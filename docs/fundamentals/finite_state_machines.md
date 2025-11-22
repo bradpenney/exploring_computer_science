@@ -2,7 +2,7 @@
 
 You've seen [Recursive Transition Networks](recursive_transition_networks.md)—those diagrams with nodes and arrows that describe valid strings in a language. But where did that idea come from? Enter the **Finite State Machine**, the theoretical foundation beneath RTNs and one of the most elegant models in computer science.
 
-FSMs are everywhere: traffic lights, vending machines, elevators, video game AI, text parsers, network protocols. Once you understand them, you'll start seeing them in everything.
+FSMs are everywhere: traffic lights, vending machines, elevators, video game AI, text parsers, network protocols. Once you understand them, you'll start seeing them in everything. 👀
 
 ## What is a Finite State Machine?
 
@@ -63,7 +63,7 @@ stateDiagram-v2
 - Insert coin → Unlocked
 - Push while Unlocked → Locked (you go through)
 - Push while Locked → stays Locked (nothing happens)
-- Insert coin while Unlocked → stays Unlocked (thanks for the extra money!)
+- Insert coin while Unlocked → stays Unlocked (thanks for the extra money! 💰)
 
 This is a complete specification of turnstile behavior. No ambiguity.
 
@@ -129,7 +129,7 @@ stateDiagram-v2
 
 From S0, reading 'a' could go to S0 *or* S1. Non-deterministic!
 
-**The magic:** NFAs and DFAs are equally powerful. Any NFA can be converted to an equivalent DFA (though the DFA might have more states). NFAs are often easier to design; DFAs are easier to implement.
+**The magic:** NFAs and DFAs are equally powerful. Any NFA can be converted to an equivalent DFA (though the DFA might have more states). NFAs are often easier to design; DFAs are easier to implement. Best of both worlds! ✨
 
 ## FSMs and Regular Languages
 
@@ -185,7 +185,7 @@ stateDiagram-v2
     Attack --> Patrol: player_dead
 ```
 
-This creates believable behavior from simple rules.
+This creates believable behavior from simple rules. 🎮 Not bad for a bunch of circles and arrows.
 
 ### TCP Connection State
 

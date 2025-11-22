@@ -2,7 +2,7 @@
 
 You've learned about [RTNs](recursive_transition_networks.md), [BNF](backus_naur_form.md), and [Finite State Machines](finite_state_machines.md). These are all ways to *describe* languages. But how do we actually *use* these descriptions to process text? How does Python know that `print("hello")` is valid but `print("hello` isn't?
 
-The answer is **parsing**—the process of analyzing text according to a grammar. It's how compilers understand your code, how browsers render HTML, and how your JSON config files become usable data.
+The answer is **parsing**—the process of analyzing text according to a grammar. It's how compilers understand your code, how browsers render HTML, and how your JSON config files become usable data. 🎯
 
 ## The Big Picture
 
@@ -44,7 +44,7 @@ For the expression `total = price * 2 + tax`:
 | PLUS | "+" |
 | IDENTIFIER | "tax" |
 
-The lexer doesn't understand grammar—it just recognizes patterns. "Is this a number? A keyword? An operator?" That's all it asks.
+The lexer doesn't understand grammar—it just recognizes patterns. "Is this a number? A keyword? An operator?" That's all it asks. Simple creature, the lexer. 🔍
 
 ### Lexer Implementation
 
@@ -353,7 +353,7 @@ Writing parsers by hand is educational, but for real projects, consider parser g
 | **PEG.js** | JavaScript | PEG |
 | **Bison** | C/C++ | YACC |
 
-You write the grammar, the tool generates the parser code.
+You write the grammar, the tool generates the parser code. ✨ Laziness is a virtue in programming.
 
 **Example with Lark (Python):**
 
@@ -397,7 +397,7 @@ HTML is messy—browsers handle malformed HTML gracefully. Real HTML parsers use
 <p>This is <b>bold and <i>italic</b> text</i>
 ```
 
-Technically invalid, but browsers render it anyway!
+Technically invalid, but browsers render it anyway! 🤷 The web is wild.
 
 ### Programming Language Parsers
 

@@ -12,7 +12,7 @@ A regular expression is a pattern that describes a set of strings. Instead of li
 ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
 ```
 
-That monstrosity? It matches email addresses. Let's learn to read (and write) these things.
+That monstrosity? It matches email addresses. 😅 Let's learn to read (and write) these things.
 
 ## Basic Building Blocks
 
@@ -197,7 +197,7 @@ Breaking it down:
 
 ??? warning "Email Validation Reality"
 
-    This regex is a simplification. The actual email spec (RFC 5322) is absurdly complex.
+    This regex is a simplification. The actual email spec (RFC 5322) is absurdly complex. 🤯
     In practice, just check for `@` and send a confirmation email.
 
 ### Phone Numbers
@@ -323,7 +323,7 @@ Some patterns cause exponential backtracking:
 (a+)+b
 ```
 
-Against a string like `aaaaaaaaaaaaaaaaac`, the engine tries every possible way to divide the a's among the groups—and there are exponentially many. This can freeze your program.
+Against a string like `aaaaaaaaaaaaaaaaac`, the engine tries every possible way to divide the a's among the groups—and there are exponentially many. This can freeze your program. ❄️ Not fun.
 
 **Solution:** Avoid nested quantifiers, or use atomic groups/possessive quantifiers if your engine supports them.
 

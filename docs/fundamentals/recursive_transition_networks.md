@@ -13,7 +13,7 @@ At its core, an RTN is a directed graph that describes a grammar. Think of it as
 - **Start node** is where parsing begins
 - **End node** means "success! this is valid!"
 
-The "recursive" part? RTNs can call *other* RTNs (or even themselves), allowing us to describe complex, nested structures without our diagrams turning into spaghetti.
+The "recursive" part? RTNs can call *other* RTNs (or even themselves), allowing us to describe complex, nested structures without our diagrams turning into spaghetti. 🍝
 
 ## A Simple Example: Greeting Someone
 
@@ -79,7 +79,7 @@ stateDiagram-v2
 2. The loop on `s2` lets us add as many additional digits as we want
 3. We can exit to the end state whenever we're done
 
-That loop is doing the heavy lifting—it's saying "zero or more additional digits" in a beautifully compact way.
+That loop is doing the heavy lifting—it's saying "zero or more additional digits" in a beautifully compact way. Elegant, right? ✨
 
 ## The Power of Recursion: Arithmetic Expressions
 
@@ -204,7 +204,7 @@ stateDiagram-v2
 These RTNs can parse sentences like:
 
 - "Cats sleep" (simple!)
-- "The cat sleeps"
+- "The cat sleeps" 🐱
 - "The big fluffy cat chased the tiny mouse"
 - "A very small dog barked"
 

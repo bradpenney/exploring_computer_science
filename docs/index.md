@@ -1,20 +1,38 @@
-<img src="images/exploring_software_development_tools.png" alt="Exploring Software Development Tools" class="img-responsive-right" width="300">
+<img src="images/exploring_computer_science.png" alt="Exploring Computer Science" class="img-responsive-right" width="300">
 
-# Welcome to Exploring Software Development Tools
+# Welcome to Exploring Computer Science
 
-A subsection of [BradPenney.io](https://bradpenney.io), this is a friendly guide through the world of command-line magic and automation awesomeness! 🧰🚀
+A subsection of [BradPenney.io](https://bradpenney.io), this site documents my journey through Computer Science concepts as I work toward my degree.
 
-This site is dedicated to documenting the best practices, quirks, and superpowers of tools like `git`, `jq`, `yq`, `make`, `gh` and other must-haves for developers who want to do more with less typing (and fewer headaches).
+This isn't just a collection of notes - it's a teaching-focused resource. Writing to explain concepts reinforces learning and creates something useful for others exploring the same topics.
 
-Whether you’re just getting started or you’ve been piping output into `/dev/null` for years, I hope you’ll find something here that’s helpful, insightful, or at least good for a smirk. 😄
+## What You'll Find Here
 
-## Topics to Explore 🔍
+### Fundamentals
 
-- Version control with `git` and helpful branching workflows 🌳
-- Slicing and dicing JSON and YAML with `jq` and `yq` 🪓
-- Automating builds and scripts with `make` ⚙️
-- Tips, tricks, and tiny CLI power moves ⚡
-- Real-world examples and shell-fu 🧠
+The building blocks of computer science:
 
-Stick around — I’ll keep adding more tools, tutorials, and tangents.
-Thanks for visiting, and happy hacking! 👋
+- **Computational Thinking** - How to approach problems like a computer scientist
+- **Finite State Machines** - Modeling systems with states and transitions
+- **Recursive Transition Networks** - Parsing natural language structures
+- **Backus-Naur Form** - Formal grammar notation for defining languages
+- **Regular Expressions** - Pattern matching and text processing
+- **How Parsers Work** - From tokens to syntax trees
+
+### Coming Soon
+
+- **Algorithms** - Big-O notation, Turing machines, sorting and searching
+- **Programming** - Paradigms, OOP, interpreters vs compilers
+- **Systems** - Operating systems, networks, databases
+- **Modern Topics** - AI, security, ethics in computing
+
+## About This Project
+
+This site grows alongside my coursework. Each article synthesizes multiple sources into a cohesive explanation with diagrams, code examples, and practice problems.
+
+The goal: if someone asks me to explain a concept, I should be able to point them here.
+
+## Connect
+
+- Main site: [bradpenney.io](https://bradpenney.io)
+- Source code: [GitHub](https://github.com/bradpenney/exploring_computer_science)

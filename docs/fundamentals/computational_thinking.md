@@ -26,7 +26,7 @@ When faced with something overwhelming, the natural instinct is to panic. Comput
 - Style everything with CSS
 - Deploy to a server
 
-Suddenly, you have a todo list instead of an existential crisis.
+Suddenly, you have a todo list instead of an existential crisis. 📝 Much better.
 
 **Example: Making Breakfast**
 
@@ -37,7 +37,7 @@ Even "make breakfast" decomposes:
 3. Prepare each item (eggs, toast, coffee)
 4. Plate and serve
 
-Each sub-task can be further decomposed. "Make coffee" becomes: fill kettle, boil water, grind beans, add to French press, pour water, wait, plunge, pour.
+Each sub-task can be further decomposed. "Make coffee" becomes: fill kettle, boil water, grind beans (freshly, obviously—pre-ground is for emergencies only), add to French press, pour water at exactly 200°F, wait four minutes, plunge, pour. ☕ Now we're cooking (or brewing). This is the most important sub-task, frankly.
 
 ??? tip "Decomposition in Practice"
 
@@ -153,7 +153,7 @@ This works for any list, any size. That's the power of a well-designed algorithm
 7. Place the other slice on top, flat side down
 8. Close the peanut butter jar
 
-Tedious? Yes. Unambiguous? Also yes. That's algorithm design.
+Tedious? Yes. Unambiguous? Also yes. That's algorithm design. 🥪
 
 ??? note "The Sandwich Exercise"
 
@@ -216,7 +216,7 @@ Here's the thing: computational thinking isn't just for programmers. These skill
 | **Law** | Decompose case → Pattern match to precedents → Abstract legal principles |
 | **Cooking** | Decompose recipe → Pattern match techniques → Abstract flavor profiles |
 | **Music** | Decompose song → Pattern match chord progressions → Abstract genre conventions |
-| **Debugging Life** | Decompose problem → Pattern match to past experiences → Abstract lessons learned |
+| **Debugging Life** | Decompose problem → Pattern match to past experiences → Abstract lessons learned 🐛 |
 
 The formal name is "computational thinking," but really it's just *structured problem-solving*.
 

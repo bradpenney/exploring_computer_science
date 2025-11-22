@@ -8,7 +8,7 @@ BNF has been the go-to notation for defining programming language syntax since t
 
 BNF was developed by **John Backus** and **Peter Naur** while working on the ALGOL 60 programming language. Backus created the initial notation; Naur refined and popularized it. The name is sometimes expanded as "Backus Normal Form," but "Backus-Naur Form" is more historically accurate (and gives Naur his due credit).
 
-Fun fact: This was one of the first times anyone had formally specified a programming language's syntax. Before BNF, language definitions were often ambiguous prose that left implementers guessing.
+Fun fact: This was one of the first times anyone had formally specified a programming language's syntax. Before BNF, language definitions were often ambiguous prose that left implementers guessing. 🤔 Good times.
 
 ## The Basic Syntax
 
@@ -78,7 +78,7 @@ Here's where BNF really shines. Remember those three interconnected RTNs for ari
 <digit> ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 ```
 
-Five lines of text capture the entire grammar! Let's trace through parsing `3 + 4 * 2`:
+Five lines of text capture the entire grammar! ✨ Let's trace through parsing `3 + 4 * 2`:
 
 1. Start with `<expression>`
 2. Try `<expression> + <term>` — looks promising!
@@ -158,8 +158,8 @@ You can read this almost like English:
     Most programming languages publish their formal grammar:
 
     - [Python Grammar](https://docs.python.org/3/reference/grammar.html)
-    - [JSON Grammar](https://www.json.org/json-en.html) (beautifully simple)
-    - [SQL Grammar](https://jakewheat.github.io/sql-overview/sql-2016-foundation-grammar.html) (terrifyingly complex)
+    - [JSON Grammar](https://www.json.org/json-en.html) (beautifully simple 💖)
+    - [SQL Grammar](https://jakewheat.github.io/sql-overview/sql-2016-foundation-grammar.html) (terrifyingly complex 😱)
 
     Reading these is a great way to deeply understand a language's syntax.
 

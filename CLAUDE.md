@@ -4,7 +4,7 @@ This file provides guidance to Claude Code when working with this repository.
 
 ## Repository Overview
 
-This is a Material for MkDocs site documenting Computer Science concepts learned during the CS degree program (starting with COMP200). The site serves as a teaching tool, portfolio, and personal reference.
+This is a Material for MkDocs site documenting Computer Science concepts learned during the CS degree program. The site serves as a teaching tool, portfolio, and personal reference.
 
 ## Important Preferences
 

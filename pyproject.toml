@@ -1,7 +1,7 @@
 [project]
-name = "exploring-software-development-tools"
+name = "exploring-computer-science"
 version = "0.1.0"
-description = ""
+description = "A Material for MkDocs site documenting Computer Science concepts"
 authors = [
     {name = "Brad Penney",email = "penney.brad@protonmail.com"}
 ]

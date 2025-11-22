@@ -8,7 +8,7 @@ Computer science isn't really about computers, any more than astronomy is about 
 
 ## The Classic Definitions
 
-Ask ten computer scientists what CS is, and you'll get twelve answers. Here are some classics:
+Ask ten computer scientists what CS is, and you'll get twelve answers. 🤷 Here are some classics:
 
 > "Computer science is no more about computers than astronomy is about telescopes."
 > — Edsger Dijkstra
@@ -29,11 +29,11 @@ Computer science asks fundamental questions that would matter even if silicon ch
 
 Not everything! Some problems are **undecidable**—no algorithm can ever solve them. The famous Halting Problem asks: "Given a program, will it eventually stop or run forever?" Alan Turing proved in 1936 that no general algorithm can answer this for all programs.
 
-This matters because it sets limits on what we can automate. Some things require human judgment not because we haven't figured out the algorithm yet, but because no such algorithm can exist.
+This matters because it sets limits on what we can automate. Some things require human judgment not because we haven't figured out the algorithm yet, but because no such algorithm can exist. Math said so! 🧮
 
 ### How efficiently can it be computed?
 
-Even solvable problems vary wildly in difficulty. Sorting a million numbers? Easy—a fraction of a second. Finding the best route through 100 cities (the Traveling Salesman Problem)? Our best algorithms would take longer than the age of the universe.
+Even solvable problems vary wildly in difficulty. Sorting a million numbers? Easy—a fraction of a second. Finding the best route through 100 cities (the Traveling Salesman Problem)? Our best algorithms would take longer than the age of the universe. ⏳ Pack a lunch.
 
 This is the study of **computational complexity**—categorizing problems by how their difficulty scales with size.
 
@@ -164,7 +164,7 @@ Software runs the world. Banking, healthcare, transportation, communication, ent
 
 ### It's Creative
 
-Despite the "science" name, much of CS is creative. Designing elegant algorithms, crafting user experiences, architecting systems—these require imagination as much as logic.
+Despite the "science" name, much of CS is creative. Designing elegant algorithms, crafting user experiences, architecting systems—these require imagination as much as logic. It's art that happens to compile. 🎨
 
 ### It's Powerful
 
