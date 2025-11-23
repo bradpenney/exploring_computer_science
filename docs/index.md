@@ -12,12 +12,16 @@ This isn't just a collection of notes - it's a teaching-focused resource. Writin
 
 The building blocks of computer science:
 
-- **Computational Thinking** - How to approach problems like a computer scientist
-- **Finite State Machines** - Modeling systems with states and transitions
-- **Recursive Transition Networks** - Parsing natural language structures
-- **Backus-Naur Form** - Formal grammar notation for defining languages
-- **Regular Expressions** - Pattern matching and text processing
-- **How Parsers Work** - From tokens to syntax trees
+- **[What is Computer Science?](fundamentals/what_is_computer_science.md)** - The field beyond the code
+- **[Computational Thinking](fundamentals/computational_thinking.md)** - How to approach problems like a computer scientist
+
+*Coming soon:*
+
+- Finite State Machines - Modeling systems with states and transitions
+- Recursive Transition Networks - Parsing natural language structures
+- Backus-Naur Form - Formal grammar notation for defining languages
+- Regular Expressions - Pattern matching and text processing
+- How Parsers Work - From tokens to syntax trees
 
 ### Coming Soon
 

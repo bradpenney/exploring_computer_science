@@ -277,11 +277,18 @@ Good abstraction hides complexity while preserving essential behavior. Bad abstr
 | **Abstraction** | "What details can I safely ignore?" |
 | **Algorithm Design** | "What are the exact steps to solve this?" |
 
-## Further Reading
+## Further Resources
 
-- **Jeannette Wing, "Computational Thinking"** — The seminal paper that popularized the term
-- [Recursive Transition Networks](recursive_transition_networks.md) — Abstraction and decomposition in action
+- **Jeannette Wing, "Computational Thinking"** — the video below is exceptional:
+
+<div style="width: 60%;">
+  <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+    <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube.com/embed/YVEUOHw3Qb8?start=704" frameborder="0" allowfullscreen></iframe>
+  </div>
+</div>
+<!--- [Recursive Transition Networks](recursive_transition_networks.md) — Abstraction and decomposition in action
 - [Backus-Naur Form](backus_naur_form.md) — Pattern recognition applied to language structure
+-->
 
 ---
 
