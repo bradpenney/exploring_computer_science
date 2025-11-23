@@ -281,10 +281,8 @@ Good abstraction hides complexity while preserving essential behavior. Bad abstr
 
 - **Jeannette Wing, "Computational Thinking"** — the video below is exceptional:
 
-<div style="width: 60%;">
-  <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-    <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube.com/embed/YVEUOHw3Qb8?start=704" frameborder="0" allowfullscreen></iframe>
-  </div>
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/YVEUOHw3Qb8?start=704" title="Jeannette Wing - Computational Thinking" allowfullscreen></iframe>
 </div>
 <!--- [Recursive Transition Networks](recursive_transition_networks.md) — Abstraction and decomposition in action
 - [Backus-Naur Form](backus_naur_form.md) — Pattern recognition applied to language structure
@@ -293,3 +291,9 @@ Good abstraction hides complexity while preserving essential behavior. Bad abstr
 ---
 
 Computational thinking isn't about thinking *like* a computer—computers don't actually think. It's about thinking *clearly* enough that you could explain your reasoning to a computer. And if you can do that, you can explain it to anyone. That's the real superpower. 🧠
+
+## Video Summary
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/1aqCajM4MiM" title="Computational Thinking" allowfullscreen></iframe>
+</div>

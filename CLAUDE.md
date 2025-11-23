@@ -42,3 +42,9 @@ poetry run mkdocs build
 - Cross-link related articles
 - Use admonitions for tips, notes, warnings (`??? tip`, `!!! note`)
 - Code examples should include titles and line numbers
+- Embed YouTube videos using the responsive wrapper class:
+  ```html
+  <div class="video-wrapper">
+    <iframe src="https://www.youtube.com/embed/VIDEO_ID" title="..." allowfullscreen></iframe>
+  </div>
+  ```

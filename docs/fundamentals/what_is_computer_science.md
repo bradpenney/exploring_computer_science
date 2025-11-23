@@ -225,3 +225,9 @@ Each topic builds on the previous, moving from abstract thinking to concrete too
 ---
 
 Computer science is a young field—barely 80 years old—but it's already transformed the world more profoundly than disciplines thousands of years older. That transformation is accelerating. Whether you're here to build the next transformation or just to understand the one that's already happened, welcome. There's a lot to explore. 🚀
+
+## Video Summary
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/CnVg09yCs6Y" title="What is Computer Science?" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
