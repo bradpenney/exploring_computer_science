@@ -100,14 +100,31 @@ You *don't* think about fuel injection timing, spark plug voltage, or transmissi
 
 **Example: Functions in Programming**
 
+Without abstraction, sending an email means dealing with all this:
+
 ```python
-def send_email(to, subject, body):
-    # ... 50 lines of SMTP configuration,
-    # authentication, encoding, error handling ...
-    pass
+# Without abstraction: caller needs to know everything
+import smtplib
+from email.mime.text import MIMEText
+
+server = smtplib.SMTP('smtp.gmail.com', 587)
+server.starttls()
+server.login('me@gmail.com', 'password123')
+msg = MIMEText('Hi Bob!')
+msg['Subject'] = 'Hello'
+msg['To'] = 'bob@example.com'
+server.send_message(msg)
+server.quit()
 ```
 
-The caller just writes `send_email("bob@example.com", "Hello", "Hi Bob!")`. They don't need to know *how* emails work—only *that* they can send one.
+With abstraction, all that complexity hides behind a simple interface:
+
+```python
+# With abstraction: complexity hidden
+send_email("bob@example.com", "Hello", "Hi Bob!")
+```
+
+The caller doesn't need to know *how* emails work—only *that* they can send one. The 50 lines of SMTP configuration, authentication, and error handling still exist, but they're someone else's problem now.
 
 **Levels of Abstraction:**
 

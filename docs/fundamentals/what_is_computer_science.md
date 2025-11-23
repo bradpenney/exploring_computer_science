@@ -204,6 +204,17 @@ If you're new to CS, start here:
 
 Each topic builds on the previous, moving from abstract thinking to concrete tools.
 
+??? example "How These Subfields Connect: A Google Search"
+
+    When you type a query into Google and hit enter, you're touching all four areas of CS:
+
+    - **Theory**: Search algorithms decide which pages match your query; ranking algorithms determine the order using graph theory (PageRank) and complexity analysis
+    - **Systems**: Your query hits distributed databases across thousands of servers, coordinated by networking protocols and operating systems
+    - **Applications**: Natural language processing interprets what you *meant*, not just what you typed; machine learning personalizes results
+    - **Human-Centered**: The clean, minimal interface hides all this complexity behind a single text box
+
+    One search. Four subfields. That's computer science in action.
+
 ## Key Takeaways
 
 | Concept | What It Means |
