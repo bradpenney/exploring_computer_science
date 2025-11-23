@@ -213,10 +213,11 @@ Each topic builds on the previous, moving from abstract thinking to concrete too
 
 ## Further Reading
 
-- **David Evans, Introduction to Computing** — The textbook behind much of this site
-- **Code: The Hidden Language of Computer Hardware and Software** by Charles Petzold — How computers actually work
-- **Gödel, Escher, Bach** by Douglas Hofstadter — Mind-bending exploration of computation and consciousness
-- **The Innovators** by Walter Isaacson — History of computing from Ada Lovelace to the internet
+- [**Introduction to Computing: Explorations in Language, Logic, and Machines**](https://computingbook.org/) by David Evans - A free introductory Computer Science textbook
+
+- [**Code: The Hidden Language of Computer Hardware and Software**](https://en.wikipedia.org/wiki/Code:_The_Hidden_Language_of_Computer_Hardware_and_Software) by Charles Petzold — How computers actually work
+- [**Gödel, Escher, Bach**](https://en.wikipedia.org/wiki/G%C3%B6del,_Escher,_Bach) by Douglas Hofstadter — Mind-bending exploration of computation and consciousness
+- [**The Innovators**](https://en.wikipedia.org/wiki/The_Innovators_(book)) by Walter Isaacson — History of computing from Ada Lovelace to the internet
 
 ---
 
