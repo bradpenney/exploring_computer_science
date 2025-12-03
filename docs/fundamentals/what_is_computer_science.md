@@ -39,7 +39,7 @@ This is the study of **computational complexity**—categorizing problems by how
 
 ### How do we express computation?
 
-This is where programming languages come in. But beneath the syntax lies a deeper question: What are the fundamental ways to describe processes? Recursive transition networks, BNF grammars, lambda calculus, Turing machines—these are all answers to "How do we write down what we want a computer to do?"
+This is where programming languages come in. But beneath the syntax lies a deeper question: What are the fundamental ways to describe processes? [Finite State Machines](finite_state_machines.md), recursive transition networks, BNF grammars, lambda calculus, Turing machines—these are all answers to "How do we write down what we want a computer to do?"
 
 ### How do we build reliable systems?
 
@@ -75,9 +75,8 @@ Building the infrastructure:
 | **Compilers** | How do we translate high-level code to machine code? |
 | **Distributed Systems** | How do we coordinate many computers? |
 
-### Applications
-
-Solving real problems:
+### Specialized Domains
+Pushing the boundaries of what computers can do:
 
 | Area | Key Questions |
 |:-----|:--------------|
@@ -87,16 +86,28 @@ Solving real problems:
 | **Natural Language Processing** | How do we understand human language? |
 | **Robotics** | How do we build machines that act in the world? |
 
-### Human-Centered
+### Software Engineering
+The art and science of building robust software:
 
-Computing meets people:
+| Area | Key Questions |
+|:-----|:--------------|
+| **Software Engineering** | How do we build large systems reliably? |
+
+### Human-Computer Interaction (HCI)
+Designing for people:
 
 | Area | Key Questions |
 |:-----|:--------------|
 | **Human-Computer Interaction** | How do we design usable interfaces? |
-| **Software Engineering** | How do we build large systems reliably? |
-| **Computer Science Education** | How do we teach these concepts? |
+
+### Ethics & Society
+Considering the impact:
+
+| Area | Key Questions |
+|:-----|:--------------|
 | **Ethics** | What should we build? What shouldn't we? |
+| **Privacy** | How do we protect personal information? |
+| **Fairness** | Are our algorithms biased? |
 
 ## A Brief History
 
@@ -146,7 +157,7 @@ These terms are often confused:
 | **Computer Science** | Theory and foundations | "Is this problem solvable? How efficiently?" |
 | **Software Engineering** | Building systems | "How do we build this reliably at scale?" |
 | **Programming** | Writing code | "How do I implement this feature?" |
-| **Information Technology** | Operating systems | "How do we deploy and maintain this?" |
+| **Information Technology** | Managing and maintaining computing infrastructure and services | "How do we deploy and maintain this?" |
 
 A computer scientist might study whether a problem is solvable in polynomial time. A programmer implements a solution. An IT professional deploys it. These overlap, but they're distinct skill sets.
 
@@ -193,10 +204,10 @@ Computer science is philosophy made executable.
 If you're new to CS, start here:
 
 1. **[Computational Thinking](computational_thinking.md)** — The mental toolkit
+2. **[Finite State Machines](finite_state_machines.md)** — Simple computation models
 
 *Coming soon:*
 
-2. Finite State Machines — Simple computation models
 3. Recursive Transition Networks — Describing languages visually
 4. Backus-Naur Form — Describing languages textually
 5. Regular Expressions — Practical pattern matching

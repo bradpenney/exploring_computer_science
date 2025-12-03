@@ -53,7 +53,7 @@ nav:
   - Fundamentals:
       - What is Computer Science?: fundamentals/what_is_computer_science.md
       - Computational Thinking: fundamentals/computational_thinking.md
-#      - Finite State Machines: fundamentals/finite_state_machines.md
+      - Finite State Machines: fundamentals/finite_state_machines.md
 #      - Recursive Transition Networks: fundamentals/recursive_transition_networks.md
 #      - Backus-Naur Form (BNF): fundamentals/backus_naur_form.md
 #      - Regular Expressions: fundamentals/regular_expressions.md

@@ -98,6 +98,10 @@ When you drive, you think in terms of:
 
 You *don't* think about fuel injection timing, spark plug voltage, or transmission gear ratios. Those details are abstracted away behind simple interfaces.
 
+**Example: Finite State Machines**
+
+A [Finite State Machine](finite_state_machines.md) is pure abstraction—it models systems (traffic lights, game AI, compilers) as just states and transitions, ignoring all implementation details. You don't need to know if it's running on hardware or software; the abstraction captures the essential behavior.
+
 **Example: Functions in Programming**
 
 Without abstraction, sending an email means dealing with all this:
@@ -130,13 +134,13 @@ The caller doesn't need to know *how* emails work—only *that* they can send on
 
 Think of a computer:
 
-| Level | What You See |
-|:------|:-------------|
-| User | Apps, buttons, windows |
-| Application | Functions, objects, APIs |
-| Operating System | Processes, files, memory |
-| Hardware | CPU, RAM, circuits |
-| Physics | Electrons, voltage, silicon |
+| Level | What You Interact With / Build With |
+|:------|:----------------------------------|
+| User | Apps, buttons, windows (the interface) |
+| Application | Functions, objects, APIs (the building blocks) |
+| Operating System | Processes, files, memory (the system's tools) |
+| Hardware | CPU, RAM, circuits (the physical components) |
+| Physics | Electrons, voltage, silicon (the fundamental reality) |
 
 Each level abstracts the one below. You can write Python without understanding transistors. That's powerful.
 
@@ -292,7 +296,7 @@ Good abstraction hides complexity while preserving essential behavior. Bad abstr
 | **Decomposition** | "How can I break this into smaller pieces?" |
 | **Pattern Recognition** | "Have I seen something like this before?" |
 | **Abstraction** | "What details can I safely ignore?" |
-| **Algorithm Design** | "What are the exact steps to solve this?" |
+| **Algorithm Design** | "What are the exact, unambiguous steps to solve this?" |
 
 ## Further Resources
 
