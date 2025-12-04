@@ -531,3 +531,9 @@ RTNs make the abstract concrete. They turn "grammar" from a vague concept into a
 Recursive Transition Networks transform the abstract notion of "grammar" into something you can see, trace, and reason about. They bridge the gap between finite state machines (too simple for nesting) and full context-free grammars (precise but less visual). In doing so, they make parsing—a fundamental task in computer science—accessible and intuitive.
 
 Every time a compiler checks your code or a grammar checker analyzes your writing, something very much like an RTN is working behind the scenes. Understanding how these networks operate gives you insight into one of the most ubiquitous problems in computing: making sense of structured input.
+
+## Video Summary
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/S2G4QGy5vGE" title="Recursive Transition Networks Explained" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
