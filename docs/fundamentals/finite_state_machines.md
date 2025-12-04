@@ -161,19 +161,15 @@ In a Moore machine, the output is determined *only by the current state*.
 stateDiagram-v2
     direction LR
     [*] --> S0
-    S0((S0))
-    note right of S0 : Output: "Yes"
-    S1
-    note right of S1 : Output: "No"
-    S2
-    note right of S2 : Output: "No"
-
-    S0 --> S1 : 1
-    S1 --> S0 : 1
-    S0 --> S0 : 0
-    S1 --> S2 : 0
-    S2 --> S1 : 0
-    S2 --> S2 : 1
+    state "remainder 0 (output: Yes)" as S0
+    state "remainder 1 (output: No)" as S1
+    state "remainder 2 (output: No)" as S2
+    S0 --> S1: 1
+    S1 --> S0: 1
+    S0 --> S0: 0
+    S1 --> S2: 0
+    S2 --> S1: 0
+    S2 --> S2: 1
 ```
 
 ### Mealy Machine
@@ -186,8 +182,8 @@ In a Mealy machine, the output is determined by both the *current state and the 
 stateDiagram-v2
     direction LR
     [*] --> Locked
-    Locked --> Unlocked : coin / unlock_gate
-    Unlocked --> Locked : push / lock_gate
+    Locked --> Unlocked: coin / unlock_gate
+    Unlocked --> Locked: push / lock_gate
 ```
 
 Here, the output (`unlock_gate`, `lock_gate`) is written on the transition path, separated by a `/`.
@@ -200,6 +196,16 @@ Here, the output (`unlock_gate`, `lock_gate`) is written on the transition path,
 | **Mealy** | State and Input | "On this input, do X" |
 
 Any Moore machine can be converted to an equivalent Mealy machine, and vice versa. They are computationally equivalent, but one might be more convenient for a specific problem.
+
+??? info "Historical Note: Who Were Moore and Mealy?"
+
+    These machines are named after the computer scientists who formalized these models in the 1950s:
+
+    **Moore Machine** - Named after **Edward F. Moore** (1925-2003), an American mathematician and computer scientist. He described this model in his 1956 paper "Gedanken-experiments on Sequential Machines."
+
+    **Mealy Machine** - Named after **George H. Mealy** (1927-2010), who published "A Method for Synthesizing Sequential Circuits" in 1955, describing machines where output depends on both state and input.
+
+    Both were working at Bell Labs during this era, which was a hotbed of early computer science and information theory research (along with folks like Claude Shannon). Their models became fundamental tools in digital circuit design and formal language theory.
 
 ## FSMs and Regular Languages
 
@@ -271,6 +277,20 @@ To validate these strings, you'd need to:
 FSMs can't do step 2. To remember any possible count, you'd need states like:
 
 - state_0_as, state_1_as, state_2_as, state_3_as, ..., state_1000_as, ...
+
+Here's what this impossible FSM would look like:
+
+```mermaid
+stateDiagram-v2
+    direction LR
+    [*] --> S0
+    S0 --> S1: a
+    S1 --> S2: a
+    S2 --> S3: a
+    S3 --> S4: a
+    S4 --> ...: a
+    note right of S4: This continues forever!<br/>Need infinite states to<br/>count unbounded a's
+```
 
 But there are **infinitely many possible counts**, and FSMs must have a **FINITE** number of states. That's the fundamental limitation.
 
@@ -474,14 +494,20 @@ This FSM works, but states `S2` and `S4` are redundant. They are both accepting 
 stateDiagram-v2
     direction LR
     [*] --> S0
-    S0 --> S1 : a
-    S0 --> S3 : b
-    S1 --> S2 : a
-    S1 --> S3 : b
-    S2((S2)) --> S2 : a,b
-    S3 --> S1 : a
-    S3 --> S4 : b
-    S4((S4)) --> S4 : a,b
+    S0 --> S1: a
+    S0 --> S3: b
+    S1 --> S2: a
+    S1 --> S3: b
+    S2 --> S2: a
+    S2 --> S2: b
+    S3 --> S1: a
+    S3 --> S4: b
+    S4 --> S4: a
+    S4 --> S4: b
+    S2:::accepting
+    S4:::accepting
+
+    classDef accepting fill:#90EE90
 ```
 
 **The minimal FSM:**
@@ -492,13 +518,17 @@ By merging the equivalent states `S2` and `S4` into a single accepting state (`S
 stateDiagram-v2
     direction LR
     [*] --> S0
-    S0 --> S1 : a
-    S0 --> S3 : b
-    S1 --> S24 : a
-    S1 --> S3 : b
-    S3 --> S1 : a
-    S3 --> S24 : b
-    S24((S24)) --> S24 : a,b
+    S0 --> S1: a
+    S0 --> S3: b
+    S1 --> S24: a
+    S1 --> S3: b
+    S3 --> S1: a
+    S3 --> S24: b
+    S24 --> S24: a
+    S24 --> S24: b
+    S24:::accepting
+
+    classDef accepting fill:#90EE90
 ```
 
 ### Why Minimize?
@@ -563,3 +593,9 @@ More articles coming soon on related topics:
 ---
 
 FSMs are the "hello world" of computation theory—simple enough to fully understand, powerful enough to be genuinely useful. Every computer scientist should have them in their mental toolkit. They're proof that sometimes, constraints (finite states, no memory) force elegant solutions. 🔄
+
+## Video Summary
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/PfGFLUkiv74" title="Finite State Machines" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>

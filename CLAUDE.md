@@ -42,9 +42,18 @@ poetry run mkdocs build
 - Cross-link related articles
 - Use admonitions for tips, notes, warnings (`??? tip`, `!!! note`)
 - Code examples should include titles and line numbers
-- Embed YouTube videos using the responsive wrapper class:
-  ```html
+- Embed YouTube videos at the bottom of articles in a "Video Summary" section using the responsive wrapper class:
+  ```markdown
+  ## Video Summary
+
   <div class="video-wrapper">
-    <iframe src="https://www.youtube.com/embed/VIDEO_ID" title="..." allowfullscreen></iframe>
+    <iframe src="https://www.youtube.com/embed/VIDEO_ID" title="Descriptive Title" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
   </div>
   ```
+  Replace `VIDEO_ID` with the YouTube video ID (from `https://youtu.be/VIDEO_ID`) and provide a descriptive title.
+
+  The `video-wrapper` class is defined in `docs/stylesheets/extra.css` and provides:
+  - Full-width responsive embedding (100% width, max 800px)
+  - Automatic 16:9 aspect ratio
+  - Rounded corners and no border
+  - Proper spacing above and below the video

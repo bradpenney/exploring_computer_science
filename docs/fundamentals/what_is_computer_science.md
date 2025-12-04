@@ -17,7 +17,7 @@ Ask ten computer scientists what CS is, and you'll get twelve answers. 🤷 Here
 > — Encyclopaedia Britannica (less poetic, more accurate for practical purposes)
 
 > "The discipline of computing is the systematic study of algorithmic processes that describe and transform information."
-> — ACM/IEEE Computing Curricula
+> — ACM/IEEE Computing Curricula (yes, this one's a mouthful, but it's accurate)
 
 The common thread? **Algorithms** and **information**. Computers just happen to be really good at executing algorithms on information.
 
@@ -53,7 +53,7 @@ Computer science is vast. Here's a map of the territory:
 
 ### Theory
 
-The mathematical foundations:
+The mathematical foundations (where the magic happens):
 
 | Area | Key Questions |
 |:-----|:--------------|
@@ -187,17 +187,17 @@ Can machines think? What are the limits of computation? How do we build systems 
 
 ## The Philosophical Angle
 
-Computer science touches deep philosophical questions:
+Here's where things get genuinely interesting. Computer science touches deep philosophical questions:
 
-**What is intelligence?** AI research forces us to define what we mean by understanding, learning, and reasoning.
+**What is intelligence?** AI research forces us to define what we mean by understanding, learning, and reasoning. Turns out it's harder than you'd think.
 
-**What is information?** Claude Shannon's information theory quantifies the abstract concept of "information" mathematically.
+**What is information?** Claude Shannon's information theory quantifies the abstract concept of "information" mathematically. (Yes, you can measure surprise!)
 
-**What is proof?** Automated theorem provers and proof assistants are changing how we think about mathematical certainty.
+**What is proof?** Automated theorem provers and proof assistants are changing how we think about mathematical certainty. Computers now help mathematicians prove theorems humans can't verify by hand.
 
-**What is a process?** Algorithms formalize the notion of "a procedure to do something"—an idea that seemed obvious until we tried to make it precise.
+**What is a process?** Algorithms formalize the notion of "a procedure to do something"—an idea that seemed obvious until we tried to make it precise. (Spoiler: it wasn't obvious.)
 
-Computer science is philosophy made executable.
+Computer science is philosophy made executable. 💭→💻
 
 ## Getting Started
 
@@ -226,6 +226,67 @@ Each topic builds on the previous, moving from abstract thinking to concrete too
 
     One search. Four subfields. That's computer science in action.
 
+## Practice Problems
+
+??? question "Challenge 1: Identify the Subfield"
+
+    For each problem below, which CS subfield would primarily tackle it? (Some might involve multiple!)
+
+    1. Making Netflix recommend shows you'll actually like
+    2. Ensuring electronic voting machines can't be hacked
+    3. Making a video game run smoothly at 60 frames per second
+    4. Determining if two programs do the same thing
+    5. Designing an intuitive interface for elderly users
+
+    ??? tip "Answers"
+
+        1. **Machine Learning / AI** — Pattern recognition from viewing history
+        2. **Security / Cryptography** — Protecting systems from attacks, ensuring integrity
+        3. **Computer Graphics / Systems** — Rendering efficiently, managing resources
+        4. **Theory / Computability** — This is actually undecidable! (Rice's Theorem)
+        5. **Human-Computer Interaction (HCI)** — Usability and accessibility
+
+??? question "Challenge 2: Solvable or Not?"
+
+    Which of these problems can be solved algorithmically?
+
+    1. Given a number, determine if it's prime
+    2. Given a program, determine if it will ever print "Hello"
+    3. Given a list of numbers, find the largest one
+    4. Given any mathematical statement, prove whether it's true or false
+    5. Given a list of numbers, sort them in ascending order
+
+    ??? tip "Answers"
+
+        **Solvable:**
+
+        - ✅ #1: Prime testing — solvable (even efficiently!)
+        - ✅ #3: Find largest — definitely solvable
+        - ✅ #5: Sorting — very solvable (many algorithms)
+
+        **Unsolvable:**
+
+        - ❌ #2: Undecidable (related to Halting Problem)
+        - ❌ #4: Undecidable (Gödel's Incompleteness Theorem)
+
+??? question "Challenge 3: CS vs. Programming vs. IT"
+
+    Classify each task as primarily Computer Science (theory), Software Engineering (building systems), Programming (writing code), or IT (deployment/maintenance):
+
+    1. Proving that no algorithm can solve the Traveling Salesman Problem in polynomial time
+    2. Writing a Python script to rename 1000 files
+    3. Designing the architecture for a system that handles 10 million users
+    4. Setting up backup systems for a company's servers
+    5. Implementing a search feature for a website
+
+    ??? tip "Answers"
+
+        1. **Computer Science** — Theoretical complexity analysis
+        2. **Programming** — Straightforward coding task
+        3. **Software Engineering** — System design at scale
+        4. **IT** — Infrastructure management
+        5. **Programming** (for small sites) or **Software Engineering** (for large-scale systems)
+
 ## Key Takeaways
 
 | Concept | What It Means |
@@ -246,7 +307,9 @@ Each topic builds on the previous, moving from abstract thinking to concrete too
 
 ---
 
-Computer science is a young field—barely 80 years old—but it's already transformed the world more profoundly than disciplines thousands of years older. That transformation is accelerating. Whether you're here to build the next transformation or just to understand the one that's already happened, welcome. There's a lot to explore. 🚀
+Computer science is a young field—barely 80 years old—but it's already transformed the world more profoundly than disciplines thousands of years older. That transformation is accelerating.
+
+Whether you're here to build the next transformation or just to understand the one that's already happened, welcome. There's a lot to explore. Let's get started. 🚀
 
 ## Video Summary
 
