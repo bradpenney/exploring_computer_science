@@ -305,8 +305,8 @@ Good abstraction hides complexity while preserving essential behavior. Bad abstr
 <div class="video-wrapper">
   <iframe src="https://www.youtube.com/embed/YVEUOHw3Qb8?start=704" title="Jeannette Wing - Computational Thinking" allowfullscreen></iframe>
 </div>
-<!--- [Recursive Transition Networks](recursive_transition_networks.md) — Abstraction and decomposition in action
-- [Backus-Naur Form](backus_naur_form.md) — Pattern recognition applied to language structure
+- [Recursive Transition Networks](recursive_transition_networks.md) — Abstraction and decomposition in action
+<!--- [Backus-Naur Form](backus_naur_form.md) — Pattern recognition applied to language structure
 -->
 
 ---

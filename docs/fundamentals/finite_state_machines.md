@@ -586,9 +586,9 @@ When you write a regex like `a*b+`, there are automatic algorithms that convert 
 
 More articles coming soon on related topics:
 
+- [Recursive Transition Networks](recursive_transition_networks.md) — FSMs with recursion
 - Regular Expressions — Another notation for regular languages
 - Backus-Naur Form — Describing context-free languages
-- Recursive Transition Networks — FSMs with recursion
 
 ---
 

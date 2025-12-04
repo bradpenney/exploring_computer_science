@@ -14,11 +14,10 @@ The building blocks of computer science:
 
 - **[What is Computer Science?](fundamentals/what_is_computer_science.md)** - The field beyond the code
 - **[Computational Thinking](fundamentals/computational_thinking.md)** - How to approach problems like a computer scientist
+- **[Finite State Machines](fundamentals/finite_state_machines.md)** - Modeling systems with states and transitions
+- **[Recursive Transition Networks](fundamentals/recursive_transition_networks.md)** - Parsing natural language structures
 
 *Coming soon:*
-
-- Finite State Machines - Modeling systems with states and transitions
-- Recursive Transition Networks - Parsing natural language structures
 - Backus-Naur Form - Formal grammar notation for defining languages
 - Regular Expressions - Pattern matching and text processing
 - How Parsers Work - From tokens to syntax trees
