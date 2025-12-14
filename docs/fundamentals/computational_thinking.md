@@ -106,7 +106,7 @@ A [Finite State Machine](finite_state_machines.md) is pure abstraction—it mode
 
 Without abstraction, sending an email means dealing with all this:
 
-```python
+```python title="Sending Email Without Abstraction" linenums="1"
 # Without abstraction: caller needs to know everything
 import smtplib
 from email.mime.text import MIMEText
@@ -123,7 +123,7 @@ server.quit()
 
 With abstraction, all that complexity hides behind a simple interface:
 
-```python
+```python title="Sending Email With Abstraction" linenums="1"
 # With abstraction: complexity hidden
 send_email("bob@example.com", "Hello", "Hi Bob!")
 ```
@@ -306,8 +306,7 @@ Good abstraction hides complexity while preserving essential behavior. Bad abstr
   <iframe src="https://www.youtube.com/embed/YVEUOHw3Qb8?start=704" title="Jeannette Wing - Computational Thinking" allowfullscreen></iframe>
 </div>
 - [Recursive Transition Networks](recursive_transition_networks.md) — Abstraction and decomposition in action
-<!--- [Backus-Naur Form](backus_naur_form.md) — Pattern recognition applied to language structure
--->
+- [Backus-Naur Form](backus_naur_form.md) — Pattern recognition applied to language structure
 
 ---
 

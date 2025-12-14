@@ -426,7 +426,7 @@ These extended models essentially add a stack or other memory structure to track
 
 FSMs translate directly into code. Here's a turnstile in Python:
 
-```python
+```python title="Turnstile FSM in Python" linenums="1"
 class Turnstile:
     def __init__(self):
         self.state = "locked"
@@ -453,7 +453,7 @@ print(t.transition("push"))   # locked
 
 Or using a transition table:
 
-```python
+```python title="Table-Driven FSM Implementation" linenums="1"
 transitions = {
     ("locked", "coin"): "unlocked",
     ("locked", "push"): "locked",
@@ -588,7 +588,7 @@ More articles coming soon on related topics:
 
 - [Recursive Transition Networks](recursive_transition_networks.md) — FSMs with recursion
 - Regular Expressions — Another notation for regular languages
-- Backus-Naur Form — Describing context-free languages
+- [Backus-Naur Form](backus_naur_form.md) — Describing context-free languages
 
 ---
 

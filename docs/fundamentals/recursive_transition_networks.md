@@ -347,13 +347,13 @@ RTNs sit in a hierarchy of formal language tools:
 |:----------|:------|:--------|:---------|
 | **Finite State Machine** | Regular languages | Yes | Simple patterns (no nesting) |
 | **Recursive Transition Network** | Context-free languages | Yes | Nested structures with visual clarity |
-| **Context-Free Grammar** (BNF) | Context-free languages | No | Precise textual specification |
+| **Context-Free Grammar** ([BNF](backus_naur_form.md)) | Context-free languages | No | Precise textual specification |
 | **Pushdown Automaton** | Context-free languages | Rarely | Theoretical analysis |
 
 RTNs and context-free grammars are **equally powerful**—they recognize the same class of languages (context-free languages). The choice between them is often about convenience and clarity:
 
 - **RTNs**: More intuitive visually; easier to trace by hand
-- **BNF/CFG**: More compact textually; easier to process algorithmically
+- **[BNF](backus_naur_form.md)/CFG**: More compact textually; easier to process algorithmically
 
 ## Implementation Considerations
 
@@ -524,7 +524,7 @@ RTNs make the abstract concrete. They turn "grammar" from a vague concept into a
 - **William A. Woods (1970)** — "Transition Network Grammars for Natural Language Analysis" (the original paper)
 - **David Evans, [Introduction to Computing](https://computingbook.org/)** — Chapter 2 covers RTNs and formal languages
 - **[Computational Thinking](computational_thinking.md)** — RTNs exemplify decomposition and abstraction
-- **Backus-Naur Form** (coming soon) — Textual notation for context-free grammars
+- **[Backus-Naur Form](backus_naur_form.md)** — Textual notation for context-free grammars
 
 ---
 

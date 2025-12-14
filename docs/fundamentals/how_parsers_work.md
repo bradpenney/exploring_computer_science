@@ -68,7 +68,7 @@ stateDiagram-v2
 
 Here's a simple Python lexer:
 
-```python
+```python title="Simple Lexer in Python" linenums="1"
 import re
 
 TOKEN_SPEC = [
@@ -154,7 +154,7 @@ Start with the goal (e.g., "program") and work down to terminals.
 **Recursive Descent** is the most intuitive top-down approach. Each grammar rule becomes a function:
 
 Given this grammar:
-```bnf
+```bnf title="Expression Grammar" linenums="1"
 <expression> ::= <term> { ("+" | "-") <term> }
 <term> ::= <factor> { ("*" | "/") <factor> }
 <factor> ::= NUMBER | "(" <expression> ")"
@@ -162,7 +162,7 @@ Given this grammar:
 
 Here's a recursive descent parser:
 
-```python
+```python title="Recursive Descent Parser" linenums="1"
 class Parser:
     def __init__(self, tokens):
         self.tokens = tokens
@@ -276,7 +276,7 @@ Result: 2 + (3 * 4) = 14 ✓
 
 Want to add exponentiation (`^`) with highest precedence?
 
-```bnf
+```bnf title="Grammar with Exponentiation" linenums="1"
 <expression> ::= <term> { ("+" | "-") <term> }
 <term> ::= <power> { ("*" | "/") <power> }
 <power> ::= <factor> [ "^" <power> ]
@@ -289,7 +289,7 @@ Notice `<power>` calls itself on the right side—this makes `^` right-associati
 
 Good parsers give helpful error messages:
 
-```python
+```python title="Error Handling in Parser" linenums="1"
 def consume(self, expected_type):
     token = self.current_token()
     if token is None:
@@ -313,7 +313,7 @@ More sophisticated parsers can:
 
 Once you have an AST, you can walk it to compute results:
 
-```python
+```python title="AST Evaluator" linenums="1"
 def evaluate(node):
     if node[0] == 'number':
         return node[1]
@@ -357,7 +357,7 @@ You write the grammar, the tool generates the parser code. ✨ Laziness is a vir
 
 **Example with Lark (Python):**
 
-```python
+```python title="Parser Generator with Lark" linenums="1"
 from lark import Lark
 
 grammar = """
@@ -393,7 +393,7 @@ Most languages have built-in JSON parsers because it's so common.
 
 HTML is messy—browsers handle malformed HTML gracefully. Real HTML parsers use complex error recovery:
 
-```html
+```html title="Malformed HTML Example" linenums="1"
 <p>This is <b>bold and <i>italic</b> text</i>
 ```
 

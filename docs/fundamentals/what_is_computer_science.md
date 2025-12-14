@@ -39,7 +39,7 @@ This is the study of **computational complexity**—categorizing problems by how
 
 ### How do we express computation?
 
-This is where programming languages come in. But beneath the syntax lies a deeper question: What are the fundamental ways to describe processes? [Finite State Machines](finite_state_machines.md), [Recursive Transition Networks](recursive_transition_networks.md), BNF grammars, lambda calculus, Turing machines—these are all answers to "How do we write down what we want a computer to do?"
+This is where programming languages come in. But beneath the syntax lies a deeper question: What are the fundamental ways to describe processes? [Finite State Machines](finite_state_machines.md), [Recursive Transition Networks](recursive_transition_networks.md), [BNF grammars](backus_naur_form.md), lambda calculus, Turing machines—these are all answers to "How do we write down what we want a computer to do?"
 
 ### How do we build reliable systems?
 
@@ -205,11 +205,10 @@ If you're new to CS, start here:
 
 1. **[Computational Thinking](computational_thinking.md)** — The mental toolkit
 2. **[Finite State Machines](finite_state_machines.md)** — Simple computation models
-
-3. [Recursive Transition Networks](recursive_transition_networks.md) — Describing languages visually
+3. **[Recursive Transition Networks](recursive_transition_networks.md)** — Describing languages visually
+4. **[Backus-Naur Form](backus_naur_form.md)** — Describing languages textually
 
 *Coming soon:*
-4. Backus-Naur Form — Describing languages textually
 5. Regular Expressions — Practical pattern matching
 6. How Parsers Work — From theory to implementation
 

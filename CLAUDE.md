@@ -79,8 +79,14 @@ Articles must balance **playfulness with professionalism** and be **technically 
 - Use mermaid diagrams for visual concepts (already configured)
 - Include practice problems with expandable solutions (`??? question`)
 - Cross-link related articles using markdown links
-- Use admonitions for tips, notes, warnings (`??? tip`, `!!! note`)
-- Code examples should include titles and line numbers
+- Use admonitions for tips and callouts:
+  - Prefer `??? tip` (collapsible tips) for helpful insights
+  - **Avoid** `??? note` or `!!! note` (the "note" style doesn't render well in Material for MkDocs)
+- **Code examples must include titles and line numbers**:
+  - Format: ` ```language title="Descriptive Title" linenums="1" `
+  - Example: ` ```python title="Recursive Descent Parser" linenums="1" `
+  - The title should describe what the code demonstrates
+  - Material for MkDocs provides copy button automatically
 - **Markdown list formatting**: Always add a blank line before lists that follow text/bold headers
 - Embed YouTube videos at the bottom of articles in a "Video Summary" section using the responsive wrapper class:
   ```markdown

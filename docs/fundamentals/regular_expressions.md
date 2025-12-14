@@ -107,7 +107,7 @@ Parentheses group patterns together:
 
 Groups also *capture* what they match for later use:
 
-```python
+```python title="Capturing Groups in Python" linenums="1"
 import re
 
 match = re.search(r'(\d{3})-(\d{4})', 'Call 555-1234')
@@ -247,7 +247,7 @@ Most languages use similar syntax, with minor variations:
 
 ### Python
 
-```python
+```python title="Regular Expressions in Python" linenums="1"
 import re
 
 # Search for pattern
@@ -265,7 +265,7 @@ print(result)  # "Order X"
 
 ### JavaScript
 
-```javascript
+```javascript title="Regular Expressions in JavaScript" linenums="1"
 // Test if pattern matches
 /\d+/.test('Order 12345')  // true
 
@@ -278,7 +278,7 @@ print(result)  # "Order X"
 
 ### Command Line (grep)
 
-```bash
+```bash title="Regular Expressions in grep" linenums="1"
 # Find lines containing "error"
 grep -E 'error' logfile.txt
 
