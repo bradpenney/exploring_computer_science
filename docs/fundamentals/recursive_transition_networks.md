@@ -409,7 +409,7 @@ RTNs make the abstract concrete. They turn "grammar" from a vague concept into a
 
 ## Practice Problems
 
-??? question "Challenge 1: Email Addresses"
+??? question "Practice Problem 1: Email Addresses"
 
     Design an RTN for simplified email addresses like `user@domain.com`.
 
@@ -438,7 +438,7 @@ RTNs make the abstract concrete. They turn "grammar" from a vague concept into a
 
         Where Username, Domain, and Extension each follow the "one or more alphanumeric" pattern (similar to our unsigned integer RTN).
 
-??? question "Challenge 2: Trace an Expression"
+??? question "Practice Problem 2: Trace an Expression"
 
     Trace `2 * 3 + 4` through the Expression/Term/Factor RTNs.
 
@@ -458,7 +458,7 @@ RTNs make the abstract concrete. They turn "grammar" from a vague concept into a
 
         **Result:** `(2 * 3) + 4 = 10`, not `2 * (3 + 4) = 14`. Correct precedence!
 
-??? question "Challenge 3: Extend the Grammar"
+??? question "Practice Problem 3: Extend the Grammar"
 
     How would you modify the arithmetic RTNs to support exponentiation (`^`), which should have higher precedence than multiplication?
 
@@ -486,7 +486,7 @@ RTNs make the abstract concrete. They turn "grammar" from a vague concept into a
 
         Now `2 + 3 * 4 ^ 5` parses as `2 + (3 * (4 ^ 5))` ✓
 
-??? question "Challenge 4: Ambiguity"
+??? question "Practice Problem 4: Ambiguity"
 
     The natural language RTNs above are ambiguous. Find a sentence that could have multiple valid parses.
 

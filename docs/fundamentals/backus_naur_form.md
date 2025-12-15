@@ -260,13 +260,13 @@ Both describe the same thing—valid strings in a language. Choose based on your
 
 ## Practice Problems
 
-??? question "Challenge 1: Write BNF for Email Addresses"
+??? question "Practice Problem 1: Write BNF for Email Addresses"
 
     Define a grammar for simple email addresses like `user@domain.com`.
 
     Hint: You'll need rules for the local part (before @), domain, and top-level domain.
 
-??? question "Challenge 2: Convert This RTN to BNF"
+??? question "Practice Problem 2: Convert This RTN to BNF"
 
     Remember the natural language Sentence RTN? Convert the Noun Phrase portion to BNF:
 
@@ -276,7 +276,7 @@ Both describe the same thing—valid strings in a language. Choose based on your
     <noun-phrase> ::= ???
     ```
 
-??? question "Challenge 3: Add Exponentiation"
+??? question "Practice Problem 3: Add Exponentiation"
 
     Extend the arithmetic expression grammar to support `^` for exponentiation.
     Remember: exponentiation has higher precedence than multiplication and is right-associative
@@ -320,3 +320,9 @@ Both describe the same thing—valid strings in a language. Choose based on your
 ---
 
 BNF takes the visual intuition of RTNs and packages it into a format that's easy to write, share, and—most importantly—turn into working parsers. It's been describing programming languages for over 60 years, and it's not going anywhere. Once you can read BNF, you can read the source code of language design itself. 🎯
+
+## Video Summary
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/siCKbYi4vhg" title="Backus-Naur Form (BNF) Notation" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>

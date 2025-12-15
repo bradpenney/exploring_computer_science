@@ -264,13 +264,13 @@ Good abstraction hides complexity while preserving essential behavior. Bad abstr
 
 ## Practice Problems
 
-??? question "Challenge 1: Decompose a Mobile App"
+??? question "Practice Problem 1: Decompose a Mobile App"
 
     You're building a mobile app for tracking daily habits. Decompose this into components and sub-components.
 
     How would you break down just the "streak tracking" feature?
 
-??? question "Challenge 2: Spot the Pattern"
+??? question "Practice Problem 2: Spot the Pattern"
 
     These functions all do something similar:
 
@@ -281,7 +281,7 @@ Good abstraction hides complexity while preserving essential behavior. Bad abstr
 
     What's the underlying pattern? Could you write one general function that handles all of these?
 
-??? question "Challenge 3: Write an Algorithm"
+??? question "Practice Problem 3: Write an Algorithm"
 
     Write precise, unambiguous instructions for:
 

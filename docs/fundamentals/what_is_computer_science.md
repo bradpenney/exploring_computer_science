@@ -227,7 +227,7 @@ Each topic builds on the previous, moving from abstract thinking to concrete too
 
 ## Practice Problems
 
-??? question "Challenge 1: Identify the Subfield"
+??? question "Practice Problem 1: Identify the Subfield"
 
     For each problem below, which CS subfield would primarily tackle it? (Some might involve multiple!)
 
@@ -245,7 +245,7 @@ Each topic builds on the previous, moving from abstract thinking to concrete too
         4. **Theory / Computability** — This is actually undecidable! (Rice's Theorem)
         5. **Human-Computer Interaction (HCI)** — Usability and accessibility
 
-??? question "Challenge 2: Solvable or Not?"
+??? question "Practice Problem 2: Solvable or Not?"
 
     Which of these problems can be solved algorithmically?
 
@@ -268,7 +268,7 @@ Each topic builds on the previous, moving from abstract thinking to concrete too
         - ❌ #2: Undecidable (related to Halting Problem)
         - ❌ #4: Undecidable (Gödel's Incompleteness Theorem)
 
-??? question "Challenge 3: CS vs. Programming vs. IT"
+??? question "Practice Problem 3: CS vs. Programming vs. IT"
 
     Classify each task as primarily Computer Science (theory), Software Engineering (building systems), Programming (writing code), or IT (deployment/maintenance):
 

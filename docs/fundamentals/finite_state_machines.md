@@ -140,7 +140,6 @@ stateDiagram-v2
     S0 --> S0: a
     S0 --> S1: a
     S1 --> S2: b
-    S2((S2))
 ```
 
 From S0, reading 'a' could go to S0 *or* S1. Non-deterministic!
@@ -547,13 +546,13 @@ When you write a regex like `a*b+`, there are automatic algorithms that convert 
 
 ## Practice Problems
 
-??? question "Challenge 1: Design an FSM"
+??? question "Practice Problem 1: Design an FSM"
 
     Create an FSM that accepts strings over {a, b} that contain an even number of a's.
 
     Hint: How many states do you need? What do they represent?
 
-??? question "Challenge 2: Vending Machine"
+??? question "Practice Problem 2: Vending Machine"
 
     Design an FSM for a vending machine that:
 
@@ -563,7 +562,7 @@ When you write a regex like `a*b+`, there are automatic algorithms that convert 
 
     What are your states? (Hint: think about accumulated amounts)
 
-??? question "Challenge 3: Prove It's Not Regular"
+??? question "Practice Problem 3: Prove It's Not Regular"
 
     The language L = {aⁿbⁿ | n ≥ 0} is not regular.
 
@@ -586,8 +585,8 @@ When you write a regex like `a*b+`, there are automatic algorithms that convert 
 
 More articles coming soon on related topics:
 
+- [Regular Expressions](regular_expressions.md) — Another notation for regular languages
 - [Recursive Transition Networks](recursive_transition_networks.md) — FSMs with recursion
-- Regular Expressions — Another notation for regular languages
 - [Backus-Naur Form](backus_naur_form.md) — Describing context-free languages
 
 ---
