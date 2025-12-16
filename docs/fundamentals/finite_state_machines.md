@@ -428,17 +428,17 @@ FSMs translate directly into code. Here's a turnstile in Python:
 ```python title="Turnstile FSM in Python" linenums="1"
 class Turnstile:
     def __init__(self):
-        self.state = "locked"
+        self.state = "locked"  # (1)!
 
-    def transition(self, input):
-        if self.state == "locked":
+    def transition(self, input):  # (2)!
+        if self.state == "locked":  # (3)!
             if input == "coin":
-                self.state = "unlocked"
+                self.state = "unlocked"  # (4)!
             # push while locked: stay locked
 
         elif self.state == "unlocked":
             if input == "push":
-                self.state = "locked"
+                self.state = "locked"  # (5)!
             # coin while unlocked: stay unlocked
 
         return self.state
@@ -450,19 +450,29 @@ print(t.transition("coin"))   # unlocked
 print(t.transition("push"))   # locked
 ```
 
+1. Initial state - turnstile starts locked
+2. Process an input event and transition to next state
+3. Check current state to determine which transitions are valid
+4. Transition from locked to unlocked when coin inserted
+5. Transition from unlocked to locked when pushed
+
 Or using a transition table:
 
 ```python title="Table-Driven FSM Implementation" linenums="1"
-transitions = {
+transitions = {  # (1)!
     ("locked", "coin"): "unlocked",
     ("locked", "push"): "locked",
     ("unlocked", "coin"): "unlocked",
     ("unlocked", "push"): "locked",
 }
 
-def next_state(current, input):
-    return transitions.get((current, input), current)
+def next_state(current, input):  # (2)!
+    return transitions.get((current, input), current)  # (3)!
 ```
+
+1. Define all state transitions as a dictionary mapping (state, input) tuples to next states
+2. Look up the next state based on current state and input
+3. Use .get() with current state as default - if transition not defined, stay in current state
 
 The table-driven approach scales better for complex FSMs.
 

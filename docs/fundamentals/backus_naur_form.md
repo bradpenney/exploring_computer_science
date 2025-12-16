@@ -201,16 +201,16 @@ You can read this almost like English:
 One of BNF's superpowers is that it translates almost directly into parser code. Each rule becomes a function:
 
 ```python title="Recursive Descent Parser from BNF" linenums="1"
-def parse_expression():
+def parse_expression():  # (1)!
     """<expression> ::= <term> { ('+' | '-') <term> }"""
-    result = parse_term()
-    while current_token() in ['+', '-']:
+    result = parse_term()  # (2)!
+    while current_token() in ['+', '-']:  # (3)!
         operator = consume_token()
         right = parse_term()
-        result = BinaryOp(result, operator, right)
+        result = BinaryOp(result, operator, right)  # (4)!
     return result
 
-def parse_term():
+def parse_term():  # (5)!
     """<term> ::= <factor> { ('*' | '/') <factor> }"""
     result = parse_factor()
     while current_token() in ['*', '/']:
@@ -219,18 +219,26 @@ def parse_term():
         result = BinaryOp(result, operator, right)
     return result
 
-def parse_factor():
+def parse_factor():  # (6)!
     """<factor> ::= <number> | '(' <expression> ')'"""
     if current_token() == '(':
         consume_token()  # eat '('
-        result = parse_expression()
+        result = parse_expression()  # (7)!
         consume_token()  # eat ')'
         return result
     else:
         return parse_number()
 ```
 
-This technique is called **recursive descent parsing**, and it's one of the most intuitive ways to build a parser. The grammar *is* the code structure.
+1. Each BNF rule becomes a function - this one handles expressions (lowest precedence)
+2. Start by parsing the higher-precedence term
+3. Handle zero or more addition/subtraction operations
+4. Build AST node combining left operand, operator, and right operand
+5. Handles medium precedence operations (multiplication and division)
+6. Handles highest precedence: numbers and parenthesized expressions
+7. Recursively parse expressions inside parentheses - shows how BNF recursion becomes function recursion
+
+This technique is called **recursive descent parsing**, and it's one of the most intuitive ways to build a parser. The grammar *is* the code structure. For a deeper dive into parsing strategies and implementation, see [How Parsers Work](how_parsers_work.md).
 
 ## BNF Variants You'll Encounter
 

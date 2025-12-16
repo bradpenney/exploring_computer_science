@@ -82,11 +82,27 @@ Articles must balance **playfulness with professionalism** and be **technically 
 - Use admonitions for tips and callouts:
   - Prefer `??? tip` (collapsible tips) for helpful insights
   - **Avoid** `??? note` or `!!! note` (the "note" style doesn't render well in Material for MkDocs)
-- **Code examples must include titles and line numbers**:
+- **Code examples must include titles, line numbers, and annotations**:
   - Format: ` ```language title="Descriptive Title" linenums="1" `
   - Example: ` ```python title="Recursive Descent Parser" linenums="1" `
   - The title should describe what the code demonstrates
   - Material for MkDocs provides copy button automatically
+  - **Add code annotations** to explain key concepts:
+    - Use `# (1)!`, `# (2)!`, etc. for inline annotations
+    - After the code block, provide numbered explanations
+    - Annotate important lines that explain algorithms, data structures, or non-obvious logic
+    - Example:
+      ```python
+      def tokenize(text):
+          tokens = []
+          pos = 0  # (1)!
+          while pos < len(text):  # (2)!
+              # ... processing logic
+          return tokens
+      ```
+
+      1. Track current position in the input string
+      2. Process each character until we reach the end
 - **Markdown list formatting**: Always add a blank line before lists that follow text/bold headers
 - Embed YouTube videos at the bottom of articles in a "Video Summary" section using the responsive wrapper class:
   ```markdown

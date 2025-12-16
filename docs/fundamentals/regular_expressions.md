@@ -218,11 +218,16 @@ For example, if you're matching a phone number like `555-1234`, you might want t
 ```python title="Capturing Groups in Python" linenums="1"
 import re
 
-match = re.search(r'(\d{3})-(\d{4})', 'Call 555-1234')
-print(match.group(0))  # "555-1234" (entire match)
-print(match.group(1))  # "555" (first capture group)
-print(match.group(2))  # "1234" (second capture group)
+match = re.search(r'(\d{3})-(\d{4})', 'Call 555-1234')  # (1)!
+print(match.group(0))  # "555-1234" (entire match)  # (2)!
+print(match.group(1))  # "555" (first capture group)  # (3)!
+print(match.group(2))  # "1234" (second capture group)  # (4)!
 ```
+
+1. Search for pattern with two capturing groups: 3 digits, hyphen, 4 digits
+2. Group 0 is always the entire matched string
+3. Group 1 captures the first parenthesized sub-pattern (3 digits)
+4. Group 2 captures the second parenthesized sub-pattern (4 digits)
 
 **Breaking it down:**
 
@@ -240,15 +245,18 @@ The parentheses create numbered groups (1, 2, 3...). Group 0 is always the entir
 import re
 
 text = "Born on 1995-08-23"
-match = re.search(r'(\d{4})-(\d{2})-(\d{2})', text)
+match = re.search(r'(\d{4})-(\d{2})-(\d{2})', text)  # (1)!
 
-year = match.group(1)   # "1995"
+year = match.group(1)   # "1995"  # (2)!
 month = match.group(2)  # "08"
 day = match.group(3)    # "23"
 
 print(f"Year: {year}, Month: {month}, Day: {day}")
 # Output: Year: 1995, Month: 08, Day: 23
 ```
+
+1. Pattern with three groups: 4 digits (year), 2 digits (month), 2 digits (day)
+2. Extract each component by accessing numbered capture groups
 
 **Practical use - Reformatting:**
 
@@ -257,12 +265,15 @@ import re
 
 phone = "555-123-4567"
 # Capture three groups
-match = re.search(r'(\d{3})-(\d{3})-(\d{4})', phone)
+match = re.search(r'(\d{3})-(\d{3})-(\d{4})', phone)  # (1)!
 
 # Rearrange into different format
-formatted = f"({match.group(1)}) {match.group(2)}-{match.group(3)}"
+formatted = f"({match.group(1)}) {match.group(2)}-{match.group(3)}"  # (2)!
 print(formatted)  # Output: (555) 123-4567
 ```
+
+1. Capture three groups: area code, exchange, and line number
+2. Reconstruct the phone number in a different format using the captured groups
 
 **Key insight:** Parentheses do two things:
 
@@ -718,30 +729,38 @@ Most languages use similar syntax, with minor variations:
 import re
 
 # Search for pattern
-match = re.search(r'\d+', 'Order 12345')
+match = re.search(r'\d+', 'Order 12345')  # (1)!
 print(match.group())  # "12345"
 
 # Find all matches
-matches = re.findall(r'\d+', 'Items: 5, 10, 15')
+matches = re.findall(r'\d+', 'Items: 5, 10, 15')  # (2)!
 print(matches)  # ['5', '10', '15']
 
 # Replace
-result = re.sub(r'\d+', 'X', 'Order 123')
+result = re.sub(r'\d+', 'X', 'Order 123')  # (3)!
 print(result)  # "Order X"
 ```
+
+1. `search()` finds the first match in the string and returns a match object
+2. `findall()` returns a list of all non-overlapping matches
+3. `sub()` replaces all matches with a replacement string
 
 ### JavaScript
 
 ```javascript title="Regular Expressions in JavaScript" linenums="1"
 // Test if pattern matches
-/\d+/.test('Order 12345')  // true
+/\d+/.test('Order 12345')  // true  // (1)!
 
 // Find match
-'Order 12345'.match(/\d+/)  // ['12345']
+'Order 12345'.match(/\d+/)  // ['12345']  // (2)!
 
 // Replace
-'Order 123'.replace(/\d+/, 'X')  // "Order X"
+'Order 123'.replace(/\d+/, 'X')  // "Order X"  // (3)!
 ```
+
+1. `test()` returns boolean - true if pattern is found anywhere in string
+2. `match()` returns array of matches (use `/g` flag for all matches)
+3. `replace()` substitutes first match with replacement (use `/g` for all)
 
 ### Command Line (grep)
 
@@ -911,9 +930,16 @@ Or use a character class where most specials are literal:
 ## Further Reading
 
 - [Finite State Machines](finite_state_machines.md) — The theory behind regex
+- [How Parsers Work](how_parsers_work.md) — How regex fits into lexical analysis and parsing
 - [Regular Expressions 101](https://regex101.com/) — Interactive regex tester
 - [Backus-Naur Form](backus_naur_form.md) — When regex isn't powerful enough
 
 ---
 
 Regular expressions are a superpower with a steep learning curve. They look like line noise until suddenly they don't—and then you'll find yourself reaching for them constantly. The trick is to build them up piece by piece, test frequently, and resist the urge to write everything in one inscrutable line. Your future self will thank you. 🎯
+
+## Video Summary
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/yhZgVeaZiiU" title="Regular Expressions" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>

@@ -111,22 +111,31 @@ Without abstraction, sending an email means dealing with all this:
 import smtplib
 from email.mime.text import MIMEText
 
-server = smtplib.SMTP('smtp.gmail.com', 587)
-server.starttls()
-server.login('me@gmail.com', 'password123')
-msg = MIMEText('Hi Bob!')
+server = smtplib.SMTP('smtp.gmail.com', 587)  # (1)!
+server.starttls()  # (2)!
+server.login('me@gmail.com', 'password123')  # (3)!
+msg = MIMEText('Hi Bob!')  # (4)!
 msg['Subject'] = 'Hello'
 msg['To'] = 'bob@example.com'
-server.send_message(msg)
-server.quit()
+server.send_message(msg)  # (5)!
+server.quit()  # (6)!
 ```
+
+1. Connect to Gmail's SMTP server on port 587
+2. Upgrade connection to secure TLS encryption
+3. Authenticate with username and password
+4. Construct email message with MIME formatting
+5. Send the constructed message through the server
+6. Close the connection properly
 
 With abstraction, all that complexity hides behind a simple interface:
 
 ```python title="Sending Email With Abstraction" linenums="1"
 # With abstraction: complexity hidden
-send_email("bob@example.com", "Hello", "Hi Bob!")
+send_email("bob@example.com", "Hello", "Hi Bob!")  # (1)!
 ```
+
+1. All the complexity from the previous example is now hidden inside this function - caller only needs to provide recipient, subject, and message
 
 The caller doesn't need to know *how* emails work—only *that* they can send one. The 50 lines of SMTP configuration, authentication, and error handling still exist, but they're someone else's problem now.
 
