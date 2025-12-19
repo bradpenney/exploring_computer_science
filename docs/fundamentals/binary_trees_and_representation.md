@@ -93,6 +93,69 @@ With binary, computers can represent:
 
 **Everything** a computer processes—from your email to a movie to the operating system itself—is ultimately bits.
 
+## Why Abstraction is Still Necessary
+
+Given that binary can represent anything—numbers, text, images, sound—why do we need abstraction?
+
+=== ":material-brain: Cognitive Overload"
+
+    Working directly with bits is impractical for humans.
+
+    **Representing the number 1,000,000:**
+
+    - **Binary**: `11110100001001000000` (20 bits)
+    - **Decimal**: `1000000` (7 digits)
+    - **Hexadecimal**: `F4240` (5 characters)
+
+    Hexadecimal is an abstraction over binary (each hex digit = 4 bits), making it easier to read and write.
+
+=== ":material-comment-question: Semantic Meaning"
+
+    Bits have no inherent meaning—context determines interpretation.
+
+    **The bit sequence `01000001` could mean:**
+
+    - The number 65 (unsigned integer)
+    - The letter 'A' (ASCII encoding)
+    - The number \(1.52 \times 10^{-43}\) (part of a floating-point number)
+    - An instruction opcode (CPU operation)
+
+    **Abstraction provides meaning:** High-level languages let you write `'A'` instead of `01000001`, making intent clear.
+
+=== ":material-chip: Hardware Complexity"
+
+    Modern CPUs have billions of transistors. Writing programs at the bit level would be:
+
+    - Extremely tedious (millions of lines for simple tasks)
+    - Error-prone (one wrong bit = program crash)
+    - Unportable (different CPUs use different instruction sets)
+
+    **Abstraction layers solve this:**
+
+    | Layer | Example | Abstracts Over |
+    |:------|:--------|:---------------|
+    | **Hardware** | Transistors, logic gates | Physics (voltage, current) |
+    | **Machine Code** | `10110000 01100001` | Gate-level operations |
+    | **Assembly** | `MOV AL, 97` | Binary opcodes |
+    | **High-Level** | `char letter = 'A';` | Assembly instructions |
+    | **Libraries** | `print("Hello")` | Low-level I/O details |
+
+    Each layer hides complexity, letting programmers focus on solving problems rather than managing bits.
+
+=== ":material-speedometer: Efficiency"
+
+    Sometimes binary isn't the most efficient representation for specific tasks.
+
+    **Example: DNA Sequences**
+
+    DNA has four bases (A, C, G, T). You could encode each base in binary:
+
+    - `A = 00`, `C = 01`, `G = 10`, `T = 11` (2 bits each)
+
+    But specialized data structures (suffix trees, hash tables) provide faster search and comparison, even though they ultimately use binary underneath.
+
+    **Abstraction enables optimization:** You can change the underlying representation without changing the program logic.
+
 ## Binary Trees
 
 ### What is a Binary Tree?
@@ -289,122 +352,67 @@ Only 3 comparisons instead of scanning all 7 nodes sequentially.
 
 ## Real-World Applications
 
-### 1. Decision Trees (Machine Learning)
+=== "Decision Trees"
 
-Binary trees model decisions in AI systems:
+    **Machine Learning**
 
-- Each node represents a feature test
-- Each leaf represents a classification
-- Depth determines model complexity
+    Binary trees model decisions in AI systems:
 
-### 2. Expression Trees (Compilers)
+    - Each node represents a feature test
+    - Each leaf represents a classification
+    - Depth determines model complexity
 
-The expression `3 + 4 * 2` becomes a binary tree:
+=== "Expression Trees"
 
-```mermaid
-graph TD
-    Plus["+"] --> Three["3"]
-    Plus --> Times["*"]
-    Times --> Four["4"]
-    Times --> Two["2"]
+    **Compilers**
 
-    style Plus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style Times fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style Three fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style Four fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style Two fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
-```
+    The expression `2 + 3 * 4` becomes a binary tree:
 
-Evaluating the tree (post-order traversal) correctly computes `3 + (4 * 2) = 11`.
+    ```mermaid
+    graph TD
+        Plus["+"] --> Two["2"]
+        Plus --> Times["*"]
+        Times --> Three["3"]
+        Times --> Four["4"]
 
-### 3. File Systems
+        style Plus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Times fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Two fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Three fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Four fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    ```
 
-Directory hierarchies are trees:
+    Evaluating the tree (post-order traversal) correctly computes `2 + (3 * 4) = 14`.
 
-```
-/
-├── home/
-│   ├── user/
-│   │   ├── documents/
-│   │   └── pictures/
-│   └── shared/
-└── var/
-    └── log/
-```
+    See **[How Parsers Work](how_parsers_work.md)** for a deep dive into how these trees are built.
 
-Though not strictly binary (nodes can have many children), the principle of hierarchical organization is the same.
+=== "File Systems"
 
-### 4. Huffman Encoding (Compression)
+    Directory hierarchies are trees:
 
-Huffman trees assign shorter binary codes to frequent characters:
+    ```
+    /
+    ├── home/
+    │   ├── user/
+    │   │   ├── documents/
+    │   │   └── pictures/
+    │   └── shared/
+    └── var/
+        └── log/
+    ```
 
-- Frequent characters: shorter paths (fewer bits)
-- Rare characters: longer paths (more bits)
+    Though not strictly binary (nodes can have many children), the principle of hierarchical organization is the same.
 
-This is how ZIP files and JPEG images achieve compression.
+=== "Compression"
 
-## Why Abstraction is Still Necessary
+    **Huffman Encoding**
 
-Given that binary can represent anything—numbers, text, images, sound—why do we need abstraction?
+    Huffman trees assign shorter binary codes to frequent characters:
 
-=== ":material-brain: Cognitive Overload"
+    - Frequent characters: shorter paths (fewer bits)
+    - Rare characters: longer paths (more bits)
 
-    Working directly with bits is impractical for humans.
-
-    **Representing the number 1,000,000:**
-
-    - **Binary**: `11110100001001000000` (20 bits)
-    - **Decimal**: `1000000` (7 digits)
-    - **Hexadecimal**: `F4240` (5 characters)
-
-    Hexadecimal is an abstraction over binary (each hex digit = 4 bits), making it easier to read and write.
-
-=== ":material-comment-question: Semantic Meaning"
-
-    Bits have no inherent meaning—context determines interpretation.
-
-    **The bit sequence `01000001` could mean:**
-
-    - The number 65 (unsigned integer)
-    - The letter 'A' (ASCII encoding)
-    - The number \(1.52 \times 10^{-43}\) (part of a floating-point number)
-    - An instruction opcode (CPU operation)
-
-    **Abstraction provides meaning:** High-level languages let you write `'A'` instead of `01000001`, making intent clear.
-
-=== ":material-chip: Hardware Complexity"
-
-    Modern CPUs have billions of transistors. Writing programs at the bit level would be:
-
-    - Extremely tedious (millions of lines for simple tasks)
-    - Error-prone (one wrong bit = program crash)
-    - Unportable (different CPUs use different instruction sets)
-
-    **Abstraction layers solve this:**
-
-    | Layer | Example | Abstracts Over |
-    |:------|:--------|:---------------|
-    | **Hardware** | Transistors, logic gates | Physics (voltage, current) |
-    | **Machine Code** | `10110000 01100001` | Gate-level operations |
-    | **Assembly** | `MOV AL, 97` | Binary opcodes |
-    | **High-Level** | `char letter = 'A';` | Assembly instructions |
-    | **Libraries** | `print("Hello")` | Low-level I/O details |
-
-    Each layer hides complexity, letting programmers focus on solving problems rather than managing bits.
-
-=== ":material-speedometer: Efficiency"
-
-    Sometimes binary isn't the most efficient representation for specific tasks.
-
-    **Example: DNA Sequences**
-
-    DNA has four bases (A, C, G, T). You could encode each base in binary:
-
-    - `A = 00`, `C = 01`, `G = 10`, `T = 11` (2 bits each)
-
-    But specialized data structures (suffix trees, hash tables) provide faster search and comparison, even though they ultimately use binary underneath.
-
-    **Abstraction enables optimization:** You can change the underlying representation without changing the program logic.
+    This is how ZIP files and JPEG images achieve compression.
 
 ## Practice Problems
 
