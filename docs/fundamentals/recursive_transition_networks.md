@@ -20,16 +20,16 @@ The defining feature: edges can reference *other RTNs*. An RTN for "Expression" 
 
 ### Formal Definition
 
-An RTN is defined by a set of networks, where each network N is a 5-tuple (Q, Σ, Γ, δ, q₀, F):
+An RTN is defined by a set of networks, where each network N is a 5-tuple \((Q, \Sigma, \Gamma, \delta, q_0, F)\):
 
 | Symbol | Meaning |
 |:-------|:--------|
-| Q | Finite set of states |
-| Σ | Finite alphabet of **terminal** symbols (actual tokens) |
-| Γ | Finite set of **non-terminal** symbols (network names) |
-| δ | Transition function: Q × (Σ ∪ Γ) → Q |
-| q₀ | Initial state (q₀ ∈ Q) |
-| F | Set of final/accepting states (F ⊆ Q) |
+| \(Q\) | Finite set of states |
+| \(\Sigma\) | Finite alphabet of **terminal** symbols (actual tokens) |
+| \(\Gamma\) | Finite set of **non-terminal** symbols (network names) |
+| \(\delta\) | Transition function: \(Q \times (\Sigma \cup \Gamma) \to Q\) |
+| \(q_0\) | Initial state \((q_0 \in Q)\) |
+| \(F\) | Set of final/accepting states \((F \subseteq Q)\) |
 
 The key distinction from finite state machines: transitions can be on **non-terminals**, which invoke other networks recursively.
 
@@ -137,70 +137,76 @@ The grammar itself must encode this precedence. We accomplish this through a **h
 
 ### The Three-Level Hierarchy
 
-We define three mutually recursive networks:
+We define three mutually recursive networks that work together to enforce operator precedence:
 
-1. **Expression** (loosest binding): handles `+` and `-`
-2. **Term** (medium binding): handles `*` and `/`
-3. **Factor** (tightest binding): handles numbers and parenthesized expressions
+=== ":material-numeric-1-circle: Expression (Loosest Binding)"
 
-**Conceptually:**
+    An **Expression** handles addition and subtraction (`+` and `-`).
 
-- A **Factor** is the smallest unit: a number or a parenthesized expression
-- A **Term** is one or more Factors multiplied or divided together
-- An **Expression** is one or more Terms added or subtracted together
+    **Conceptually:** An Expression is one or more Terms added or subtracted together.
 
-Thus `3 + 4 * 2` naturally parses as: **(term: 3) + (term: 4 * 2)**
+    **RTN Diagram:**
 
-### Expression RTN
+    ```mermaid
+    stateDiagram-v2
+        direction LR
+        [*] --> s1
+        s1 --> s2: Term
+        s2 --> [*]
+        s2 --> s3: +
+        s2 --> s3: -
+        s3 --> s2: Term
+    ```
 
-An expression is a term, optionally followed by `+` or `-` and another term (repeatable):
+    **How it works:** An expression is a term, optionally followed by `+` or `-` and another term (repeatable).
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    [*] --> s1
-    s1 --> s2: Term
-    s2 --> [*]
-    s2 --> s3: +
-    s2 --> s3: -
-    s3 --> s2: Term
-```
+    **Key observation:** Expression calls Term first, ensuring multiplication/division are handled before returning. This means `3 + 4 * 2` naturally parses as **(term: 3) + (term: 4 × 2)**.
 
-**Key observation:** Expression calls Term first, ensuring multiplication/division are handled before returning.
+=== ":material-numeric-2-circle: Term (Medium Binding)"
 
-### Term RTN
+    A **Term** handles multiplication and division (`*` and `/`).
 
-A term is a factor, optionally followed by `*` or `/` and another factor (repeatable):
+    **Conceptually:** A Term is one or more Factors multiplied or divided together.
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    [*] --> t1
-    t1 --> t2: Factor
-    t2 --> [*]
-    t2 --> t3: *
-    t2 --> t3: /
-    t3 --> t2: Factor
-```
+    **RTN Diagram:**
 
-**Key observation:** Term calls Factor, grouping numbers/parenthesized expressions before returning to Expression.
+    ```mermaid
+    stateDiagram-v2
+        direction LR
+        [*] --> t1
+        t1 --> t2: Factor
+        t2 --> [*]
+        t2 --> t3: *
+        t2 --> t3: /
+        t3 --> t2: Factor
+    ```
 
-### Factor RTN
+    **How it works:** A term is a factor, optionally followed by `*` or `/` and another factor (repeatable).
 
-A factor is either a number or an expression wrapped in parentheses:
+    **Key observation:** Term calls Factor, grouping numbers/parenthesized expressions before returning to Expression. This ensures multiplication happens before addition.
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    [*] --> f1
-    f1 --> f2: Number
-    f1 --> f3: (
-    f3 --> f4: Expression
-    f4 --> f2: )
-    f2 --> [*]
-```
+=== ":material-numeric-3-circle: Factor (Tightest Binding)"
 
-**Key observation:** Factor can call Expression recursively, enabling nested parentheses like `((1 + 2))`.
+    A **Factor** handles numbers and parenthesized expressions.
+
+    **Conceptually:** A Factor is the smallest unit—either a number or a parenthesized expression.
+
+    **RTN Diagram:**
+
+    ```mermaid
+    stateDiagram-v2
+        direction LR
+        [*] --> f1
+        f1 --> f2: Number
+        f1 --> f3: (
+        f3 --> f4: Expression
+        f4 --> f2: )
+        f2 --> [*]
+    ```
+
+    **How it works:** A factor is either a number or an expression wrapped in parentheses.
+
+    **Key observation:** Factor can call Expression recursively, enabling nested parentheses like `((1 + 2))`. This is where the recursion becomes circular—Expression calls Term, Term calls Factor, Factor can call Expression again.
 
 !!! tip "How the Calling Chain Encodes Precedence"
 
@@ -523,6 +529,7 @@ RTNs make the abstract concrete. They turn "grammar" from a vague concept into a
 
 - **William A. Woods (1970)** — "Transition Network Grammars for Natural Language Analysis" (the original paper)
 - **David Evans, [Introduction to Computing](https://computingbook.org/)** — Chapter 2 covers RTNs and formal languages
+- **[Binary Trees & Representation](binary_trees_and_representation.md)** — Tree structures and parse trees
 - **[Computational Thinking](computational_thinking.md)** — RTNs exemplify decomposition and abstraction
 - **[Backus-Naur Form](backus_naur_form.md)** — Textual notation for context-free grammars
 

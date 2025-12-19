@@ -370,184 +370,209 @@ Different parsing strategies exist because:
 
 For most projects: start with **recursive descent** (top-down) because it's intuitive. Only reach for more powerful strategies when you hit limitations.
 
-### Top-Down Parsing (LL)
+=== ":material-arrow-down-bold: Top-Down Parsing (LL)"
 
-Start with the goal (e.g., "program") and work down to terminals.
+    **Strategy:** Start with the goal (e.g., "program") and work down to terminals.
 
-**Recursive Descent** is the most intuitive top-down approach. Each grammar rule becomes a function:
+    **Recursive Descent** is the most intuitive top-down approach. Each grammar rule becomes a function:
 
-Given this grammar:
-```bnf title="Expression Grammar" linenums="1"
-<expression> ::= <term> { ("+" | "-") <term> }
-<term> ::= <factor> { ("*" | "/") <factor> }
-<factor> ::= NUMBER | "(" <expression> ")"
-```
+    Given this grammar:
 
-!!! warning "Left Recursion: A Top-Down Parser Killer"
-
-    Top-down parsers **cannot handle left-recursive grammars**. A rule like this will cause infinite recursion:
-
-    ```bnf
-    <expression> ::= <expression> "+" <term>   # ❌ Left-recursive!
+    ```bnf title="Expression Grammar" linenums="1"
+    <expression> ::= <term> { ("+" | "-") <term> }
+    <term> ::= <factor> { ("*" | "/") <factor> }
+    <factor> ::= NUMBER | "(" <expression> ")"
     ```
 
-    **Why it breaks:** When `parse_expression()` is called, the first thing it does is call `parse_expression()` again (to match `<expression>`), which calls `parse_expression()` again, forever. The parser never consumes a token!
+    !!! warning "Left Recursion: A Top-Down Parser Killer"
 
-    **The fix:** Rewrite left recursion as iteration (loops):
+        Top-down parsers **cannot handle left-recursive grammars**. A rule like this will cause infinite recursion:
 
-    ```bnf
-    # Instead of:
-    <expression> ::= <expression> "+" <term>
+        ```bnf
+        <expression> ::= <expression> "+" <term>   # ❌ Left-recursive!
+        ```
 
-    # Use:
-    <expression> ::= <term> { "+" <term> }
+        **Why it breaks:** When `parse_expression()` is called, the first thing it does is call `parse_expression()` again (to match `<expression>`), which calls `parse_expression()` again, forever. The parser never consumes a token!
+
+        **The fix:** Rewrite left recursion as iteration (loops):
+
+        ```bnf
+        # Instead of:
+        <expression> ::= <expression> "+" <term>
+
+        # Use:
+        <expression> ::= <term> { "+" <term> }
+        ```
+
+        The `{ }` notation means "zero or more," which translates to a `while` loop in code. This is why our grammar above uses `{ ... }` - it avoids left recursion.
+
+        **Bottom-up parsers** (LR) handle left recursion naturally, which is one reason they're more powerful.
+
+    Here's a recursive descent parser:
+
+    ```python title="Recursive Descent Parser" linenums="1"
+    class Parser:
+        def __init__(self, tokens):
+            self.tokens = tokens  # (1)!
+            self.pos = 0  # (2)!
+
+        def current_token(self):
+            if self.pos < len(self.tokens):
+                return self.tokens[self.pos]
+            return None
+
+        def consume(self, expected_type=None):  # (3)!
+            token = self.current_token()
+            if expected_type and token[0] != expected_type:
+                raise SyntaxError(f"Expected {expected_type}, got {token}")
+            self.pos += 1  # (4)!
+            return token
+
+        def parse_expression(self):  # (5)!
+            """expression = term { ('+' | '-') term }"""
+            left = self.parse_term()  # (6)!
+
+            while self.current_token() and self.current_token()[0] in ('PLUS', 'MINUS'):
+                op = self.consume()[1]
+                right = self.parse_term()
+                left = ('binop', op, left, right)  # (7)!
+
+            return left
+
+        def parse_term(self):  # (8)!
+            """term = factor { ('*' | '/') factor }"""
+            left = self.parse_factor()
+
+            while self.current_token() and self.current_token()[0] in ('STAR', 'SLASH'):
+                op = self.consume()[1]
+                right = self.parse_factor()
+                left = ('binop', op, left, right)
+
+            return left
+
+        def parse_factor(self):  # (9)!
+            """factor = NUMBER | '(' expression ')'"""
+            token = self.current_token()
+
+            if token[0] == 'NUMBER':
+                self.consume()
+                return ('number', int(token[1]))
+
+            elif token[0] == 'LPAREN':  # (10)!
+                self.consume('LPAREN')
+                expr = self.parse_expression()  # (11)!
+                self.consume('RPAREN')
+                return expr
+
+            else:
+                raise SyntaxError(f"Unexpected token: {token}")
+
+    # Usage
+    tokens = tokenize("2 + 3 * 4")
+    parser = Parser(tokens)
+    ast = parser.parse_expression()
+    print(ast)
     ```
 
-    The `{ }` notation means "zero or more," which translates to a `while` loop in code. This is why our grammar above uses `{ ... }` - it avoids left recursion.
+    1. Store the list of tokens from the lexer
+    2. Track current position in the token list
+    3. Consume one token and optionally validate its type
+    4. Move to the next token after consuming
+    5. Handles lowest precedence operators (+ and -)
+    6. Start by parsing the higher-precedence term
+    7. Build a binary operation node combining left and right operands
+    8. Handles medium precedence operators (* and /)
+    9. Handles highest precedence: numbers and parenthesized expressions
+    10. Handle parenthesized sub-expressions
+    11. Recursively parse the expression inside parentheses
 
-    **Bottom-up parsers** (LR) handle left recursion naturally, which is one reason they're more powerful.
+    **Output:**
 
-Here's a recursive descent parser:
+    ```python
+    ('binop', '+', ('number', 2), ('binop', '*', ('number', 3), ('number', 4)))
+    ```
 
-```python title="Recursive Descent Parser" linenums="1"
-class Parser:
-    def __init__(self, tokens):
-        self.tokens = tokens  # (1)!
-        self.pos = 0  # (2)!
+    This is a **tree structure represented as nested tuples**—our AST! Each tuple is a node:
 
-    def current_token(self):
-        if self.pos < len(self.tokens):
-            return self.tokens[self.pos]
-        return None
+    - `('binop', '+', left, right)` = a binary operation node with operator `+`
+    - `('number', 2)` = a leaf node containing the value `2`
+    - The nesting shows the tree structure: `2 + (3 * 4)`
 
-    def consume(self, expected_type=None):  # (3)!
-        token = self.current_token()
-        if expected_type and token[0] != expected_type:
-            raise SyntaxError(f"Expected {expected_type}, got {token}")
-        self.pos += 1  # (4)!
-        return token
+    Compare this to the lexer's flat list of tokens—the parser has transformed that flat list into a hierarchical tree that captures the meaning and precedence.
 
-    def parse_expression(self):  # (5)!
-        """expression = term { ('+' | '-') term }"""
-        left = self.parse_term()  # (6)!
+    ??? tip "Notice the Structure"
 
-        while self.current_token() and self.current_token()[0] in ('PLUS', 'MINUS'):
-            op = self.consume()[1]
-            right = self.parse_term()
-            left = ('binop', op, left, right)  # (7)!
+        The parser functions mirror the grammar exactly:
 
-        return left
+        - `parse_expression` handles `+` and `-`
+        - `parse_term` handles `*` and `/`
+        - `parse_factor` handles numbers and parentheses
 
-    def parse_term(self):  # (8)!
-        """term = factor { ('*' | '/') factor }"""
-        left = self.parse_factor()
+        This is why BNF translates so directly into code!
 
-        while self.current_token() and self.current_token()[0] in ('STAR', 'SLASH'):
-            op = self.consume()[1]
-            right = self.parse_factor()
-            left = ('binop', op, left, right)
+    **How It Handles Operator Precedence:**
 
-        return left
+    Our grammar naturally handles precedence! Here's why:
 
-    def parse_factor(self):  # (9)!
-        """factor = NUMBER | '(' expression ')'"""
-        token = self.current_token()
+    1. `expression` handles `+` and `-`
+    2. `term` handles `*` and `/`
+    3. `factor` handles numbers and parentheses
 
-        if token[0] == 'NUMBER':
-            self.consume()
-            return ('number', int(token[1]))
+    Since `term` is nested inside `expression`, multiplication happens "deeper" in the tree—which means it's evaluated first.
 
-        elif token[0] == 'LPAREN':  # (10)!
-            self.consume('LPAREN')
-            expr = self.parse_expression()  # (11)!
-            self.consume('RPAREN')
-            return expr
+    For `2 + 3 * 4`:
 
-        else:
-            raise SyntaxError(f"Unexpected token: {token}")
+    ```
+         +          (evaluated last)
+        / \
+       2   *        (evaluated first)
+          / \
+         3   4
+    ```
 
-# Usage
-tokens = tokenize("2 + 3 * 4")
-parser = Parser(tokens)
-ast = parser.parse_expression()
-print(ast)
-```
+    Result: 2 + (3 * 4) = 14 ✓
 
-1. Store the list of tokens from the lexer
-2. Track current position in the token list
-3. Consume one token and optionally validate its type
-4. Move to the next token after consuming
-5. Handles lowest precedence operators (+ and -)
-6. Start by parsing the higher-precedence term
-7. Build a binary operation node combining left and right operands
-8. Handles medium precedence operators (* and /)
-9. Handles highest precedence: numbers and parenthesized expressions
-10. Handle parenthesized sub-expressions
-11. Recursively parse the expression inside parentheses
+    **Adding More Precedence Levels:**
 
-**Output:**
-```python
-('binop', '+', ('number', 2), ('binop', '*', ('number', 3), ('number', 4)))
-```
+    Want to add exponentiation (`^`) with highest precedence?
 
-This is a **tree structure represented as nested tuples**—our AST! Each tuple is a node:
+    ```bnf title="Grammar with Exponentiation" linenums="1"
+    <expression> ::= <term> { ("+" | "-") <term> }
+    <term> ::= <power> { ("*" | "/") <power> }
+    <power> ::= <factor> [ "^" <power> ]
+    <factor> ::= NUMBER | "(" <expression> ")"
+    ```
 
-- `('binop', '+', left, right)` = a binary operation node with operator `+`
-- `('number', 2)` = a leaf node containing the value `2`
-- The nesting shows the tree structure: `2 + (3 * 4)`
+    Notice `<power>` calls itself on the right side—this makes `^` right-associative: \(2^{3^4} = 2^{(3^4)}\).
 
-Compare this to the lexer's flat list of tokens—the parser has transformed that flat list into a hierarchical tree that captures the meaning and precedence.
+=== ":material-arrow-up-bold: Bottom-Up Parsing (LR)"
 
-??? tip "Notice the Structure"
+    **Strategy:** Start with tokens and combine them into larger structures, building the parse tree from the leaves up to the root.
 
-    The parser functions mirror the grammar exactly:
+    **How it works:**
 
-    - `parse_expression` handles `+` and `-`
-    - `parse_term` handles `*` and `/`
-    - `parse_factor` handles numbers and parentheses
+    - Begin with individual tokens
+    - Recognize patterns that match the right-hand side of grammar rules
+    - "Reduce" those patterns to non-terminals
+    - Continue until reaching the start symbol
 
-    This is why BNF translates so directly into code!
+    **Advantages:**
 
-#### How It Handles Operator Precedence
+    - More powerful than top-down (handles more grammars)
+    - Naturally handles left-recursive grammars
+    - Can detect syntax errors earlier
 
-Our grammar naturally handles precedence! Here's why:
+    **Disadvantages:**
 
-1. `expression` handles `+` and `-`
-2. `term` handles `*` and `/`
-3. `factor` handles numbers and parentheses
+    - More complex to implement by hand
+    - Harder to understand and debug
+    - Error messages can be less intuitive
 
-Since `term` is nested inside `expression`, multiplication happens "deeper" in the tree—which means it's evaluated first.
-
-For `2 + 3 * 4`:
-
-```
-     +          (evaluated last)
-    / \
-   2   *        (evaluated first)
-      / \
-     3   4
-```
-
-Result: 2 + (3 * 4) = 14 ✓
-
-#### Adding More Precedence Levels
-
-Want to add exponentiation (`^`) with highest precedence?
-
-```bnf title="Grammar with Exponentiation" linenums="1"
-<expression> ::= <term> { ("+" | "-") <term> }
-<term> ::= <power> { ("*" | "/") <power> }
-<power> ::= <factor> [ "^" <power> ]
-<factor> ::= NUMBER | "(" <expression> ")"
-```
-
-Notice `<power>` calls itself on the right side—this makes `^` right-associative: `2^3^4` = `2^(3^4)`.
-
-### Bottom-Up Parsing (LR)
-
-Start with tokens and combine them into larger structures. More powerful but harder to write by hand. Tools like [YACC](https://en.wikipedia.org/wiki/Yacc) and [GNU Bison](https://www.gnu.org/software/bison/) generate bottom-up parsers.
+    **In practice:** Bottom-up parsers are typically generated by tools like [YACC](https://en.wikipedia.org/wiki/Yacc) and [GNU Bison](https://www.gnu.org/software/bison/) rather than written by hand. These tools take a grammar specification and automatically generate efficient parser code.
 
 ### Understanding LL and LR
+
+Now that we've seen both approaches, let's compare them:
 
 | Type | Reads | Builds Tree | Used By |
 |:-----|:------|:------------|:--------|
@@ -591,7 +616,7 @@ Example: 2 + 3
 
 For practical purposes: **LL is top-down** (goal → tokens), **LR is bottom-up** (tokens → goal). The "leftmost/rightmost" distinction matters for formal theory but the key difference is the direction.
 
-**Understanding Lookahead: The "(k)" Parameter**
+### Understanding Lookahead: The "(k)" Parameter
 
 The "(k)" means **how many tokens ahead the parser peeks** to decide which grammar rule to apply.
 
@@ -750,36 +775,44 @@ print(tree.pretty())
 
 ## Real-World Parsing
 
-### JSON Parser
+=== ":material-code-json: JSON Parser"
 
-JSON is simple enough to parse by hand:
+    JSON is simple enough to parse by hand:
 
-```
-value   = object | array | string | number | "true" | "false" | "null"
-object  = "{" [ pair { "," pair } ] "}"
-pair    = string ":" value
-array   = "[" [ value { "," value } ] "]"
-```
+    ```
+    value   = object | array | string | number | "true" | "false" | "null"
+    object  = "{" [ pair { "," pair } ] "}"
+    pair    = string ":" value
+    array   = "[" [ value { "," value } ] "]"
+    ```
 
-Most languages have built-in JSON parsers because it's so common.
+    Most languages have built-in JSON parsers because it's so common. The grammar is regular enough that a hand-written recursive descent parser works well.
 
-### HTML Parser
+=== ":material-language-html5: HTML Parser"
 
-HTML is messy—browsers handle malformed HTML gracefully. Real HTML parsers use complex error recovery:
+    HTML is messy—browsers handle malformed HTML gracefully. Real HTML parsers use complex error recovery:
 
-```html title="Malformed HTML Example" linenums="1"
-<p>This is <b>bold and <i>italic</b> text</i>
-```
+    ```html title="Malformed HTML Example" linenums="1"
+    <p>This is <b>bold and <i>italic</b> text</i>
+    ```
 
-Technically invalid, but browsers render it anyway! 🤷 The web is wild.
+    Technically invalid, but browsers render it anyway! The web is wild.
 
-### Programming Language Parsers
+    **Why HTML parsing is hard:**
 
-Modern language parsers are sophisticated:
+    - Browsers must handle broken HTML (unclosed tags, misnested elements)
+    - Contextual parsing rules (what's valid inside `<script>` differs from `<div>`)
+    - Historical quirks mode for backward compatibility
 
-- **Error recovery** for IDE features
-- **Incremental parsing** for fast re-parsing on edits
-- **Loose parsing** modes for incomplete code
+=== ":material-code-braces: Programming Language Parsers"
+
+    Modern language parsers are sophisticated:
+
+    **Error recovery** — IDE features like syntax highlighting and autocomplete work even with incomplete/invalid code
+
+    **Incremental parsing** — Fast re-parsing on edits by only updating changed parts of the tree
+
+    **Loose parsing** modes — Handle incomplete code during typing for real-time feedback
 
 ## Practice Problems
 
@@ -822,6 +855,7 @@ Modern language parsers are sophisticated:
 
 ## Further Reading
 
+- [Binary Trees & Representation](binary_trees_and_representation.md) — Tree structures and hierarchical data
 - [Recursive Transition Networks](recursive_transition_networks.md) — Visual grammars
 - [Backus-Naur Form](backus_naur_form.md) — Grammar notation
 - [Finite State Machines](finite_state_machines.md) — Foundation for lexers

@@ -16,12 +16,12 @@ Binary is a base-2 number system, using only two digits: `0` and `1`. Each digit
 |:--------|:-------|:------------|
 | 0 | 0 | 0 |
 | 1 | 1 | 1 |
-| 2 | 10 | 1×2¹ + 0×2⁰ |
-| 3 | 11 | 1×2¹ + 1×2⁰ |
-| 4 | 100 | 1×2² + 0×2¹ + 0×2⁰ |
-| 5 | 101 | 1×2² + 0×2¹ + 1×2⁰ |
-| 7 | 111 | 1×2² + 1×2¹ + 1×2⁰ |
-| 42 | 101010 | 1×2⁵ + 0×2⁴ + 1×2³ + 0×2² + 1×2¹ + 0×2⁰ |
+| 2 | 10 | \(1 \times 2^1 + 0 \times 2^0\) |
+| 3 | 11 | \(1 \times 2^1 + 1 \times 2^0\) |
+| 4 | 100 | \(1 \times 2^2 + 0 \times 2^1 + 0 \times 2^0\) |
+| 5 | 101 | \(1 \times 2^2 + 0 \times 2^1 + 1 \times 2^0\) |
+| 7 | 111 | \(1 \times 2^2 + 1 \times 2^1 + 1 \times 2^0\) |
+| 42 | 101010 | \(1 \times 2^5 + 0 \times 2^4 + 1 \times 2^3 + 0 \times 2^2 + 1 \times 2^1 + 0 \times 2^0\) |
 
 Each position represents a power of 2, just as decimal positions represent powers of 10.
 
@@ -36,14 +36,49 @@ This physical constraint makes binary natural for electronic computers. A transi
 
 **Two states are reliable.** Trying to distinguish between ten voltage levels (for decimal) would require extreme precision and be error-prone.
 
+??? tip "Historical Context: Binary's Journey from Ancient Mathematics to Modern Computing"
+
+    **Ancient Origins of Binary Arithmetic**
+
+    Binary arithmetic has deep roots. Indian mathematician Pingala described binary-like patterns in prosody around 300 BCE. Later, Gottfried Wilhelm Leibniz formalized binary arithmetic in 1679 and recognized its connection to Boolean logic—a connection that would prove essential for computing centuries later.
+
+    **The Decimal Computer Experiments (1940s-1950s)**
+
+    Binary wasn't always the obvious choice for electronic computers. In the 1940s and early 1950s, several pioneering computers experimented with **decimal** (base-10) representation, since humans naturally think in decimal.
+
+    **Notable decimal computers:**
+
+    - **ENIAC (1945)**: Used decimal representation with 10-state vacuum tube rings to store each digit. Each decimal digit required 10 vacuum tubes in a ring counter configuration—far more complex than binary's simple on/off states.
+    - **IBM 650 (1953)**: A commercial decimal computer that stored data using bi-quinary code (a hybrid approach using 7 bits to represent each decimal digit).
+    - **UNIVAC I (1951)**: Used excess-3 binary-coded decimal (BCD), where each decimal digit was encoded in 4 bits.
+
+    **Why binary won:**
+
+    1. **Simplicity**: Binary logic gates and circuits are far simpler to design and build.
+    2. **Reliability**: Two voltage levels are easier to distinguish than ten, especially as components age or temperatures fluctuate.
+    3. **Efficiency**: Binary arithmetic circuits (adders, multipliers) are more straightforward than decimal equivalents.
+    4. **Error correction**: Binary systems made it easier to detect and correct errors using parity bits and other techniques.
+
+    By the late 1950s, the industry had largely standardized on binary.
+
+    **Binary Trees in Computing (1960s-1970s)**
+
+    Binary trees became fundamental to computer science in the 1960s:
+
+    - **1962**: Donald Knuth's work on tree algorithms (later published in *The Art of Computer Programming*)
+    - **1962**: Adelson-Velsky and Landis invented AVL trees (self-balancing binary search trees)
+    - **1972**: Rudolf Bayer invented B-trees (generalization for databases)
+
+    **The lesson?** Sometimes the system that's easiest for *machines* to process trumps the system that's easiest for *humans* to read—and we build translation layers (like decimal I/O) to bridge the gap. Today, binary representation and binary trees underpin databases, compilers, file systems, and machine learning.
+
 ### The Power of Binary
 
 Binary is remarkably expressive:
 
-- **8 bits** (1 byte) can represent 2⁸ = **256** different values (0-255)
-- **16 bits** can represent 2¹⁶ = **65,536** values
-- **32 bits** can represent 2³² = **4,294,967,296** values (4.3 billion)
-- **64 bits** can represent 2⁶⁴ = **18,446,744,073,709,551,616** values (18.4 quintillion)
+- **8 bits** (1 byte) can represent \(2^8 = 256\) different values (0-255)
+- **16 bits** can represent \(2^{16} = 65{,}536\) values
+- **32 bits** can represent \(2^{32} = 4{,}294{,}967{,}296\) values (4.3 billion)
+- **64 bits** can represent \(2^{64} = 18{,}446{,}744{,}073{,}709{,}551{,}616\) values (18.4 quintillion)
 
 With binary, computers can represent:
 
@@ -116,15 +151,19 @@ At each level of a binary tree, the maximum number of nodes **doubles**:
 
 | Level | Max Nodes | Calculation | Total Nodes (cumulative) |
 |:------|:----------|:------------|:-------------------------|
-| 0 (root) | 1 | 2⁰ | 1 |
-| 1 | 2 | 2¹ | 3 |
-| 2 | 4 | 2² | 7 |
-| 3 | 8 | 2³ | 15 |
-| 4 | 16 | 2⁴ | 31 |
-| 5 | 32 | 2⁵ | 63 |
-| n | 2ⁿ | 2ⁿ | 2ⁿ⁺¹ - 1 |
+| 0 (root) | 1 | \(2^0\) | 1 |
+| 1 | 2 | \(2^1\) | 3 |
+| 2 | 4 | \(2^2\) | 7 |
+| 3 | 8 | \(2^3\) | 15 |
+| 4 | 16 | \(2^4\) | 31 |
+| 5 | 32 | \(2^5\) | 63 |
+| \(n\) | \(2^n\) | \(2^n\) | \(2^{n+1} - 1\) |
 
-**Key insight:** A binary tree of depth *n* has **2ⁿ** nodes at the bottom level.
+??? tip "Key Insight: Exponential Growth"
+
+    A binary tree of depth \(n\) has \(2^n\) nodes at the bottom level.
+
+    This exponential relationship is why binary trees are so powerful for representing choices, decisions, and hierarchical data. Each additional level doubles the capacity—making even shallow trees surprisingly expressive.
 
 ### Example: Depth 3 Binary Tree
 
@@ -154,7 +193,7 @@ graph TD
     style G fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
 ```
 
-**Total capacity:** 2³ = **8 distinct values** can be represented at the leaves.
+**Total capacity:** \(2^3 = 8\) distinct values can be represented at the leaves.
 
 If each path from root to leaf represents a unique answer to yes/no questions:
 
@@ -172,7 +211,7 @@ A binary tree can **distinguish** among different values by assigning each leaf 
 
 ### Example: 20 Questions Game
 
-The classic "20 Questions" game leverages this principle. With 20 yes/no questions, you can distinguish among 2²⁰ = **1,048,576** possible answers.
+The classic "20 Questions" game leverages this principle. With 20 yes/no questions, you can distinguish among \(2^{20} = 1{,}048{,}576\) possible answers.
 
 **Simplified Example (3 questions, 8 animals):**
 
@@ -218,7 +257,7 @@ A **binary search tree** (BST) is a binary tree where:
 - Left subtree contains only values **less than** the node's value
 - Right subtree contains only values **greater than** the node's value
 
-This structure enables **O(log n) search time** for balanced trees—meaning searching 1,000,000 items requires only about 20 comparisons.
+This structure enables **logarithmic search time** for balanced trees. Each comparison eliminates half of the remaining items, so the number of steps grows as \(\log_2 n\) (we'll explore this "Big O notation" in our algorithms section). In practical terms: searching 1,000,000 items requires only about 20 comparisons, because \(\log_2 1{,}000{,}000 \approx 20\). Double the data to 2,000,000 items? You only need 21 comparisons—one more.
 
 **Example BST (numbers):**
 
@@ -308,80 +347,64 @@ This is how ZIP files and JPEG images achieve compression.
 
 Given that binary can represent anything—numbers, text, images, sound—why do we need abstraction?
 
-### Problem 1: Cognitive Overload
+=== ":material-brain: Cognitive Overload"
 
-Working directly with bits is impractical for humans.
+    Working directly with bits is impractical for humans.
 
-**Example: Representing the number 1,000,000**
+    **Representing the number 1,000,000:**
 
-- **Binary**: `11110100001001000000` (20 bits)
-- **Decimal**: `1000000` (7 digits)
-- **Hexadecimal**: `F4240` (5 characters)
+    - **Binary**: `11110100001001000000` (20 bits)
+    - **Decimal**: `1000000` (7 digits)
+    - **Hexadecimal**: `F4240` (5 characters)
 
-Hexadecimal is an abstraction over binary (each hex digit = 4 bits), making it easier to read and write.
+    Hexadecimal is an abstraction over binary (each hex digit = 4 bits), making it easier to read and write.
 
-### Problem 2: Lack of Semantic Meaning
+=== ":material-comment-question: Semantic Meaning"
 
-Bits have no inherent meaning—context determines interpretation.
+    Bits have no inherent meaning—context determines interpretation.
 
-**The bit sequence `01000001` could mean:**
+    **The bit sequence `01000001` could mean:**
 
-- The number 65 (unsigned integer)
-- The letter 'A' (ASCII encoding)
-- The number 1.52×10⁻⁴³ (part of a floating-point number)
-- An instruction opcode (CPU operation)
+    - The number 65 (unsigned integer)
+    - The letter 'A' (ASCII encoding)
+    - The number \(1.52 \times 10^{-43}\) (part of a floating-point number)
+    - An instruction opcode (CPU operation)
 
-**Abstraction provides meaning:** High-level languages let you write `'A'` instead of `01000001`, making intent clear.
+    **Abstraction provides meaning:** High-level languages let you write `'A'` instead of `01000001`, making intent clear.
 
-### Problem 3: Hardware Complexity
+=== ":material-chip: Hardware Complexity"
 
-Modern CPUs have billions of transistors. Writing programs at the bit level would be:
+    Modern CPUs have billions of transistors. Writing programs at the bit level would be:
 
-- Extremely tedious (millions of lines for simple tasks)
-- Error-prone (one wrong bit = program crash)
-- Unportable (different CPUs use different instruction sets)
+    - Extremely tedious (millions of lines for simple tasks)
+    - Error-prone (one wrong bit = program crash)
+    - Unportable (different CPUs use different instruction sets)
 
-**Abstraction layers solve this:**
+    **Abstraction layers solve this:**
 
-| Layer | Example | Abstracts Over |
-|:------|:--------|:---------------|
-| **Hardware** | Transistors, logic gates | Physics (voltage, current) |
-| **Machine Code** | `10110000 01100001` | Gate-level operations |
-| **Assembly** | `MOV AL, 97` | Binary opcodes |
-| **High-Level Languages** | `char letter = 'A';` | Assembly instructions |
-| **Libraries/Frameworks** | `print("Hello")` | Low-level I/O details |
+    | Layer | Example | Abstracts Over |
+    |:------|:--------|:---------------|
+    | **Hardware** | Transistors, logic gates | Physics (voltage, current) |
+    | **Machine Code** | `10110000 01100001` | Gate-level operations |
+    | **Assembly** | `MOV AL, 97` | Binary opcodes |
+    | **High-Level** | `char letter = 'A';` | Assembly instructions |
+    | **Libraries** | `print("Hello")` | Low-level I/O details |
 
-Each layer hides complexity, letting programmers focus on solving problems rather than managing bits.
+    Each layer hides complexity, letting programmers focus on solving problems rather than managing bits.
 
-### Problem 4: Efficiency and Optimization
+=== ":material-speedometer: Efficiency"
 
-Sometimes binary isn't the most efficient representation for specific tasks.
+    Sometimes binary isn't the most efficient representation for specific tasks.
 
-**Example: DNA Sequences**
+    **Example: DNA Sequences**
 
-DNA has four bases (A, C, G, T). You could encode each base in binary:
+    DNA has four bases (A, C, G, T). You could encode each base in binary:
 
-- `A = 00`, `C = 01`, `G = 10`, `T = 11` (2 bits each)
+    - `A = 00`, `C = 01`, `G = 10`, `T = 11` (2 bits each)
 
-But specialized data structures (suffix trees, hash tables) provide faster search and comparison, even though they ultimately use binary underneath.
+    But specialized data structures (suffix trees, hash tables) provide faster search and comparison, even though they ultimately use binary underneath.
 
-**Abstraction enables optimization:** You can change the underlying representation without changing the program logic.
-
-## Historical Context
-
-### Binary Arithmetic
-
-Binary arithmetic has roots in ancient India (Pingala's prosody, ~300 BCE) and was formalized by Gottfried Wilhelm Leibniz in 1679, who recognized its connection to Boolean logic.
-
-### Binary Trees in Computing
-
-Binary trees became fundamental to computer science in the 1960s:
-
-- **1962**: Donald Knuth's work on tree algorithms (later in *The Art of Computer Programming*)
-- **1962**: Adelson-Velsky and Landis invented AVL trees (self-balancing binary search trees)
-- **1972**: Rudolf Bayer invented B-trees (generalization for databases)
-
-Today, binary trees underpin databases, compilers, file systems, and machine learning.
+    **Abstraction enables optimization:** You can change the underlying representation without changing the program logic.
 
 ## Practice Problems
 
@@ -410,10 +433,10 @@ Today, binary trees underpin databases, compilers, file systems, and machine lea
         **Method 2: Powers of 2**
 
         100 = 64 + 32 + 4
-            = 2⁶ + 2⁵ + 2²
+            = \(2^6 + 2^5 + 2^2\)
             = `1100100` in binary
 
-        **Verification:** 1×64 + 1×32 + 0×16 + 0×8 + 1×4 + 0×2 + 0×1 = 100 ✓
+        **Verification:** \(1 \times 64 + 1 \times 32 + 0 \times 16 + 0 \times 8 + 1 \times 4 + 0 \times 2 + 0 \times 1 = 100\) ✓
 
 ??? question "Practice Problem 2: Tree Depth Calculation"
 
@@ -425,16 +448,16 @@ Today, binary trees underpin databases, compilers, file systems, and machine lea
 
         **Part 1: Depth 7**
 
-        A binary tree of depth *n* can distinguish 2ⁿ values.
+        A binary tree of depth \(n\) can distinguish \(2^n\) values.
 
-        Depth 7: 2⁷ = **128 distinct values**
+        Depth 7: \(2^7 = 128\) distinct values
 
         **Part 2: 500 Species**
 
-        Need 2ⁿ ≥ 500
+        Need \(2^n \geq 500\)
 
-        - 2⁸ = 256 (too small)
-        - 2⁹ = 512 ✓ (sufficient)
+        - \(2^8 = 256\) (too small)
+        - \(2^9 = 512\) ✓ (sufficient)
 
         **Minimum depth:** 9
 
@@ -504,20 +527,20 @@ Today, binary trees underpin databases, compilers, file systems, and machine lea
 | **Binary Number System** | Base-2 representation using only 0 and 1 |
 | **Binary Tree** | Hierarchical structure where each node has ≤ 2 children |
 | **Depth** | Number of edges from root to a node |
-| **Exponential Growth** | Tree of depth *n* can distinguish 2ⁿ values |
+| **Exponential Growth** | Tree of depth \(n\) can distinguish \(2^n\) values |
 | **Binary Search Tree** | Binary tree with left < parent < right ordering |
 | **Abstraction** | Hiding bit-level details to provide semantic meaning and manage complexity |
-| **O(log n)** | Efficiency of balanced binary tree operations |
+| **Logarithmic Time** | Search efficiency \(\log_2 n\) where doubling data adds only one more step |
 
 ## Why Binary Trees Matter
 
 Understanding binary trees reveals:
 
 - **How computers organize information efficiently** (databases, file systems)
-- **How compilers parse code** (syntax trees, expression evaluation)
+- **[How compilers parse code](how_parsers_work.md)** (syntax trees, expression evaluation)
 - **How search algorithms work** (binary search, decision trees)
 - **How exponential growth creates power** (20 questions → 1 million possibilities)
-- **Why logarithmic time is so valuable** (log₂(1,000,000) ≈ 20 comparisons)
+- **Why logarithmic time is so valuable** (\(\log_2(1{,}000{,}000) \approx 20\) comparisons)
 
 Binary representation is the foundation—binary trees are the structure built on that foundation. Together, they explain how computers transform electrical signals into everything from spreadsheets to streaming video.
 
@@ -525,11 +548,10 @@ Binary representation is the foundation—binary trees are the structure built o
 
 - **David Evans, [Introduction to Computing](https://computingbook.org/)** — Chapter 1 covers binary trees and representation
 - **[Computational Thinking](computational_thinking.md)** — Decomposition and abstraction in action
+- **[How Parsers Work](how_parsers_work.md)** — Building syntax trees from code
 - **[Recursive Transition Networks](recursive_transition_networks.md)** — Trees in parsing and grammars
 - **Donald Knuth, *The Art of Computer Programming, Volume 1*** — Definitive reference on tree algorithms
 
 ---
 
-Binary is the language of computers. Binary trees are the grammar. You can't truly understand computing without understanding both—and how they work together to turn simple on/off signals into the complex systems we use e
-
-very day.
+Binary is the language of computers. Binary trees are the grammar. You can't truly understand computing without understanding both—and how they work together to turn simple on/off signals into the complex systems we use every day.

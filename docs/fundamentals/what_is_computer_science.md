@@ -51,102 +51,124 @@ This encompasses software engineering, security, distributed systems, and more.
 
 Computer science is vast. Here's a map of the territory:
 
-### Theory
+<div class="grid cards" markdown>
 
-The mathematical foundations (where the magic happens):
+-   :material-math-compass: __Theory__
 
-| Area | Key Questions |
-|:-----|:--------------|
-| **Algorithms** | What's the best way to solve this problem? |
-| **Complexity** | How hard is this problem inherently? |
-| **Computability** | Can this problem be solved at all? |
-| **Formal Languages** | How do we describe and recognize patterns? |
-| **Cryptography** | How do we secure information mathematically? |
+    ---
 
-### Systems
+    The mathematical foundations (where the magic happens):
 
-Building the infrastructure:
+    **Algorithms** — What's the best way to solve this problem?
 
-| Area | Key Questions |
-|:-----|:--------------|
-| **Operating Systems** | How do we manage hardware resources? |
-| **Networks** | How do computers communicate? |
-| **Databases** | How do we store and retrieve information efficiently? |
-| **Compilers** | How do we translate high-level code to machine code? |
-| **Distributed Systems** | How do we coordinate many computers? |
+    **Complexity** — How hard is this problem inherently?
 
-### Specialized Domains
-Pushing the boundaries of what computers can do:
+    **Computability** — Can this problem be solved at all?
 
-| Area | Key Questions |
-|:-----|:--------------|
-| **Artificial Intelligence** | Can machines think? Learn? Reason? |
-| **Computer Graphics** | How do we generate images and animations? |
-| **Computer Vision** | How do we understand images and video? |
-| **Natural Language Processing** | How do we understand human language? |
-| **Robotics** | How do we build machines that act in the world? |
+    **Formal Languages** — How do we describe and recognize patterns?
 
-### Software Engineering
-The art and science of building robust software:
+    **Cryptography** — How do we secure information mathematically?
 
-| Area | Key Questions |
-|:-----|:--------------|
-| **Software Engineering** | How do we build large systems reliably? |
+-   :material-server: __Systems__
 
-### Human-Computer Interaction (HCI)
-Designing for people:
+    ---
 
-| Area | Key Questions |
-|:-----|:--------------|
-| **Human-Computer Interaction** | How do we design usable interfaces? |
+    Building the infrastructure:
 
-### Ethics & Society
-Considering the impact:
+    **Operating Systems** — How do we manage hardware resources?
 
-| Area | Key Questions |
-|:-----|:--------------|
-| **Ethics** | What should we build? What shouldn't we? |
-| **Privacy** | How do we protect personal information? |
-| **Fairness** | Are our algorithms biased? |
+    **Networks** — How do computers communicate?
+
+    **Databases** — How do we store and retrieve information efficiently?
+
+    **Compilers** — How do we translate high-level code to machine code?
+
+    **Distributed Systems** — How do we coordinate many computers?
+
+-   :material-robot: __Specialized Domains__
+
+    ---
+
+    Pushing the boundaries of what computers can do:
+
+    **Artificial Intelligence** — Can machines think? Learn? Reason?
+
+    **Computer Graphics** — How do we generate images and animations?
+
+    **Computer Vision** — How do we understand images and video?
+
+    **Natural Language Processing** — How do we understand human language?
+
+    **Robotics** — How do we build machines that act in the world?
+
+-   :material-code-braces: __Software Engineering__
+
+    ---
+
+    The art and science of building robust software:
+
+    **Software Engineering** — How do we build large systems reliably?
+
+-   :material-monitor: __Human-Computer Interaction__
+
+    ---
+
+    Designing for people:
+
+    **Human-Computer Interaction** — How do we design usable interfaces?
+
+-   :material-scale-balance: __Ethics & Society__
+
+    ---
+
+    Considering the impact:
+
+    **Ethics** — What should we build? What shouldn't we?
+
+    **Privacy** — How do we protect personal information?
+
+    **Fairness** — Are our algorithms biased?
+
+</div>
 
 ## A Brief History
 
-### Before Computers (–1940s)
+=== "Before Computers (–1940s)"
 
-Computer science ideas predate computers:
+    Computer science ideas predate computers:
 
-- **9th century**: Al-Khwarizmi develops algebra and systematic problem-solving (his name gives us "algorithm")
-- **1843**: Ada Lovelace writes the first algorithm intended for a machine
-- **1936**: Alan Turing defines computation mathematically; Alonzo Church develops lambda calculus
+    - **9th century**: Al-Khwarizmi develops algebra and systematic problem-solving (his name gives us "algorithm")
+    - **1843**: Ada Lovelace writes the first algorithm intended for a machine
+    - **1936**: Alan Turing defines computation mathematically; Alonzo Church develops lambda calculus
 
-### The Pioneer Era (1940s–1960s)
+=== "Pioneer Era (1940s–1960s)"
 
-- First electronic computers (ENIAC, UNIVAC)
-- First programming languages (FORTRAN, LISP, COBOL)
-- Dijkstra, Knuth, McCarthy lay theoretical foundations
-- The term "software" is coined (1958)
+    - First electronic computers (ENIAC, UNIVAC)
+    - First programming languages (FORTRAN, LISP, COBOL)
+    - Dijkstra, Knuth, McCarthy lay theoretical foundations
+    - The term "software" is coined (1958)
 
-### The Structured Era (1970s–1980s)
+=== "Structured Era (1970s–1980s)"
 
-- Unix and C language
-- Relational databases
-- Personal computers arrive
-- Object-oriented programming emerges
-- The internet (ARPANET) grows
+    - Unix and C language
+    - Relational databases
+    - Personal computers arrive
+    - Object-oriented programming emerges
+    - The internet (ARPANET) grows
 
-### The Networked Era (1990s–2000s)
+=== "Networked Era (1990s–2000s)"
 
-- World Wide Web
-- Java, Python, JavaScript
-- Open source movement
-- Google, Amazon, Facebook scale to billions
+    - World Wide Web
+    - Java, Python, JavaScript
+    - Open source movement
+    - Google, Amazon, Facebook scale to billions
 
-### The Modern Era (2010s–Present)
+=== "Modern Era (2010s–Present)"
 
-- Cloud computing becomes dominant
-- Machine learning renaissance (deep learning)
-- Mobile-first world
-- Growing concerns about ethics, privacy, AI safety
+    - Cloud computing becomes dominant
+    - Machine learning renaissance (deep learning)
+    - Mobile-first world
+    - Growing concerns about ethics, privacy, AI safety
 
 ## CS vs Programming vs IT
 

@@ -119,3 +119,102 @@ Articles must balance **playfulness with professionalism** and be **technically 
   - Automatic 16:9 aspect ratio
   - Rounded corners and no border
   - Proper spacing above and below the video
+
+### Interactive Elements: Tabs and Cards
+
+Material for MkDocs supports tabs and cards for organizing content interactively. Use these to enhance engagement and readability.
+
+**When to Use Cards:**
+
+Use `<div class="grid cards">` for **brief, scannable content** (3-6 items):
+- Comparing similar concepts or categories
+- Overview of subfields or components
+- Short definitions or descriptions
+- Independent items that don't require detailed explanation
+
+**Cards work best when:**
+- Each item is 2-4 lines of text
+- Content is self-contained and doesn't need expansion
+- Reader should see all options at a glance
+
+**Card Format:**
+```markdown
+<div class="grid cards" markdown>
+
+-   :material-icon-name: __Card Title__
+
+    ---
+
+    **Item 1** — Brief description
+
+    **Item 2** — Brief description
+
+    **Item 3** — Brief description
+
+</div>
+```
+
+**Important formatting rules:**
+- Use em-dashes (`—`) not tables inside cards
+- Add blank lines between each item for proper rendering
+- Keep content concise (cards look cluttered with long text)
+
+**When to Use Tabs:**
+
+Use `=== "Tab Name"` syntax for **detailed, related content**:
+- Code examples in different languages
+- Step-by-step procedures or strategies
+- Domain-specific examples (real-world parsing scenarios)
+- Comparing/contrasting approaches with detailed explanations
+- Content with code blocks, warnings, or nested admonitions
+
+**Tabs work best when:**
+- Each tab contains 1-2 paragraphs or code blocks
+- Content is related but distinct (different approaches, examples, scenarios)
+- Reader should explore options individually
+
+**Tab Format:**
+```markdown
+=== ":material-icon-name: Tab Title"
+
+    Content here with 4-space indentation.
+
+    **All content** must be indented to stay within the tab.
+
+    ```python title="Code Example" linenums="1"
+    # Code must also be indented
+    def example():
+        pass
+    ```
+
+=== ":material-icon-name: Another Tab"
+
+    Second tab content, also indented.
+```
+
+**Critical tab formatting rules:**
+- Tab declarations (`===`) start at column 0
+- ALL content inside tabs must be indented with 4 spaces
+- Code blocks need indentation: ` ```language` line AND all code content
+- Blank line between tabs (but not required)
+- Admonitions inside tabs need 8-space indentation for their content
+
+**Choosing Between Tabs and Cards:**
+
+| Use Case | Tabs or Cards? | Why? |
+|:---------|:---------------|:-----|
+| Major CS subfields overview | Cards | Brief, scannable, independent |
+| Historical timeline | Tabs | Chronological, detailed context |
+| Parsing strategies comparison | Tabs | Detailed code, warnings, explanations |
+| Real-world examples | Tabs | Code blocks, domain-specific context |
+| Practical regex examples | Tabs | Tables, warnings, detailed breakdowns |
+| "Why [concept] matters" | Tabs | Multiple detailed scenarios |
+
+**Examples from the site:**
+- Cards: What is CS - Major Subfields (6 brief areas)
+- Tabs: What is CS - Brief History (5 chronological eras)
+- Tabs: FSM - Real-World Examples (traffic lights, games, TCP, lexing)
+- Tabs: Regex - Practical Examples (email, phone, IP, log parsing)
+- Tabs: RTN - Expression Hierarchy (Expression, Term, Factor)
+- Tabs: Parsers - Parsing Strategies (Top-Down, Bottom-Up)
+- Tabs: Parsers - Real-World Parsing (JSON, HTML, Programming Languages)

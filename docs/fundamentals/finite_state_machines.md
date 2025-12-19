@@ -29,15 +29,15 @@ This is an FSM for a light switch. Two states (On, Off), one input (press), dete
 
 ## Formal Definition
 
-For the mathematically inclined, an FSM is a 5-tuple (Q, Σ, δ, q₀, F):
+For the mathematically inclined, an FSM is a 5-tuple \((Q, \Sigma, \delta, q_0, F)\):
 
 | Symbol | Meaning |
 |:-------|:--------|
-| Q | Finite set of states |
-| Σ | Finite alphabet (possible inputs) |
-| δ | Transition function (state × input → state) |
-| q₀ | Initial state |
-| F | Set of accepting/final states |
+| \(Q\) | Finite set of states |
+| \(\Sigma\) | Finite alphabet (possible inputs) |
+| \(\delta\) | Transition function \((state \times input \to state)\) |
+| \(q_0\) | Initial state |
+| \(F\) | Set of accepting/final states |
 
 Don't worry if that looks intimidating—we'll work with diagrams.
 
@@ -87,11 +87,11 @@ stateDiagram-v2
 
 **Formal Definition of this FSM:**
 
-- **Q** = {S0, S1, S2}
-- **Σ** = {0, 1}
-- **q₀** = S0
-- **F** = {S0}
-- **δ** is defined by the following table:
+- \(Q = \{S0, S1, S2\}\)
+- \(\Sigma = \{0, 1\}\)
+- \(q_0 = S0\)
+- \(F = \{S0\}\)
+- \(\delta\) is defined by the following table:
 
 | State | Input '0' | Input '1' |
 |:------|:----------|:----------|
@@ -245,7 +245,7 @@ FSMs recognize exactly the **regular languages**—the same languages described 
 
 - "Same number of a's and b's" — needs counting/memory
 - "Balanced parentheses" — needs a stack to track nesting
-- "aⁿbⁿ" (equal a's and b's) — needs unbounded counting
+- \(a^nb^n\) (equal a's and b's) — needs unbounded counting
 
 ### What FSMs *Cannot* Do
 
@@ -257,7 +257,7 @@ FSMs have no memory beyond their current state. This means they can't:
 
 **Example: The "Equal A's and B's" Language**
 
-The language {aⁿbⁿ | n ≥ 0} is NOT regular. This notation means "n a's followed by n b's, where n is any number 0 or greater":
+The language \(\{a^nb^n \mid n \geq 0\}\) is NOT regular. This notation means "n a's followed by n b's, where n is any number 0 or greater":
 
 - When n=0: "" (empty string)
 - When n=1: "ab"
@@ -299,113 +299,113 @@ For languages requiring this kind of counting or nesting (like balanced parenthe
 
 ## Real-World FSMs
 
-### Traffic Light Controller
+=== ":material-traffic-light: Traffic Light Controller"
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    [*] --> Green
-    Green --> Yellow: timer
-    Yellow --> Red: timer
-    Red --> Green: timer
-```
+    ```mermaid
+    stateDiagram-v2
+        direction LR
+        [*] --> Green
+        Green --> Yellow: timer
+        Yellow --> Red: timer
+        Red --> Green: timer
+    ```
 
-Real traffic lights are more complex (handling multiple directions, pedestrian buttons, sensors), but the core is an FSM.
+    Real traffic lights are more complex (handling multiple directions, pedestrian buttons, sensors), but the core is an FSM.
 
-### Video Game AI
+=== ":material-gamepad-variant: Video Game AI"
 
-Enemy behavior in many games:
+    Enemy behavior in many games:
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    [*] --> Patrol
-    Patrol --> Chase: see_player
-    Chase --> Attack: in_range
-    Chase --> Patrol: lose_player
-    Attack --> Chase: player_fled
-    Attack --> Patrol: player_dead
-```
+    ```mermaid
+    stateDiagram-v2
+        direction LR
+        [*] --> Patrol
+        Patrol --> Chase: see_player
+        Chase --> Attack: in_range
+        Chase --> Patrol: lose_player
+        Attack --> Chase: player_fled
+        Attack --> Patrol: player_dead
+    ```
 
-This creates believable behavior from simple rules. 🎮 Not bad for a bunch of circles and arrows.
+    This creates believable behavior from simple rules. 🎮 Not bad for a bunch of circles and arrows.
 
-### TCP Connection State
+=== ":material-network: TCP Connection"
 
-Network protocols are often specified as FSMs:
+    Network protocols are often specified as FSMs:
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    [*] --> CLOSED
-    CLOSED --> LISTEN: passive_open
-    CLOSED --> SYN_SENT: active_open
-    LISTEN --> SYN_RCVD: recv_SYN
-    SYN_SENT --> ESTABLISHED: recv_SYN_ACK
-    SYN_RCVD --> ESTABLISHED: recv_ACK
-    ESTABLISHED --> FIN_WAIT: close
-    ESTABLISHED --> CLOSE_WAIT: recv_FIN
-```
+    ```mermaid
+    stateDiagram-v2
+        direction LR
+        [*] --> CLOSED
+        CLOSED --> LISTEN: passive_open
+        CLOSED --> SYN_SENT: active_open
+        LISTEN --> SYN_RCVD: recv_SYN
+        SYN_SENT --> ESTABLISHED: recv_SYN_ACK
+        SYN_RCVD --> ESTABLISHED: recv_ACK
+        ESTABLISHED --> FIN_WAIT: close
+        ESTABLISHED --> CLOSE_WAIT: recv_FIN
+    ```
 
-(Simplified—the real TCP state diagram has more states and transitions.)
+    (Simplified—the real TCP state diagram has more states and transitions.)
 
-### Lexical Analysis (Tokenizing)
+=== ":material-code-tags: Lexical Analysis"
 
-When a compiler reads your code, the first step is **tokenizing**—breaking the code into meaningful chunks called **tokens**.
+    When a compiler reads your code, the first step is **tokenizing**—breaking the code into meaningful chunks called **tokens**.
 
-**Example:** The code `x = 42 + y` gets broken into tokens:
+    **Example:** The code `x = 42 + y` gets broken into tokens:
 
-- `x` (identifier/variable name)
-- `=` (operator)
-- `42` (number)
-- `+` (operator)
-- `y` (identifier/variable name)
+    - `x` (identifier/variable name)
+    - `=` (operator)
+    - `42` (number)
+    - `+` (operator)
+    - `y` (identifier/variable name)
 
-Compilers use FSMs to recognize different token types. Here are two FSMs—one for **numbers**, one for **identifiers** (variable/function names):
+    Compilers use FSMs to recognize different token types. Here are two FSMs—one for **numbers**, one for **identifiers** (variable/function names):
 
-!!! note "State Names"
-    The state names like "InNumber" and "InIdentifier" are descriptive labels that tell us what the FSM is currently doing:
+    !!! note "State Names"
+        The state names like "InNumber" and "InIdentifier" are descriptive labels that tell us what the FSM is currently doing:
 
-    - **InNumber** = "currently in the middle of reading a number"
-    - **InIdentifier** = "currently in the middle of reading an identifier"
+        - **InNumber** = "currently in the middle of reading a number"
+        - **InIdentifier** = "currently in the middle of reading an identifier"
 
-    Just like "Locked/Unlocked" for a turnstile, these names help us understand what's happening in each state.
+        Just like "Locked/Unlocked" for a turnstile, these names help us understand what's happening in each state.
 
-**Recognizing Numbers:**
+    **Recognizing Numbers:**
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    [*] --> Start
-    Start --> InNumber: digit (0-9)
-    InNumber --> InNumber: digit
-    InNumber --> [*]: space/operator
-```
+    ```mermaid
+    stateDiagram-v2
+        direction LR
+        [*] --> Start
+        Start --> InNumber: digit (0-9)
+        InNumber --> InNumber: digit
+        InNumber --> [*]: space/operator
+    ```
 
-**Recognizing Identifiers:**
+    **Recognizing Identifiers:**
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    [*] --> Start
-    Start --> InIdentifier: letter (a-z)
-    InIdentifier --> InIdentifier: letter/digit
-    InIdentifier --> [*]: space/operator
-```
+    ```mermaid
+    stateDiagram-v2
+        direction LR
+        [*] --> Start
+        Start --> InIdentifier: letter (a-z)
+        InIdentifier --> InIdentifier: letter/digit
+        InIdentifier --> [*]: space/operator
+    ```
 
-**How it works:**
+    **How it works:**
 
-- See a **digit** (0-9) first → InNumber state, keep reading digits until hitting something else (space, operator, etc.) → emit a number token
-- See a **letter** (a-z, A-Z) first → InIdentifier state, keep reading letters/digits until hitting something else → emit an identifier token
+    - See a **digit** (0-9) first → InNumber state, keep reading digits until hitting something else (space, operator, etc.) → emit a number token
+    - See a **letter** (a-z, A-Z) first → InIdentifier state, keep reading letters/digits until hitting something else → emit an identifier token
 
-**Example trace for `x42`:**
+    **Example trace for `x42`:**
 
-1. Start state
-2. See 'x' (letter) → InIdentifier
-3. See '4' (digit, allowed in identifiers) → stay InIdentifier
-4. See '2' (digit) → stay InIdentifier
-5. See space → done, emit identifier token `x42`
+    1. Start state
+    2. See 'x' (letter) → InIdentifier
+    3. See '4' (digit, allowed in identifiers) → stay InIdentifier
+    4. See '2' (digit) → stay InIdentifier
+    5. See space → done, emit identifier token `x42`
 
-This is how compilers turn source code text into structured tokens for parsing!
+    This is how compilers turn source code text into structured tokens for parsing!
 
 ## Beyond FSMs: Adding Memory
 
@@ -574,7 +574,7 @@ When you write a regex like `a*b+`, there are automatic algorithms that convert 
 
 ??? question "Practice Problem 3: Prove It's Not Regular"
 
-    The language L = {aⁿbⁿ | n ≥ 0} is not regular.
+    The language \(L = \{a^nb^n \mid n \geq 0\}\) is not regular.
 
     Try to design an FSM for it. Where do you get stuck?
     What would you need that an FSM doesn't have?

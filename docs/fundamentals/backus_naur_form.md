@@ -288,7 +288,7 @@ Both describe the same thing—valid strings in a language. Choose based on your
 
     Extend the arithmetic expression grammar to support `^` for exponentiation.
     Remember: exponentiation has higher precedence than multiplication and is right-associative
-    (`2^3^4` = `2^(3^4)`, not `(2^3)^4`).
+    (\(2^{3^4} = 2^{(3^4)}\), not \((2^3)^4\)).
 
     Where does the new rule go?
 

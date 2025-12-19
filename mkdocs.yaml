@@ -45,9 +45,21 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-  - pymdownx.tabbed
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.highlight
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - attr_list
+  - md_in_html
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
 nav:
   - Home: index.md
@@ -59,7 +71,7 @@ nav:
       - Backus-Naur Form (BNF): fundamentals/backus_naur_form.md
       - Regular Expressions: fundamentals/regular_expressions.md
       - How Parsers Work: fundamentals/how_parsers_work.md
-#      - Binary Trees & Representation: fundamentals/binary_trees_and_representation.md
+      - Binary Trees & Representation: fundamentals/binary_trees_and_representation.md
 #      - Scheme & Parse Trees: fundamentals/scheme_and_parse_trees.md
 #      - Procedures & Higher-Order Functions: fundamentals/procedures_and_higher_order_functions.md
 #      - Abstract Data Types & Stacks: fundamentals/abstract_data_types_and_stack.md

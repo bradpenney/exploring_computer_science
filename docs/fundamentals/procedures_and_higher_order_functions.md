@@ -233,7 +233,7 @@ The derivative operator takes a function and returns a new function:
 d/dx(f) → f'
 ```
 
-If `f(x) = x²`, then `f'(x) = 2x`. The derivative operator is higher-order.
+If \(f(x) = x^2\), then \(f'(x) = 2x\). The derivative operator is higher-order.
 
 ## Example 1: Reducing Repetition
 

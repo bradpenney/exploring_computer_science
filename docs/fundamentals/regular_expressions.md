@@ -634,143 +634,167 @@ const text = "Hello\nWorld";
 
 ## Practical Examples
 
-### Email Address (Simplified)
+=== ":material-email: Email Address"
 
-``` title="Email Address Pattern" linenums="1"
-^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
-```
-
-| Part | Meaning |
-|:-----|:--------|
-| `^` | Start |
-| `[a-zA-Z0-9._%+-]+` | Local part (one or more valid chars) |
-| `@` | Literal @ |
-| `[a-zA-Z0-9.-]+` | Domain name |
-| `\.` | Literal dot |
-| `[a-zA-Z]{2,}` | TLD (at least 2 letters) |
-| `$` | End |
-
-??? warning "Email Validation Reality"
-
-    This regex is a simplification. The actual email spec ([RFC 5322](https://www.rfc-editor.org/rfc/rfc5322.html)) is absurdly complex. 🤯
-    In practice, just check for `@` and send a confirmation email.
-
-### Phone Numbers
-
-US phone number with optional formatting:
-
-``` title="US Phone Number Pattern (Simplified)" linenums="1"
-^\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})$
-```
-
-Matches:
-
-- `5551234567`
-- `555-123-4567`
-- `(555) 123-4567`
-- `555.123.4567`
-
-??? warning "Mismatched Parentheses"
-
-    This pattern has a flaw: it allows **mismatched** parentheses!
-
-    **Invalid matches it allows:**
-
-    - `(555-123-4567` (opening paren, no closing)
-    - `555)-123-4567` (closing paren, no opening)
-
-    **Fixed version** (requires both or neither):
-
-    ``` title="Phone Number with Matched Parentheses" linenums="1"
-    ^(\d{3}|(\(\d{3}\)))[-.\s]?(\d{3})[-.\s]?(\d{4})$
+    ``` title="Email Address Pattern" linenums="1"
+    ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
     ```
 
-    Or more explicitly with alternation:
+    | Part | Meaning |
+    |:-----|:--------|
+    | `^` | Start |
+    | `[a-zA-Z0-9._%+-]+` | Local part (one or more valid chars) |
+    | `@` | Literal @ |
+    | `[a-zA-Z0-9.-]+` | Domain name |
+    | `\.` | Literal dot |
+    | `[a-zA-Z]{2,}` | TLD (at least 2 letters) |
+    | `$` | End |
 
-    ``` title="Phone Number - Strict Parentheses" linenums="1"
-    ^(\(\d{3}\)|\d{3})[-.\s]?(\d{3})[-.\s]?(\d{4})$
+    ??? warning "Email Validation Reality"
+
+        This regex is a simplification. The actual email spec ([RFC 5322](https://www.rfc-editor.org/rfc/rfc5322.html)) is absurdly complex. 🤯
+        In practice, just check for `@` and send a confirmation email.
+
+=== ":material-phone: Phone Numbers"
+
+    ``` title="US Phone Number Pattern (Simplified)" linenums="1"
+    ^\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})$
     ```
 
-    This says: "Either `(555)` OR `555`, but not a mix."
+    Matches:
 
-### IP Address (IPv4)
+    - `5551234567`
+    - `555-123-4567`
+    - `(555) 123-4567`
+    - `555.123.4567`
 
-``` title="IPv4 Address Pattern" linenums="1"
-^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$
-```
+    ??? warning "Mismatched Parentheses"
 
-??? warning "This Isn't Perfect"
+        This pattern has a flaw: it allows **mismatched** parentheses!
 
-    This matches `999.999.999.999`, which isn't a valid IP.
-    For true validation, you'd need `(?:25[0-5]|2[0-4]\d|[01]?\d\d?)` for each octet,
-    or just parse the numbers and check in code.
+        **Invalid matches it allows:**
 
-### Log Parsing
+        - `(555-123-4567` (opening paren, no closing)
+        - `555)-123-4567` (closing paren, no opening)
 
-Extract timestamp and message from log lines:
+        **Fixed version** (requires both or neither):
 
-``` title="Log Parsing Pattern" linenums="1"
-^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\] \[(\w+)\] (.*)$
-```
+        ``` title="Phone Number with Matched Parentheses" linenums="1"
+        ^(\d{3}|(\(\d{3}\)))[-.\s]?(\d{3})[-.\s]?(\d{4})$
+        ```
 
-For: `[2024-03-15 14:30:45] [ERROR] Something went wrong`
+        Or more explicitly with alternation:
 
-- Group 1: `2024-03-15 14:30:45`
-- Group 2: `ERROR`
-- Group 3: `Something went wrong`
+        ``` title="Phone Number - Strict Parentheses" linenums="1"
+        ^(\(\d{3}\)|\d{3})[-.\s]?(\d{3})[-.\s]?(\d{4})$
+        ```
+
+        This says: "Either `(555)` OR `555`, but not a mix."
+
+=== ":material-ip-network: IP Address"
+
+    ``` title="IPv4 Address Pattern" linenums="1"
+    ^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$
+    ```
+
+    ??? warning "This Isn't Perfect"
+
+        This matches `999.999.999.999`, which isn't a valid IP.
+        For true validation, you'd need `(?:25[0-5]|2[0-4]\d|[01]?\d\d?)` for each octet,
+        or just parse the numbers and check in code.
+
+=== ":material-file-document: Log Parsing"
+
+    ``` title="Log Parsing Pattern" linenums="1"
+    ^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\] \[(\w+)\] (.*)$
+    ```
+
+    For: `[2024-03-15 14:30:45] [ERROR] Something went wrong`
+
+    - Group 1: `2024-03-15 14:30:45`
+    - Group 2: `ERROR`
+    - Group 3: `Something went wrong`
 
 ## Regex in Different Languages
 
 Most languages use similar syntax, with minor variations:
 
-### Python
+=== ":material-language-python: Python"
 
-```python title="Regular Expressions in Python" linenums="1"
-import re
+    ```python title="Regular Expressions in Python" linenums="1"
+    import re
 
-# Search for pattern
-match = re.search(r'\d+', 'Order 12345')  # (1)!
-print(match.group())  # "12345"
+    # Search for pattern
+    match = re.search(r'\d+', 'Order 12345')  # (1)!
+    print(match.group())  # "12345"
 
-# Find all matches
-matches = re.findall(r'\d+', 'Items: 5, 10, 15')  # (2)!
-print(matches)  # ['5', '10', '15']
+    # Find all matches
+    matches = re.findall(r'\d+', 'Items: 5, 10, 15')  # (2)!
+    print(matches)  # ['5', '10', '15']
 
-# Replace
-result = re.sub(r'\d+', 'X', 'Order 123')  # (3)!
-print(result)  # "Order X"
-```
+    # Replace
+    result = re.sub(r'\d+', 'X', 'Order 123')  # (3)!
+    print(result)  # "Order X"
+    ```
 
-1. `search()` finds the first match in the string and returns a match object
-2. `findall()` returns a list of all non-overlapping matches
-3. `sub()` replaces all matches with a replacement string
+    1. `search()` finds the first match in the string and returns a match object
+    2. `findall()` returns a list of all non-overlapping matches
+    3. `sub()` replaces all matches with a replacement string
 
-### JavaScript
+=== ":material-language-javascript: JavaScript"
 
-```javascript title="Regular Expressions in JavaScript" linenums="1"
-// Test if pattern matches
-/\d+/.test('Order 12345')  // true  // (1)!
+    ```javascript title="Regular Expressions in JavaScript" linenums="1"
+    // Test if pattern matches
+    /\d+/.test('Order 12345')  // true  // (1)!
 
-// Find match
-'Order 12345'.match(/\d+/)  // ['12345']  // (2)!
+    // Find match
+    'Order 12345'.match(/\d+/)  // ['12345']  // (2)!
 
-// Replace
-'Order 123'.replace(/\d+/, 'X')  // "Order X"  // (3)!
-```
+    // Replace
+    'Order 123'.replace(/\d+/, 'X')  // "Order X"  // (3)!
+    ```
 
-1. `test()` returns boolean - true if pattern is found anywhere in string
-2. `match()` returns array of matches (use `/g` flag for all matches)
-3. `replace()` substitutes first match with replacement (use `/g` for all)
+    1. `test()` returns boolean - true if pattern is found anywhere in string
+    2. `match()` returns array of matches (use `/g` flag for all matches)
+    3. `replace()` substitutes first match with replacement (use `/g` for all)
 
-### Command Line (grep)
+=== ":material-language-rust: Rust"
 
-```bash title="Regular Expressions in grep" linenums="1"
-# Find lines containing "error"
-grep -E 'error' logfile.txt
+    ```rust title="Regular Expressions in Rust" linenums="1"
+    use regex::Regex;  // (1)!
 
-# Find lines starting with a date
-grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}' logfile.txt
-```
+    // Search for pattern
+    let re = Regex::new(r"\d+").unwrap();
+    if let Some(mat) = re.find("Order 12345") {  // (2)!
+        println!("{}", mat.as_str());  // "12345"
+    }
+
+    // Find all matches
+    let caps: Vec<&str> = re
+        .find_iter("Items: 5, 10, 15")  // (3)!
+        .map(|m| m.as_str())
+        .collect();
+    println!("{:?}", caps);  // ["5", "10", "15"]
+
+    // Replace
+    let result = re.replace_all("Order 123", "X");  // (4)!
+    println!("{}", result);  // "Order X"
+    ```
+
+    1. Requires `regex` crate: add `regex = "1"` to `Cargo.toml`
+    2. `find()` returns `Option<Match>` for the first match
+    3. `find_iter()` returns an iterator over all matches
+    4. `replace_all()` substitutes all matches with replacement string
+
+=== ":material-console: Command Line (grep)"
+
+    ```bash title="Regular Expressions in grep" linenums="1"
+    # Find lines containing "error"
+    grep -E 'error' logfile.txt
+
+    # Find lines starting with a date
+    grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}' logfile.txt
+    ```
 
 ## The Connection to Theory
 
