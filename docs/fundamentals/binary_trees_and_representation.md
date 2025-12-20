@@ -384,6 +384,8 @@ Only 3 comparisons instead of scanning all 7 nodes sequentially.
 
     Evaluating the tree (post-order traversal) correctly computes `2 + (3 * 4) = 14`.
 
+    See **[Scheme & Parse Trees](scheme_and_parse_trees.md)** for a perfect example of how code structure maps directly to these trees.
+
     See **[How Parsers Work](how_parsers_work.md)** for a deep dive into how these trees are built.
 
 === "File Systems"
@@ -563,3 +565,9 @@ Binary representation is the foundation—binary trees are the structure built o
 ---
 
 Binary is the language of computers. Binary trees are the grammar. You can't truly understand computing without understanding both—and how they work together to turn simple on/off signals into the complex systems we use every day.
+
+## Video Summary
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/suiBcUgYx_8" title="Binary Trees and Binary Representation" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>

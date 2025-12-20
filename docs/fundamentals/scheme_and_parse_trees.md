@@ -6,21 +6,18 @@ Enter **Lisp** and its dialect **Scheme**: languages where parentheses aren't de
 
 Understanding Scheme's prefix notation and its parse trees reveals something profound: the notation you choose shapes how you think about computation.
 
+??? tip "The Lisp Family: A Quick Map"
+
+    If you’ve heard of **Emacs Lisp (Elisp)** or **Common Lisp**, you’re looking at the same family tree. Lisp isn’t a single language, but a lineage of dialects that share the same "code is data" DNA.
+
+    -   **Common Lisp**: The "industrial" version—massive, feature-rich, and standardized.
+    -   **Emacs Lisp (Elisp)**: The specialized dialect used to build and extend the Emacs text editor. (Yes, the editor is mostly written in its own language.)
+    -   **Scheme**: The "academic" version—minimalist, elegant, and the focus of this article.
+
+    We use Scheme because its syntax is so stripped-down that you can’t help but see the underlying structure of the computation.
+
 ## What is Scheme?
 
-Scheme is a minimalist dialect of **Lisp** (LISt Processing), created by Guy L. Steele and Gerald Jay Sussman in 1975. Lisp itself dates to 1958, making it the second-oldest high-level programming language still in widespread use (after Fortran).
-
-**Key characteristics:**
-
-- **Prefix notation**: Operators come before operands
-- **Fully parenthesized**: No ambiguity about evaluation order
-- **Homoiconic**: Code is data (programs are lists)
-- **Functional**: Functions are first-class values
-- **Minimal syntax**: Almost everything is a function call
-
-Scheme is often used in computer science education (MIT's famous SICP textbook) precisely because its syntax strips away complexity, letting you focus on computation itself.
-
-## Prefix Notation (Polish Notation)
 
 In most programming languages, you write:
 
@@ -51,7 +48,7 @@ This is **prefix notation**—the operator comes first, followed by its operands
 
 1. **No precedence rules needed**: Parentheses make structure explicit
 2. **Uniform syntax**: Everything is `(function arg1 arg2 ...)`
-3. **Easy to parse**: No need for precedence-climbing or shunting-yard algorithms
+3. **Easy to parse**: No need for precedence-climbing or [shunting-yard algorithms](how_parsers_work.md)
 4. **Variable number of arguments**: `(+ 1 2 3 4 5)` works naturally
 
 **Disadvantages:**
@@ -61,23 +58,72 @@ This is **prefix notation**—the operator comes first, followed by its operands
 
 ## S-Expressions
 
-**S-expression** (symbolic expression) is the fundamental data structure in Lisp/Scheme.
+The term **S-expression** (symbolic expression) sounds complex, but it describes a very simple, recursive structure.
 
-An S-expression is either:
+Think of it like a system of **nested boxes**:
 
-1. An **atom**: A number, symbol, string, etc. (`42`, `foo`, `"hello"`)
-2. A **list**: Zero or more S-expressions enclosed in parentheses (`()`, `(1 2 3)`, `(+ 1 2)`)
+1.  **Atoms**: These are the contents. A number (`42`) or a symbol (`+`) is an atom. It cannot be split further.
+2.  **Lists**: These are the boxes. A list is wrapped in parentheses `( ... )`.
 
-**Examples:**
+**The Golden Rule:** A list can contain atoms, *or it can contain other lists.*
+
+| Type | Definition | Examples |
+|:-----|:-----------|:---------|
+| **Atom** | A fundamental unit (number, symbol, string) | `42`, `x`, `+`, `"hello"` |
+| **List** | A container holding zero or more S-expressions | `(1 2 3)`, `(a (b c) d)`, `()` |
+
+Because lists can contain lists, you naturally build a **tree structure**.
+
+### Visualizing S-Expressions
+
+Consider the S-expression: `(* (+ 1 2) 3)`
+
+It is a **List** containing three things:
+
+1.  **Atom**: `*`
+2.  **List**: `(+ 1 2)` (which itself contains three atoms)
+3.  **Atom**: `3`
+
+If we draw this hierarchy, it is identical to a tree:
+
+```mermaid
+graph TD
+    Root[List: * ... 3] --> Atom1["Atom: *"]
+    Root --> InnerList[List: + 1 2]
+    Root --> Atom2["Atom: 3"]
+    InnerList --> Atom3["Atom: +"]
+    InnerList --> Atom4["Atom: 1"]
+    InnerList --> Atom5["Atom: 2"]
+
+    style Root fill:#454d5d,stroke:#3b4252,color:#fff
+    style InnerList fill:#2e3440,stroke:#3b4252,color:#fff
+```
+
+### Why "Symbolic"?
+
+In most languages (like C or Java), variable names like `x` or `calculate` disappear when you compile the code—they turn into memory addresses.
+
+In an **S-expression**, symbols (words like `x`, `foo`, `+`) are distinct data types, just like numbers. The language can manipulate words and names as easily as it manipulates math. This is why it's called a *Symbolic* Expression.
+
+??? info "Under the Hood: How does the CPU handle symbols?"
+
+    In languages like C, a variable name like `radius` is completely erased during compilation and replaced with a memory address (e.g., `0x7ffe...`). The CPU only sees the address.
+
+    In Lisp/Scheme, symbols **persist** during execution because the language uses an **Environment**: a giant lookup table in memory.
+
+    1.  **The Environment**: When you call `(square 7)`, the language looks up the symbol `square` in its table to find the code it needs to run.
+    2.  **Pointers**: To keep this fast, the language "interns" symbols. Every instance of `x` in your code points to the exact same "Symbol Object" in memory. The CPU doesn't compare the string "x"; it just compares the memory pointers to see if they match.
+    3.  **Code as Data**: Because symbols aren't erased, a Lisp program can read its own source code, move symbols around, and even generate new functions while it is running.
+
+**Examples of valid S-expressions:**
 
 ```scheme
 42                  ; Atom (number)
 hello               ; Atom (symbol)
-"world"             ; Atom (string)
 (1 2 3)             ; List of three atoms
 (+ 1 2)             ; List (function call)
 (+ (* 2 3) 4)       ; List containing another list (nested)
-()                  ; Empty list
+()                  ; The Empty List (also called "nil")
 ```
 
 ### Lists as Code
@@ -90,176 +136,178 @@ In Scheme, **code is lists**. A function call is a list where:
 ```scheme
 (+ 1 2)             ; Call function + with arguments 1 and 2
 (* 3 4)             ; Call function * with arguments 3 and 4
-(define x 10)       ; Call define with arguments x and 10
+(- 10 5)            ; Call function - with arguments 10 and 5
 ```
 
 This **homoiconicity** (code as data) makes Lisp/Scheme uniquely powerful for metaprogramming—programs that manipulate programs.
+
+??? tip "Common Misconception: Code vs. Data"
+
+    When we say "Code is Data," we don't mean **hardcoding** (mixing magic numbers or strings into your logic), which is generally bad practice.
+
+    We mean that the **structure** of the program is exposed as a data structure you can edit.
+
+    -   **In Python/Java:** Code is text. To change it, you have to cut and paste strings.
+    -   **In Lisp:** Code is a **List**. You can use standard list functions (like `map` or `reverse`) to rewrite your own program while it is loading. This allows you to add new features to the language (like loops or classes) without waiting for the compiler developers to add them.
+
+### Special Forms: Breaking the Rules
+
+There is one catch. Normally, Scheme evaluates **all** arguments before passing them to a function. But some things, like defining variables, wouldn't work if we did that.
+
+```scheme
+(define x 10)
+```
+
+If `define` were a normal function, Scheme would try to find the value of `x` *before* running the line. But `x` doesn't exist yet!
+
+To handle this, Scheme has **Special Forms** (like `define`, `if`, and `quote`) that have their own custom evaluation rules. They don't evaluate all their arguments.
 
 ## Reading Scheme Expressions
 
 Let's build intuition by reading Scheme expressions aloud.
 
-### Simple Expressions
+=== ":material-numeric-1-box: Simple"
 
-```scheme
-(+ 5 6)
-```
+    ```scheme
+    (+ 5 6)
+    ```
 
-**Read as:** "Add 5 and 6"
-**Evaluates to:** `11`
+    **Read as:** "Add 5 and 6"
+    **Evaluates to:** `11`
 
-```scheme
-(* 7 8)
-```
+    ```scheme
+    (* 7 8)
+    ```
 
-**Read as:** "Multiply 7 and 8"
-**Evaluates to:** `56`
+    **Read as:** "Multiply 7 and 8"
+    **Evaluates to:** `56`
 
-### Nested Expressions
+=== ":material-numeric-2-box: Nested"
 
-```scheme
-(+ (+ 5 6) (* 7 8))
-```
+    ```scheme
+    (+ (+ 5 6) (* 7 8))
+    ```
 
-**Read as:** "Add the result of (add 5 and 6) to the result of (multiply 7 and 8)"
+    **Read as:** "Add the result of (add 5 and 6) to the result of (multiply 7 and 8)"
 
-**Step-by-step evaluation:**
+    **Step-by-step evaluation:**
 
-1. Evaluate inner expressions first:
-   - `(+ 5 6)` → `11`
-   - `(* 7 8)` → `56`
-2. Substitute results: `(+ 11 56)`
-3. Evaluate outer expression: `67`
+    1. Evaluate inner expressions first:
+       - `(+ 5 6)` → `11`
+       - `(* 7 8)` → `56`
+    2. Substitute results: `(+ 11 56)`
+    3. Evaluate outer expression: `67`
 
-**Key insight:** The structure of nested parentheses **directly mirrors** the evaluation order. Innermost expressions evaluate first, working outward.
+    !!! abstract "Key Insight"
+        The structure of nested parentheses **directly mirrors** the evaluation order. Innermost expressions evaluate first, working outward.
 
-### Complex Expressions
+=== ":material-numeric-3-box: Complex"
 
-```scheme
-(+ (* 2 3) (- 10 4) 5)
-```
+    ```scheme
+    (+ (* 2 3) (- 10 4) 5)
+    ```
 
-**Read as:** "Add the result of (multiply 2 and 3), the result of (subtract 4 from 10), and 5"
+    **Read as:** "Add the result of (multiply 2 and 3), the result of (subtract 4 from 10), and 5"
 
-**Evaluation:**
+    **Evaluation:**
 
-1. `(* 2 3)` → `6`
-2. `(- 10 4)` → `6`
-3. `(+ 6 6 5)` → `17`
+    1. `(* 2 3)` → `6`
+    2. `(- 10 4)` → `6`
+    3. `(+ 6 6 5)` → `17`
 
-**Notice:** `+` can take more than two arguments in Scheme—another advantage of prefix notation.
+    **Notice:** `+` can take more than two arguments in Scheme—another advantage of prefix notation.
 
 ## Parse Trees for Scheme
 
-A **parse tree** (or **abstract syntax tree**, AST) represents the grammatical structure of an expression as a tree.
+A **[parse tree](binary_trees_and_representation.md)** (or **abstract syntax tree**, AST) represents the grammatical structure of an expression as a tree.
 
 For Scheme, the correspondence between written form and parse tree is particularly direct—parentheses literally define tree structure.
 
-### Simple Expression
+=== ":material-tree: Simple Tree"
 
-**Expression:** `(+ 5 6)`
+    **Expression:** `(+ 5 6)`
 
-**Parse Tree:**
+    **Structure:**
+    - **Root**: The operator `+`
+    - **Children**: The operands `5` and `6`
 
-```mermaid
-graph TD
-    Plus["+"] --> Five["5"]
-    Plus --> Six["6"]
+    ```mermaid
+    graph TD
+        Plus["+"] --> Five["5"]
+        Plus --> Six["6"]
 
-    style Plus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style Five fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style Six fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
-```
+        style Plus fill:#454d5d,stroke:#3b4252,color:#fff
+        style Five fill:#2e3440,stroke:#3b4252,color:#fff
+        style Six fill:#2e3440,stroke:#3b4252,color:#fff
+    ```
 
-**Structure:**
+=== ":material-forest: Nested Tree"
 
-- **Root**: The operator `+`
-- **Children**: The operands `5` and `6`
+    **Expression:** `(+ (+ 5 6) (* 7 8))`
 
-### Nested Expression
+    **Structure:**
+    - **Root**: Outer `+` operator
+    - **Left subtree**: `(+ 5 6)`
+    - **Right subtree**: `(* 7 8)`
 
-**Expression:** `(+ (+ 5 6) (* 7 8))`
+    ```mermaid
+    graph TD
+        RootPlus["+"] --> LeftPlus["+"]
+        RootPlus --> RightTimes["*"]
+        LeftPlus --> Five["5"]
+        LeftPlus --> Six["6"]
+        RightTimes --> Seven["7"]
+        RightTimes --> Eight["8"]
 
-**Parse Tree:**
+        style RootPlus fill:#454d5d,stroke:#3b4252,color:#fff
+        style LeftPlus fill:#3b4252,stroke:#2e3440,color:#fff
+        style RightTimes fill:#3b4252,stroke:#2e3440,color:#fff
+        style Five fill:#2e3440,stroke:#242933,color:#fff
+        style Six fill:#2e3440,stroke:#242933,color:#fff
+        style Seven fill:#2e3440,stroke:#242933,color:#fff
+        style Eight fill:#2e3440,stroke:#242933,color:#fff
+    ```
 
-```mermaid
-graph TD
-    RootPlus["+"] --> LeftPlus["+"]
-    RootPlus --> RightTimes["*"]
-    LeftPlus --> Five["5"]
-    LeftPlus --> Six["6"]
-    RightTimes --> Seven["7"]
-    RightTimes --> Eight["8"]
+    **Evaluation order** (post-order traversal):
 
-    style RootPlus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style LeftPlus fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style RightTimes fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style Five fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style Six fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style Seven fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style Eight fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
-```
+    1. Evaluate left subtree: `5 + 6 = 11`
+    2. Evaluate right subtree: `7 * 8 = 56`
+    3. Evaluate root: `11 + 56 = 67`
 
-**Structure:**
+=== ":material-pencil: Drawing Algorithm"
 
-- **Root**: Outer `+` operator
-- **Left subtree**: `(+ 5 6)` — another addition
-- **Right subtree**: `(* 7 8)` — a multiplication
+    **How to draw a parse tree from Scheme:**
 
-**Evaluation order** (post-order traversal):
+    1. The outermost parentheses define the root node (the operator)
+    2. Each argument becomes a child
+    3. If an argument is itself a list (nested expression), recurse
 
-1. Evaluate left subtree: `5 + 6 = 11`
-2. Evaluate right subtree: `7 * 8 = 56`
-3. Evaluate root: `11 + 56 = 67`
+    **Example:** `(* (+ 3 4) (- 10 5) 2)`
 
-### Drawing Parse Trees from Scheme
+    ```mermaid
+    graph TD
+        Times["*"] --> Plus["+"]
+        Times --> Minus["-"]
+        Times --> Two["2"]
+        Plus --> Three["3"]
+        Plus --> Four["4"]
+        Minus --> Ten["10"]
+        Minus --> Five["5"]
 
-**Algorithm:**
+        style Times fill:#454d5d,stroke:#3b4252,color:#fff
+        style Plus fill:#3b4252,stroke:#2e3440,color:#fff
+        style Minus fill:#3b4252,stroke:#2e3440,color:#fff
+        style Two fill:#3b4252,stroke:#2e3440,color:#fff
+        style Three fill:#2e3440,stroke:#242933,color:#fff
+        style Four fill:#2e3440,stroke:#242933,color:#fff
+        style Ten fill:#2e3440,stroke:#242933,color:#fff
+        style Five fill:#2e3440,stroke:#242933,color:#fff
+    ```
+    **Evaluation:**
 
-1. The outermost parentheses define the root node (the operator)
-2. Each argument becomes a child
-3. If an argument is itself a list (nested expression), recurse
-
-**Example:** `(* (+ 3 4) (- 10 5) 2)`
-
-**Step-by-step:**
-
-1. **Root**: `*` (multiply)
-2. **First child**: `(+ 3 4)` (a subtree)
-   - Root of subtree: `+`
-   - Children: `3`, `4`
-3. **Second child**: `(- 10 5)` (another subtree)
-   - Root of subtree: `-`
-   - Children: `10`, `5`
-4. **Third child**: `2` (a leaf)
-
-**Resulting tree:**
-
-```mermaid
-graph TD
-    Times["*"] --> Plus["+"]
-    Times --> Minus["-"]
-    Times --> Two["2"]
-    Plus --> Three["3"]
-    Plus --> Four["4"]
-    Minus --> Ten["10"]
-    Minus --> Five["5"]
-
-    style Times fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style Plus fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style Minus fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style Two fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style Three fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style Four fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style Ten fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style Five fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
-```
-
-**Evaluation:**
-
-1. `(+ 3 4)` → `7`
-2. `(- 10 5)` → `5`
-3. `(* 7 5 2)` → `70`
+    1. `(+ 3 4)` → `7`
+    2. `(- 10 5)` → `5`
+    3. `(* 7 5 2)` → `70`
 
 ## Evaluation Order: Post-Order Traversal
 
@@ -300,44 +348,90 @@ This ensures arguments are computed before the function that uses them—a funda
 
 The tree structure **guarantees** correct evaluation order—no precedence rules needed.
 
-## Infix vs. Prefix: The Ambiguity Problem
+## The Ambiguity Problem
 
-Consider the infix expression: `3 + 4 * 5`
+Why did Lisp choose such a strange notation? To eliminate **ambiguity**.
 
-**Two interpretations:**
+Infix notation (standard math) is inherently ambiguous. Consider:
 
-1. `(3 + 4) * 5 = 35` (if `+` has higher precedence)
-2. `3 + (4 * 5) = 23` (if `*` has higher precedence)
+`3 + 4 * 5`
 
-Mathematics and most programming languages choose interpretation 2 (multiplication binds tighter than addition). But this is a **convention**, not inherent to the notation.
+Does this mean `(3 + 4) * 5` or `3 + (4 * 5)`?
 
-**In Scheme, there is no ambiguity:**
+To solve this, we rely on **Precedence Rules** (PEMDAS). You have to memorize that `*` beats `+`. These are "invisible parentheses" that the parser adds for you. Scheme removes the need for invisible rules by forcing you to make the structure explicit.
 
-```scheme
-(* (+ 3 4) 5)       ; Interpretation 1: 35
-(+ 3 (* 4 5))       ; Interpretation 2: 23
-```
+=== ":material-help-circle-outline: Infix (Implicit)"
 
-Parentheses make the structure explicit. The notation itself encodes the parse tree.
+    **Expression:** `3 + 4 * 5`
 
-### Parsing Infix Expressions
+    **The Problem:**
+    Who owns the `4`? Does `+` claim it, or does `*` claim it? The notation doesn't say.
 
-Parsers for infix notation must:
+    **The Fix:**
+    We apply an arbitrary rule: "Multiplication before Addition." We need a **lookup table** of rules to read the code.
 
-1. Tokenize the input
-2. Apply precedence rules (`*` before `+`)
-3. Apply associativity rules (left-to-right for `+`)
-4. Build a parse tree respecting these rules
+    **The Hidden Tree:**
+    The computer implicitly builds this tree based on the rulebook:
 
-**Algorithm examples:**
+    ```mermaid
+    graph TD
+        T1["3"] --- T2["+"] --- T3["4"] --- T4["*"] --- T5["5"]
 
-- **Shunting-yard algorithm** (Dijkstra, 1960s)
-- **Recursive descent with precedence climbing**
-- **Operator-precedence parsing**
+        subgraph Rules ["The Rulebook (PEMDAS)"]
+            R1["Rule: * beats +"]
+        end
 
-### Parsing Prefix Expressions
+        Plus["+"] --> Three["3"]
+        Plus --> Times["*"]
+        Times --> Four["4"]
+        Times --> Five["5"]
 
-Parsers for prefix notation are trivial:
+        T3 --> Rules
+        Rules -.-> Plus
+
+        style Plus fill:#7f1d1d,stroke:#b91c1c,color:#fff
+        style Times fill:#7f1d1d,stroke:#b91c1c,color:#fff
+        style Rules fill:#334155,stroke:#475569,color:#fff
+        style R1 fill:#d97706,stroke:#92400e,color:#fff
+    ```
+
+=== ":material-check-circle-outline: Prefix (Explicit)"
+
+    **Expression:** `(+ 3 (* 4 5))`
+
+    **The Solution:**
+    There is no question about who owns the `4`. It is physically inside the `(* ...)` list. The structure is undeniable.
+
+    **The Explicit Tree:**
+    The notation maps 1:1 to the tree.
+
+    ```mermaid
+    graph TD
+        Plus["+"] --> Three["3"]
+        Plus --> Times["*"]
+        Times --> Four["4"]
+        Times --> Five["5"]
+        style Plus fill:#d97706,stroke:#92400e,color:#fff
+        style Times fill:#d97706,stroke:#92400e,color:#fff
+    ```
+
+### Why Parsers Love Prefix
+
+The difference in complexity is staggering when you try to write a program to read these expressions.
+
+**Parsing Infix (`3 + 4 * 5`) requires:**
+
+1.  **Tokenizing**: Breaking string into parts.
+2.  **Precedence Logic**: Knowing `*` > `+`.
+3.  **Associativity Logic**: Knowing `1 - 2 - 3` is `(1 - 2) - 3`.
+4.  **Complex Algorithms**: Shunting-yard (Dijkstra) or Operator-precedence parsing.
+
+**Parsing Prefix (`(+ 3 (* 4 5))`) requires:**
+
+1.  **Tokenizing**.
+2.  **Recursion**: "See a paren? Start a new node."
+
+There is no Step 3 or 4. The parser is trivial:
 
 ```python title="Simple Scheme Parser" linenums="1"
 def parse(tokens):  # (1)!
@@ -365,180 +459,142 @@ def parse(tokens):  # (1)!
 
 ## Historical Context
 
-### The Birth of Lisp
+=== ":material-creation: The Birth of Lisp"
 
-**Lisp** was created by John McCarthy in 1958 at MIT as part of his research on artificial intelligence. McCarthy wanted a language that:
+    **Lisp** was created by John McCarthy in 1958 at MIT as part of his research on artificial intelligence. McCarthy wanted a language that:
 
-- Could manipulate symbolic expressions (not just numbers)
-- Treated code as data (enabling metaprogramming)
-- Supported recursive functions naturally
+    - Could manipulate symbolic expressions (not just numbers)
+    - Treated code as data (enabling metaprogramming)
+    - Supported recursive functions naturally
 
-S-expressions were McCarthy's solution—simple, uniform, and powerful.
+    S-expressions were McCarthy's solution—simple, uniform, and powerful.
 
-### Scheme
+=== ":material-school: Scheme"
 
-**Scheme** emerged from MIT in 1975 as Guy Steele and Gerald Sussman explored λ-calculus and programming language semantics. They wanted a "purer" Lisp:
+    **Scheme** emerged from MIT in 1975 as Guy Steele and Gerald Sussman explored λ-calculus and programming language semantics. They wanted a "purer" Lisp:
 
-- Lexical scoping (instead of dynamic)
-- First-class continuations
-- Tail-call optimization
-- Minimalist design
+    - Lexical scoping (instead of dynamic)
+    - First-class continuations
+    - Tail-call optimization
+    - Minimalist design
 
-Scheme's simplicity made it ideal for teaching and research, culminating in the influential textbook **Structure and Interpretation of Computer Programs** (SICP) by Abelson and Sussman (1984).
+    Scheme's simplicity made it ideal for teaching and research, culminating in the influential textbook **Structure and Interpretation of Computer Programs** (SICP) by Abelson and Sussman (1984).
 
-### Influence
+=== ":material-graph: Influence"
 
-Lisp's ideas permeate modern programming:
+    Lisp's ideas permeate modern programming:
 
-- **Garbage collection**: Pioneered by Lisp (McCarthy, 1960)
-- **First-class functions**: Lisp made them mainstream
-- **Closures**: Scheme formalized them
-- **Dynamic typing**: Common in scripting languages
-- **Homoiconicity**: Inspired Clojure, Julia's metaprogramming
+    - **Garbage collection**: Pioneered by Lisp (McCarthy, 1960)
+    - **First-class functions**: Lisp made them mainstream
+    - **Closures**: Scheme formalized them
+    - **Dynamic typing**: Common in scripting languages
+    - **Homoiconicity**: Inspired Clojure, Julia's metaprogramming
 
-Even languages that don't look like Lisp (JavaScript, Python, Ruby) adopted its core ideas.
+    Even languages that don't look like Lisp (JavaScript, Python, Ruby) adopted its core ideas.
 
 ## Scheme in Action
 
-### Basic Arithmetic
+=== ":material-calculator: Basic Arithmetic"
 
-```scheme
-(+ 1 2 3 4 5)       ; 15 (variadic function)
-(* 2 3 4)           ; 24
-(- 10 3)            ; 7
-(/ 20 4)            ; 5
-```
+    Scheme arithmetic supports variable arguments naturally.
 
-### Nested Arithmetic
+    ```scheme
+    (+ 1 2 3 4 5)       ; 15 (variadic function)
+    (* 2 3 4)           ; 24
+    (- 10 3)            ; 7
+    (/ 20 4)            ; 5
+    ```
 
-```scheme
-(+ (* 2 3) (/ 10 2) (- 8 3))
-; Evaluates to: (+ 6 5 5) → 16
-```
+    **Nested Arithmetic:**
 
-### Defining Variables
+    ```scheme
+    (+ (* 2 3) (/ 10 2) (- 8 3))
+    ; Evaluates to: (+ 6 5 5) → 16
+    ```
 
-```scheme
-(define pi 3.14159)
-(define radius 5)
-(* pi (* radius radius))    ; Area of circle: 78.53975
-```
+=== ":material-function: Variables & Functions"
 
-### Defining Functions
+    Definitions use `define`. Notice how defining a function looks just like calling it, but with a body.
 
-```scheme
-(define (square x)
-  (* x x))
+    ```scheme
+    (define pi 3.14159)
+    (define radius 5)
+    (* pi (* radius radius))    ; Area of circle: 78.53975
+    ```
 
-(square 7)          ; 49
-```
+    **Defining Functions:**
 
-### Conditional Expressions
+    ```scheme
+    (define (square x)
+      (* x x))
 
-```scheme
-(define (abs x)
-  (if (< x 0)
-      (- x)
-      x))
+    (square 7)          ; 49
+    ```
 
-(abs -5)            ; 5
-(abs 3)             ; 3
-```
+=== ":material-call-split: Control Flow"
 
-### Recursion
+    Scheme uses `if` for conditional logic. It returns a value (like the ternary operator `? :` in C-style languages) rather than executing statements.
 
-```scheme
-(define (factorial n)
-  (if (<= n 1)
-      1
-      (* n (factorial (- n 1)))))
+    ```scheme
+    (define (abs x)
+      (if (< x 0)
+          (- x)
+          x))
 
-(factorial 5)       ; 120
-```
+    (abs -5)            ; 5
+    (abs 3)             ; 3
+    ```
+
+=== ":material-refresh: Recursion"
+
+    Recursion is the primary way to loop in Scheme.
+
+    ```scheme
+    (define (factorial n)
+      (if (<= n 1)
+          1
+          (* n (factorial (- n 1)))))
+
+    (factorial 5)       ; 120
+    ```
 
 ## Why Study Scheme?
 
 You might reasonably ask: why learn Scheme when modern languages like Python, JavaScript, or Rust dominate industry?
 
-**Answers:**
+=== ":material-lightbulb: Conceptual Clarity"
 
-### 1. Conceptual Clarity
+    Scheme strips away syntax complexity, letting you focus on computational concepts:
 
-Scheme strips away syntax complexity, letting you focus on computational concepts:
+    - Recursion without boilerplate
+    - Higher-order functions without ceremony
+    - Closures and scope made explicit
 
-- Recursion without boilerplate
-- Higher-order functions without ceremony
-- Closures and scope made explicit
+=== ":material-file-tree: Understanding Parsers"
 
-### 2. Understanding Parsers
+    Scheme's direct mapping from text to parse tree demystifies how languages work. Once you see how prefix notation avoids precedence, you understand why parsing infix is hard.
 
-Scheme's direct mapping from text to parse tree demystifies how languages work. Once you see how prefix notation avoids precedence, you understand why parsing infix is hard.
+=== ":material-function-variant: Functional Programming"
 
-### 3. Functional Programming
+    Scheme is functional-first, teaching patterns now common in JavaScript, Python, Haskell, and Rust:
 
-Scheme is functional-first, teaching patterns now common in JavaScript, Python, Haskell, and Rust:
+    - `map`, `filter`, `reduce`
+    - Immutability
+    - Function composition
 
-- `map`, `filter`, `reduce`
-- Immutability
-- Function composition
+=== ":material-history: Historical Perspective"
 
-### 4. Historical Perspective
+    Understanding Lisp/Scheme helps you appreciate language evolution. Many "modern" features (lambdas, closures, garbage collection) were invented in Lisp decades ago.
 
-Understanding Lisp/Scheme helps you appreciate language evolution. Many "modern" features (lambdas, closures, garbage collection) were invented in Lisp decades ago.
+=== ":material-school: Academic Rigor"
 
-### 5. Academic Rigor
+    Scheme's minimalism makes it perfect for studying:
 
-Scheme's minimalism makes it perfect for studying:
+    - Programming language semantics
+    - Interpreters and compilers
+    - Type theory and λ-calculus
 
-- Programming language semantics
-- Interpreters and compilers
-- Type theory and λ-calculus
-
-MIT's SICP remains a gold standard in CS education precisely because Scheme gets out of the way, letting ideas shine through.
-
-## Comparison: Infix vs. Prefix
-
-### Same Expression, Two Notations
-
-**Expression:** "Add 3 to the product of 4 and 5"
-
-| Notation | Written Form | Parse Tree Depth | Precedence Needed? |
-|:---------|:-------------|:-----------------|:-------------------|
-| **Infix** | `3 + 4 * 5` | Implicit | Yes |
-| **Prefix** | `(+ 3 (* 4 5))` | Explicit | No |
-
-**Infix Parse Tree:**
-
-```
-     +
-    / \
-   3   *
-      / \
-     4   5
-```
-
-**Prefix Parse Tree:**
-
-```
-     +
-    / \
-   3   *
-      / \
-     4   5
-```
-
-**Same tree**, but prefix notation makes it explicit in the written form.
-
-### Complex Nested Example
-
-**Expression:** "Multiply the sum of 2 and 3 by the difference of 10 and 4"
-
-| Notation | Written Form |
-|:---------|:-------------|
-| **Infix** | `(2 + 3) * (10 - 4)` |
-| **Prefix** | `(* (+ 2 3) (- 10 4))` |
-
-**Both require parentheses** for this structure, but Scheme's consistency (always use parentheses) means you never wonder whether you need them.
+    MIT's SICP remains a gold standard in CS education precisely because Scheme gets out of the way, letting ideas shine through.
 
 ## Practice Problems
 
@@ -598,13 +654,13 @@ MIT's SICP remains a gold standard in CS education precisely because Scheme gets
             Minus --> Seven["7"]
             Minus --> Two["2"]
 
-            style Times fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
-            style Plus fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
-            style Minus fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
-            style Five fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
-            style Six fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
-            style Seven fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
-            style Two fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
+            style Times fill:#454d5d,stroke:#3b4252,color:#fff
+            style Plus fill:#3b4252,stroke:#2e3440,color:#fff
+            style Minus fill:#3b4252,stroke:#2e3440,color:#fff
+            style Five fill:#2e3440,stroke:#242933,color:#fff
+            style Six fill:#2e3440,stroke:#242933,color:#fff
+            style Seven fill:#2e3440,stroke:#242933,color:#fff
+            style Two fill:#2e3440,stroke:#242933,color:#fff
         ```
 
         **Evaluation:**
@@ -638,13 +694,13 @@ MIT's SICP remains a gold standard in CS education precisely because Scheme gets
             RightTimes --> Seven["7"]
             RightTimes --> Eight["8"]
 
-            style RootPlus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
-            style LeftPlus fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
-            style RightTimes fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
-            style Five fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
-            style Six fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
-            style Seven fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
-            style Eight fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
+            style RootPlus fill:#454d5d,stroke:#3b4252,color:#fff
+            style LeftPlus fill:#3b4252,stroke:#2e3440,color:#fff
+            style RightTimes fill:#3b4252,stroke:#2e3440,color:#fff
+            style Five fill:#2e3440,stroke:#242933,color:#fff
+            style Six fill:#2e3440,stroke:#242933,color:#fff
+            style Seven fill:#2e3440,stroke:#242933,color:#fff
+            style Eight fill:#2e3440,stroke:#242933,color:#fff
         ```
 
         **Post-Order Evaluation:**
@@ -723,6 +779,4 @@ You don't need to write Scheme professionally to benefit from understanding it. 
 
 ---
 
-Scheme strips programming down to its essence: functions, data, and recursion. What remains is computation in its purest form—no syntax tricks, no precedence tables, just structure made explicit through parentheses. It's 
-
-not the notation most programmers use daily, but understanding it changes how you think about all the notations you do use.
+Scheme strips programming down to its essence: functions, data, and recursion. What remains is computation in its purest form—no syntax tricks, no precedence tables, just structure made explicit through parentheses. It's not the notation most programmers use daily, but understanding it changes how you think about all the notations you do use.

@@ -257,6 +257,9 @@ For `2 + 3 * 4`:
 
 The AST is what most compilers actually work with.
 
+!!! tip "Scheme: Where Parse Tree = AST"
+    In **[Scheme & Parse Trees](scheme_and_parse_trees.md)**, you'll see a language where the written code *is* the AST. Because Scheme uses prefix notation with explicit parentheses `(+ 1 (* 2 3))`, there is no ambiguity, and the parse tree matches the code structure 1:1.
+
 !!! info "Why ASTs Drop Punctuation"
 
     Notice how the AST doesn't include parentheses, commas, or semicolons? That's intentional. Once you've parsed the code and built the tree structure, punctuation has served its purpose—it told the parser how to group things.

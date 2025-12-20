@@ -309,6 +309,7 @@ Both describe the same thing—valid strings in a language. Choose based on your
 **Related Articles:**
 
 - [Recursive Transition Networks](recursive_transition_networks.md) — The visual equivalent
+- [Scheme & Parse Trees](scheme_and_parse_trees.md) — A language with a trivial BNF grammar
 
 **Books and Tutorials:**
 

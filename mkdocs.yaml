@@ -72,7 +72,7 @@ nav:
       - Regular Expressions: fundamentals/regular_expressions.md
       - How Parsers Work: fundamentals/how_parsers_work.md
       - Binary Trees & Representation: fundamentals/binary_trees_and_representation.md
-#      - Scheme & Parse Trees: fundamentals/scheme_and_parse_trees.md
+      - Scheme & Parse Trees: fundamentals/scheme_and_parse_trees.md
 #      - Procedures & Higher-Order Functions: fundamentals/procedures_and_higher_order_functions.md
 #      - Abstract Data Types & Stacks: fundamentals/abstract_data_types_and_stack.md
 #  - Algorithms:

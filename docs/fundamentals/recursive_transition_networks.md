@@ -114,7 +114,7 @@ stateDiagram-v2
 
 This compact representation says "one or more digits"—a pattern that would require infinitely many states if we tried to enumerate every possible number explicitly.
 
-## The Power of Recursion: Arithmetic Expressions
+## The Power of Recursion: Arithmetic Expressions { #expression-rtn }
 
 Here's where RTNs demonstrate their real power. We want to parse arithmetic expressions like:
 
@@ -529,6 +529,7 @@ RTNs make the abstract concrete. They turn "grammar" from a vague concept into a
 
 - **William A. Woods (1970)** — "Transition Network Grammars for Natural Language Analysis" (the original paper)
 - **David Evans, [Introduction to Computing](https://computingbook.org/)** — Chapter 2 covers RTNs and formal languages
+- **[Scheme & Parse Trees](scheme_and_parse_trees.md)** — A language where the grammar is just nested lists
 - **[Binary Trees & Representation](binary_trees_and_representation.md)** — Tree structures and parse trees
 - **[Computational Thinking](computational_thinking.md)** — RTNs exemplify decomposition and abstraction
 - **[Backus-Naur Form](backus_naur_form.md)** — Textual notation for context-free grammars

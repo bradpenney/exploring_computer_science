@@ -17,13 +17,17 @@ The building blocks of computer science:
 - **[Finite State Machines](fundamentals/finite_state_machines.md)** - Modeling systems with states and transitions
 - **[Recursive Transition Networks](fundamentals/recursive_transition_networks.md)** - Parsing natural language structures
 - **[Backus-Naur Form](fundamentals/backus_naur_form.md)** - Formal grammar notation for defining languages
+- **[Regular Expressions](fundamentals/regular_expressions.md)** - Pattern matching and text processing
+- **[How Parsers Work](fundamentals/how_parsers_work.md)** - From tokens to syntax trees
+- **[Binary Trees & Representation](fundamentals/binary_trees_and_representation.md)** - Tree structures and data representation
+- **[Scheme & Parse Trees](fundamentals/scheme_and_parse_trees.md)** - Understanding expression parsing and prefix notation
 
 ### Coming Soon
 
 **More Fundamentals:**
 
-- Regular Expressions - Pattern matching and text processing
-- How Parsers Work - From tokens to syntax trees
+- Procedures & Higher-Order Functions - Abstraction and functional programming
+- Abstract Data Types & Stacks - LIFO data structures
 
 **New Sections:**
 
