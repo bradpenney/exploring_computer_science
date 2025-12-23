@@ -1,53 +1,71 @@
 <img src="images/exploring_computer_science.png" alt="Exploring Computer Science" class="img-responsive-right" width="300">
 
-# Welcome to Exploring Computer Science
+# Exploring Computer Science
 
-A subsection of [BradPenney.io](https://bradpenney.io), this site documents my journey through Computer Science concepts as I work toward my degree.
+**Decoding the machines that run our world.**
 
-This isn't just a collection of notes - it's a teaching-focused resource. Writing to explain concepts reinforces learning and creates something useful for others exploring the same topics.
+A subsection of [BradPenney.io](https://bradpenney.io), this site documents my journey through the Computer Science curriculum. It transforms raw lecture notes into structured, teaching-focused articles designed to explain *why* things work, not just *how*.
 
-## What You'll Find Here
+---
 
-### Building Blocks
+## Curriculum Areas
 
-The foundation of computer science:
+<div class="grid cards" markdown>
 
-- **[What is Computer Science?](building_blocks/what_is_computer_science.md)** - The field beyond the code
-- **[Computational Thinking](building_blocks/computational_thinking.md)** - How to approach problems like a computer scientist
-- **[Finite State Machines](building_blocks/finite_state_machines.md)** - Modeling systems with states and transitions
-- **[Recursive Transition Networks](building_blocks/recursive_transition_networks.md)** - Parsing natural language structures
-- **[Backus-Naur Form](building_blocks/backus_naur_form.md)** - Formal grammar notation for defining languages
-- **[Regular Expressions](building_blocks/regular_expressions.md)** - Pattern matching and text processing
-- **[How Parsers Work](building_blocks/how_parsers_work.md)** - From tokens to syntax trees
-- **[Binary Trees & Representation](building_blocks/binary_trees_and_representation.md)** - Tree structures and data representation
-- **[Scheme & Parse Trees](building_blocks/scheme_and_parse_trees.md)** - Understanding expression parsing and prefix notation
+- :material-cube-outline: **Building Blocks**
 
-### Data Structures
+    ---
 
-Organizing and managing data:
+    **Theory** — [What is CS?](building_blocks/what_is_computer_science.md), [Computational Thinking](building_blocks/computational_thinking.md), [FSMs](building_blocks/finite_state_machines.md)
 
-- **[Abstract Data Types & Stacks](data_structures/abstract_data_types_and_stack.md)** - LIFO data structures and abstraction
+    **Languages** — [Regex](building_blocks/regular_expressions.md), [BNF](building_blocks/backus_naur_form.md), [RTNs](building_blocks/recursive_transition_networks.md)
 
-### Coming Soon
+    **Implementation** — [Parsers](building_blocks/how_parsers_work.md), [Trees](building_blocks/binary_trees_and_representation.md), [Scheme](building_blocks/scheme_and_parse_trees.md)
 
-**More Building Blocks:**
+- :material-code-braces: **Programming & Languages**
 
-- Procedures & Higher-Order Functions - Abstraction and functional programming
+    ---
 
-**New Sections:**
+    **Paradigms** — [Procedures & Higher-Order Functions](programming_languages/procedures_and_higher_order_functions.md)
 
-- **Algorithms** - Big-O notation, Turing machines, sorting and searching
-- **Programming** - Paradigms, OOP, interpreters vs compilers
-- **Systems** - Operating systems, networks, databases
-- **Modern Topics** - AI, security, ethics in computing
+    **Coming Soon** — OOP, Programming Paradigms, Interpreters vs. Compilers
 
-## About This Project
+- :material-database-outline: **Data Structures** *(Coming Soon)*
 
-This site grows alongside my coursework. Each article synthesizes multiple sources into a cohesive explanation with diagrams, code examples, and practice problems.
+    ---
 
-The goal: if someone asks me to explain a concept, I should be able to point them here.
+    **Abstract Data Types** — Stacks, Queues, Deques, & Linked Lists
+
+    **Advanced Structures** — Binary Search Trees, Heaps, and Graphs
+
+- :material-graph-outline: **Algorithms** *(Coming Soon)*
+
+    ---
+
+    **Complexity** — Big-O Notation (Time & Space), Turing Machines
+
+    **Logic** — Searching, Sorting, Recursion, and Graph Traversal
+
+- :material-server-network: **Systems** *(Coming Soon)*
+
+    ---
+
+    **Architecture** — Operating Systems, Virtual Machines, and Networking
+
+    **Infrastructure** — Processes, Threads, Cloud & Edge Computing
+
+- :material-robot-outline: **Modern Topics** *(Coming Soon)*
+
+    ---
+
+    **Intelligence** — AI Concepts, Generative Models, & Computer Graphics
+
+    **Impact** — Information Security, Cryptography, and Ethics
+
+</div>
 
 ## Connect
 
 - Main site: [bradpenney.io](https://bradpenney.io)
 - Source code: [GitHub](https://github.com/bradpenney/exploring_computer_science)
+

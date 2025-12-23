@@ -259,7 +259,7 @@ endfunction
 
 Procedures provide:
 
-### 1. [Abstraction](../building_blocks/computational_thinking.md#abstraction)
+### 1. [Abstraction](../building_blocks/computational_thinking.md#the-four-pillars)
 
 Hide complexity behind a simple interface. Users don't need to know *how* `COMP-COST` works, just *what* it does.
 
