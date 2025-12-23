@@ -86,7 +86,7 @@ graph TD
         SG --> SH["A"]
     end
 
-    classDef default fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef default fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
 ```
 
 _Note: This Mermaid diagram is a simplification. A more accurate representation would show the stack growing upwards or downwards._
@@ -123,6 +123,8 @@ graph TD
     op6 --- v6;
     op7 --- v7;
     op8 --- v8;
+
+    classDef default fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
 ```
 
 This visualization is still a bit static. Let's try to describe the state transitions for clarity instead.
@@ -225,7 +227,7 @@ Compilers and interpreters use stacks extensively:
 
 -   **Infix to Postfix/Prefix conversion:** Stacks help rearrange mathematical expressions into a form easier for a computer to evaluate.
 -   **Evaluating Postfix expressions:** Stacks are used to calculate the result of expressions without worrying about operator precedence.
--   **Syntax Parsing:** Stacks help parsers determine if code follows grammar rules.
+-   **Syntax Parsing:** Stacks help [parsers](../building_blocks/how_parsers_work.md) determine if code follows grammar rules.
 
 ### 4. Backtracking Algorithms
 
@@ -277,6 +279,10 @@ When you click the "back" button in your web browser, it's essentially performin
 ??? question "Practice Problem 2: Matching Parentheses"
 
     Explain how a stack can be used to check if a mathematical expression has correctly matched parentheses (e.g., `( [ { } ] )` is valid, but `( [ ) ]` is invalid).
+
+    !!! info "Real-World Connection"
+
+        This algorithm is fundamental to [parsing](../building_blocks/how_parsers_work.md)—every compiler and interpreter uses stack-based techniques to validate syntax and match delimiters.
 
     ??? tip "Solution"
 
@@ -392,8 +398,8 @@ By embracing abstraction and wielding the power of the Stack, you unlock a deepe
 ## Further Reading
 
 -   **David Evans, [Introduction to Computing](https://computingbook.org/)** — Chapter 6 covers the Stack ADT and its applications in more detail.
--   **[Computational Thinking](computational_thinking.md)** — Abstraction as a key problem-solving tool.
--   **[Procedures and Higher-Order Functions](procedures_and_higher_order_functions.md)** — How functions enable modularity and abstraction.
+-   **[Computational Thinking](../building_blocks/computational_thinking.md)** — Abstraction as a key problem-solving tool.
+-   **[Procedures and Higher-Order Functions](../programming_languages/procedures_and_higher_order_functions.md)** — How functions enable modularity and abstraction.
 
 ---
 

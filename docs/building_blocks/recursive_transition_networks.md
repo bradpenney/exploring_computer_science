@@ -20,16 +20,16 @@ The defining feature: edges can reference *other RTNs*. An RTN for "Expression" 
 
 ### Formal Definition
 
-An RTN is defined by a set of networks, where each network N is a 5-tuple \((Q, \Sigma, \Gamma, \delta, q_0, F)\):
+An RTN is defined by a set of networks, where each network N is a 5-tuple (Q, Σ, Γ, δ, q_0, F):
 
 | Symbol | Meaning |
 |:-------|:--------|
-| \(Q\) | Finite set of states |
-| \(\Sigma\) | Finite alphabet of **terminal** symbols (actual tokens) |
-| \(\Gamma\) | Finite set of **non-terminal** symbols (network names) |
-| \(\delta\) | Transition function: \(Q \times (\Sigma \cup \Gamma) \to Q\) |
-| \(q_0\) | Initial state \((q_0 \in Q)\) |
-| \(F\) | Set of final/accepting states \((F \subseteq Q)\) |
+| Q | Finite set of states |
+| Σ | Finite alphabet of **terminal** symbols (actual tokens) |
+| Γ | Finite set of **non-terminal** symbols (network names) |
+| δ | Transition function: Q  (Σ  Γ)  Q |
+| q_0 | Initial state (q_0 ∈ Q) |
+| F | Set of final/accepting states (F ⊆ Q) |
 
 The key distinction from finite state machines: transitions can be on **non-terminals**, which invoke other networks recursively.
 
@@ -48,6 +48,7 @@ Here's the RTN:
 ```mermaid
 stateDiagram-v2
     direction LR
+
     [*] --> s1
     s1 --> s2: Hello
     s1 --> s2: Hi
@@ -100,6 +101,7 @@ Let's define a more interesting pattern: unsigned integers (one or more digits).
 ```mermaid
 stateDiagram-v2
     direction LR
+
     [*] --> s1
     s1 --> s2: Digit
     s2 --> s2: Digit
@@ -150,6 +152,7 @@ We define three mutually recursive networks that work together to enforce operat
     ```mermaid
     stateDiagram-v2
         direction LR
+
         [*] --> s1
         s1 --> s2: Term
         s2 --> [*]
@@ -160,7 +163,7 @@ We define three mutually recursive networks that work together to enforce operat
 
     **How it works:** An expression is a term, optionally followed by `+` or `-` and another term (repeatable).
 
-    **Key observation:** Expression calls Term first, ensuring multiplication/division are handled before returning. This means `3 + 4 * 2` naturally parses as **(term: 3) + (term: 4 × 2)**.
+    **Key observation:** Expression calls Term first, ensuring multiplication/division are handled before returning. This means `3 + 4 * 2` naturally parses as **(term: 3) + (term: 4  2)**.
 
 === ":material-numeric-2-circle: Term (Medium Binding)"
 
@@ -173,6 +176,7 @@ We define three mutually recursive networks that work together to enforce operat
     ```mermaid
     stateDiagram-v2
         direction LR
+
         [*] --> t1
         t1 --> t2: Factor
         t2 --> [*]
@@ -196,6 +200,7 @@ We define three mutually recursive networks that work together to enforce operat
     ```mermaid
     stateDiagram-v2
         direction LR
+
         [*] --> f1
         f1 --> f2: Number
         f1 --> f3: (
@@ -281,6 +286,7 @@ A basic sentence has a noun phrase followed by a verb phrase:
 ```mermaid
 stateDiagram-v2
     direction LR
+
     [*] --> sent1
     sent1 --> sent2: NounPhrase
     sent2 --> sent3: VerbPhrase
@@ -294,6 +300,7 @@ A noun phrase consists of an optional article, zero or more adjectives, and a no
 ```mermaid
 stateDiagram-v2
     direction LR
+
     [*] --> np1
     np1 --> np2: Article
     np1 --> np2: (skip)
@@ -311,6 +318,7 @@ A verb phrase is a verb, optionally followed by a noun phrase:
 ```mermaid
 stateDiagram-v2
     direction LR
+
     [*] --> vp1
     vp1 --> vp2: Verb
     vp2 --> [*]
@@ -433,6 +441,7 @@ RTNs make the abstract concrete. They turn "grammar" from a vague concept into a
         ```mermaid
         stateDiagram-v2
             direction LR
+
             [*] --> s1
             s1 --> s2: Username
             s2 --> s3: @
@@ -483,6 +492,7 @@ RTNs make the abstract concrete. They turn "grammar" from a vague concept into a
         ```mermaid
         stateDiagram-v2
             direction LR
+
             [*] --> p1
             p1 --> p2: Factor
             p2 --> [*]

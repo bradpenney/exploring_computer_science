@@ -18,7 +18,6 @@ Understanding Scheme's prefix notation and its parse trees reveals something pro
 
 ## What is Scheme?
 
-
 In most programming languages, you write:
 
 ```
@@ -95,8 +94,8 @@ graph TD
     InnerList --> Atom4["Atom: 1"]
     InnerList --> Atom5["Atom: 2"]
 
-    style Root fill:#454d5d,stroke:#3b4252,color:#fff
-    style InnerList fill:#2e3440,stroke:#3b4252,color:#fff
+    style Root fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style InnerList fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
 ```
 
 ### Why "Symbolic"?
@@ -236,9 +235,9 @@ For Scheme, the correspondence between written form and parse tree is particular
         Plus["+"] --> Five["5"]
         Plus --> Six["6"]
 
-        style Plus fill:#454d5d,stroke:#3b4252,color:#fff
-        style Five fill:#2e3440,stroke:#3b4252,color:#fff
-        style Six fill:#2e3440,stroke:#3b4252,color:#fff
+        style Plus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Five fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Six fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
     ```
 
 === ":material-forest: Nested Tree"
@@ -259,13 +258,13 @@ For Scheme, the correspondence between written form and parse tree is particular
         RightTimes --> Seven["7"]
         RightTimes --> Eight["8"]
 
-        style RootPlus fill:#454d5d,stroke:#3b4252,color:#fff
-        style LeftPlus fill:#3b4252,stroke:#2e3440,color:#fff
-        style RightTimes fill:#3b4252,stroke:#2e3440,color:#fff
-        style Five fill:#2e3440,stroke:#242933,color:#fff
-        style Six fill:#2e3440,stroke:#242933,color:#fff
-        style Seven fill:#2e3440,stroke:#242933,color:#fff
-        style Eight fill:#2e3440,stroke:#242933,color:#fff
+        style RootPlus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style LeftPlus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style RightTimes fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Five fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Six fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Seven fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Eight fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
     ```
 
     **Evaluation order** (post-order traversal):
@@ -294,14 +293,14 @@ For Scheme, the correspondence between written form and parse tree is particular
         Minus --> Ten["10"]
         Minus --> Five["5"]
 
-        style Times fill:#454d5d,stroke:#3b4252,color:#fff
-        style Plus fill:#3b4252,stroke:#2e3440,color:#fff
-        style Minus fill:#3b4252,stroke:#2e3440,color:#fff
-        style Two fill:#3b4252,stroke:#2e3440,color:#fff
-        style Three fill:#2e3440,stroke:#242933,color:#fff
-        style Four fill:#2e3440,stroke:#242933,color:#fff
-        style Ten fill:#2e3440,stroke:#242933,color:#fff
-        style Five fill:#2e3440,stroke:#242933,color:#fff
+        style Times fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Plus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Minus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Two fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Three fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Four fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Ten fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Five fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
     ```
     **Evaluation:**
 
@@ -389,10 +388,10 @@ To solve this, we rely on **Precedence Rules** (PEMDAS). You have to memorize th
         T3 --> Rules
         Rules -.-> Plus
 
-        style Plus fill:#7f1d1d,stroke:#b91c1c,color:#fff
-        style Times fill:#7f1d1d,stroke:#b91c1c,color:#fff
-        style Rules fill:#334155,stroke:#475569,color:#fff
-        style R1 fill:#d97706,stroke:#92400e,color:#fff
+        style Plus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Times fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Rules fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style R1 fill:#48bb78,stroke:#cbd5e0,stroke-width:2px,color:#fff
     ```
 
 === ":material-check-circle-outline: Prefix (Explicit)"
@@ -411,8 +410,8 @@ To solve this, we rely on **Precedence Rules** (PEMDAS). You have to memorize th
         Plus --> Times["*"]
         Times --> Four["4"]
         Times --> Five["5"]
-        style Plus fill:#d97706,stroke:#92400e,color:#fff
-        style Times fill:#d97706,stroke:#92400e,color:#fff
+        style Plus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style Times fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
     ```
 
 ### Why Parsers Love Prefix
@@ -436,7 +435,7 @@ There is no Step 3 or 4. The parser is trivial:
 ```python title="Simple Scheme Parser" linenums="1"
 def parse(tokens):  # (1)!
     token = tokens.pop(0)
-    if token == '(':  # (2)!
+    if token == '(':
         operator = tokens.pop(0)  # (3)!
         operands = []
         while tokens[0] != ')':  # (4)!
@@ -558,6 +557,21 @@ def parse(tokens):  # (1)!
     (factorial 5)       ; 120
     ```
 
+    ??? tip "Recursion and the Call Stack"
+
+        Every recursive call relies on the **[function call stack](../data_structures/abstract_data_types_and_stack.md#1-function-call-stack)**—a fundamental data structure that manages function execution.
+
+        When `(factorial 5)` runs, the stack grows with each recursive call:
+        ```
+        factorial(5)
+          → factorial(4)
+            → factorial(3)
+              → factorial(2)
+                → factorial(1)  ← base case reached, starts returning
+        ```
+
+        Each call waits on the stack until its nested call completes, then pops off and returns its result. This LIFO behavior is what makes recursion possible.
+
 ## Why Study Scheme?
 
 You might reasonably ask: why learn Scheme when modern languages like Python, JavaScript, or Rust dominate industry?
@@ -567,7 +581,7 @@ You might reasonably ask: why learn Scheme when modern languages like Python, Ja
     Scheme strips away syntax complexity, letting you focus on computational concepts:
 
     - Recursion without boilerplate
-    - Higher-order functions without ceremony
+    - [Higher-order functions](../programming_languages/procedures_and_higher_order_functions.md) without ceremony
     - Closures and scope made explicit
 
 === ":material-file-tree: Understanding Parsers"
@@ -654,13 +668,13 @@ You might reasonably ask: why learn Scheme when modern languages like Python, Ja
             Minus --> Seven["7"]
             Minus --> Two["2"]
 
-            style Times fill:#454d5d,stroke:#3b4252,color:#fff
-            style Plus fill:#3b4252,stroke:#2e3440,color:#fff
-            style Minus fill:#3b4252,stroke:#2e3440,color:#fff
-            style Five fill:#2e3440,stroke:#242933,color:#fff
-            style Six fill:#2e3440,stroke:#242933,color:#fff
-            style Seven fill:#2e3440,stroke:#242933,color:#fff
-            style Two fill:#2e3440,stroke:#242933,color:#fff
+            style Times fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+            style Plus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+            style Minus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+            style Five fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+            style Six fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+            style Seven fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+            style Two fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
         ```
 
         **Evaluation:**
@@ -694,13 +708,13 @@ You might reasonably ask: why learn Scheme when modern languages like Python, Ja
             RightTimes --> Seven["7"]
             RightTimes --> Eight["8"]
 
-            style RootPlus fill:#454d5d,stroke:#3b4252,color:#fff
-            style LeftPlus fill:#3b4252,stroke:#2e3440,color:#fff
-            style RightTimes fill:#3b4252,stroke:#2e3440,color:#fff
-            style Five fill:#2e3440,stroke:#242933,color:#fff
-            style Six fill:#2e3440,stroke:#242933,color:#fff
-            style Seven fill:#2e3440,stroke:#242933,color:#fff
-            style Eight fill:#2e3440,stroke:#242933,color:#fff
+            style RootPlus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+            style LeftPlus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+            style RightTimes fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+            style Five fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+            style Six fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+            style Seven fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+            style Eight fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
         ```
 
         **Post-Order Evaluation:**
@@ -779,4 +793,10 @@ You don't need to write Scheme professionally to benefit from understanding it. 
 
 ---
 
-Scheme strips programming down to its essence: functions, data, and recursion. What remains is computation in its purest form—no syntax tricks, no precedence tables, just structure made explicit through parentheses. It's not the notation most programmers use daily, but understanding it changes how you think about all the notations you do use.
+Scheme strips programming down to its essence: [functions](../programming_languages/procedures_and_higher_order_functions.md), data, and recursion. What remains is computation in its purest form—no syntax tricks, no precedence tables, just structure made explicit through parentheses. It's not the notation most programmers use daily, but understanding it changes how you think about all the notations you do use.
+
+## Video Summary
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/2v6XPK6N4ok" title="Scheme and Parse Trees" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>

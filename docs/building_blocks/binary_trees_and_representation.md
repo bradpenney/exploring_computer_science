@@ -156,6 +156,14 @@ Given that binary can represent anything—numbers, text, images, sound—why do
 
     **Abstraction enables optimization:** You can change the underlying representation without changing the program logic.
 
+??? tip "Abstraction in Data Structures"
+
+    The concept of hiding implementation details behind clean interfaces is formalized in **[Abstract Data Types (ADTs)](../data_structures/abstract_data_types_and_stack.md)**.
+
+    An ADT defines *what* a data structure does (its operations and behavior) without specifying *how* it's implemented. This separation allows you to swap implementations—switching from an array-based stack to a linked-list-based stack—without changing any code that uses it.
+
+    Binary trees themselves can be implemented many ways (arrays, linked nodes, etc.), but users of the tree only care about operations like insert, search, and traverse.
+
 ## Binary Trees
 
 ### What is a Binary Tree?

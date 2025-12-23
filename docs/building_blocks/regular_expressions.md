@@ -537,29 +537,111 @@ Flags (also called modifiers) change how the regex engine interprets your patter
 
 ### Flag Syntax by Language
 
-**JavaScript:**
+=== ":material-language-python: Python - Flags"
 
-``` title="Flags in JavaScript" linenums="1"
-/pattern/flags
+    ```python title="Flags in Python" linenums="1"
+    import re
 
-/hello/i          // Case insensitive
-/\d+/g            // Global - find all numbers
-/^line/m          // Multiline - ^ matches line starts
-/./s              // Dotall - . matches newlines
-/hello/gi         // Multiple flags: global + case insensitive
-```
+    re.search(r'hello', text, re.I)              # Case insensitive (re.IGNORECASE)
+    re.findall(r'\d+', text)                     # findall is inherently global
+    re.search(r'^line', text, re.M)              # Multiline (re.MULTILINE)
+    re.search(r'.', text, re.S)                  # Dotall (re.DOTALL)
+    re.search(r'hello', text, re.I | re.M)       # Multiple flags with |
+    ```
 
-**Python:**
+=== ":material-language-javascript: JavaScript - Flags"
 
-``` title="Flags in Python" linenums="1"
-import re
+    ```javascript title="Flags in JavaScript" linenums="1"
+    /pattern/flags
 
-re.search(r'hello', text, re.I)              # Case insensitive
-re.findall(r'\d+', text)                     # findall is inherently global
-re.search(r'^line', text, re.M)              # Multiline
-re.search(r'.', text, re.S)                  # Dotall (S = DOTALL)
-re.search(r'hello', text, re.I | re.M)       # Multiple flags with |
-```
+    /hello/i          // Case insensitive
+    /\d+/g            // Global - find all numbers
+    /^line/m          // Multiline - ^ matches line starts
+    /./s              // Dotall - . matches newlines
+    /hello/gi         // Multiple flags: global + case insensitive
+    ```
+
+=== ":material-language-go: Go - Flags"
+
+    ```go title="Flags in Go" linenums="1"
+    import "regexp"
+
+    // Go regex is always case-sensitive by default
+    regexp.MatchString(`(?i)hello`, text)        // Case insensitive (inline flag)
+    regexp.FindAllString(`\d+`, text, -1)        // Find all (use -1 for all matches)
+    regexp.MatchString(`(?m)^line`, text)        // Multiline (inline flag)
+    regexp.MatchString(`(?s).`, text)            // Dotall (inline flag)
+    regexp.MatchString(`(?im)hello`, text)       // Multiple flags (inline)
+    ```
+
+=== ":material-language-rust: Rust - Flags"
+
+    ```rust title="Flags in Rust" linenums="1"
+    use regex::Regex;
+
+    // Case insensitive - use (?i) inline flag
+    let re = Regex::new(r"(?i)hello").unwrap();
+    re.is_match(text);
+
+    // Find all matches
+    let re = Regex::new(r"\d+").unwrap();
+    let matches: Vec<_> = re.find_iter(text).collect();
+
+    // Multiline - use (?m) inline flag
+    let re = Regex::new(r"(?m)^line").unwrap();
+
+    // Dotall - use (?s) inline flag
+    let re = Regex::new(r"(?s).").unwrap();
+
+    // Multiple flags
+    let re = Regex::new(r"(?im)hello").unwrap();
+    ```
+
+=== ":material-language-java: Java - Flags"
+
+    ```java title="Flags in Java" linenums="1"
+    import java.util.regex.*;
+
+    // Case insensitive
+    Pattern.compile("hello", Pattern.CASE_INSENSITIVE);
+    Pattern.compile("(?i)hello");  // Inline flag alternative
+
+    // Find all matches (use Matcher.find() in loop)
+    Pattern p = Pattern.compile("\\d+");
+    Matcher m = p.matcher(text);
+    while (m.find()) { /* ... */ }
+
+    // Multiline
+    Pattern.compile("^line", Pattern.MULTILINE);
+
+    // Dotall
+    Pattern.compile(".", Pattern.DOTALL);
+
+    // Multiple flags
+    Pattern.compile("hello", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+    ```
+
+=== ":material-language-cpp: C++ - Flags"
+
+    ```cpp title="Flags in C++" linenums="1"
+    #include <regex>
+
+    // Case insensitive
+    std::regex re("hello", std::regex::icase);
+
+    // Find all matches (use std::sregex_iterator)
+    std::regex re("\\d+");
+    auto matches = std::sregex_iterator(text.begin(), text.end(), re);
+
+    // Multiline (use ECMAScript grammar with multiline)
+    std::regex re("^line", std::regex::multiline);
+
+    // Dotall - not directly supported in C++11, use [\s\S] instead
+    std::regex re("[\\s\\S]");  // Workaround for dotall
+
+    // Multiple flags
+    std::regex re("hello", std::regex::icase | std::regex::multiline);
+    ```
 
 ### Example: Case Insensitive Matching
 
@@ -576,49 +658,397 @@ With `i` flag:
 /cat/i             # Matches: "cat", "Cat", "CAT", "CaT"
 ```
 
-### Example: Global Flag (JavaScript)
+### Example: Global Flag
 
-The `g` flag is crucial in JavaScript:
+The global flag controls whether to find just the first match or all matches:
 
-``` title="Global vs Non-Global in JavaScript" linenums="1"
-const text = "2024-12-15";
+=== ":material-language-python: Python - Global"
 
-// Without g - finds first match only
-text.match(/\d+/)     // ["2024"]
+    ```python title="Find All vs Find First in Python" linenums="1"
+    import re
 
-// With g - finds all matches
-text.match(/\d+/g)    // ["2024", "12", "15"]
-```
+    text = "2024-12-15"
+
+    # Find first match only
+    first = re.search(r'\d+', text)
+    print(first.group())  # "2024"
+
+    # Find all matches
+    all_matches = re.findall(r'\d+', text)
+    print(all_matches)  # ["2024", "12", "15"]
+    ```
+
+=== ":material-language-javascript: JavaScript - Global"
+
+    ```javascript title="Global vs Non-Global in JavaScript" linenums="1"
+    const text = "2024-12-15";
+
+    // Without g - finds first match only
+    text.match(/\d+/)     // ["2024"]
+
+    // With g - finds all matches
+    text.match(/\d+/g)    // ["2024", "12", "15"]
+    ```
+
+=== ":material-language-go: Go - Global"
+
+    ```go title="Find All vs Find First in Go" linenums="1"
+    package main
+
+    import (
+        "fmt"
+        "regexp"
+    )
+
+    func main() {
+        text := "2024-12-15"
+        re := regexp.MustCompile(`\d+`)
+
+        // Find first match only
+        first := re.FindString(text)
+        fmt.Println(first)  // "2024"
+
+        // Find all matches
+        all := re.FindAllString(text, -1)
+        fmt.Println(all)  // ["2024" "12" "15"]
+    }
+    ```
+
+=== ":material-language-rust: Rust - Global"
+
+    ```rust title="Find All vs Find First in Rust" linenums="1"
+    use regex::Regex;
+
+    fn main() {
+        let text = "2024-12-15";
+        let re = Regex::new(r"\d+").unwrap();
+
+        // Find first match only
+        if let Some(first) = re.find(text) {
+            println!("{}", first.as_str());  // "2024"
+        }
+
+        // Find all matches
+        let all: Vec<&str> = re.find_iter(text)
+            .map(|m| m.as_str())
+            .collect();
+        println!("{:?}", all);  // ["2024", "12", "15"]
+    }
+    ```
+
+=== ":material-language-java: Java - Global"
+
+    ```java title="Find All vs Find First in Java" linenums="1"
+    import java.util.regex.*;
+    import java.util.*;
+
+    public class GlobalFlag {
+        public static void main(String[] args) {
+            String text = "2024-12-15";
+            Pattern pattern = Pattern.compile("\\d+");
+            Matcher matcher = pattern.matcher(text);
+
+            // Find first match only
+            if (matcher.find()) {
+                System.out.println(matcher.group());  // "2024"
+            }
+
+            // Find all matches
+            matcher.reset();  // Reset to find all
+            List<String> all = new ArrayList<>();
+            while (matcher.find()) {
+                all.add(matcher.group());
+            }
+            System.out.println(all);  // [2024, 12, 15]
+        }
+    }
+    ```
+
+=== ":material-language-cpp: C++ - Global"
+
+    ```cpp title="Find All vs Find First in C++" linenums="1"
+    #include <iostream>
+    #include <regex>
+    #include <string>
+    #include <vector>
+
+    int main() {
+        std::string text = "2024-12-15";
+        std::regex re(R"(\d+)");
+
+        // Find first match only
+        std::smatch match;
+        if (std::regex_search(text, match, re)) {
+            std::cout << match[0] << std::endl;  // "2024"
+        }
+
+        // Find all matches
+        auto begin = std::sregex_iterator(text.begin(), text.end(), re);
+        auto end = std::sregex_iterator();
+        std::vector<std::string> all;
+        for (auto i = begin; i != end; ++i) {
+            all.push_back(i->str());
+        }
+        // Prints: 2024, 12, 15
+        for (const auto& s : all) {
+            std::cout << s << " ";
+        }
+        std::cout << std::endl;
+        return 0;
+    }
+    ```
 
 ### Example: Multiline Flag
 
 Changes how `^` and `$` work:
 
-``` title="Multiline Flag Example" linenums="1"
-const text = `Line 1
-Line 2
-Line 3`;
+=== ":material-language-python: Python - Multiline"
 
-// Without m: ^ matches only start of entire string
-/^Line/              // Matches "Line 1" only
+    ```python title="Multiline Flag in Python" linenums="1"
+    import re
 
-// With m: ^ matches start of any line
-/^Line/m             // Matches at start of each line
-```
+    text = """Line 1
+    Line 2
+    Line 3"""
+
+    # Without MULTILINE: ^ matches only start of entire string
+    matches = re.findall(r'^Line', text)
+    print(matches)  # ['Line'] - only first line
+
+    # With MULTILINE: ^ matches start of any line
+    matches = re.findall(r'^Line', text, re.MULTILINE)
+    print(matches)  # ['Line', 'Line', 'Line'] - all three lines
+    ```
+
+=== ":material-language-javascript: JavaScript - Multiline"
+
+    ```javascript title="Multiline Flag in JavaScript" linenums="1"
+    const text = `Line 1
+    Line 2
+    Line 3`;
+
+    // Without m: ^ matches only start of entire string
+    /^Line/              // Matches "Line 1" only
+
+    // With m: ^ matches start of any line
+    /^Line/m             // Matches at start of each line
+
+    // Example with matchAll
+    Array.from(text.matchAll(/^Line/gm))  // 3 matches
+    ```
+
+=== ":material-language-go: Go - Multiline"
+
+    ```go title="Multiline Flag in Go" linenums="1"
+    package main
+
+    import (
+        "fmt"
+        "regexp"
+    )
+
+    func main() {
+        text := `Line 1
+    Line 2
+    Line 3`
+
+        // Without multiline mode (default in Go is multiline)
+        // Go's regexp always treats ^ and $ as multiline
+        re := regexp.MustCompile(`(?m)^Line`)
+        matches := re.FindAllString(text, -1)
+        fmt.Println(matches)  // [Line Line Line]
+    }
+    ```
+
+=== ":material-language-rust: Rust - Multiline"
+
+    ```rust title="Multiline Flag in Rust" linenums="1"
+    use regex::Regex;
+
+    fn main() {
+        let text = "Line 1\nLine 2\nLine 3";
+
+        // Without multiline: ^ matches only start of entire string
+        let re = Regex::new(r"^Line").unwrap();
+        let count = re.find_iter(text).count();
+        println!("{}", count);  // 1 - only first line
+
+        // With multiline: ^ matches start of any line
+        let re_multi = Regex::new(r"(?m)^Line").unwrap();
+        let count = re_multi.find_iter(text).count();
+        println!("{}", count);  // 3 - all three lines
+    }
+    ```
+
+=== ":material-language-java: Java - Multiline"
+
+    ```java title="Multiline Flag in Java" linenums="1"
+    import java.util.regex.*;
+
+    public class MultilineFlag {
+        public static void main(String[] args) {
+            String text = "Line 1\nLine 2\nLine 3";
+
+            // Without MULTILINE: ^ matches only start of entire string
+            Pattern pattern = Pattern.compile("^Line");
+            Matcher matcher = pattern.matcher(text);
+            int count = 0;
+            while (matcher.find()) count++;
+            System.out.println(count);  // 1
+
+            // With MULTILINE: ^ matches start of any line
+            Pattern multiPattern = Pattern.compile("^Line", Pattern.MULTILINE);
+            Matcher multiMatcher = multiPattern.matcher(text);
+            count = 0;
+            while (multiMatcher.find()) count++;
+            System.out.println(count);  // 3
+        }
+    }
+    ```
+
+=== ":material-language-cpp: C++ - Multiline"
+
+    ```cpp title="Multiline Flag in C++" linenums="1"
+    #include <iostream>
+    #include <regex>
+    #include <string>
+
+    int main() {
+        std::string text = "Line 1\nLine 2\nLine 3";
+
+        // Without multiline (C++ default is NOT multiline)
+        std::regex re("^Line");
+        auto begin = std::sregex_iterator(text.begin(), text.end(), re);
+        auto end = std::sregex_iterator();
+        std::cout << std::distance(begin, end) << std::endl;  // 1
+
+        // With multiline (use ECMAScript multiline syntax)
+        std::regex re_multi("^Line", std::regex::multiline);
+        begin = std::sregex_iterator(text.begin(), text.end(), re_multi);
+        std::cout << std::distance(begin, end) << std::endl;  // 3
+        return 0;
+    }
+    ```
 
 ### Example: Dotall Flag
 
 Makes `.` match newlines:
 
-``` title="Dotall Flag Example" linenums="1"
-const text = "Hello\nWorld";
+=== ":material-language-python: Python - Dotall"
 
-// Without s: . doesn't match newlines
-/Hello.World/        // Doesn't match
+    ```python title="Dotall Flag in Python" linenums="1"
+    import re
 
-// With s: . matches newlines too
-/Hello.World/s       // Matches!
-```
+    text = "Hello\nWorld"
+
+    # Without DOTALL: . doesn't match newlines
+    match = re.search(r'Hello.World', text)
+    print(match)  # None
+
+    # With DOTALL: . matches newlines too
+    match = re.search(r'Hello.World', text, re.DOTALL)
+    print(match.group())  # "Hello\nWorld"
+    ```
+
+=== ":material-language-javascript: JavaScript - Dotall"
+
+    ```javascript title="Dotall Flag in JavaScript" linenums="1"
+    const text = "Hello\nWorld";
+
+    // Without s: . doesn't match newlines
+    /Hello.World/        // Doesn't match
+
+    // With s: . matches newlines too
+    /Hello.World/s       // Matches!
+
+    // Using test()
+    /Hello.World/s.test(text)  // true
+    ```
+
+=== ":material-language-go: Go - Dotall"
+
+    ```go title="Dotall Flag in Go" linenums="1"
+    package main
+
+    import (
+        "fmt"
+        "regexp"
+    )
+
+    func main() {
+        text := "Hello\nWorld"
+
+        // Without dotall: . doesn't match newlines (Go default)
+        re := regexp.MustCompile(`Hello.World`)
+        fmt.Println(re.MatchString(text))  // false
+
+        // With dotall: . matches newlines (use (?s) flag)
+        re_dotall := regexp.MustCompile(`(?s)Hello.World`)
+        fmt.Println(re_dotall.MatchString(text))  // true
+    }
+    ```
+
+=== ":material-language-rust: Rust - Dotall"
+
+    ```rust title="Dotall Flag in Rust" linenums="1"
+    use regex::Regex;
+
+    fn main() {
+        let text = "Hello\nWorld";
+
+        // Without dotall: . doesn't match newlines
+        let re = Regex::new(r"Hello.World").unwrap();
+        println!("{}", re.is_match(text));  // false
+
+        // With dotall: . matches newlines (use (?s) flag)
+        let re_dotall = Regex::new(r"(?s)Hello.World").unwrap();
+        println!("{}", re_dotall.is_match(text));  // true
+    }
+    ```
+
+=== ":material-language-java: Java - Dotall"
+
+    ```java title="Dotall Flag in Java" linenums="1"
+    import java.util.regex.*;
+
+    public class DotallFlag {
+        public static void main(String[] args) {
+            String text = "Hello\nWorld";
+
+            // Without DOTALL: . doesn't match newlines
+            Pattern pattern = Pattern.compile("Hello.World");
+            Matcher matcher = pattern.matcher(text);
+            System.out.println(matcher.find());  // false
+
+            // With DOTALL: . matches newlines
+            Pattern dotallPattern = Pattern.compile("Hello.World", Pattern.DOTALL);
+            Matcher dotallMatcher = dotallPattern.matcher(text);
+            System.out.println(dotallMatcher.find());  // true
+        }
+    }
+    ```
+
+=== ":material-language-cpp: C++ - Dotall"
+
+    ```cpp title="Dotall Flag in C++" linenums="1"
+    #include <iostream>
+    #include <regex>
+    #include <string>
+
+    int main() {
+        std::string text = "Hello\nWorld";
+
+        // Without dotall: . doesn't match newlines (C++ default)
+        std::regex re("Hello.World");
+        std::cout << std::regex_search(text, re) << std::endl;  // false (0)
+
+        // C++ doesn't have direct dotall flag
+        // Workaround: use [\s\S] instead of .
+        std::regex re_workaround(R"(Hello[\s\S]World)");
+        std::cout << std::regex_search(text, re_workaround) << std::endl;  // true (1)
+        return 0;
+    }
+    ```
 
 ??? example "Concept Check 15: Case Insensitive Email"
 
@@ -719,7 +1149,7 @@ const text = "Hello\nWorld";
 
 Most languages use similar syntax, with minor variations:
 
-=== ":material-language-python: Python"
+=== ":material-language-python: Python - Usage"
 
     ```python title="Regular Expressions in Python" linenums="1"
     import re
@@ -741,7 +1171,7 @@ Most languages use similar syntax, with minor variations:
     2. `findall()` returns a list of all non-overlapping matches
     3. `sub()` replaces all matches with a replacement string
 
-=== ":material-language-javascript: JavaScript"
+=== ":material-language-javascript: JavaScript - Usage"
 
     ```javascript title="Regular Expressions in JavaScript" linenums="1"
     // Test if pattern matches
@@ -758,7 +1188,7 @@ Most languages use similar syntax, with minor variations:
     2. `match()` returns array of matches (use `/g` flag for all matches)
     3. `replace()` substitutes first match with replacement (use `/g` for all)
 
-=== ":material-language-rust: Rust"
+=== ":material-language-rust: Rust - Usage"
 
     ```rust title="Regular Expressions in Rust" linenums="1"
     use regex::Regex;  // (1)!
@@ -815,6 +1245,7 @@ Every regex can be converted to an [NFA (Non-deterministic Finite Automaton)](fi
 ```mermaid
 stateDiagram-v2
     direction LR
+    
     [*] --> S0
     S0 --> S1: a
     S1 --> S1: b

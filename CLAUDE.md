@@ -10,16 +10,43 @@ This is a Material for MkDocs site documenting Computer Science concepts learned
 
 **Git Operations**: The user handles all git operations (commits, pushes, etc.) themselves. Do not commit or push changes.
 
+**MkDocs Operations**: The user handles running `mkdocs serve` and `mkdocs build` themselves. Do not run these commands.
+
 ## Project Structure
 
-- `docs/` - Markdown content organized by section
-  - `fundamentals/` - Core CS concepts (complete)
-  - `algorithms/` - Algorithm theory (planned)
-  - `programming/` - Programming concepts (planned)
-  - `systems/` - Systems architecture (planned)
-  - `modern/` - Modern CS topics (planned)
+- `docs/` - Markdown content organized by category (matches site navigation)
+  - `building_blocks/` - Core CS theory and concepts (published)
+  - `data_structures/` - Data structures and ADTs
+  - `algorithms_complexity/` - Algorithms and complexity theory
+  - `programming_languages/` - Programming paradigms and languages
+  - `systems_architecture/` - OS, networking, virtualization
+  - `data_security/` - Databases, security, cryptography
+  - `modern_topics/` - AI, graphics, ethics
+  - `deep_dives/` - Advanced theoretical topics
 - `mkdocs.yaml` - Site configuration and navigation
 - `pyproject.toml` - Poetry dependencies
+
+**Important:** Directory structure mirrors site navigation. Articles reference each other using relative paths (e.g., `../building_blocks/filename.md`).
+
+## Course Materials & References
+
+**Current Course: COMP200** (This will change when moving to the next course)
+
+**COMP200 Source Materials Location:**
+- `/home/brad/notes/slip-box/01_source_material/athabasca/comp200/`
+- Contains all course unit PDFs, readings, and assignments
+- `comp200.md` file has course overview and unit breakdowns
+
+**Key Reference Books:**
+- **Introduction to Computing** by David Evans (COMP200 textbook)
+  - Location: `/home/brad/notes/slip-box/01_source_material/books/introduction_to_computing_david_evans.pdf`
+  - Used throughout COMP200 (Units 1-4)
+
+**COMP200 Unit Mapping:**
+- Unit 1: Computational Thinking (Chapters 1-5)
+- Unit 2: Algorithms & Problem-Solving (Chapters 6-8)
+- Unit 3: Languages & Programming (Chapters 10-11)
+- Unit 4: Virtual Machines & Applications (Reading 3, Sections 1-8)
 
 ## Common Commands
 
@@ -30,9 +57,17 @@ poetry install
 # Serve locally (http://localhost:8000)
 poetry run mkdocs serve
 
-# Build static site
-poetry run mkdocs build
+# Build static site (ALWAYS use --strict for link validation)
+poetry run mkdocs build --strict
+
+# Validate all internal and external links
+# The htmlproofer plugin is configured to:
+# - Validate all internal links (raise_error: true)
+# - Skip external URL validation (validate_external_urls: false)
+# - Treat warnings as errors (--strict flag)
 ```
+
+**Link Validation:** The project uses `mkdocs-htmlproofer-plugin` to validate all internal links. Always build with `--strict` flag to catch broken links.
 
 ## Content Guidelines
 
@@ -76,7 +111,12 @@ Articles must balance **playfulness with professionalism** and be **technically 
 ### Content Structure
 
 - Articles should be teaching-focused, not just notes
-- Use mermaid diagrams for visual concepts (already configured)
+- Use mermaid diagrams for visual concepts. **Follow the project's 'Slate' color scheme for consistency:**
+  - **Standard Node (Slate 800):** `fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff`
+  - **Highlighted Node (Slate 700):** `fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff`
+  - **Darker Node (Slate 900):** `fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff`
+  - **Accent Node (Green):** `fill:#48bb78,stroke:#cbd5e0,stroke-width:2px,color:#fff`
+  - *Always explicitly style nodes using these hex codes to ensure readability in the dark theme.*
 - Include practice problems with expandable solutions (`??? question`)
 - Cross-link related articles using markdown links
 - Use admonitions for tips and callouts:
@@ -103,6 +143,107 @@ Articles must balance **playfulness with professionalism** and be **technically 
 
       1. Track current position in the input string
       2. Process each character until we reach the end
+
+### Multi-Language Code Examples
+
+**CRITICAL REQUIREMENT:** All code examples in published articles MUST be provided in tabs with implementations in the following languages (in this order):
+
+1. **:material-language-python: Python** - Always first (most accessible)
+2. **:material-language-javascript: JavaScript** - Second (web developers)
+3. **:material-language-go: Go** - Third (modern systems programming)
+4. **:material-language-rust: Rust** - Fourth (safety-focused systems programming)
+5. **:material-language-java: Java** - Fifth (enterprise/academic standard)
+6. **:material-language-cpp: C++** - Sixth (performance-critical applications)
+
+**When to Provide Multi-Language Examples:**
+
+- ✅ **DO** provide multi-language tabs for:
+  - Algorithm implementations (lexers, parsers, sorting, searching, etc.)
+  - Data structure implementations (trees, stacks, queues, etc.)
+  - Complete working code examples (functions, classes, programs)
+  - Language-specific feature demonstrations (regex flags, pattern matching, etc.)
+
+- ❌ **DO NOT** provide multi-language tabs for:
+  - Pseudocode examples (these are language-agnostic by design)
+  - Language-specific features that only exist in one language (e.g., Scheme S-expressions)
+  - Mathematical notation or formal definitions
+  - Command-line examples or shell commands
+  - Conceptual diagrams or ASCII art
+
+**Tab Format for Multi-Language Examples:**
+
+```markdown
+=== ":material-language-python: Python"
+
+    ```python title="Descriptive Title" linenums="1"
+    # Python implementation
+    def example():
+        pass
+    ```
+
+=== ":material-language-javascript: JavaScript"
+
+    ```javascript title="Descriptive Title" linenums="1"
+    // JavaScript implementation
+    function example() {
+        // ...
+    }
+    ```
+
+=== ":material-language-go: Go"
+
+    ```go title="Descriptive Title" linenums="1"
+    // Go implementation
+    func example() {
+        // ...
+    }
+    ```
+
+=== ":material-language-rust: Rust"
+
+    ```rust title="Descriptive Title" linenums="1"
+    // Rust implementation
+    fn example() {
+        // ...
+    }
+    ```
+
+=== ":material-language-java: Java"
+
+    ```java title="Descriptive Title" linenums="1"
+    // Java implementation
+    public class Example {
+        public void example() {
+            // ...
+        }
+    }
+    ```
+
+=== ":material-language-cpp: C++"
+
+    ```cpp title="Descriptive Title" linenums="1"
+    // C++ implementation
+    void example() {
+        // ...
+    }
+    ```
+```
+
+**Quality Standards:**
+
+- Each language implementation must be **functionally equivalent** to the others
+- Code must be **idiomatic** for that language (use language-specific conventions)
+- Include necessary imports/includes at the top of each example
+- Add comments to explain language-specific idioms when helpful
+- Test that implementations would actually compile/run (conceptually)
+- **Draft articles** do not require multi-language examples yet; add them during review/publication
+
+**Examples of Proper Multi-Language Implementation:**
+
+- Regex flag syntax (completed) - Shows language-specific API differences
+- Lexer implementation (completed) - Full working code in all 6 languages
+- Parser implementation (in progress) - Complex algorithm with proper error handling
+
 - **Markdown list formatting**: Always add a blank line before lists that follow text/bold headers
 - Embed YouTube videos at the bottom of articles in a "Video Summary" section using the responsive wrapper class:
   ```markdown

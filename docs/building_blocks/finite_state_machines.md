@@ -20,6 +20,7 @@ That's it. No infinite memory, no complex calculations—just states and transit
 ```mermaid
 stateDiagram-v2
     direction LR
+
     [*] --> Off
     Off --> On: press
     On --> Off: press
@@ -48,6 +49,7 @@ A classic FSM example is a subway turnstile:
 ```mermaid
 stateDiagram-v2
     direction LR
+
     [*] --> Locked
     Locked --> Locked: push
     Locked --> Unlocked: coin
@@ -76,21 +78,24 @@ Here's where FSMs get interesting. Can we build a machine that accepts binary nu
 ```mermaid
 stateDiagram-v2
     direction LR
+    classDef accepting fill:#48bb78,stroke:#cbd5e0,stroke-width:2px,color:#fff
+
     [*] --> S0
-    S0((S0)) --> S0: 0
+    S0 --> S0: 0
     S0 --> S1: 1
     S1 --> S2: 0
     S1 --> S0: 1
     S2 --> S1: 0
     S2 --> S2: 1
+    S0 ::: accepting
 ```
 
 **Formal Definition of this FSM:**
 
-- \(Q = \{S0, S1, S2\}\)
-- \(\Sigma = \{0, 1\}\)
-- \(q_0 = S0\)
-- \(F = \{S0\}\)
+- \(Q = \{S0, S1, S2\}
+- \(\Sigma = \{0, 1\}
+- \(q_0 = S0
+- \(F = \{S0\}
 - \(\delta\) is defined by the following table:
 
 | State | Input '0' | Input '1' |
@@ -136,6 +141,7 @@ A state might have:
 ```mermaid
 stateDiagram-v2
     direction LR
+
     [*] --> S0
     S0 --> S0: a
     S0 --> S1: a
@@ -159,6 +165,7 @@ In a Moore machine, the output is determined *only by the current state*.
 ```mermaid
 stateDiagram-v2
     direction LR
+
     [*] --> S0
     state "remainder 0 (output: Yes)" as S0
     state "remainder 1 (output: No)" as S1
@@ -180,6 +187,7 @@ In a Mealy machine, the output is determined by both the *current state and the 
 ```mermaid
 stateDiagram-v2
     direction LR
+
     [*] --> Locked
     Locked --> Unlocked: coin / unlock_gate
     Unlocked --> Locked: push / lock_gate
@@ -257,7 +265,7 @@ FSMs have no memory beyond their current state. This means they can't:
 
 **Example: The "Equal A's and B's" Language**
 
-The language \(\{a^nb^n \mid n \geq 0\}\) is NOT regular. This notation means "n a's followed by n b's, where n is any number 0 or greater":
+The language \(\ L = \{a^nb^n \mid n \geq 0\} \) is NOT regular. This notation means "n a's followed by n b's, where n is any number 0 or greater":
 
 - When n=0: "" (empty string)
 - When n=1: "ab"
@@ -282,6 +290,7 @@ Here's what this impossible FSM would look like:
 ```mermaid
 stateDiagram-v2
     direction LR
+
     [*] --> S0
     S0 --> S1: a
     S1 --> S2: a
@@ -304,6 +313,7 @@ For languages requiring this kind of counting or nesting (like balanced parenthe
     ```mermaid
     stateDiagram-v2
         direction LR
+
         [*] --> Green
         Green --> Yellow: timer
         Yellow --> Red: timer
@@ -319,6 +329,7 @@ For languages requiring this kind of counting or nesting (like balanced parenthe
     ```mermaid
     stateDiagram-v2
         direction LR
+
         [*] --> Patrol
         Patrol --> Chase: see_player
         Chase --> Attack: in_range
@@ -336,6 +347,7 @@ For languages requiring this kind of counting or nesting (like balanced parenthe
     ```mermaid
     stateDiagram-v2
         direction LR
+
         [*] --> CLOSED
         CLOSED --> LISTEN: passive_open
         CLOSED --> SYN_SENT: active_open
@@ -375,6 +387,7 @@ For languages requiring this kind of counting or nesting (like balanced parenthe
     ```mermaid
     stateDiagram-v2
         direction LR
+
         [*] --> Start
         Start --> InNumber: digit (0-9)
         InNumber --> InNumber: digit
@@ -386,6 +399,7 @@ For languages requiring this kind of counting or nesting (like balanced parenthe
     ```mermaid
     stateDiagram-v2
         direction LR
+
         [*] --> Start
         Start --> InIdentifier: letter (a-z)
         InIdentifier --> InIdentifier: letter/digit
@@ -423,56 +437,417 @@ These extended models essentially add a stack or other memory structure to track
 
 ## Implementing an FSM
 
-FSMs translate directly into code. Here's a turnstile in Python:
+FSMs translate directly into code. Here's a turnstile implementation:
 
-```python title="Turnstile FSM in Python" linenums="1"
-class Turnstile:
-    def __init__(self):
-        self.state = "locked"  # (1)!
+=== ":material-language-python: Python - Class-Based"
 
-    def transition(self, input):  # (2)!
-        if self.state == "locked":  # (3)!
-            if input == "coin":
-                self.state = "unlocked"  # (4)!
-            # push while locked: stay locked
+    ```python title="Turnstile FSM in Python" linenums="1"
+    class Turnstile:
+        def __init__(self):
+            self.state = "locked"  # (1)!
 
-        elif self.state == "unlocked":
-            if input == "push":
-                self.state = "locked"  # (5)!
-            # coin while unlocked: stay unlocked
+        def transition(self, input):  # (2)!
+            if self.state == "locked":  # (3)!
+                if input == "coin":
+                    self.state = "unlocked"  # (4)!
+                # push while locked: stay locked
 
-        return self.state
+            elif self.state == "unlocked":
+                if input == "push":
+                    self.state = "locked"  # (5)!
+                # coin while unlocked: stay unlocked
 
-# Usage
-t = Turnstile()
-print(t.transition("push"))   # locked
-print(t.transition("coin"))   # unlocked
-print(t.transition("push"))   # locked
-```
+            return self.state
 
-1. Initial state - turnstile starts locked
-2. Process an input event and transition to next state
-3. Check current state to determine which transitions are valid
-4. Transition from locked to unlocked when coin inserted
-5. Transition from unlocked to locked when pushed
+    # Usage
+    t = Turnstile()
+    print(t.transition("push"))   # locked
+    print(t.transition("coin"))   # unlocked
+    print(t.transition("push"))   # locked
+    ```
+
+    1. Initial state - turnstile starts locked
+    2. Process an input event and transition to next state
+    3. Check current state to determine which transitions are valid
+    4. Transition from locked to unlocked when coin inserted
+    5. Transition from unlocked to locked when pushed
+
+=== ":material-language-javascript: JavaScript - Class-Based"
+
+    ```javascript title="Turnstile FSM in JavaScript" linenums="1"
+    class Turnstile {
+        constructor() {
+            this.state = "locked";
+        }
+
+        transition(input) {
+            if (this.state === "locked") {
+                if (input === "coin") {
+                    this.state = "unlocked";
+                }
+                // push while locked: stay locked
+            } else if (this.state === "unlocked") {
+                if (input === "push") {
+                    this.state = "locked";
+                }
+                // coin while unlocked: stay unlocked
+            }
+
+            return this.state;
+        }
+    }
+
+    // Usage
+    const t = new Turnstile();
+    console.log(t.transition("push"));   // locked
+    console.log(t.transition("coin"));   // unlocked
+    console.log(t.transition("push"));   // locked
+    ```
+
+=== ":material-language-go: Go - Class-Based"
+
+    ```go title="Turnstile FSM in Go" linenums="1"
+    package main
+
+    import "fmt"
+
+    type Turnstile struct {
+        state string
+    }
+
+    func NewTurnstile() *Turnstile {
+        return &Turnstile{state: "locked"}
+    }
+
+    func (t *Turnstile) Transition(input string) string {
+        if t.state == "locked" {
+            if input == "coin" {
+                t.state = "unlocked"
+            }
+            // push while locked: stay locked
+        } else if t.state == "unlocked" {
+            if input == "push" {
+                t.state = "locked"
+            }
+            // coin while unlocked: stay unlocked
+        }
+
+        return t.state
+    }
+
+    func main() {
+        t := NewTurnstile()
+        fmt.Println(t.Transition("push"))   // locked
+        fmt.Println(t.Transition("coin"))   // unlocked
+        fmt.Println(t.Transition("push"))   // locked
+    }
+    ```
+
+=== ":material-language-rust: Rust - Class-Based"
+
+    ```rust title="Turnstile FSM in Rust" linenums="1"
+    #[derive(Debug)]
+    enum State {
+        Locked,
+        Unlocked,
+    }
+
+    struct Turnstile {
+        state: State,
+    }
+
+    impl Turnstile {
+        fn new() -> Self {
+            Turnstile { state: State::Locked }
+        }
+
+        fn transition(&mut self, input: &str) -> &State {
+            match (&self.state, input) {
+                (State::Locked, "coin") => self.state = State::Unlocked,
+                (State::Unlocked, "push") => self.state = State::Locked,
+                _ => {} // No transition, stay in current state
+            }
+
+            &self.state
+        }
+    }
+
+    fn main() {
+        let mut t = Turnstile::new();
+        println!("{:?}", t.transition("push"));   // Locked
+        println!("{:?}", t.transition("coin"));   // Unlocked
+        println!("{:?}", t.transition("push"));   // Locked
+    }
+    ```
+
+=== ":material-language-java: Java - Class-Based"
+
+    ```java title="Turnstile FSM in Java" linenums="1"
+    public class Turnstile {
+        private String state;
+
+        public Turnstile() {
+            this.state = "locked";
+        }
+
+        public String transition(String input) {
+            if (state.equals("locked")) {
+                if (input.equals("coin")) {
+                    state = "unlocked";
+                }
+                // push while locked: stay locked
+            } else if (state.equals("unlocked")) {
+                if (input.equals("push")) {
+                    state = "locked";
+                }
+                // coin while unlocked: stay unlocked
+            }
+
+            return state;
+        }
+
+        public static void main(String[] args) {
+            Turnstile t = new Turnstile();
+            System.out.println(t.transition("push"));   // locked
+            System.out.println(t.transition("coin"));   // unlocked
+            System.out.println(t.transition("push"));   // locked
+        }
+    }
+    ```
+
+=== ":material-language-cpp: C++ - Class-Based"
+
+    ```cpp title="Turnstile FSM in C++" linenums="1"
+    #include <iostream>
+    #include <string>
+
+    class Turnstile {
+    private:
+        std::string state;
+
+    public:
+        Turnstile() : state("locked") {}
+
+        std::string transition(const std::string& input) {
+            if (state == "locked") {
+                if (input == "coin") {
+                    state = "unlocked";
+                }
+                // push while locked: stay locked
+            } else if (state == "unlocked") {
+                if (input == "push") {
+                    state = "locked";
+                }
+                // coin while unlocked: stay unlocked
+            }
+
+            return state;
+        }
+    };
+
+    int main() {
+        Turnstile t;
+        std::cout << t.transition("push") << std::endl;   // locked
+        std::cout << t.transition("coin") << std::endl;   // unlocked
+        std::cout << t.transition("push") << std::endl;   // locked
+        return 0;
+    }
+    ```
 
 Or using a transition table:
 
-```python title="Table-Driven FSM Implementation" linenums="1"
-transitions = {  # (1)!
-    ("locked", "coin"): "unlocked",
-    ("locked", "push"): "locked",
-    ("unlocked", "coin"): "unlocked",
-    ("unlocked", "push"): "locked",
-}
+=== ":material-language-python: Python - Table-Driven"
 
-def next_state(current, input):  # (2)!
-    return transitions.get((current, input), current)  # (3)!
-```
+    ```python title="Table-Driven FSM Implementation" linenums="1"
+    transitions = {  # (1)!
+        ("locked", "coin"): "unlocked",
+        ("locked", "push"): "locked",
+        ("unlocked", "coin"): "unlocked",
+        ("unlocked", "push"): "locked",
+    }
 
-1. Define all state transitions as a dictionary mapping (state, input) tuples to next states
-2. Look up the next state based on current state and input
-3. Use .get() with current state as default - if transition not defined, stay in current state
+    def next_state(current, input):  # (2)!
+        return transitions.get((current, input), current)  # (3)!
+
+    # Usage
+    state = "locked"
+    state = next_state(state, "push")   # locked
+    state = next_state(state, "coin")   # unlocked
+    state = next_state(state, "push")   # locked
+    ```
+
+    1. Define all state transitions as a dictionary mapping (state, input) tuples to next states
+    2. Look up the next state based on current state and input
+    3. Use .get() with current state as default - if transition not defined, stay in current state
+
+=== ":material-language-javascript: JavaScript - Table-Driven"
+
+    ```javascript title="Table-Driven FSM Implementation" linenums="1"
+    const transitions = new Map([
+        [JSON.stringify(["locked", "coin"]), "unlocked"],
+        [JSON.stringify(["locked", "push"]), "locked"],
+        [JSON.stringify(["unlocked", "coin"]), "unlocked"],
+        [JSON.stringify(["unlocked", "push"]), "locked"],
+    ]);
+
+    function nextState(current, input) {
+        const key = JSON.stringify([current, input]);
+        return transitions.get(key) || current;
+    }
+
+    // Usage
+    let state = "locked";
+    state = nextState(state, "push");   // locked
+    state = nextState(state, "coin");   // unlocked
+    state = nextState(state, "push");   // locked
+    ```
+
+=== ":material-language-go: Go - Table-Driven"
+
+    ```go title="Table-Driven FSM Implementation" linenums="1"
+    package main
+
+    import "fmt"
+
+    type StateInput struct {
+        state string
+        input string
+    }
+
+    var transitions = map[StateInput]string{
+        {"locked", "coin"}:   "unlocked",
+        {"locked", "push"}:   "locked",
+        {"unlocked", "coin"}: "unlocked",
+        {"unlocked", "push"}: "locked",
+    }
+
+    func nextState(current, input string) string {
+        key := StateInput{current, input}
+        if next, ok := transitions[key]; ok {
+            return next
+        }
+        return current
+    }
+
+    func main() {
+        state := "locked"
+        state = nextState(state, "push")   // locked
+        state = nextState(state, "coin")   // unlocked
+        state = nextState(state, "push")   // locked
+        fmt.Println(state)
+    }
+    ```
+
+=== ":material-language-rust: Rust - Table-Driven"
+
+    ```rust title="Table-Driven FSM Implementation" linenums="1"
+    use std::collections::HashMap;
+
+    fn next_state(current: &str, input: &str,
+                  transitions: &HashMap<(&str, &str), &str>) -> &str {
+        transitions.get(&(current, input)).unwrap_or(&current)
+    }
+
+    fn main() {
+        let transitions: HashMap<(&str, &str), &str> = [
+            (("locked", "coin"), "unlocked"),
+            (("locked", "push"), "locked"),
+            (("unlocked", "coin"), "unlocked"),
+            (("unlocked", "push"), "locked"),
+        ].iter().cloned().collect();
+
+        let mut state = "locked";
+        state = next_state(state, "push", &transitions);   // locked
+        state = next_state(state, "coin", &transitions);   // unlocked
+        state = next_state(state, "push", &transitions);   // locked
+        println!("{}", state);
+    }
+    ```
+
+=== ":material-language-java: Java - Table-Driven"
+
+    ```java title="Table-Driven FSM Implementation" linenums="1"
+    import java.util.HashMap;
+    import java.util.Map;
+
+    class StateInput {
+        String state;
+        String input;
+
+        StateInput(String state, String input) {
+            this.state = state;
+            this.input = input;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof StateInput)) return false;
+            StateInput si = (StateInput) o;
+            return state.equals(si.state) && input.equals(si.input);
+        }
+
+        @Override
+        public int hashCode() {
+            return state.hashCode() * 31 + input.hashCode();
+        }
+    }
+
+    public class FSM {
+        private static Map<StateInput, String> transitions = new HashMap<>();
+
+        static {
+            transitions.put(new StateInput("locked", "coin"), "unlocked");
+            transitions.put(new StateInput("locked", "push"), "locked");
+            transitions.put(new StateInput("unlocked", "coin"), "unlocked");
+            transitions.put(new StateInput("unlocked", "push"), "locked");
+        }
+
+        public static String nextState(String current, String input) {
+            return transitions.getOrDefault(new StateInput(current, input), current);
+        }
+
+        public static void main(String[] args) {
+            String state = "locked";
+            state = nextState(state, "push");   // locked
+            state = nextState(state, "coin");   // unlocked
+            state = nextState(state, "push");   // locked
+            System.out.println(state);
+        }
+    }
+    ```
+
+=== ":material-language-cpp: C++ - Table-Driven"
+
+    ```cpp title="Table-Driven FSM Implementation" linenums="1"
+    #include <iostream>
+    #include <map>
+    #include <string>
+    #include <utility>
+
+    using StateInput = std::pair<std::string, std::string>;
+
+    std::map<StateInput, std::string> transitions = {
+        {{"locked", "coin"}, "unlocked"},
+        {{"locked", "push"}, "locked"},
+        {{"unlocked", "coin"}, "unlocked"},
+        {{"unlocked", "push"}, "locked"},
+    };
+
+    std::string nextState(const std::string& current, const std::string& input) {
+        StateInput key = {current, input};
+        auto it = transitions.find(key);
+        return (it != transitions.end()) ? it->second : current;
+    }
+
+    int main() {
+        std::string state = "locked";
+        state = nextState(state, "push");   // locked
+        state = nextState(state, "coin");   // unlocked
+        state = nextState(state, "push");   // locked
+        std::cout << state << std::endl;
+        return 0;
+    }
+    ```
 
 The table-driven approach scales better for complex FSMs.
 
@@ -484,7 +859,7 @@ Two FSMs are equivalent if they accept the same language. Often, an FSM can be *
 
 A minimal DFA is the smallest possible FSM (fewest states) that still recognizes the same language. Sometimes you can build different FSMs that accept exactly the same strings, but one has more states than necessary.
 
-**Example:** Two FSMs that both accept "strings ending in 'ab'":
+**Example:** Two FSMs that both accept "strings ending in 'ab'" :
 
 - **Bloated version** (5 states): Might have redundant states that behave identically—like having two different "saw an 'a'" states
 - **Minimal version** (3 states): Start → SawA → SawAB (accepting)
@@ -502,6 +877,8 @@ This FSM works, but states `S2` and `S4` are redundant. They are both accepting 
 ```mermaid
 stateDiagram-v2
     direction LR
+    classDef accepting fill:#48bb78,stroke:#cbd5e0,stroke-width:2px,color:#fff
+
     [*] --> S0
     S0 --> S1: a
     S0 --> S3: b
@@ -515,8 +892,6 @@ stateDiagram-v2
     S4 --> S4: b
     S2:::accepting
     S4:::accepting
-
-    classDef accepting fill:#90EE90
 ```
 
 **The minimal FSM:**
@@ -526,6 +901,8 @@ By merging the equivalent states `S2` and `S4` into a single accepting state (`S
 ```mermaid
 stateDiagram-v2
     direction LR
+    classDef accepting fill:#48bb78,stroke:#cbd5e0,stroke-width:2px,color:#fff
+
     [*] --> S0
     S0 --> S1: a
     S0 --> S3: b
@@ -536,8 +913,6 @@ stateDiagram-v2
     S24 --> S24: a
     S24 --> S24: b
     S24:::accepting
-
-    classDef accepting fill:#90EE90
 ```
 
 ### Why Minimize?
@@ -574,7 +949,7 @@ When you write a regex like `a*b+`, there are automatic algorithms that convert 
 
 ??? question "Practice Problem 3: Prove It's Not Regular"
 
-    The language \(L = \{a^nb^n \mid n \geq 0\}\) is not regular.
+    The language \( L = \{a^nb^n \mid n \geq 0\} \) is not regular.
 
     Try to design an FSM for it. Where do you get stuck?
     What would you need that an FSM doesn't have?

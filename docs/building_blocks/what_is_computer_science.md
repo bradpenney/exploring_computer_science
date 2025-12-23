@@ -187,25 +187,24 @@ You can be an excellent programmer without knowing complexity theory. You can un
 
 ## Why Study Computer Science?
 
-### It's Everywhere
+Studying computer science isn't just about learning to code; it's about developing a powerful new way of thinking.
 
-Software runs the world. Banking, healthcare, transportation, communication, entertainment—all depend on computing. Understanding CS means understanding the infrastructure of modern life.
+=== ":material-brain: Problem-Solving"
 
-### Problem-Solving Skills Transfer
+    At its core, computer science is about solving problems systematically and at a massive scale. Whether it's finding the shortest route between two cities, detecting cancer in medical images, or serving billions of search queries a day, computer science provides the tools to tackle these challenges efficiently.
 
-[Computational thinking](computational_thinking.md)—decomposition, abstraction, pattern recognition, algorithm design—applies far beyond coding. These are general reasoning skills.
+=== ":material-palette: Empowering Creativity"
 
-### It's Creative
+    Computer science is a creative discipline. You can build anything you can imagine: games, music, art, social networks, scientific simulations. Code is the ultimate creative medium, limited only by your imagination.
 
-Despite the "science" name, much of CS is creative. Designing elegant algorithms, crafting user experiences, architecting systems—these require imagination as much as logic. It's art that happens to compile. 🎨
+=== ":material-earth: Understanding the World"
 
-### It's Powerful
+    Everything is powered by computation. From your phone to your car to the economy, understanding computer science is essential to being a literate citizen in the 21st century. It demystifies technology and empowers you to be a creator, not just a consumer.
 
-Few other fields let you build something from nothing and deploy it to millions of people. A laptop and an internet connection can change the world. That's not hyperbole—it's history.
+=== ":material-briefcase: Career Opportunities"
 
-### The Questions Are Fascinating
+    Demand for computer science skills is high across every industry—finance, healthcare, entertainment, and more. A CS degree opens doors to a vast range of fulfilling and well-compensated careers.
 
-Can machines think? What are the limits of computation? How do we build systems we can trust? What should we automate, and what should remain human? These are some of the most interesting questions of our time.
 
 ## The Philosophical Angle
 

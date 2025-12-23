@@ -31,6 +31,15 @@ theme:
     - content.tooltips
     - content.code.mermaid
 
+plugins:
+  - search
+  - htmlproofer:
+      enabled: true
+      validate_rendered_template: true
+      validate_external_urls: false
+      raise_error: true
+      raise_error_after_finish: true
+
 markdown_extensions:
   - admonition
   - pymdownx.details
@@ -63,20 +72,61 @@ extra_javascript:
 
 nav:
   - Home: index.md
-  - Fundamentals:
-      - What is Computer Science?: fundamentals/what_is_computer_science.md
-      - Computational Thinking: fundamentals/computational_thinking.md
-      - Finite State Machines: fundamentals/finite_state_machines.md
-      - Recursive Transition Networks: fundamentals/recursive_transition_networks.md
-      - Backus-Naur Form (BNF): fundamentals/backus_naur_form.md
-      - Regular Expressions: fundamentals/regular_expressions.md
-      - How Parsers Work: fundamentals/how_parsers_work.md
-      - Binary Trees & Representation: fundamentals/binary_trees_and_representation.md
-      - Scheme & Parse Trees: fundamentals/scheme_and_parse_trees.md
-#      - Procedures & Higher-Order Functions: fundamentals/procedures_and_higher_order_functions.md
-#      - Abstract Data Types & Stacks: fundamentals/abstract_data_types_and_stack.md
-#  - Algorithms:
-#  - Programming:
-#  - Systems:
+  - Building Blocks:
+      - What is Computer Science?: building_blocks/what_is_computer_science.md
+      - Computational Thinking: building_blocks/computational_thinking.md
+      - Finite State Machines: building_blocks/finite_state_machines.md
+      - Regular Expressions: building_blocks/regular_expressions.md
+      - Backus-Naur Form (BNF): building_blocks/backus_naur_form.md
+      - Recursive Transition Networks: building_blocks/recursive_transition_networks.md
+      - How Parsers Work: building_blocks/how_parsers_work.md
+      - Binary Trees & Representation: building_blocks/binary_trees_and_representation.md
+      - Scheme & Parse Trees: building_blocks/scheme_and_parse_trees.md
+  #  - Algorithms & Complexity:
+  #      - Turing Machines: algorithms_complexity/turing_machines.md  # COMP200 Unit 2
+  #      - The Halting Problem: algorithms_complexity/the_halting_problem.md  # COMP200 Unit 2
+  #      - Big O: Time Complexity: algorithms_complexity/big_o_time_complexity.md  # COMP200 Unit 2
+  #      - Big O: Space Complexity: algorithms_complexity/big_o_space_complexity.md  # COMP200 Unit 2
+  #      - Searching: Linear vs Binary: algorithms_complexity/searching_linear_vs_binary.md  # COMP200 Unit 2
+  #      - Sorting: Elementary Sorts: algorithms_complexity/sorting_elementary.md  # COMP200 Unit 2
+  #      - Sorting: Insertion Sort: algorithms_complexity/sorting_insertion.md  # COMP200 Unit 2
+  #      - Sorting: Merge Sort: algorithms_complexity/sorting_merge.md  # COMP200 Unit 2
+  #      - Sorting: Quick Sort: algorithms_complexity/sorting_quick.md  # COMP200 Unit 2
+  #      - Recursion: algorithms_complexity/recursion.md  # COMP200 Unit 2
+  #      - Graph Traversal: algorithms_complexity/graph_traversal.md  # COMP200 Unit 2
+  # - Data Structures:
+  #    - Abstract Data Types & Stacks: data_structures/abstract_data_types_and_stack.md
+  #      - Binary Search Trees: data_structures/binary_search_trees.md  # COMP200 Unit 2
+  #      - Queues & Deques: data_structures/queues_and_deques.md  # COMP200 Unit 2
+  #      - Linked Lists: data_structures/linked_lists.md  # COMP200 Unit 2
+  - Programming & Languages:
+      #      - Programming Paradigms: programming_languages/programming_paradigms.md  # COMP200 Unit 3
+      - Procedures & Higher-Order Functions: programming_languages/procedures_and_higher_order_functions.md # COMP200 Unit 1
+#      - OOP: Classes & Objects: programming_languages/oop_classes_and_objects.md  # COMP200 Unit 3
+#      - OOP: Encapsulation: programming_languages/oop_encapsulation.md  # COMP200 Unit 3
+#      - OOP: Inheritance: programming_languages/oop_inheritance.md  # COMP200 Unit 3
+#      - OOP: Polymorphism: programming_languages/oop_polymorphism.md  # COMP200 Unit 3
+#      - Compilers vs Interpreters: programming_languages/compilers_vs_interpreters.md  # COMP200 Unit 3
+#      - How Interpreters Work: programming_languages/how_interpreters_work.md  # COMP200 Unit 3
+#  - Systems & Architecture:
+#      - Operating System Basics: systems_architecture/operating_system_basics.md  # COMP200 Unit 4
+#      - Processes & Threads: systems_architecture/processes_and_threads.md  # COMP200 Unit 4
+#      - Virtual Machines: systems_architecture/virtual_machines.md  # COMP200 Unit 4
+#      - Network Fundamentals: systems_architecture/network_fundamentals.md  # COMP200 Unit 4
+#      - Internet vs WWW: systems_architecture/internet_vs_www.md  # COMP200 Unit 4
+#      - Cloud & Edge Computing: systems_architecture/cloud_and_edge_computing.md  # COMP200 Unit 4
+#  - Data & Security:
+#      - Database Fundamentals: data_security/database_fundamentals.md  # COMP200 Unit 4
+#      - ACID & Normalization: data_security/database_acid_and_normalization.md  # COMP200 Unit 4
+#      - Big Data & NoSQL: data_security/big_data_and_nosql.md  # COMP200 Unit 4
+#      - Information Security Basics: data_security/information_security_basics.md  # COMP200 Unit 4
+#      - Cryptography Basics: data_security/cryptography_basics.md  # COMP200 Unit 4
 #  - Modern Topics:
+#      - Artificial Intelligence: modern_topics/artificial_intelligence_concepts.md  # COMP200 Unit 4
+#      - Generative AI: modern_topics/generative_ai.md  # COMP200 Unit 4
+#      - Computer Graphics: modern_topics/computer_graphics.md  # COMP200 Unit 4
+#      - Ethics in Computing: modern_topics/ethics_in_computing.md  # COMP200 Unit 4
+#  - Deep Dives:
+#      - Information Theory: deep_dives/information_theory.md  # Advanced Topic
+#      - P vs NP: deep_dives/p_vs_np.md  # Advanced Topic (relates to Unit 2)
 

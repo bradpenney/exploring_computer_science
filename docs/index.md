@@ -8,26 +8,31 @@ This isn't just a collection of notes - it's a teaching-focused resource. Writin
 
 ## What You'll Find Here
 
-### Fundamentals
+### Building Blocks
 
-The building blocks of computer science:
+The foundation of computer science:
 
-- **[What is Computer Science?](fundamentals/what_is_computer_science.md)** - The field beyond the code
-- **[Computational Thinking](fundamentals/computational_thinking.md)** - How to approach problems like a computer scientist
-- **[Finite State Machines](fundamentals/finite_state_machines.md)** - Modeling systems with states and transitions
-- **[Recursive Transition Networks](fundamentals/recursive_transition_networks.md)** - Parsing natural language structures
-- **[Backus-Naur Form](fundamentals/backus_naur_form.md)** - Formal grammar notation for defining languages
-- **[Regular Expressions](fundamentals/regular_expressions.md)** - Pattern matching and text processing
-- **[How Parsers Work](fundamentals/how_parsers_work.md)** - From tokens to syntax trees
-- **[Binary Trees & Representation](fundamentals/binary_trees_and_representation.md)** - Tree structures and data representation
-- **[Scheme & Parse Trees](fundamentals/scheme_and_parse_trees.md)** - Understanding expression parsing and prefix notation
+- **[What is Computer Science?](building_blocks/what_is_computer_science.md)** - The field beyond the code
+- **[Computational Thinking](building_blocks/computational_thinking.md)** - How to approach problems like a computer scientist
+- **[Finite State Machines](building_blocks/finite_state_machines.md)** - Modeling systems with states and transitions
+- **[Recursive Transition Networks](building_blocks/recursive_transition_networks.md)** - Parsing natural language structures
+- **[Backus-Naur Form](building_blocks/backus_naur_form.md)** - Formal grammar notation for defining languages
+- **[Regular Expressions](building_blocks/regular_expressions.md)** - Pattern matching and text processing
+- **[How Parsers Work](building_blocks/how_parsers_work.md)** - From tokens to syntax trees
+- **[Binary Trees & Representation](building_blocks/binary_trees_and_representation.md)** - Tree structures and data representation
+- **[Scheme & Parse Trees](building_blocks/scheme_and_parse_trees.md)** - Understanding expression parsing and prefix notation
+
+### Data Structures
+
+Organizing and managing data:
+
+- **[Abstract Data Types & Stacks](data_structures/abstract_data_types_and_stack.md)** - LIFO data structures and abstraction
 
 ### Coming Soon
 
-**More Fundamentals:**
+**More Building Blocks:**
 
 - Procedures & Higher-Order Functions - Abstraction and functional programming
-- Abstract Data Types & Stacks - LIFO data structures
 
 **New Sections:**
 
