@@ -94,14 +94,14 @@ nav:
   #      - Sorting: Quick Sort: algorithms_complexity/sorting_quick.md  # COMP200 Unit 2
   #      - Recursion: algorithms_complexity/recursion.md  # COMP200 Unit 2
   #      - Graph Traversal: algorithms_complexity/graph_traversal.md  # COMP200 Unit 2
-  # - Data Structures:
-  #    - Abstract Data Types & Stacks: data_structures/abstract_data_types_and_stack.md
+  - Data Structures:
+      - Abstract Data Types & Stacks: data_structures/abstract_data_types_and_stack.md
   #      - Binary Search Trees: data_structures/binary_search_trees.md  # COMP200 Unit 2
   #      - Queues & Deques: data_structures/queues_and_deques.md  # COMP200 Unit 2
   #      - Linked Lists: data_structures/linked_lists.md  # COMP200 Unit 2
   - Programming & Languages:
       #      - Programming Paradigms: programming_languages/programming_paradigms.md  # COMP200 Unit 3
-      - Procedures & Higher-Order Functions: programming_languages/procedures_and_higher_order_functions.md # COMP200 Unit 1
+      - Procedures & Higher-Order Functions: programming_languages/procedures_and_higher_order_functions.md
 #      - OOP: Classes & Objects: programming_languages/oop_classes_and_objects.md  # COMP200 Unit 3
 #      - OOP: Encapsulation: programming_languages/oop_encapsulation.md  # COMP200 Unit 3
 #      - OOP: Inheritance: programming_languages/oop_inheritance.md  # COMP200 Unit 3

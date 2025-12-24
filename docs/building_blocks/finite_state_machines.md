@@ -476,12 +476,12 @@ FSMs translate directly into code. Here's a turnstile implementation:
 
     ```javascript title="Turnstile FSM in JavaScript" linenums="1"
     class Turnstile {
-        constructor() {
-            this.state = "locked";
+        constructor() {  // (1)!
+            this.state = "locked";  // (2)!
         }
 
         transition(input) {
-            if (this.state === "locked") {
+            if (this.state === "locked") {  // (3)!
                 if (input === "coin") {
                     this.state = "unlocked";
                 }
@@ -493,7 +493,7 @@ FSMs translate directly into code. Here's a turnstile implementation:
                 // coin while unlocked: stay unlocked
             }
 
-            return this.state;
+            return this.state;  // (4)!
         }
     }
 
@@ -504,6 +504,11 @@ FSMs translate directly into code. Here's a turnstile implementation:
     console.log(t.transition("push"));   // locked
     ```
 
+    1. Constructor method called automatically when creating new instance with `new`
+    2. Instance property using `this` - each Turnstile object has its own state
+    3. Use strict equality `===` for string comparison (preferred over `==` in JavaScript)
+    4. Return current state after transition for convenient chaining and logging
+
 === ":material-language-go: Go - Class-Based"
 
     ```go title="Turnstile FSM in Go" linenums="1"
@@ -511,15 +516,15 @@ FSMs translate directly into code. Here's a turnstile implementation:
 
     import "fmt"
 
-    type Turnstile struct {
+    type Turnstile struct {  // (1)!
         state string
     }
 
-    func NewTurnstile() *Turnstile {
-        return &Turnstile{state: "locked"}
+    func NewTurnstile() *Turnstile {  // (2)!
+        return &Turnstile{state: "locked"}  // (3)!
     }
 
-    func (t *Turnstile) Transition(input string) string {
+    func (t *Turnstile) Transition(input string) string {  // (4)!
         if t.state == "locked" {
             if input == "coin" {
                 t.state = "unlocked"
@@ -543,11 +548,16 @@ FSMs translate directly into code. Here's a turnstile implementation:
     }
     ```
 
+    1. Define struct type - Go's way of grouping data (like a class without inheritance)
+    2. Constructor function pattern - Go convention to prefix with "New" and return pointer
+    3. Return address (&) of struct initialized with field syntax
+    4. Method with pointer receiver (*Turnstile) - allows modifying the struct's state
+
 === ":material-language-rust: Rust - Class-Based"
 
     ```rust title="Turnstile FSM in Rust" linenums="1"
-    #[derive(Debug)]
-    enum State {
+    #[derive(Debug)]  // (1)!
+    enum State {  // (2)!
         Locked,
         Unlocked,
     }
@@ -561,14 +571,14 @@ FSMs translate directly into code. Here's a turnstile implementation:
             Turnstile { state: State::Locked }
         }
 
-        fn transition(&mut self, input: &str) -> &State {
-            match (&self.state, input) {
+        fn transition(&mut self, input: &str) -> &State {  // (3)!
+            match (&self.state, input) {  // (4)!
                 (State::Locked, "coin") => self.state = State::Unlocked,
                 (State::Unlocked, "push") => self.state = State::Locked,
-                _ => {} // No transition, stay in current state
+                _ => {}  // (5)!
             }
 
-            &self.state
+            &self.state  // (6)!
         }
     }
 
@@ -580,18 +590,25 @@ FSMs translate directly into code. Here's a turnstile implementation:
     }
     ```
 
+    1. Derive Debug trait to enable printing State values with `{:?}` format
+    2. Enum for type-safe states - compiler ensures only Locked or Unlocked exist
+    3. Mutable reference (&mut) required to modify state; return immutable reference
+    4. Match on tuple (state, input) - Rust's powerful pattern matching handles all cases
+    5. Wildcard pattern `_` matches any unhandled case (no transition, stay in current state)
+    6. Return reference to internal state (borrowing, not transferring ownership)
+
 === ":material-language-java: Java - Class-Based"
 
     ```java title="Turnstile FSM in Java" linenums="1"
     public class Turnstile {
-        private String state;
+        private String state;  // (1)!
 
-        public Turnstile() {
+        public Turnstile() {  // (2)!
             this.state = "locked";
         }
 
         public String transition(String input) {
-            if (state.equals("locked")) {
+            if (state.equals("locked")) {  // (3)!
                 if (input.equals("coin")) {
                     state = "unlocked";
                 }
@@ -615,6 +632,10 @@ FSMs translate directly into code. Here's a turnstile implementation:
     }
     ```
 
+    1. Private field with public methods (encapsulation) - standard Java pattern
+    2. Constructor with same name as class - initializes state
+    3. Use `.equals()` for string comparison (not `==` which compares references)
+
 === ":material-language-cpp: C++ - Class-Based"
 
     ```cpp title="Turnstile FSM in C++" linenums="1"
@@ -626,10 +647,10 @@ FSMs translate directly into code. Here's a turnstile implementation:
         std::string state;
 
     public:
-        Turnstile() : state("locked") {}
+        Turnstile() : state("locked") {}  // (1)!
 
-        std::string transition(const std::string& input) {
-            if (state == "locked") {
+        std::string transition(const std::string& input) {  // (2)!
+            if (state == "locked") {  // (3)!
                 if (input == "coin") {
                     state = "unlocked";
                 }
@@ -653,6 +674,10 @@ FSMs translate directly into code. Here's a turnstile implementation:
         return 0;
     }
     ```
+
+    1. Initializer list - more efficient than assignment in constructor body
+    2. Pass string by const reference to avoid copying (performance optimization)
+    3. C++ allows `==` for string comparison (std::string overloads the operator)
 
 Or using a transition table:
 
@@ -683,16 +708,16 @@ Or using a transition table:
 === ":material-language-javascript: JavaScript - Table-Driven"
 
     ```javascript title="Table-Driven FSM Implementation" linenums="1"
-    const transitions = new Map([
-        [JSON.stringify(["locked", "coin"]), "unlocked"],
+    const transitions = new Map([  // (1)!
+        [JSON.stringify(["locked", "coin"]), "unlocked"],  // (2)!
         [JSON.stringify(["locked", "push"]), "locked"],
         [JSON.stringify(["unlocked", "coin"]), "unlocked"],
         [JSON.stringify(["unlocked", "push"]), "locked"],
     ]);
 
     function nextState(current, input) {
-        const key = JSON.stringify([current, input]);
-        return transitions.get(key) || current;
+        const key = JSON.stringify([current, input]);  // (3)!
+        return transitions.get(key) || current;  // (4)!
     }
 
     // Usage
@@ -702,6 +727,11 @@ Or using a transition table:
     state = nextState(state, "push");   // locked
     ```
 
+    1. Map data structure for efficient key-value lookups
+    2. Use JSON.stringify to create string keys from [state, input] arrays (Map requires unique keys)
+    3. Convert current state and input to same JSON string format for lookup
+    4. Use logical OR `||` to return current state if no transition found (default behavior)
+
 === ":material-language-go: Go - Table-Driven"
 
     ```go title="Table-Driven FSM Implementation" linenums="1"
@@ -709,13 +739,13 @@ Or using a transition table:
 
     import "fmt"
 
-    type StateInput struct {
+    type StateInput struct {  // (1)!
         state string
         input string
     }
 
-    var transitions = map[StateInput]string{
-        {"locked", "coin"}:   "unlocked",
+    var transitions = map[StateInput]string{  // (2)!
+        {"locked", "coin"}:   "unlocked",  // (3)!
         {"locked", "push"}:   "locked",
         {"unlocked", "coin"}: "unlocked",
         {"unlocked", "push"}: "locked",
@@ -723,10 +753,10 @@ Or using a transition table:
 
     func nextState(current, input string) string {
         key := StateInput{current, input}
-        if next, ok := transitions[key]; ok {
+        if next, ok := transitions[key]; ok {  // (4)!
             return next
         }
-        return current
+        return current  // (5)!
     }
 
     func main() {
@@ -738,23 +768,29 @@ Or using a transition table:
     }
     ```
 
+    1. Define custom struct to use as map key (Go maps require comparable types)
+    2. Map with struct keys - Go's type-safe alternative to tuples
+    3. Struct literal syntax - field names optional when in declaration order
+    4. Two-value assignment from map lookup: value and "ok" boolean (comma-ok idiom)
+    5. Return current state if key not found in map (default behavior)
+
 === ":material-language-rust: Rust - Table-Driven"
 
     ```rust title="Table-Driven FSM Implementation" linenums="1"
     use std::collections::HashMap;
 
     fn next_state(current: &str, input: &str,
-                  transitions: &HashMap<(&str, &str), &str>) -> &str {
-        transitions.get(&(current, input)).unwrap_or(&current)
+                  transitions: &HashMap<(&str, &str), &str>) -> &str {  // (1)!
+        transitions.get(&(current, input)).unwrap_or(&current)  // (2)!
     }
 
     fn main() {
-        let transitions: HashMap<(&str, &str), &str> = [
+        let transitions: HashMap<(&str, &str), &str> = [  // (3)!
             (("locked", "coin"), "unlocked"),
             (("locked", "push"), "locked"),
             (("unlocked", "coin"), "unlocked"),
             (("unlocked", "push"), "locked"),
-        ].iter().cloned().collect();
+        ].iter().cloned().collect();  // (4)!
 
         let mut state = "locked";
         state = next_state(state, "push", &transitions);   // locked
@@ -764,13 +800,18 @@ Or using a transition table:
     }
     ```
 
+    1. HashMap with tuple keys - Rust tuples are hashable and implement Eq/Hash
+    2. unwrap_or returns reference to current state if key not found (Option handling)
+    3. Type annotation shows HashMap maps (&str, &str) tuples to &str values
+    4. Convert array to HashMap using iterator: iter() creates iterator, cloned() copies elements, collect() builds HashMap
+
 === ":material-language-java: Java - Table-Driven"
 
     ```java title="Table-Driven FSM Implementation" linenums="1"
     import java.util.HashMap;
     import java.util.Map;
 
-    class StateInput {
+    class StateInput {  // (1)!
         String state;
         String input;
 
@@ -780,14 +821,14 @@ Or using a transition table:
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(Object o) {  // (2)!
             if (!(o instanceof StateInput)) return false;
             StateInput si = (StateInput) o;
             return state.equals(si.state) && input.equals(si.input);
         }
 
         @Override
-        public int hashCode() {
+        public int hashCode() {  // (3)!
             return state.hashCode() * 31 + input.hashCode();
         }
     }
@@ -795,7 +836,7 @@ Or using a transition table:
     public class FSM {
         private static Map<StateInput, String> transitions = new HashMap<>();
 
-        static {
+        static {  // (4)!
             transitions.put(new StateInput("locked", "coin"), "unlocked");
             transitions.put(new StateInput("locked", "push"), "locked");
             transitions.put(new StateInput("unlocked", "coin"), "unlocked");
@@ -803,7 +844,7 @@ Or using a transition table:
         }
 
         public static String nextState(String current, String input) {
-            return transitions.getOrDefault(new StateInput(current, input), current);
+            return transitions.getOrDefault(new StateInput(current, input), current);  // (5)!
         }
 
         public static void main(String[] args) {
@@ -816,6 +857,12 @@ Or using a transition table:
     }
     ```
 
+    1. Custom class needed as HashMap key (Java doesn't have tuple literals)
+    2. Override equals() to define structural equality (required for HashMap lookups)
+    3. Override hashCode() to match equals() contract (multiply by prime 31 to reduce collisions)
+    4. Static initializer block - runs once when class loads to populate transitions
+    5. getOrDefault() returns current state if key not in map (cleaner than null check)
+
 === ":material-language-cpp: C++ - Table-Driven"
 
     ```cpp title="Table-Driven FSM Implementation" linenums="1"
@@ -824,10 +871,10 @@ Or using a transition table:
     #include <string>
     #include <utility>
 
-    using StateInput = std::pair<std::string, std::string>;
+    using StateInput = std::pair<std::string, std::string>;  // (1)!
 
-    std::map<StateInput, std::string> transitions = {
-        {{"locked", "coin"}, "unlocked"},
+    std::map<StateInput, std::string> transitions = {  // (2)!
+        {{"locked", "coin"}, "unlocked"},  // (3)!
         {{"locked", "push"}, "locked"},
         {{"unlocked", "coin"}, "unlocked"},
         {{"unlocked", "push"}, "locked"},
@@ -835,8 +882,8 @@ Or using a transition table:
 
     std::string nextState(const std::string& current, const std::string& input) {
         StateInput key = {current, input};
-        auto it = transitions.find(key);
-        return (it != transitions.end()) ? it->second : current;
+        auto it = transitions.find(key);  // (4)!
+        return (it != transitions.end()) ? it->second : current;  // (5)!
     }
 
     int main() {
@@ -848,6 +895,12 @@ Or using a transition table:
         return 0;
     }
     ```
+
+    1. Type alias for std::pair - provides tuple-like behavior for map keys
+    2. std::map automatically ordered by keys (uses < operator on pairs)
+    3. Nested braces: outer for map entry, inner for pair construction
+    4. find() returns iterator to element (or end() if not found)
+    5. Ternary operator checks if iterator valid, accesses value with ->second, else returns current
 
 The table-driven approach scales better for complex FSMs.
 

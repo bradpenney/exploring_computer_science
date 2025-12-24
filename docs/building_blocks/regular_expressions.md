@@ -702,17 +702,21 @@ The global flag controls whether to find just the first match or all matches:
 
     func main() {
         text := "2024-12-15"
-        re := regexp.MustCompile(`\d+`)
+        re := regexp.MustCompile(`\d+`)  // (1)!
 
         // Find first match only
-        first := re.FindString(text)
+        first := re.FindString(text)  // (2)!
         fmt.Println(first)  // "2024"
 
         // Find all matches
-        all := re.FindAllString(text, -1)
+        all := re.FindAllString(text, -1)  // (3)!
         fmt.Println(all)  // ["2024" "12" "15"]
     }
     ```
+
+    1. `MustCompile` panics on invalid regex (use `Compile` for error handling)
+    2. `FindString` returns first match as string (empty string if no match)
+    3. Second parameter `-1` means find all matches (positive number limits results)
 
 === ":material-language-rust: Rust - Global"
 
@@ -721,20 +725,25 @@ The global flag controls whether to find just the first match or all matches:
 
     fn main() {
         let text = "2024-12-15";
-        let re = Regex::new(r"\d+").unwrap();
+        let re = Regex::new(r"\d+").unwrap();  // (1)!
 
         // Find first match only
-        if let Some(first) = re.find(text) {
+        if let Some(first) = re.find(text) {  // (2)!
             println!("{}", first.as_str());  // "2024"
         }
 
         // Find all matches
-        let all: Vec<&str> = re.find_iter(text)
-            .map(|m| m.as_str())
+        let all: Vec<&str> = re.find_iter(text)  // (3)!
+            .map(|m| m.as_str())  // (4)!
             .collect();
         println!("{:?}", all);  // ["2024", "12", "15"]
     }
     ```
+
+    1. `unwrap()` panics on invalid regex (prefer `?` in real code)
+    2. `find()` returns `Option<Match>` - use `if let` to handle
+    3. `find_iter()` returns iterator over all matches (lazy evaluation)
+    4. `map()` extracts string slice from each Match object
 
 === ":material-language-java: Java - Global"
 
@@ -745,24 +754,30 @@ The global flag controls whether to find just the first match or all matches:
     public class GlobalFlag {
         public static void main(String[] args) {
             String text = "2024-12-15";
-            Pattern pattern = Pattern.compile("\\d+");
-            Matcher matcher = pattern.matcher(text);
+            Pattern pattern = Pattern.compile("\\d+");  // (1)!
+            Matcher matcher = pattern.matcher(text);  // (2)!
 
             // Find first match only
-            if (matcher.find()) {
+            if (matcher.find()) {  // (3)!
                 System.out.println(matcher.group());  // "2024"
             }
 
             // Find all matches
-            matcher.reset();  // Reset to find all
+            matcher.reset();  // (4)!
             List<String> all = new ArrayList<>();
-            while (matcher.find()) {
+            while (matcher.find()) {  // (5)!
                 all.add(matcher.group());
             }
             System.out.println(all);  // [2024, 12, 15]
         }
     }
     ```
+
+    1. Compile pattern once for reuse (throws `PatternSyntaxException` on invalid regex)
+    2. Create Matcher object that performs operations on the input text
+    3. `find()` advances to next match each call (stateful operation)
+    4. `reset()` returns matcher to start of string for re-scanning
+    5. Loop repeatedly calling `find()` to get all matches (Java's "global" approach)
 
 === ":material-language-cpp: C++ - Global"
 
@@ -774,19 +789,19 @@ The global flag controls whether to find just the first match or all matches:
 
     int main() {
         std::string text = "2024-12-15";
-        std::regex re(R"(\d+)");
+        std::regex re(R"(\d+)");  // (1)!
 
         // Find first match only
-        std::smatch match;
-        if (std::regex_search(text, match, re)) {
+        std::smatch match;  // (2)!
+        if (std::regex_search(text, match, re)) {  // (3)!
             std::cout << match[0] << std::endl;  // "2024"
         }
 
         // Find all matches
-        auto begin = std::sregex_iterator(text.begin(), text.end(), re);
-        auto end = std::sregex_iterator();
+        auto begin = std::sregex_iterator(text.begin(), text.end(), re);  // (4)!
+        auto end = std::sregex_iterator();  // (5)!
         std::vector<std::string> all;
-        for (auto i = begin; i != end; ++i) {
+        for (auto i = begin; i != end; ++i) {  // (6)!
             all.push_back(i->str());
         }
         // Prints: 2024, 12, 15
@@ -797,6 +812,13 @@ The global flag controls whether to find just the first match or all matches:
         return 0;
     }
     ```
+
+    1. Raw string literal `R"(...)"` avoids escaping backslashes
+    2. `std::smatch` stores match results for strings (use `std::cmatch` for C-strings)
+    3. `regex_search` finds first match and populates match object
+    4. `sregex_iterator` iterates over all matches (begin points to first match)
+    5. Default-constructed iterator serves as end sentinel
+    6. Dereference iterator to get match_results, then call `str()` for matched text
 
 ### Example: Multiline Flag
 

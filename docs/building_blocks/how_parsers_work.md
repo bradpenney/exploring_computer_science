@@ -193,7 +193,7 @@ Here's a simple lexer implementation:
 === ":material-language-javascript: JavaScript - Lexer"
 
     ```javascript title="Simple Lexer in JavaScript" linenums="1"
-    const TOKEN_SPEC = [
+    const TOKEN_SPEC = [  // (1)!
         ['NUMBER',  /\d+/],
         ['IDENT',   /[a-zA-Z_][a-zA-Z0-9_]*/],
         ['PLUS',    /\+/],
@@ -203,31 +203,31 @@ Here's a simple lexer implementation:
         ['EQUALS',  /=/],
         ['LPAREN',  /\(/],
         ['RPAREN',  /\)/],
-        ['SKIP',    /[ \t]+/],
+        ['SKIP',    /[ \t]+/],  // (2)!
     ];
 
     function tokenize(text) {
         const tokens = [];
-        let pos = 0;
+        let pos = 0;  // (3)!
 
         while (pos < text.length) {
             let matched = false;
 
-            for (const [tokenType, pattern] of TOKEN_SPEC) {
-                const regex = new RegExp('^' + pattern.source);
-                const match = text.slice(pos).match(regex);
+            for (const [tokenType, pattern] of TOKEN_SPEC) {  // (4)!
+                const regex = new RegExp('^' + pattern.source);  // (5)!
+                const match = text.slice(pos).match(regex);  // (6)!
 
                 if (match) {
-                    if (tokenType !== 'SKIP') {
+                    if (tokenType !== 'SKIP') {  // (7)!
                         tokens.push([tokenType, match[0]]);
                     }
-                    pos += match[0].length;
+                    pos += match[0].length;  // (8)!
                     matched = true;
                     break;
                 }
             }
 
-            if (!matched) {
+            if (!matched) {  // (9)!
                 throw new SyntaxError(`Unknown character: ${text[pos]}`);
             }
         }
@@ -240,6 +240,16 @@ Here's a simple lexer implementation:
     //          ['PLUS', '+'], ['IDENT', 'y']]
     ```
 
+    1. Define token types as [name, regex] pairs (arrays in JS, not tuples)
+    2. SKIP tokens recognized but not added to output
+    3. Track current position in input string
+    4. Destructuring assignment extracts tokenType and pattern from each pair
+    5. Anchor regex with `^` to match only at current position
+    6. `slice(pos)` creates substring from current position to end
+    7. Filter out whitespace tokens from final result
+    8. Move position forward by length of matched token
+    9. No pattern matched - input contains invalid character
+
 === ":material-language-go: Go - Lexer"
 
     ```go title="Simple Lexer in Go" linenums="1"
@@ -250,7 +260,7 @@ Here's a simple lexer implementation:
         "regexp"
     )
 
-    type TokenSpec struct {
+    type TokenSpec struct {  // (1)!
         tokenType string
         pattern   *regexp.Regexp
     }
@@ -260,9 +270,9 @@ Here's a simple lexer implementation:
         Value string
     }
 
-    func tokenize(text string) ([]Token, error) {
-        tokenSpecs := []TokenSpec{
-            {"NUMBER", regexp.MustCompile(`^\d+`)},
+    func tokenize(text string) ([]Token, error) {  // (2)!
+        tokenSpecs := []TokenSpec{  // (3)!
+            {"NUMBER", regexp.MustCompile(`^\d+`)},  // (4)!
             {"IDENT", regexp.MustCompile(`^[a-zA-Z_][a-zA-Z0-9_]*`)},
             {"PLUS", regexp.MustCompile(`^\+`)},
             {"MINUS", regexp.MustCompile(`^-`)},
@@ -271,28 +281,28 @@ Here's a simple lexer implementation:
             {"EQUALS", regexp.MustCompile(`^=`)},
             {"LPAREN", regexp.MustCompile(`^\(`)},
             {"RPAREN", regexp.MustCompile(`^\)`)},
-            {"SKIP", regexp.MustCompile(`^[ \t]+`)},
+            {"SKIP", regexp.MustCompile(`^[ \t]+`)},  // (5)!
         }
 
         tokens := []Token{}
-        pos := 0
+        pos := 0  // (6)!
 
         for pos < len(text) {
             matched := false
 
-            for _, spec := range tokenSpecs {
-                match := spec.pattern.FindString(text[pos:])
+            for _, spec := range tokenSpecs {  // (7)!
+                match := spec.pattern.FindString(text[pos:])  // (8)!
                 if match != "" {
-                    if spec.tokenType != "SKIP" {
+                    if spec.tokenType != "SKIP" {  // (9)!
                         tokens = append(tokens, Token{spec.tokenType, match})
                     }
-                    pos += len(match)
+                    pos += len(match)  // (10)!
                     matched = true
                     break
                 }
             }
 
-            if !matched {
+            if !matched {  // (11)!
                 return nil, fmt.Errorf("unknown character: %c", text[pos])
             }
         }
@@ -307,20 +317,32 @@ Here's a simple lexer implementation:
     }
     ```
 
+    1. Define struct to hold token type name and compiled regex pattern
+    2. Returns slice of tokens and error (idiomatic Go error handling)
+    3. Slice of TokenSpec structs initialized inline
+    4. Raw string literals (backticks) used for regex patterns in Go
+    5. SKIP tokens for whitespace (recognized but not stored)
+    6. Track current position as integer index
+    7. Underscore `_` discards the index (we only need the spec)
+    8. Slice `text[pos:]` creates substring from position to end
+    9. Filter out whitespace tokens from results
+    10. Advance position by length of matched string
+    11. No pattern matched - return error with unknown character
+
 === ":material-language-rust: Rust - Lexer"
 
     ```rust title="Simple Lexer in Rust" linenums="1"
     use regex::Regex;
 
-    #[derive(Debug)]
+    #[derive(Debug)]  // (1)!
     struct Token {
         token_type: String,
         value: String,
     }
 
-    fn tokenize(text: &str) -> Result<Vec<Token>, String> {
-        let token_specs = vec![
-            ("NUMBER", Regex::new(r"^\d+").unwrap()),
+    fn tokenize(text: &str) -> Result<Vec<Token>, String> {  // (2)!
+        let token_specs = vec![  // (3)!
+            ("NUMBER", Regex::new(r"^\d+").unwrap()),  // (4)!
             ("IDENT", Regex::new(r"^[a-zA-Z_][a-zA-Z0-9_]*").unwrap()),
             ("PLUS", Regex::new(r"^\+").unwrap()),
             ("MINUS", Regex::new(r"^-").unwrap()),
@@ -329,36 +351,36 @@ Here's a simple lexer implementation:
             ("EQUALS", Regex::new(r"^=").unwrap()),
             ("LPAREN", Regex::new(r"^\(").unwrap()),
             ("RPAREN", Regex::new(r"^\)").unwrap()),
-            ("SKIP", Regex::new(r"^[ \t]+").unwrap()),
+            ("SKIP", Regex::new(r"^[ \t]+").unwrap()),  // (5)!
         ];
 
         let mut tokens = Vec::new();
-        let mut pos = 0;
+        let mut pos = 0;  // (6)!
 
         while pos < text.len() {
-            let remaining = &text[pos..];
+            let remaining = &text[pos..];  // (7)!
             let mut matched = false;
 
-            for (token_type, pattern) in &token_specs {
-                if let Some(mat) = pattern.find(remaining) {
-                    if *token_type != "SKIP" {
+            for (token_type, pattern) in &token_specs {  // (8)!
+                if let Some(mat) = pattern.find(remaining) {  // (9)!
+                    if *token_type != "SKIP" {  // (10)!
                         tokens.push(Token {
                             token_type: token_type.to_string(),
                             value: mat.as_str().to_string(),
                         });
                     }
-                    pos += mat.end();
+                    pos += mat.end();  // (11)!
                     matched = true;
                     break;
                 }
             }
 
-            if !matched {
+            if !matched {  // (12)!
                 return Err(format!("Unknown character: {}", &text[pos..pos+1]));
             }
         }
 
-        Ok(tokens)
+        Ok(tokens)  // (13)!
     }
 
     fn main() {
@@ -367,6 +389,20 @@ Here's a simple lexer implementation:
         // Output: [Token { token_type: "IDENT", value: "x" }, ...]
     }
     ```
+
+    1. Auto-derive Debug trait for printing token structures
+    2. Returns `Result<Vec<Token>, String>` - Rust's idiomatic error handling
+    3. Vector of tuples containing token type strings and compiled regex patterns
+    4. Raw strings `r"..."` don't require escaping backslashes in Rust
+    5. SKIP tokens recognized but not added to result vector
+    6. Track position as byte index (mut allows mutation)
+    7. Create string slice from current position to end
+    8. Borrow token_specs with `&` to iterate without consuming
+    9. `if let` pattern matching extracts match if pattern succeeds
+    10. Dereference `*token_type` to compare the &str with string literal
+    11. Advance position by number of bytes matched
+    12. No pattern matched - return Err variant with error message
+    13. Return Ok variant wrapping the successful token vector
 
 === ":material-language-java: Java - Lexer"
 
@@ -390,19 +426,19 @@ Here's a simple lexer implementation:
     }
 
     class Lexer {
-        static class TokenSpec {
+        static class TokenSpec {  // (1)!
             String type;
             Pattern pattern;
 
             TokenSpec(String type, String pattern) {
                 this.type = type;
-                this.pattern = Pattern.compile("^" + pattern);
+                this.pattern = Pattern.compile("^" + pattern);  // (2)!
             }
         }
 
         public static List<Token> tokenize(String text) {
-            List<TokenSpec> specs = Arrays.asList(
-                new TokenSpec("NUMBER", "\\d+"),
+            List<TokenSpec> specs = Arrays.asList(  // (3)!
+                new TokenSpec("NUMBER", "\\d+"),  // (4)!
                 new TokenSpec("IDENT", "[a-zA-Z_][a-zA-Z0-9_]*"),
                 new TokenSpec("PLUS", "\\+"),
                 new TokenSpec("MINUS", "-"),
@@ -411,28 +447,28 @@ Here's a simple lexer implementation:
                 new TokenSpec("EQUALS", "="),
                 new TokenSpec("LPAREN", "\\("),
                 new TokenSpec("RPAREN", "\\)"),
-                new TokenSpec("SKIP", "[ \\t]+")
+                new TokenSpec("SKIP", "[ \\t]+")  // (5)!
             );
 
             List<Token> tokens = new ArrayList<>();
-            int pos = 0;
+            int pos = 0;  // (6)!
 
             while (pos < text.length()) {
                 boolean matched = false;
 
-                for (TokenSpec spec : specs) {
-                    Matcher matcher = spec.pattern.matcher(text.substring(pos));
+                for (TokenSpec spec : specs) {  // (7)!
+                    Matcher matcher = spec.pattern.matcher(text.substring(pos));  // (8)!
                     if (matcher.find()) {
-                        if (!spec.type.equals("SKIP")) {
+                        if (!spec.type.equals("SKIP")) {  // (9)!
                             tokens.add(new Token(spec.type, matcher.group()));
                         }
-                        pos += matcher.end();
+                        pos += matcher.end();  // (10)!
                         matched = true;
                         break;
                     }
                 }
 
-                if (!matched) {
+                if (!matched) {  // (11)!
                     throw new RuntimeException("Unknown character: " + text.charAt(pos));
                 }
             }
@@ -448,6 +484,18 @@ Here's a simple lexer implementation:
     }
     ```
 
+    1. Inner static class holds token type name and compiled regex Pattern
+    2. Compile pattern with `^` anchor to match at start of string
+    3. Create immutable list using Arrays.asList helper method
+    4. Double backslash `\\` needed in Java strings to represent single backslash in regex
+    5. SKIP tokens for whitespace (tabs and spaces)
+    6. Track current position as integer index
+    7. Enhanced for-loop iterates over token specs
+    8. Create substring from current position and try to match pattern
+    9. Filter out whitespace tokens from final result
+    10. Advance position by length of matched region
+    11. No pattern matched - throw runtime exception with character
+
 === ":material-language-cpp: C++ - Lexer"
 
     ```cpp title="Simple Lexer in C++" linenums="1"
@@ -462,14 +510,14 @@ Here's a simple lexer implementation:
         std::string value;
     };
 
-    struct TokenSpec {
+    struct TokenSpec {  // (1)!
         std::string type;
         std::regex pattern;
     };
 
-    std::vector<Token> tokenize(const std::string& text) {
-        std::vector<TokenSpec> specs = {
-            {"NUMBER", std::regex(R"(^\d+)")},
+    std::vector<Token> tokenize(const std::string& text) {  // (2)!
+        std::vector<TokenSpec> specs = {  // (3)!
+            {"NUMBER", std::regex(R"(^\d+)")},  // (4)!
             {"IDENT", std::regex(R"(^[a-zA-Z_][a-zA-Z0-9_]*)")},
             {"PLUS", std::regex(R"(^\+)")},
             {"MINUS", std::regex(R"(^-)")},
@@ -478,29 +526,29 @@ Here's a simple lexer implementation:
             {"EQUALS", std::regex(R"(^=)")},
             {"LPAREN", std::regex(R"(^\()")},
             {"RPAREN", std::regex(R"(^\))")},
-            {"SKIP", std::regex(R"(^[ \t]+)")}
+            {"SKIP", std::regex(R"(^[ \t]+)")}  // (5)!
         };
 
         std::vector<Token> tokens;
-        size_t pos = 0;
+        size_t pos = 0;  // (6)!
 
         while (pos < text.length()) {
             bool matched = false;
-            std::string remaining = text.substr(pos);
+            std::string remaining = text.substr(pos);  // (7)!
 
-            for (const auto& spec : specs) {
-                std::smatch match;
-                if (std::regex_search(remaining, match, spec.pattern)) {
-                    if (spec.type != "SKIP") {
+            for (const auto& spec : specs) {  // (8)!
+                std::smatch match;  // (9)!
+                if (std::regex_search(remaining, match, spec.pattern)) {  // (10)!
+                    if (spec.type != "SKIP") {  // (11)!
                         tokens.push_back({spec.type, match.str()});
                     }
-                    pos += match.length();
+                    pos += match.length();  // (12)!
                     matched = true;
                     break;
                 }
             }
 
-            if (!matched) {
+            if (!matched) {  // (13)!
                 throw std::runtime_error("Unknown character: " +
                                        std::string(1, text[pos]));
             }
@@ -519,6 +567,20 @@ Here's a simple lexer implementation:
         return 0;
     }
     ```
+
+    1. Struct holds token type name and compiled std::regex pattern
+    2. Pass string by const reference to avoid copying
+    3. Initialize vector with brace-enclosed initializer list
+    4. Raw string literals `R"(...)"` don't require escaping in C++11+
+    5. SKIP tokens for whitespace recognition
+    6. Track position as size_t (unsigned integer type)
+    7. Create substring from current position to end
+    8. Range-based for loop with const reference to avoid copying
+    9. std::smatch stores regex match results
+    10. Search for pattern match in remaining text
+    11. Filter out whitespace tokens from results
+    12. Advance position by length of matched text
+    13. No pattern matched - throw runtime_error exception
 
 This produces a **list of tokens**, where each token is a tuple of `(TOKEN_TYPE, VALUE)`. The lexer has broken the input string into meaningful pieces that the parser can work with.
 
@@ -826,8 +888,8 @@ For most projects: start with **recursive descent** (top-down) because it's intu
         ```javascript title="Recursive Descent Parser in JavaScript" linenums="1"
         class Parser {
             constructor(tokens) {
-                this.tokens = tokens;
-                this.pos = 0;
+                this.tokens = tokens;  // (1)!
+                this.pos = 0;  // (2)!
             }
 
             currentToken() {
@@ -837,30 +899,30 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                 return null;
             }
 
-            consume(expectedType = null) {
+            consume(expectedType = null) {  // (3)!
                 const token = this.currentToken();
                 if (expectedType && token[0] !== expectedType) {
                     throw new SyntaxError(`Expected ${expectedType}, got ${token}`);
                 }
-                this.pos++;
+                this.pos++;  // (4)!
                 return token;
             }
 
-            parseExpression() {
+            parseExpression() {  // (5)!
                 // expression = term { ('+' | '-') term }
-                let left = this.parseTerm();
+                let left = this.parseTerm();  // (6)!
 
                 while (this.currentToken() &&
                        ['PLUS', 'MINUS'].includes(this.currentToken()[0])) {
                     const op = this.consume()[1];
                     const right = this.parseTerm();
-                    left = ['binop', op, left, right];
+                    left = ['binop', op, left, right];  // (7)!
                 }
 
                 return left;
             }
 
-            parseTerm() {
+            parseTerm() {  // (8)!
                 // term = factor { ('*' | '/') factor }
                 let left = this.parseFactor();
 
@@ -874,7 +936,7 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                 return left;
             }
 
-            parseFactor() {
+            parseFactor() {  // (9)!
                 // factor = NUMBER | '(' expression ')'
                 const token = this.currentToken();
 
@@ -883,9 +945,9 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                     return ['number', parseInt(token[1])];
                 }
 
-                if (token[0] === 'LPAREN') {
+                if (token[0] === 'LPAREN') {  // (10)!
                     this.consume('LPAREN');
-                    const expr = this.parseExpression();
+                    const expr = this.parseExpression();  // (11)!
                     this.consume('RPAREN');
                     return expr;
                 }
@@ -902,6 +964,18 @@ For most projects: start with **recursive descent** (top-down) because it's intu
             // Output: ['binop', '+', ['number', 2], ['binop', '*', ['number', 3], ['number', 4]]]
         ```
 
+        1. Store token array from lexer in instance variable
+        2. Track current position as index into token array
+        3. Default parameter `null` allows calling without expected type
+        4. Increment position to move to next token
+        5. Handles lowest precedence operators (+ and -)
+        6. Start by parsing higher-precedence term
+        7. Build binary operation array: [type, operator, left, right]
+        8. Handles medium precedence operators (* and /)
+        9. Handles highest precedence: numbers and parenthesized expressions
+        10. Handle parenthesized sub-expressions for grouping
+        11. Recursively parse expression inside parentheses
+
     === ":material-language-go: Go - Parser"
 
         ```go title="Recursive Descent Parser in Go" linenums="1"
@@ -912,8 +986,8 @@ For most projects: start with **recursive descent** (top-down) because it's intu
         type ASTNode interface{}
 
         type Parser struct {
-            tokens []Token
-            pos    int
+            tokens []Token  // (1)!
+            pos    int  // (2)!
         }
 
         func NewParser(tokens []Token) *Parser {
@@ -927,7 +1001,7 @@ For most projects: start with **recursive descent** (top-down) because it's intu
             return nil
         }
 
-        func (p *Parser) consume(expectedType ...string) Token {
+        func (p *Parser) consume(expectedType ...string) Token {  // (3)!
             token := p.currentToken()
             if token == nil {
                 panic("Unexpected end of tokens")
@@ -935,25 +1009,25 @@ For most projects: start with **recursive descent** (top-down) because it's intu
             if len(expectedType) > 0 && token.Type != expectedType[0] {
                 panic(fmt.Sprintf("Expected %s, got %s", expectedType[0], token.Type))
             }
-            p.pos++
+            p.pos++  // (4)!
             return *token
         }
 
-        func (p *Parser) parseExpression() ASTNode {
+        func (p *Parser) parseExpression() ASTNode {  // (5)!
             // expression = term { ('+' | '-') term }
-            left := p.parseTerm()
+            left := p.parseTerm()  // (6)!
 
             for p.currentToken() != nil &&
                 (p.currentToken().Type == "PLUS" || p.currentToken().Type == "MINUS") {
                 op := p.consume().Value
                 right := p.parseTerm()
-                left = []interface{}{"binop", op, left, right}
+                left = []interface{}{"binop", op, left, right}  // (7)!
             }
 
             return left
         }
 
-        func (p *Parser) parseTerm() ASTNode {
+        func (p *Parser) parseTerm() ASTNode {  // (8)!
             // term = factor { ('*' | '/') factor }
             left := p.parseFactor()
 
@@ -967,7 +1041,7 @@ For most projects: start with **recursive descent** (top-down) because it's intu
             return left
         }
 
-        func (p *Parser) parseFactor() ASTNode {
+        func (p *Parser) parseFactor() ASTNode {  // (9)!
             // factor = NUMBER | '(' expression ')'
             token := p.currentToken()
 
@@ -976,9 +1050,9 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                 return []interface{}{"number", token.Value}
             }
 
-            if token.Type == "LPAREN" {
+            if token.Type == "LPAREN" {  // (10)!
                 p.consume("LPAREN")
-                expr := p.parseExpression()
+                expr := p.parseExpression()  // (11)!
                 p.consume("RPAREN")
                 return expr
             }
@@ -995,22 +1069,34 @@ For most projects: start with **recursive descent** (top-down) because it's intu
             }
         ```
 
+        1. Store slice of tokens from lexer
+        2. Track current position as integer index
+        3. Variadic parameter `...string` allows optional expected type
+        4. Increment position to advance to next token
+        5. Handles lowest precedence operators (+ and -)
+        6. Start with higher-precedence term
+        7. Build slice representing binary operation node
+        8. Handles medium precedence operators (* and /)
+        9. Handles highest precedence: numbers and parentheses
+        10. Handle parenthesized sub-expressions for grouping
+        11. Recursive call parses expression inside parentheses
+
     === ":material-language-rust: Rust - Parser"
 
         ```rust title="Recursive Descent Parser in Rust" linenums="1"
         #[derive(Debug, Clone)]
-        enum ASTNode {
+        enum ASTNode {  // (1)!
             Number(i32),
             BinOp {
                 op: String,
-                left: Box<ASTNode>,
+                left: Box<ASTNode>,  // (2)!
                 right: Box<ASTNode>,
             },
         }
 
         struct Parser {
-            tokens: Vec<Token>,
-            pos: usize,
+            tokens: Vec<Token>,  // (3)!
+            pos: usize,  // (4)!
         }
 
         impl Parser {
@@ -1022,7 +1108,7 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                 self.tokens.get(self.pos)
             }
 
-            fn consume(&mut self, expected_type: Option<&str>) -> Result<Token, String> {
+            fn consume(&mut self, expected_type: Option<&str>) -> Result<Token, String> {  // (5)!
                 match self.current_token() {
                     None => Err("Unexpected end of tokens".to_string()),
                     Some(token) => {
@@ -1031,21 +1117,21 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                                 return Err(format!("Expected {}, got {}", exp, token.token_type));
                             }
                         }
-                        self.pos += 1;
+                        self.pos += 1;  // (6)!
                         Ok(token.clone())
                     }
                 }
             }
 
-            fn parse_expression(&mut self) -> Result<ASTNode, String> {
+            fn parse_expression(&mut self) -> Result<ASTNode, String> {  // (7)!
                 // expression = term { ('+' | '-') term }
-                let mut left = self.parse_term()?;
+                let mut left = self.parse_term()?;  // (8)!
 
                 while let Some(token) = self.current_token() {
                     if token.token_type == "PLUS" || token.token_type == "MINUS" {
                         let op = self.consume(None)?.value;
                         let right = self.parse_term()?;
-                        left = ASTNode::BinOp {
+                        left = ASTNode::BinOp {  // (9)!
                             op,
                             left: Box::new(left),
                             right: Box::new(right),
@@ -1058,7 +1144,7 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                 Ok(left)
             }
 
-            fn parse_term(&mut self) -> Result<ASTNode, String> {
+            fn parse_term(&mut self) -> Result<ASTNode, String> {  // (10)!
                 // term = factor { ('*' | '/') factor }
                 let mut left = self.parse_factor()?;
 
@@ -1079,7 +1165,7 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                 Ok(left)
             }
 
-            fn parse_factor(&mut self) -> Result<ASTNode, String> {
+            fn parse_factor(&mut self) -> Result<ASTNode, String> {  // (11)!
                 // factor = NUMBER | '(' expression ')'
                 match self.current_token() {
                     None => Err("Unexpected end of tokens".to_string()),
@@ -1088,9 +1174,9 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                             let value = token.value.parse::<i32>().unwrap();
                             self.consume(None)?;
                             Ok(ASTNode::Number(value))
-                        } else if token.token_type == "LPAREN" {
+                        } else if token.token_type == "LPAREN" {  // (12)!
                             self.consume(Some("LPAREN"))?;
-                            let expr = self.parse_expression()?;
+                            let expr = self.parse_expression()?;  // (13)!
                             self.consume(Some("RPAREN"))?;
                             Ok(expr)
                         } else {
@@ -1109,6 +1195,20 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                 // Output: BinOp { op: "+", left: Number(2), right: BinOp { op: "*", left: Number(3), right: Number(4) } }
             }
         ```
+
+        1. Enum defines AST node types (Number or Binary Operation)
+        2. Box heap-allocates nodes to allow recursive tree structure
+        3. Store vector of tokens from lexer
+        4. Track current position as usize (unsigned integer)
+        5. Returns Result type for idiomatic Rust error handling
+        6. Increment position to move to next token
+        7. Handles lowest precedence operators (+ and -)
+        8. `?` operator propagates errors up the call stack
+        9. Create BinOp variant with boxed left/right children
+        10. Handles medium precedence operators (* and /)
+        11. Handles highest precedence: numbers and parentheses
+        12. Handle parenthesized sub-expressions for grouping
+        13. Recursive call parses expression inside parentheses
 
     === ":material-language-java: Java - Parser"
 
@@ -1139,8 +1239,8 @@ For most projects: start with **recursive descent** (top-down) because it's intu
         }
 
         class Parser {
-            List<Token> tokens;
-            int pos;
+            List<Token> tokens;  // (1)!
+            int pos;  // (2)!
 
             Parser(List<Token> tokens) {
                 this.tokens = tokens;
@@ -1154,7 +1254,7 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                 return null;
             }
 
-            Token consume(String expectedType) {
+            Token consume(String expectedType) {  // (3)!
                 Token token = currentToken();
                 if (token == null) {
                     throw new RuntimeException("Unexpected end of tokens");
@@ -1162,7 +1262,7 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                 if (expectedType != null && !token.type.equals(expectedType)) {
                     throw new RuntimeException("Expected " + expectedType + ", got " + token.type);
                 }
-                pos++;
+                pos++;  // (4)!
                 return token;
             }
 
@@ -1170,21 +1270,21 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                 return consume(null);
             }
 
-            ASTNode parseExpression() {
+            ASTNode parseExpression() {  // (5)!
                 // expression = term { ('+' | '-') term }
-                ASTNode left = parseTerm();
+                ASTNode left = parseTerm();  // (6)!
 
                 while (currentToken() != null &&
                        (currentToken().type.equals("PLUS") || currentToken().type.equals("MINUS"))) {
                     String op = consume().value;
                     ASTNode right = parseTerm();
-                    left = new BinOpNode(op, left, right);
+                    left = new BinOpNode(op, left, right);  // (7)!
                 }
 
                 return left;
             }
 
-            ASTNode parseTerm() {
+            ASTNode parseTerm() {  // (8)!
                 // term = factor { ('*' | '/') factor }
                 ASTNode left = parseFactor();
 
@@ -1198,7 +1298,7 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                 return left;
             }
 
-            ASTNode parseFactor() {
+            ASTNode parseFactor() {  // (9)!
                 // factor = NUMBER | '(' expression ')'
                 Token token = currentToken();
 
@@ -1207,9 +1307,9 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                     return new NumberNode(Integer.parseInt(token.value));
                 }
 
-                if (token.type.equals("LPAREN")) {
+                if (token.type.equals("LPAREN")) {  // (10)!
                     consume("LPAREN");
-                    ASTNode expr = parseExpression();
+                    ASTNode expr = parseExpression();  // (11)!
                     consume("RPAREN");
                     return expr;
                 }
@@ -1226,6 +1326,18 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                 }
             }
         ```
+
+        1. Store List of tokens from lexer
+        2. Track current position as integer index
+        3. Method overloading allows optional expectedType parameter
+        4. Increment position to move to next token
+        5. Handles lowest precedence operators (+ and -)
+        6. Start with higher-precedence term
+        7. Create new BinOpNode object for binary operation
+        8. Handles medium precedence operators (* and /)
+        9. Handles highest precedence: numbers and parentheses
+        10. Handle parenthesized sub-expressions for grouping
+        11. Recursive call parses expression inside parentheses
 
     === ":material-language-cpp: C++ - Parser"
 
@@ -1263,8 +1375,8 @@ For most projects: start with **recursive descent** (top-down) because it's intu
         };
 
         class Parser {
-            std::vector<Token> tokens;
-            size_t pos;
+            std::vector<Token> tokens;  // (1)!
+            size_t pos;  // (2)!
 
         public:
             Parser(const std::vector<Token>& toks) : tokens(toks), pos(0) {}
@@ -1276,7 +1388,7 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                 return nullptr;
             }
 
-            Token consume(const std::string& expectedType = "") {
+            Token consume(const std::string& expectedType = "") {  // (3)!
                 auto token = currentToken();
                 if (!token) {
                     throw std::runtime_error("Unexpected end of tokens");
@@ -1284,25 +1396,25 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                 if (!expectedType.empty() && token->type != expectedType) {
                     throw std::runtime_error("Expected " + expectedType + ", got " + token->type);
                 }
-                pos++;
+                pos++;  // (4)!
                 return *token;
             }
 
-            std::unique_ptr<ASTNode> parseExpression() {
+            std::unique_ptr<ASTNode> parseExpression() {  // (5)!
                 // expression = term { ('+' | '-') term }
-                auto left = parseTerm();
+                auto left = parseTerm();  // (6)!
 
                 while (currentToken() &&
                        (currentToken()->type == "PLUS" || currentToken()->type == "MINUS")) {
                     std::string op = consume().value;
                     auto right = parseTerm();
-                    left = std::make_unique<BinOpNode>(op, std::move(left), std::move(right));
+                    left = std::make_unique<BinOpNode>(op, std::move(left), std::move(right));  // (7)!
                 }
 
                 return left;
             }
 
-            std::unique_ptr<ASTNode> parseTerm() {
+            std::unique_ptr<ASTNode> parseTerm() {  // (8)!
                 // term = factor { ('*' | '/') factor }
                 auto left = parseFactor();
 
@@ -1316,7 +1428,7 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                 return left;
             }
 
-            std::unique_ptr<ASTNode> parseFactor() {
+            std::unique_ptr<ASTNode> parseFactor() {  // (9)!
                 // factor = NUMBER | '(' expression ')'
                 auto token = currentToken();
 
@@ -1325,9 +1437,9 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                     return std::make_unique<NumberNode>(std::stoi(token->value));
                 }
 
-                if (token->type == "LPAREN") {
+                if (token->type == "LPAREN") {  // (10)!
                     consume("LPAREN");
-                    auto expr = parseExpression();
+                    auto expr = parseExpression();  // (11)!
                     consume("RPAREN");
                     return expr;
                 }
@@ -1345,6 +1457,18 @@ For most projects: start with **recursive descent** (top-down) because it's intu
                 return 0;
             }
         ```
+
+        1. Store vector of tokens from lexer
+        2. Track position as size_t (unsigned integer type)
+        3. Default parameter allows calling without expectedType
+        4. Increment position to advance to next token
+        5. Returns unique_ptr for automatic memory management
+        6. Start with higher-precedence term
+        7. `std::move` transfers ownership to new BinOpNode
+        8. Handles medium precedence operators (* and /)
+        9. Handles highest precedence: numbers and parentheses
+        10. Handle parenthesized sub-expressions for grouping
+        11. Recursive call parses expression inside parentheses
 
     This is a **tree structure represented as nested tuples**—our AST! Each tuple is a node:
 
@@ -1366,7 +1490,7 @@ For most projects: start with **recursive descent** (top-down) because it's intu
 
     ??? tip "Recursion and the Call Stack"
 
-        Notice how `parse_factor` can call `parse_expression`, which calls `parse_term`, which calls `parse_factor` again? This mutual recursion works because each function call is managed by the **[function call stack](../data_structures/abstract_data_types_and_stack.md#1-function-call-stack)**.
+        Notice how `parse_factor` can call `parse_expression`, which calls `parse_term`, which calls `parse_factor` again? This mutual recursion works because each function call is managed by the **[function call stack](../data_structures/abstract_data_types_and_stack.md#function-call-stack)**.
 
         When parsing `(2 + 3)`, the call stack looks like:
         ```

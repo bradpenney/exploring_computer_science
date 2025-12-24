@@ -8,30 +8,49 @@ Get ready to dive into the world of "black boxes" and discover how a simple pile
 
 ## What is an Abstract Data Type (ADT)?
 
-An **Abstract Data Type (ADT)** is a logical description of what a data structure represents, *without specifying how it's implemented*. It defines:
-
-1.  **The data:** What kind of information does it hold?
-2.  **The operations:** What actions can you perform on that data?
-3.  **The behavior:** How do those operations affect the data?
+An **Abstract Data Type (ADT)** is a logical description of what a data structure represents, *without specifying how it's implemented*. It defines the data, the operations you can perform on it, and the behavior those operations exhibit.
 
 Think of an ADT as a contract or a blueprint. It tells you *what* you can do, but not *how* it's done.
 
+### Formal Definition
+
+Mathematically, an ADT can be defined by its state and the transitions between those states. For a Stack, we can represent its behavior using the following notation:
+
+| Component | Mathematical Notation | Description |
+|:----------|:----------------------|:------------|
+| **Data Set** | $D$ | The set of all possible elements that can be stored in the stack |
+| **Stack State** | $S$ | A sequence of elements $(e_1, e_2, \dots, e_n)$ where $e_n$ is the top |
+| **Push** | $push: S \times D \to S$ | Adds an element to the top: $push((e_1, \dots, e_n), e) = (e_1, \dots, e_n, e)$ |
+| **Pop** | $pop: S \to S \times D$ | Removes and returns the top element: $pop((e_1, \dots, e_n)) = ((e_1, \dots, e_{n-1}), e_n)$ |
+| **Peek** | $peek: S \to D$ | Returns the top element without removing it: $peek((e_1, \dots, e_n)) = e_n$ |
+| **Is Empty** | $isEmpty: S \to \{True, False\}$ | Returns True if the sequence is empty, False otherwise |
+
 ### The Vending Machine Analogy
 
-Remember our discussion about procedures and how a vending machine hides complexity? ADTs are very similar:
+In the article about [Procedures and Higher-Order Functions](../programming_languages/procedures_and_higher_order_functions.md), we mentioned that [a vending machine is a great analogy for hiding complexity](../programming_languages/procedures_and_higher_order_functions.md#the-vending-machine-analogy). ADTs are very similar:
 
--   **Buttons (Operations):** `Insert Money`, `Select Item`, `Get Change`. You know what these buttons do.
--   **Display (Data):** Shows `Item A: $1.50`, `Item B: Out of Stock`. You know what information is available.
--   **Internal Mechanism (Implementation):** Motors, wires, sensors, inventory management system. You **don't** need to know this to use the machine.
+- **Buttons (Operations):** `Insert Money`, `Select Item`, `Get Change`. You know what these buttons do.
+- **Display (Data):** Shows `Item A: $1.50`, `Item B: Out of Stock`. You know what information is available.
+- **Internal Mechanism (Implementation):** Motors, wires, sensors, inventory management system. You **don't** need to know this to use the machine.
 
-If the vending machine owner decides to replace the internal coin mechanism with a credit card reader, you still use the `Select Item` operation – the *behavior* remains the same, even if the *implementation* changes. That's abstraction in action!
+If the vending machine owner decides to replace the internal coin mechanism with a credit card reader, you still use the `Select Item` operation—the *behavior* remains the same, even if the *implementation* changes. That's abstraction in action!
 
 ### Why ADTs are Awesome
 
-1.  **Modularity:** Code becomes easier to organize and maintain.
-2.  **Flexibility:** You can change the underlying implementation without affecting the rest of the program, as long as the ADT's contract is upheld.
-3.  **Encapsulation:** Details are hidden, preventing accidental misuse or modification.
-4.  **Clarity:** Focus on the problem you're solving, not the nitty-gritty storage details.
+1. **Modularity:** Code becomes easier to organize and maintain.
+2. **Flexibility:** You can change the underlying implementation without affecting the rest of the program, as long as the ADT's contract is upheld.
+3. **Encapsulation:** Details are hidden, preventing accidental misuse or modification.
+4. **Clarity:** Focus on the problem you're solving, not the nitty-gritty storage details.
+
+## Historical Context: The Evolution of the "Cellar"
+
+The concept of the stack wasn't just "discovered"—it was engineered to solve specific problems in early computing.
+
+- **1945: Alan Turing** used the terms "bury" and "unbury" for stacks in his design of the Automatic Computing Engine (ACE). He needed a way to keep track of return addresses during sub-routine calls.
+- **1955: Friedrich L. Bauer and Klaus Samelson** applied for a patent for "The Cellar Principle" (Stapelprinzip). They recognized that a "cellar" (stack) was the perfect structure for evaluating mathematical expressions.
+- **1957: Charles Hamblin** introduced Reverse Polish Notation (RPN) and stack-based evaluation, which became the foundation for many early calculators and programming languages like Forth and PostScript.
+
+That's not hyperbole—it's history. The stack is one of the oldest and most enduring structures in computer science.
 
 ## The Stack: A LIFO Love Story
 
@@ -43,55 +62,15 @@ A Stack is a collection of items that follows the **Last-In, First-Out (LIFO)** 
 
 The Stack ADT typically defines a few essential operations:
 
--   **`PUSH(item)`:** Adds an `item` to the top of the stack.
--   **`POP()`:** Removes and returns the `item` from the top of the stack. If the stack is empty, it usually results in an error or returns a special value.
--   **`PEEK()` / `TOP()`:** Returns the `item` at the top of the stack *without removing it*.
--   **`IS_EMPTY()`:** Checks if the stack contains any items. Returns `TRUE` if empty, `FALSE` otherwise.
--   **`SIZE()`:** Returns the number of items currently in the stack.
-
-### The Stack of Plates Analogy
-
-Imagine a stack of plates:
-
-1.  You **push** a clean plate onto the top.
-2.  When you need a plate, you **pop** the one from the top.
-3.  You can always **peek** at the top plate to see if it's the fancy one.
-4.  If there are no plates, the stack **is empty**.
-
-You can't just pull a plate from the middle or the bottom without messing up the whole pile! That's LIFO in action.
+- **`PUSH(item)`:** Adds an `item` to the top of the stack.
+- **`POP()`:** Removes and returns the `item` from the top of the stack. If the stack is empty, it usually results in an error.
+- **`PEEK()` / `TOP()`:** Returns the `item` at the top of the stack *without removing it*.
+- **`IS_EMPTY()`:** Checks if the stack contains any items.
+- **`SIZE()`:** Returns the number of items currently in the stack.
 
 ### Visualizing a Stack
 
 Let's see a stack in action with some pushes and pops:
-
-```mermaid
-graph TD
-    subgraph Stack Operations
-        A[Start Empty] --> B{PUSH(A)}
-        B --> C{PUSH(B)}
-        C --> D{PUSH(C)}
-        D --> E{POP()}
-        E --> F{PUSH(D)}
-        F --> G{POP()}
-        G --> H{POP()}
-    end
-
-    subgraph Stack State
-        SA[""] --> SB["A"]
-        SB --> SC["B<br>A"]
-        SC --> SD["C<br>B<br>A"]
-        SD --> SE["B<br>A"]
-        SE --> SF["D<br>B<br>A"]
-        SF --> SG["B<br>A"]
-        SG --> SH["A"]
-    end
-
-    classDef default fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
-```
-
-_Note: This Mermaid diagram is a simplification. A more accurate representation would show the stack growing upwards or downwards._
-
-Let's try a different Mermaid style that shows the stack growing.
 
 ```mermaid
 graph TD
@@ -106,7 +85,7 @@ graph TD
     end
 
     subgraph Stack Visuals
-        v1[""] --> v2["A"]
+        v1[" "] --> v2["A"]
         v2 --> v3["B<br>A"]
         v3 --> v4["C<br>B<br>A"]
         v4 --> v5["B<br>A"]
@@ -124,282 +103,389 @@ graph TD
     op7 --- v7;
     op8 --- v8;
 
-    classDef default fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style v1 fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style v2 fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style v3 fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style v4 fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style v5 fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style v6 fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style v7 fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style v8 fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    
+    style op1 fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style op2 fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style op3 fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style op4 fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style op5 fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style op6 fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style op7 fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style op8 fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
 ```
-
-This visualization is still a bit static. Let's try to describe the state transitions for clarity instead.
-
-### Stack State Transitions
-
-| Operation     | Stack Before | Operation Call | Stack After (Top -> Bottom) | Returned Value |
-|---------------|--------------|----------------|-----------------------------|----------------|
-| Start         | `[]`         |                | `[]`                        | N/A            |
-| Push 'A'      | `[]`         | `PUSH('A')`    | `['A']`                     | N/A            |
-| Push 'B'      | `['A']`      | `PUSH('B')`    | `['B', 'A']`                | N/A            |
-| Push 'C'      | `['B', 'A']` | `PUSH('C')`    | `['C', 'B', 'A']`           | N/A            |
-| Pop           | `['C', 'B', 'A']` | `POP()`     | `['B', 'A']`                | 'C'            |
-| Push 'D'      | `['B', 'A']` | `PUSH('D')`    | `['D', 'B', 'A']`           | N/A            |
-| Peek          | `['D', 'B', 'A']` | `PEEK()`    | `['D', 'B', 'A']`           | 'D'            |
-| Is Empty?     | `['D', 'B', 'A']` | `IS_EMPTY()`| `['D', 'B', 'A']`           | FALSE          |
 
 ## Implementing a Stack (The How, Hidden by the ADT)
 
-The beauty of an ADT is that its users don't care about the implementation. But for us curious computer scientists, it's good to know the common ways a Stack can be built.
+The beauty of an ADT is that its users don't care about the implementation. But for us curious computer scientists, it's good to know how a Stack can be built.
 
 Two common ways to implement a Stack are:
 
-1.  **Using an Array/List:**
-    -   `PUSH` appends to the end of the array.
-    -   `POP` removes from the end (or decreases a `top` pointer).
-    -   Efficient if the array can dynamically resize.
+1. **Using an Array/List:** `PUSH` appends to the end; `POP` removes from the end. This is highly efficient if the array can dynamically resize.
+2. **Using a Linked List:** `PUSH` adds a new node at the beginning (making it the new head); `POP` removes the head node.
 
-2.  **Using a Linked List:**
-    -   `PUSH` adds a new node at the beginning of the list (making it the new head).
-    -   `POP` removes the head node.
-    -   Naturally handles dynamic size, but might have slightly more overhead per operation.
+### Multi-Language Implementation
 
-Regardless of which you choose, the user of your Stack ADT still just calls `PUSH` and `POP`. They get the LIFO behavior they expect, blissfully unaware of the underlying data storage mechanism.
+Here is a Stack implementation using dynamic arrays (the most common approach) in several popular languages:
 
-### Pseudocode for a Stack Implementation (using a dynamic array)
+=== ":material-language-python: Python"
 
-```
-// Assuming 'data' is a dynamic array (like Python list or JavaScript array)
-// and 'top' is an index or pointer to the last element
+    ```python title="Stack Implementation in Python" linenums="1"
+    class Stack:
+        def __init__(self):
+            self.data = []  # (1)!
 
-function CREATE_STACK()
-    stack.data ← empty_array
-    stack.top_index ← -1 // Indicates empty stack
-    return stack
-endfunction
+        def push(self, item):
+            self.data.append(item)  # (2)!
 
-function PUSH(stack, item)
-    stack.top_index ← stack.top_index + 1
-    stack.data[stack.top_index] ← item // Add item at new top_index
-endfunction
+        def pop(self):
+            if self.is_empty():
+                raise IndexError("Pop from empty stack")
+            return self.data.pop()  # (3)!
 
-function POP(stack)
-    if IS_EMPTY(stack) then
-        return ERROR("Stack is empty!") // Or return null/None
-    else
-        item ← stack.data[stack.top_index]
-        stack.top_index ← stack.top_index - 1
-        return item
-    endif
-endfunction
+        def peek(self):
+            if self.is_empty():
+                return None
+            return self.data[-1]  # (4)!
 
-function PEEK(stack)
-    if IS_EMPTY(stack) then
-        return ERROR("Stack is empty!")
-    else
-        return stack.data[stack.top_index]
-    endif
-endfunction
+        def is_empty(self):
+            return len(self.data) == 0
 
-function IS_EMPTY(stack)
-    return stack.top_index == -1
-endfunction
-```
+        def size(self):
+            return len(self.data)
+    ```
+
+    1. Python lists are dynamic arrays, perfect for a stack.
+    2. Appending to the end of a list is O(1) amortized.
+    3. `pop()` without an index removes the last item.
+    4. Access the last element without removing it.
+
+=== ":material-language-javascript: JavaScript"
+
+    ```javascript title="Stack Implementation in JavaScript" linenums="1"
+    class Stack {
+        constructor() {
+            this.data = [];  // (1)!
+        }
+
+        push(item) {
+            this.data.push(item);  // (2)!
+        }
+
+        pop() {
+            if (this.isEmpty()) {
+                throw new Error("Stack is empty");
+            }
+            return this.data.pop();  // (3)!
+        }
+
+        peek() {
+            return this.isEmpty() ? null : this.data[this.data.length - 1];  // (4)!
+        }
+
+        isEmpty() {
+            return this.data.length === 0;
+        }
+
+        size() {
+            return this.data.length;
+        }
+    }
+    ```
+
+    1. JavaScript arrays are dynamic and work perfectly as stacks.
+    2. The `push()` method appends to the end in O(1) time.
+    3. The `pop()` method removes and returns the last element.
+    4. Uses a ternary operator to return null for empty stacks.
+
+=== ":material-language-go: Go"
+
+    ```go title="Stack Implementation in Go" linenums="1"
+    package main
+
+    import "errors"
+
+    type Stack struct {
+        data []interface{}  // (1)!
+    }
+
+    func (s *Stack) Push(item interface{}) {
+        s.data = append(s.data, item)  // (2)!
+    }
+
+    func (s *Stack) Pop() (interface{}, error) {
+        if s.IsEmpty() {
+            return nil, errors.New("stack is empty")  // (3)!
+        }
+        item := s.data[len(s.data)-1]
+        s.data = s.data[:len(s.data)-1]  // (4)!
+        return item, nil
+    }
+
+    func (s *Stack) Peek() (interface{}, error) {
+        if s.IsEmpty() {
+            return nil, errors.New("stack is empty")
+        }
+        return s.data[len(s.data)-1], nil
+    }
+
+    func (s *Stack) IsEmpty() bool {
+        return len(s.data) == 0
+    }
+    ```
+
+    1. Uses `interface{}` to allow any type (consider using generics in Go 1.18+).
+    2. The `append()` function handles slice growth automatically.
+    3. Idiomatic Go returns errors instead of throwing exceptions.
+    4. Slice reslicing removes the last element efficiently.
+
+=== ":material-language-rust: Rust"
+
+    ```rust title="Stack Implementation in Rust" linenums="1"
+    struct Stack<T> {  // (1)!
+        data: Vec<T>,
+    }
+
+    impl<T> Stack<T> {
+        fn new() -> Self {
+            Stack { data: Vec::new() }
+        }
+
+        fn push(&mut self, item: T) {  // (2)!
+            self.data.push(item);
+        }
+
+        fn pop(&mut self) -> Option<T> {  // (3)!
+            self.data.pop()
+        }
+
+        fn peek(&self) -> Option<&T> {  // (4)!
+            self.data.last()
+        }
+
+        fn is_empty(&self) -> bool {
+            self.data.is_empty()
+        }
+    }
+    ```
+
+    1. Generic type `T` allows the stack to hold any type safely.
+    2. `&mut self` borrows the stack mutably for modification.
+    3. Returns `Option<T>` - idiomatic Rust for operations that can fail.
+    4. Returns a reference `&T` since peek doesn't take ownership.
+
+=== ":material-language-java: Java"
+
+    ```java title="Stack Implementation in Java" linenums="1"
+    import java.util.ArrayList;
+
+    public class Stack<T> {  // (1)!
+        private ArrayList<T> data = new ArrayList<>();  // (2)!
+
+        public void push(T item) {
+            data.add(item);
+        }
+
+        public T pop() {
+            if (isEmpty()) {
+                throw new RuntimeException("Stack is empty");  // (3)!
+            }
+            return data.remove(data.size() - 1);
+        }
+
+        public T peek() {
+            if (isEmpty()) {
+                return null;
+            }
+            return data.get(data.size() - 1);
+        }
+
+        public boolean isEmpty() {
+            return data.isEmpty();
+        }
+    }
+    ```
+
+    1. Generic type parameter `<T>` provides type safety.
+    2. ArrayList automatically resizes as needed.
+    3. Throws unchecked exception for empty stack (alternatively use Optional<T>).
+
+=== ":material-language-cpp: C++"
+
+    ```cpp title="Stack Implementation in C++" linenums="1"
+    #include <vector>
+    #include <stdexcept>
+
+    template <typename T>  // (1)!
+    class Stack {
+    private:
+        std::vector<T> data;  // (2)!
+
+    public:
+        void push(const T& item) {  // (3)!
+            data.push_back(item);
+        }
+
+        T pop() {
+            if (isEmpty()) {
+                throw std::runtime_error("Stack is empty");
+            }
+            T item = data.back();
+            data.pop_back();
+            return item;
+        }
+
+        T peek() const {  // (4)!
+            if (isEmpty()) {
+                throw std::runtime_error("Stack is empty");
+            }
+            return data.back();
+        }
+
+        bool isEmpty() const {
+            return data.empty();
+        }
+    };
+    ```
+
+    1. Template allows generic type-safe stack implementation.
+    2. `std::vector` provides dynamic array with automatic memory management.
+    3. Pass by const reference to avoid unnecessary copying.
+    4. `const` method indicates peek doesn't modify the stack.
 
 ## Real-World Applications of Stacks
 
 Stacks aren't just academic exercises; they power many features you use daily!
+{: #function-call-stack}
 
-### 1. Function Call Stack
+=== ":material-function-variant: Function Call Stack"
 
-This is perhaps the most critical use of a stack in computing. When a program executes:
+    This is perhaps the most critical use of a stack in computing.
 
--   Each time a function is called, a "stack frame" (containing local variables, return address) is **pushed** onto the call stack.
--   When the function finishes, its stack frame is **popped** off, and execution returns to the address stored in the previous frame.
+    When a program calls a function, a **stack frame** (containing local variables and return addresses) is **pushed** onto the call stack. When the function finishes, its frame is **popped**, and execution returns to the caller. This LIFO behavior is why [recursion](../building_blocks/recursive_transition_networks.md) works—the last function called is the first one to finish. (Pack a lunch; recursion can get deep!)
 
-This LIFO behavior is perfect because the last function called is always the first one to complete. Without the call stack, programs would quickly get lost in a spaghetti mess of function calls!
+=== ":material-undo: Undo/Redo"
 
-### 2. Undo/Redo Functionality
+    <div id="undo-redo"></div>
 
-Ever hit Ctrl+Z? That's a stack at work!
+    Ever hit ++ctrl+z++? That's a stack at work!
 
--   Each action you perform (typing, deleting, formatting) is **pushed** onto an "undo stack."
--   When you "undo," the last action is **popped** from the undo stack and performed in reverse.
--   (Often) the undone action is then **pushed** onto a "redo stack," allowing you to "redo" it later.
+    Each action you perform is **pushed** onto an "undo stack." When you "undo," the last action is **popped** and reversed. Often, that popped action is then **pushed** onto a "redo stack," allowing you to move back and forth through your history.
 
-### 3. Expression Evaluation & Compilers
+=== ":material-xml: Expression Parsing"
 
-Compilers and interpreters use stacks extensively:
+    <div id="expression-parsing"></div>
 
--   **Infix to Postfix/Prefix conversion:** Stacks help rearrange mathematical expressions into a form easier for a computer to evaluate.
--   **Evaluating Postfix expressions:** Stacks are used to calculate the result of expressions without worrying about operator precedence.
--   **Syntax Parsing:** Stacks help [parsers](../building_blocks/how_parsers_work.md) determine if code follows grammar rules.
+    [Compilers and interpreters](../building_blocks/how_parsers_work.md) use stacks extensively to validate syntax and evaluate math.
 
-### 4. Backtracking Algorithms
+    - **Parentheses Matching:** As a parser reads code, it pushes opening brackets onto a stack and pops them when it sees a closing bracket. If the types don't match or the stack isn't empty at the end, the code is invalid.
+    - **RPN Evaluation:** Calculators use stacks to evaluate expressions like `3 4 + 5 *` (which equals 35) without needing parentheses.
 
-Algorithms that explore multiple paths (like solving a maze, Sudoku, or finding all possible chess moves) often use stacks:
+=== ":material-web: Browser History"
 
--   When the algorithm moves to a new state/path, the current state is **pushed** onto a stack.
--   If the algorithm reaches a dead end, it **pops** the previous state from the stack to backtrack and try a different path.
+    <div id="browser-history"></div>
 
-### 5. Browser History
-
-When you click the "back" button in your web browser, it's essentially performing a `POP` operation on a stack of visited URLs. The last page you visited is the first one you go back to.
+    Your web browser's "Back" button is a classic stack. As you navigate to new pages, your URLs are **pushed** onto a history stack. Clicking "Back" **pops** the current URL and takes you to the one underneath it.
 
 ## Practice Problems
 
-??? question "Practice Problem 1: Stack Operations"
+??? question "Practice Problem 1: Stack State Tracing"
 
-    Starting with an empty stack, perform the following sequence of operations. What is the final state of the stack (from top to bottom), and what values are returned by `POP` operations?
+    Starting with an empty stack, perform the following sequence of operations. What is the final state of the stack (from top to bottom), and what values are returned by the `POP` operations?
 
-    1.  `PUSH('A')`
-    2.  `PUSH('B')`
-    3.  `POP()`
-    4.  `PUSH('C')`
-    5.  `PEEK()`
-    6.  `PUSH('D')`
-    7.  `POP()`
-    8.  `POP()`
-    9.  `IS_EMPTY()`
+    1. `PUSH('X')`
+    2. `PUSH('Y')`
+    3. `POP()`
+    4. `PUSH('Z')`
+    5. `PUSH('W')`
+    6. `POP()`
+    7. `PEEK()`
 
     ??? tip "Solution"
 
-        Let's track the stack state (top-to-bottom) and returned values:
+        | Operation | Stack State (Top -> Bottom) | Returned Value |
+        |:---|:---|:---|
+        | Start | `[]` | N/A |
+        | `PUSH('X')` | `['X']` | N/A |
+        | `PUSH('Y')` | `['Y', 'X']` | N/A |
+        | `POP()` | `['X']` | `'Y'` |
+        | `PUSH('Z')` | `['Z', 'X']` | N/A |
+        | `PUSH('W')` | `['W', 'Z', 'X']` | N/A |
+        | `POP()` | `['Z', 'X']` | `'W'` |
+        | `PEEK()` | `['Z', 'X']` | `'Z'` |
 
-        | Operation       | Stack State (Top -> Bottom) | Returned Value |
-        |-----------------|-----------------------------|----------------|
-        | Start           | `[]`                        | N/A            |
-        | `PUSH('A')`     | `['A']`                     | N/A            |
-        | `PUSH('B')`     | `['B', 'A']`                | N/A            |
-        | `POP()`         | `['A']`                     | `'B'`          |
-        | `PUSH('C')`     | `['C', 'A']`                | N/A            |
-        | `PEEK()`        | `['C', 'A']`                | `'C'`          |
-        | `PUSH('D')`     | `['D', 'C', 'A']`           | N/A            |
-        | `POP()`         | `['C', 'A']`                | `'D'`          |
-        | `POP()`         | `['A']`                     | `'C'`          |
-        | `IS_EMPTY()`    | `['A']`                     | `FALSE`        |
+        **Final Stack State:** `['Z', 'X']`
+        **Values returned by POP:** 'Y', 'W'
 
-        **Final Stack State:** `['A']` (only 'A' remains)
-        **Values returned by POP:** 'B', 'D', 'C'
+??? question "Practice Problem 2: Balanced Delimiters"
 
-??? question "Practice Problem 2: Matching Parentheses"
-
-    Explain how a stack can be used to check if a mathematical expression has correctly matched parentheses (e.g., `( [ { } ] )` is valid, but `( [ ) ]` is invalid).
-
-    !!! info "Real-World Connection"
-
-        This algorithm is fundamental to [parsing](../building_blocks/how_parsers_work.md)—every compiler and interpreter uses stack-based techniques to validate syntax and match delimiters.
+    Using a stack, determine if the string `"{ [ ( ) ] }"` is balanced. Describe the steps.
 
     ??? tip "Solution"
 
-        **Algorithm:**
-
-        1.  Initialize an empty stack.
-        2.  Iterate through the expression character by character.
-        3.  **If an opening parenthesis (`(`, `[`, `{`) is encountered:** `PUSH` it onto the stack.
-        4.  **If a closing parenthesis (`)`, `]`, `}`) is encountered:**
-            *   Check if the stack `IS_EMPTY()`. If it is, then there's a closing parenthesis without a matching opening one, so the expression is invalid.
-            *   `POP()` the top element from the stack.
-            *   If the popped element is *not* the corresponding opening parenthesis (e.g., `]` appeared but `(` was popped), then the parentheses don't match, and the expression is invalid.
-        5.  **After iterating through the entire expression:**
-            *   If the stack `IS_EMPTY()`, all parentheses were correctly matched, and the expression is valid.
-            *   If the stack is *not* empty, there are unmatched opening parentheses, so the expression is invalid.
-
-        **Example: `( [ { } ] )`**
-
-        | Char | Stack (Top -> Bottom) | Result |
-        |------|-----------------------|--------|
-        | `(`  | `[`                   |        |
-        | `[`  | `[`, `(`              |        |
-        | `{`  | `{`, `[`, `(`         |        |
-        | `}`  | `[`, `(`              | Pop `{`, Match `{` |
-        | `]`  | `(`                   | Pop `[`, Match `[` |
-        | `)`  | `[]`                  | Pop `(`, Match `(` |
-        | End  | `[]`                  | Valid! |
-
-        **Example: `( [ ) ]`**
-
-        | Char | Stack (Top -> Bottom) | Result |
-        |------|-----------------------|--------|
-        | `(`  | `[`                   |        |
-        | `[`  | `[`, `(`              |        |
-        | `)`  | `(`                   | Pop `[`, **Mismatch! Expected `(`** |
-        |      |                       | Invalid! |
+        1.  Iterate through the string:
+        2.  `{`: Push to stack. Stack: `['{']`
+        3.  `[`: Push to stack. Stack: `['[', '{']`
+        4.  `(`: Push to stack. Stack: `['(', '[', '{']`
+        5.  `)`: Pop from stack (`(`). Match found! Stack: `['[', '{']`
+        6.  `]`: Pop from stack (`[`). Match found! Stack: `['{']`
+        7.  `}`: Pop from stack (`{`). Match found! Stack: `[]`
+        8.  End of string and stack is empty: **Balanced!**
 
 ??? question "Practice Problem 3: Reverse a String"
 
-    How would you use a stack to reverse a string (e.g., "hello" becomes "olleh")? Provide pseudocode.
+    Write pseudocode using a stack to reverse the string "STACK".
 
     ??? tip "Solution"
 
-        **Algorithm:**
-
-        1.  Create an empty stack.
-        2.  Iterate through the input string character by character:
-            *   For each character, `PUSH` it onto the stack.
-        3.  Initialize an empty result string.
-        4.  While the stack `IS_EMPTY()` is `FALSE`:
-            *   `POP()` a character from the stack.
-            *   Append the popped character to the result string.
-        5.  Return the result string.
-
-        **Pseudocode:**
-
-        ```
-        function REVERSE_STRING(input_string)
-            stack ← CREATE_STACK()
+        ```text title="Reverse String Pseudocode" linenums="1"
+        function REVERSE_STRING(input)
+            s = CREATE_STACK()
+            for each char in input:
+                PUSH(s, char)
             
-            // Push all characters onto the stack
-            for each char in input_string
-                PUSH(stack, char)
-            endfor
+            result = ""
+            while NOT IS_EMPTY(s):
+                result = result + POP(s)
             
-            reversed_string ← ""
-            
-            // Pop characters and append to new string
-            while NOT IS_EMPTY(stack)
-                char ← POP(stack)
-                reversed_string ← reversed_string + char
-            endwhile
-            
-            return reversed_string
+            return result
         endfunction
         ```
 
-        **Example: "hello"**
-
-        1.  `PUSH('h')`, `PUSH('e')`, `PUSH('l')`, `PUSH('l')`, `PUSH('o')`
-            Stack: `['o', 'l', 'l', 'e', 'h']` (top to bottom)
-        2.  `POP()` -> 'o', `reversed_string` = "o"
-        3.  `POP()` -> 'l', `reversed_string` = "ol"
-        4.  `POP()` -> 'l', `reversed_string` = "oll"
-        5.  `POP()` -> 'e', `reversed_string` = "olle"
-        6.  `POP()` -> 'h', `reversed_string` = "olleh"
-        7.  Stack is empty, return "olleh".
+        1. Push 'S', 'T', 'A', 'C', 'K'. Stack: `['K', 'C', 'A', 'T', 'S']`
+        2. Pop characters: 'K', then 'C', then 'A', then 'T', then 'S'.
+        3. Result: "KCATS" (reversed).
 
 ## Key Takeaways
 
 | Concept | Meaning |
 |:--------|:--------|
-| **Abstract Data Type (ADT)** | Logical description of a data structure's behavior; hides implementation details |
-| **Stack** | An ADT following the **LIFO** (Last-In, First-Out) principle |
-| **PUSH** | Add an item to the top of the stack |
-| **POP** | Remove and return the top item from the stack |
-| **PEEK / TOP** | Return the top item without removing it |
-| **IS_EMPTY** | Check if the stack contains any items |
-| **Call Stack** | Fundamental stack used by programs to manage function calls |
-| **Undo/Redo** | Common application of stacks for user interface actions |
-| **Backtracking** | Algorithms that explore options and return to previous states use stacks |
+| **Abstract Data Type (ADT)** | A logical contract defining data and operations, hiding implementation details |
+| **Stack** | A linear data structure following the **Last-In, First-Out (LIFO)** principle |
+| **PUSH / POP** | The two primary operations for adding and removing the top element |
+| **Call Stack** | The system-level stack that manages function calls and local variables |
+| **LIFO** | The fundamental rule of stacks: the newest item is the first one out |
 
 ## Why ADTs and Stacks Matter
 
 Understanding Abstract Data Types, particularly the Stack, is foundational to mastering computer science.
 
--   **ADTs teach you to think about interfaces first:** Before you optimize or implement, you define the "what" and the "how it behaves." This leads to cleaner, more maintainable code.
--   **The Stack is everywhere:** From the lowest levels of your operating system (the call stack) to the highest levels of application design (undo/redo, browser history), its simple LIFO rule provides elegant solutions to complex problems.
--   **It demystifies complex systems:** Knowing about the call stack helps you debug programs, understand recursion, and grasp how a CPU manages execution.
-
-By embracing abstraction and wielding the power of the Stack, you unlock a deeper understanding of how software is built, organized, and ultimately, how it works its magic.
+- **ADTs teach you to think about interfaces first:** Before you optimize or implement, you define the "what" and the "how it behaves." This leads to cleaner, more maintainable code.
+- **The Stack is everywhere:** From the lowest levels of your operating system (the call stack) to the highest levels of application design (undo/redo, browser history), its simple LIFO rule provides elegant solutions to complex problems.
+- **It demystifies complex systems:** Knowing about the call stack helps you debug programs, understand recursion, and grasp how a CPU manages execution.
 
 ## Further Reading
 
--   **David Evans, [Introduction to Computing](https://computingbook.org/)** — Chapter 6 covers the Stack ADT and its applications in more detail.
--   **[Computational Thinking](../building_blocks/computational_thinking.md)** — Abstraction as a key problem-solving tool.
--   **[Procedures and Higher-Order Functions](../programming_languages/procedures_and_higher_order_functions.md)** — How functions enable modularity and abstraction.
+- **David Evans, [Introduction to Computing](https://computingbook.org/)** — Chapter 6 covers the Stack ADT and its applications in more detail.
+- **[Computational Thinking](../building_blocks/computational_thinking.md)** — Abstraction as a key problem-solving tool.
+- **[Procedures and Higher-Order Functions](../programming_languages/procedures_and_higher_order_functions.md)** — How functions enable modularity and abstraction.
 
 ---
 

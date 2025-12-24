@@ -134,25 +134,31 @@ Computational thinking rests on four core skills. They're not steps to follow in
 
         ```javascript title="Sending Email Without Abstraction" linenums="1"
         // Without abstraction: caller needs to know everything
-        const nodemailer = require('nodemailer');
+        const nodemailer = require('nodemailer');  // (1)!
 
-        const transporter = nodemailer.createTransport({
+        const transporter = nodemailer.createTransport({  // (2)!
             host: 'smtp.gmail.com',
             port: 587,
-            secure: false,  // Use STARTTLS
-            auth: {
+            secure: false,  // (3)!
+            auth: {  // (4)!
                 user: 'me@gmail.com',
                 pass: 'password123'
             }
         });
 
-        transporter.sendMail({
+        transporter.sendMail({  // (5)!
             from: 'me@gmail.com',
             to: 'bob@example.com',
             subject: 'Hello',
             text: 'Hi Bob!'
         });
         ```
+
+        1. CommonJS module import for nodemailer (Node.js email library)
+        2. Create transport object with all SMTP configuration details
+        3. secure: false means use STARTTLS to upgrade connection (TLS on port 587)
+        4. Authentication credentials passed as nested object
+        5. Send mail using configured transport with message details as object literal
 
     === ":material-language-go: Go - Without Abstraction"
 
@@ -164,15 +170,20 @@ Computational thinking rests on four core skills. They're not steps to follow in
 
         from := "me@gmail.com"
         password := "password123"
-        to := []string{"bob@example.com"}
+        to := []string{"bob@example.com"}  // (1)!
         smtpHost := "smtp.gmail.com"
         smtpPort := "587"
 
-        message := []byte("Subject: Hello\r\n\r\nHi Bob!")
+        message := []byte("Subject: Hello\r\n\r\nHi Bob!")  // (2)!
 
-        auth := smtp.PlainAuth("", from, password, smtpHost)
-        err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, to, message)
+        auth := smtp.PlainAuth("", from, password, smtpHost)  // (3)!
+        err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, to, message)  // (4)!
         ```
+
+        1. Recipients as string slice (Go's dynamic array type) - SendMail accepts multiple recipients
+        2. Message as byte slice with RFC 5322 format (headers separated by \r\n\r\n from body)
+        3. PlainAuth creates authentication mechanism using username and password
+        4. SendMail combines host:port, returns error for Go's explicit error handling pattern
 
     === ":material-language-rust: Rust - Without Abstraction"
 
@@ -181,23 +192,30 @@ Computational thinking rests on four core skills. They're not steps to follow in
         use lettre::{Message, SmtpTransport, Transport};
         use lettre::transport::smtp::authentication::Credentials;
 
-        let email = Message::builder()
-            .from("me@gmail.com".parse().unwrap())
+        let email = Message::builder()  // (1)!
+            .from("me@gmail.com".parse().unwrap())  // (2)!
             .to("bob@example.com".parse().unwrap())
             .subject("Hello")
             .body(String::from("Hi Bob!"))
-            .unwrap();
+            .unwrap();  // (3)!
 
-        let creds = Credentials::new("me@gmail.com".to_string(),
+        let creds = Credentials::new("me@gmail.com".to_string(),  // (4)!
                                      "password123".to_string());
 
-        let mailer = SmtpTransport::relay("smtp.gmail.com")
+        let mailer = SmtpTransport::relay("smtp.gmail.com")  // (5)!
             .unwrap()
             .credentials(creds)
             .build();
 
-        mailer.send(&email).unwrap();
+        mailer.send(&email).unwrap();  // (6)!
         ```
+
+        1. Builder pattern - chain method calls to construct email object incrementally
+        2. parse() converts string to email address type, unwrap() panics if invalid
+        3. Final unwrap() on builder - convert Result<Message> to Message (panic on error)
+        4. to_string() converts &str to owned String type (Credentials requires String)
+        5. relay() creates SMTP transport for relaying through server (unwrap Result)
+        6. send() borrows email reference, unwrap() panics if send fails
 
     === ":material-language-java: Java - Without Abstraction"
 
@@ -207,27 +225,33 @@ Computational thinking rests on four core skills. They're not steps to follow in
         import javax.mail.internet.*;
         import java.util.Properties;
 
-        Properties props = new Properties();
+        Properties props = new Properties();  // (1)!
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
 
-        Session session = Session.getInstance(props, new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
+        Session session = Session.getInstance(props, new Authenticator() {  // (2)!
+            protected PasswordAuthentication getPasswordAuthentication() {  // (3)!
                 return new PasswordAuthentication("me@gmail.com", "password123");
             }
         });
 
-        Message message = new MimeMessage(session);
+        Message message = new MimeMessage(session);  // (4)!
         message.setFrom(new InternetAddress("me@gmail.com"));
         message.setRecipients(Message.RecipientType.TO,
             InternetAddress.parse("bob@example.com"));
         message.setSubject("Hello");
         message.setText("Hi Bob!");
 
-        Transport.send(message);
+        Transport.send(message);  // (5)!
         ```
+
+        1. Properties object stores SMTP configuration as key-value pairs
+        2. Anonymous inner class implements Authenticator interface inline
+        3. Override getPasswordAuthentication() to provide credentials when needed
+        4. MimeMessage constructed with session (contains all SMTP settings)
+        5. Static Transport.send() method sends message using session configuration
 
     === ":material-language-cpp: C++ - Without Abstraction"
 
@@ -236,27 +260,34 @@ Computational thinking rests on four core skills. They're not steps to follow in
         #include <curl/curl.h>
         #include <string>
 
-        CURL *curl = curl_easy_init();
-        if(curl) {
-            curl_easy_setopt(curl, CURLOPT_URL, "smtp://smtp.gmail.com:587");
+        CURL *curl = curl_easy_init();  // (1)!
+        if(curl) {  // (2)!
+            curl_easy_setopt(curl, CURLOPT_URL, "smtp://smtp.gmail.com:587");  // (3)!
             curl_easy_setopt(curl, CURLOPT_USE_SSL, CURLUSESSL_ALL);
             curl_easy_setopt(curl, CURLOPT_USERNAME, "me@gmail.com");
             curl_easy_setopt(curl, CURLOPT_PASSWORD, "password123");
             curl_easy_setopt(curl, CURLOPT_MAIL_FROM, "<me@gmail.com>");
 
-            struct curl_slist *recipients = NULL;
+            struct curl_slist *recipients = NULL;  // (4)!
             recipients = curl_slist_append(recipients, "<bob@example.com>");
             curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, recipients);
 
-            std::string payload = "To: bob@example.com\r\n"
+            std::string payload = "To: bob@example.com\r\n"  // (5)!
                                 "Subject: Hello\r\n"
                                 "\r\nHi Bob!";
             curl_easy_setopt(curl, CURLOPT_READDATA, &payload);
 
-            curl_easy_perform(curl);
+            curl_easy_perform(curl);  // (6)!
             curl_easy_cleanup(curl);
         }
         ```
+
+        1. Initialize libcurl easy interface - returns handle (NULL on failure)
+        2. Check handle validity before using (C-style error handling)
+        3. curl_easy_setopt() sets options using enum constants (variadic function)
+        4. curl_slist is linked list structure for recipient list (manual memory management)
+        5. Construct RFC 5322 message format as string with proper \r\n line endings
+        6. curl_easy_perform() sends email, curl_easy_cleanup() frees allocated memory
 
     With abstraction, all that complexity hides behind a simple interface:
 
@@ -273,36 +304,46 @@ Computational thinking rests on four core skills. They're not steps to follow in
 
         ```javascript title="Sending Email With Abstraction" linenums="1"
         // With abstraction: complexity hidden
-        sendEmail("bob@example.com", "Hello", "Hi Bob!");
+        sendEmail("bob@example.com", "Hello", "Hi Bob!");  // (1)!
         ```
+
+        1. All the complexity from the previous example is now hidden inside this function - caller only needs to provide recipient, subject, and message
 
     === ":material-language-go: Go - With Abstraction"
 
         ```go title="Sending Email With Abstraction" linenums="1"
         // With abstraction: complexity hidden
-        sendEmail("bob@example.com", "Hello", "Hi Bob!")
+        sendEmail("bob@example.com", "Hello", "Hi Bob!")  // (1)!
         ```
+
+        1. All the complexity from the previous example is now hidden inside this function - caller only needs to provide recipient, subject, and message
 
     === ":material-language-rust: Rust - With Abstraction"
 
         ```rust title="Sending Email With Abstraction" linenums="1"
         // With abstraction: complexity hidden
-        send_email("bob@example.com", "Hello", "Hi Bob!");
+        send_email("bob@example.com", "Hello", "Hi Bob!");  // (1)!
         ```
+
+        1. All the complexity from the previous example is now hidden inside this function - caller only needs to provide recipient, subject, and message
 
     === ":material-language-java: Java - With Abstraction"
 
         ```java title="Sending Email With Abstraction" linenums="1"
         // With abstraction: complexity hidden
-        sendEmail("bob@example.com", "Hello", "Hi Bob!");
+        sendEmail("bob@example.com", "Hello", "Hi Bob!");  // (1)!
         ```
+
+        1. All the complexity from the previous example is now hidden inside this function - caller only needs to provide recipient, subject, and message
 
     === ":material-language-cpp: C++ - With Abstraction"
 
         ```cpp title="Sending Email With Abstraction" linenums="1"
         // With abstraction: complexity hidden
-        send_email("bob@example.com", "Hello", "Hi Bob!");
+        send_email("bob@example.com", "Hello", "Hi Bob!");  // (1)!
         ```
+
+        1. All the complexity from the previous example is now hidden inside this function - caller only needs to provide recipient, subject, and message
 
     The caller doesn't need to know *how* emails work—only *that* they can send one. The 50 lines of SMTP configuration, authentication, and error handling still exist, but they're someone else's problem now.
 

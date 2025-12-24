@@ -559,7 +559,7 @@ def parse(tokens):  # (1)!
 
     ??? tip "Recursion and the Call Stack"
 
-        Every recursive call relies on the **[function call stack](../data_structures/abstract_data_types_and_stack.md#1-function-call-stack)**—a fundamental data structure that manages function execution.
+        Every recursive call relies on the **[function call stack](../data_structures/abstract_data_types_and_stack.md#function-call-stack)**—a fundamental data structure that manages function execution.
 
         When `(factorial 5)` runs, the stack grows with each recursive call:
         ```

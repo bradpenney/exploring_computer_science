@@ -354,7 +354,7 @@ If \(f(x) = x^2\), then \(f'(x) = 2x\). The derivative operator is higher-order.
 
 === "Partial Application"
 
-    ### The Problem
+    **The Problem**
 
     Suppose you run a retail store with a fixed 5% sales tax. Every time you calculate total cost, you must specify the tax rate:
 
@@ -367,7 +367,7 @@ If \(f(x) = x^2\), then \(f'(x) = 2x\). The derivative operator is higher-order.
 
     Repeating `0.05` is tedious and error-prone. If the tax rate changes, you must update every call.
 
-    ### The Solution
+    **The Solution**
 
     Create a specialized version of `COMP-COST` that "bakes in" the tax rate:
 
@@ -415,12 +415,17 @@ If \(f(x) = x^2\), then \(f'(x) = 2x\). The derivative operator is higher-order.
     === ":material-language-javascript: JavaScript"
 
         ```javascript title="Partial Application" linenums="1"
-        function makeFixedTaxCalculator(fixedTaxRate) {
-            return function(price) {
-                return compCost(price, fixedTaxRate);
-            };
+        function makeFixedTaxCalculator(fixedTaxRate) {  // (1)!
+            return function(price) {  // (2)!
+                return compCost(price, fixedTaxRate);  // (3)!
+            };  // (4)!
         }
         ```
+
+        1. **Outer Function**: Takes the configuration value (tax rate).
+        2. **Inner Function**: Anonymous function defines the behavior to return.
+        3. **Closure Capture**: Accesses `fixedTaxRate` from the outer scope.
+        4. **Return**: Sends the function itself back to the caller.
 
         **Usage:**
 
@@ -432,13 +437,17 @@ If \(f(x) = x^2\), then \(f'(x) = 2x\). The derivative operator is higher-order.
     === ":material-language-go: Go"
 
         ```go title="Partial Application" linenums="1"
-        // Go supports closures
-        func makeFixedTaxCalculator(fixedTaxRate float64) func(float64) float64 {
-            return func(price float64) float64 {
-                return compCost(price, fixedTaxRate)
-            }
+        func makeFixedTaxCalculator(fixedTaxRate float64) func(float64) float64 {  // (1)!
+            return func(price float64) float64 {  // (2)!
+                return compCost(price, fixedTaxRate)  // (3)!
+            }  // (4)!
         }
         ```
+
+        1. **Outer Function**: Return type is a function signature `func(float64) float64`.
+        2. **Inner Function**: Anonymous function (closure) created inline.
+        3. **Closure Capture**: Go closures automatically capture variables from outer scope.
+        4. **Return**: Returns the closure, allowing partial application.
 
         **Usage:**
 
@@ -450,11 +459,14 @@ If \(f(x) = x^2\), then \(f'(x) = 2x\). The derivative operator is higher-order.
     === ":material-language-rust: Rust"
 
         ```rust title="Partial Application" linenums="1"
-        fn make_fixed_tax_calculator(fixed_tax_rate: f64) -> impl Fn(f64) -> f64 {
-            // 'move' captures fixed_tax_rate by value
-            move |price| comp_cost(price, fixed_tax_rate)
-        }
+        fn make_fixed_tax_calculator(fixed_tax_rate: f64) -> impl Fn(f64) -> f64 {  // (1)!
+            move |price| comp_cost(price, fixed_tax_rate)  // (2)!
+        }  // (3)!
         ```
+
+        1. **Return Type**: `impl Fn(f64) -> f64` returns a closure that takes f64 and returns f64.
+        2. **Move Keyword**: Transfers ownership of `fixed_tax_rate` into the closure.
+        3. **Closure Expression**: Rust's `|param| expression` syntax for inline functions.
 
         **Usage:**
 
@@ -468,10 +480,14 @@ If \(f(x) = x^2\), then \(f'(x) = 2x\). The derivative operator is higher-order.
         ```java title="Partial Application" linenums="1"
         import java.util.function.Function;
 
-        public static Function<Double, Double> makeFixedTaxCalculator(double fixedTaxRate) {
-            return (price) -> compCost(price, fixedTaxRate);
-        }
+        public static Function<Double, Double> makeFixedTaxCalculator(double fixedTaxRate) {  // (1)!
+            return (price) -> compCost(price, fixedTaxRate);  // (2)!
+        }  // (3)!
         ```
+
+        1. **Generic Type**: `Function<Double, Double>` takes a Double and returns a Double.
+        2. **Lambda Expression**: Java's `(param) -> expression` syntax captures `fixedTaxRate`.
+        3. **Closure**: Lambda expressions in Java automatically capture variables from enclosing scope.
 
         **Usage:**
 
@@ -485,12 +501,16 @@ If \(f(x) = x^2\), then \(f'(x) = 2x\). The derivative operator is higher-order.
         ```cpp title="Partial Application" linenums="1"
         #include <functional>
 
-        std::function<double(double)> makeFixedTaxCalculator(double fixedTaxRate) {
-            return [fixedTaxRate](double price) {
-                return compCost(price, fixedTaxRate);
+        std::function<double(double)> makeFixedTaxCalculator(double fixedTaxRate) {  // (1)!
+            return [fixedTaxRate](double price) {  // (2)!
+                return compCost(price, fixedTaxRate);  // (3)!
             };
         }
         ```
+
+        1. **Return Type**: `std::function<double(double)>` is a function wrapper for callables.
+        2. **Capture List**: `[fixedTaxRate]` explicitly captures the variable by value.
+        3. **Lambda Body**: Accesses the captured value to create partial application.
 
         **Usage:**
 
@@ -501,11 +521,11 @@ If \(f(x) = x^2\), then \(f'(x) = 2x\). The derivative operator is higher-order.
 
 === "Map (Functions as Parameters)"
 
-    ### The Problem
+    **The Problem**
 
     You have a list of numbers and want to perform various operations (square, double, negate) without rewriting the loop logic every time.
 
-    ### The Solution
+    **The Solution**
 
     ??? tip "1958: The First Functional Language (Lisp)"
         **John McCarthy** created **Lisp**, the first language to treat functions as "first-class citizens"—meaning they could be passed around just like numbers.
@@ -542,38 +562,49 @@ If \(f(x) = x^2\), then \(f'(x) = 2x\). The derivative operator is higher-order.
     === ":material-language-javascript: JavaScript"
 
         ```javascript title="Map Function" linenums="1"
-        function map(func, numbers) {
+        function map(func, numbers) {  // (1)!
             let result = [];
             for (let num of numbers) {
-                result.push(func(num));
+                result.push(func(num));  // (2)!
             }
             return result;
         }
         ```
 
+        1. Takes a **function** as the first parameter (higher-order).
+        2. **Higher-Order Magic**: Calls the passed-in function on each element.
+
     === ":material-language-go: Go"
 
         ```go title="Map Function" linenums="1"
-        func mapInts(f func(int) int, numbers []int) []int {
-            result := make([]int, len(numbers))
+        func mapInts(f func(int) int, numbers []int) []int {  // (1)!
+            result := make([]int, len(numbers))  // (2)!
             for i, v := range numbers {
-                result[i] = f(v)
+                result[i] = f(v)  // (3)!
             }
             return result
         }
         ```
 
+        1. **Function Parameter**: `f func(int) int` takes a function as an argument.
+        2. **Pre-allocate**: Creates result slice with known capacity for efficiency.
+        3. **Apply Function**: Calls `f` on each element, storing the transformed value.
+
     === ":material-language-rust: Rust"
 
         ```rust title="Map Function" linenums="1"
-        fn map_vec(func: fn(i32) -> i32, numbers: &Vec<i32>) -> Vec<i32> {
+        fn map_vec(func: fn(i32) -> i32, numbers: &Vec<i32>) -> Vec<i32> {  // (1)!
             let mut result = Vec::new();
-            for &num in numbers {
-                result.push(func(num));
+            for &num in numbers {  // (2)!
+                result.push(func(num));  // (3)!
             }
             return result;
         }
         ```
+
+        1. **Function Pointer**: `fn(i32) -> i32` is a function pointer type.
+        2. **Dereference Pattern**: `&num` pattern matches to dereference the element.
+        3. **Higher-Order Call**: Applies the function pointer to each element.
 
     === ":material-language-java: Java"
 
@@ -582,14 +613,17 @@ If \(f(x) = x^2\), then \(f'(x) = 2x\). The derivative operator is higher-order.
         import java.util.ArrayList;
         import java.util.function.Function;
 
-        public static List<Integer> map(Function<Integer, Integer> func, List<Integer> numbers) {
+        public static List<Integer> map(Function<Integer, Integer> func, List<Integer> numbers) {  // (1)!
             List<Integer> result = new ArrayList<>();
             for (Integer num : numbers) {
-                result.add(func.apply(num));
+                result.add(func.apply(num));  // (2)!
             }
             return result;
         }
         ```
+
+        1. **Function Interface**: Uses Java's `Function<T, R>` interface for type-safe function parameters.
+        2. **Apply Method**: Calls the function using `.apply()` method required by the interface.
 
     === ":material-language-cpp: C++"
 
@@ -597,14 +631,18 @@ If \(f(x) = x^2\), then \(f'(x) = 2x\). The derivative operator is higher-order.
         #include <vector>
         #include <functional>
 
-        std::vector<int> map(std::function<int(int)> func, const std::vector<int>& numbers) {
+        std::vector<int> map(std::function<int(int)> func, const std::vector<int>& numbers) {  // (1)!
             std::vector<int> result;
-            for (int num : numbers) {
-                result.push_back(func(num));
+            for (int num : numbers) {  // (2)!
+                result.push_back(func(num));  // (3)!
             }
             return result;
         }
         ```
+
+        1. **Function Wrapper**: `std::function<int(int)>` can hold any callable with matching signature.
+        2. **Range-Based Loop**: Modern C++ syntax for iterating over containers.
+        3. **Function Call**: Invokes the wrapped function on each element.
 
     **Usage:**
 
@@ -745,9 +783,10 @@ This "chain of machines" allows you to stop at any point. If you only have `x`, 
     === ":material-language-javascript: JavaScript"
 
         ```javascript title="Curried Add" linenums="1"
-        // Using arrow functions for brevity
-        const addCurried = x => y => x + y;
+        const addCurried = x => y => x + y;  // (1)!
         ```
+
+        1. **Arrow Function Chain**: `x =>` returns a function, which itself returns `y => x + y`. Currying in one line!
 
         **Usage:**
 
@@ -762,12 +801,16 @@ This "chain of machines" allows you to stop at any point. If you only have `x`, 
     === ":material-language-go: Go"
 
         ```go title="Curried Add" linenums="1"
-        func addCurried(x int) func(int) int {
-            return func(y int) int {
-                return x + y
+        func addCurried(x int) func(int) int {  // (1)!
+            return func(y int) int {  // (2)!
+                return x + y  // (3)!
             }
         }
         ```
+
+        1. **Stage 1**: Takes first argument `x`, returns a function.
+        2. **Stage 2**: The returned function waits for `y`.
+        3. **Combine**: Adds both captured `x` and parameter `y`.
 
         **Usage:**
 
@@ -782,10 +825,14 @@ This "chain of machines" allows you to stop at any point. If you only have `x`, 
     === ":material-language-rust: Rust"
 
         ```rust title="Curried Add" linenums="1"
-        fn add_curried(x: i32) -> impl Fn(i32) -> i32 {
-            move |y| x + y
-        }
+        fn add_curried(x: i32) -> impl Fn(i32) -> i32 {  // (1)!
+            move |y| x + y  // (2)!
+        }  // (3)!
         ```
+
+        1. **Stage 1**: Returns an `impl Fn` trait object (a closure).
+        2. **Stage 2**: `move` keyword captures `x` by value; closure waits for `y`.
+        3. **Concise**: Rust's expression-based syntax allows single-line currying.
 
         **Usage:**
 
@@ -802,10 +849,14 @@ This "chain of machines" allows you to stop at any point. If you only have `x`, 
         ```java title="Curried Add" linenums="1"
         import java.util.function.Function;
 
-        public static Function<Integer, Integer> addCurried(int x) {
-            return (y) -> x + y;
-        }
+        public static Function<Integer, Integer> addCurried(int x) {  // (1)!
+            return (y) -> x + y;  // (2)!
+        }  // (3)!
         ```
+
+        1. **Stage 1**: Returns `Function<Integer, Integer>` - a function waiting for one Integer.
+        2. **Stage 2**: Lambda captures `x` and waits for `y` parameter.
+        3. **Type Safety**: Generic `Function` interface ensures compile-time type checking.
 
         **Usage:**
 
@@ -822,12 +873,16 @@ This "chain of machines" allows you to stop at any point. If you only have `x`, 
         ```cpp title="Curried Add" linenums="1"
         #include <functional>
 
-        std::function<int(int)> addCurried(int x) {
-            return [x](int y) {
+        std::function<int(int)> addCurried(int x) {  // (1)!
+            return [x](int y) {  // (2)!
                 return x + y;
-            };
+            };  // (3)!
         }
         ```
+
+        1. **Stage 1**: Returns a function object that takes an int.
+        2. **Capture by Value**: `[x]` captures `x` into the lambda's closure.
+        3. **Stage 2**: The returned lambda waits for `y`, completing the addition.
 
         **Usage:**
 
@@ -877,11 +932,14 @@ This "chain of machines" allows you to stop at any point. If you only have `x`, 
     === ":material-language-python: Python"
 
         ```python title="Curried Logger" linenums="1"
-        def log_curried(level):
+        def log_curried(level):  # (1)!
             def inner(message):
-                print(f"{level}: {message}")
+                print(f"{level}: {message}")  # (2)!
             return inner
         ```
+
+        1. **Configuration Stage**: Captures the log level once.
+        2. **Execution Stage**: Inner function uses captured `level` with each message.
 
         **Usage:**
 
@@ -894,10 +952,13 @@ This "chain of machines" allows you to stop at any point. If you only have `x`, 
     === ":material-language-javascript: JavaScript"
 
         ```javascript title="Curried Logger" linenums="1"
-        const logCurried = level => message => {
-            console.log(`${level}: ${message}`);
+        const logCurried = level => message => {  // (1)!
+            console.log(`${level}: ${message}`);  // (2)!
         };
         ```
+
+        1. **Double Arrow**: First arrow captures `level`, second arrow captures `message`.
+        2. **Template Literals**: JavaScript's `` `${var}` `` syntax for string interpolation.
 
         **Usage:**
 
@@ -912,12 +973,15 @@ This "chain of machines" allows you to stop at any point. If you only have `x`, 
         ```go title="Curried Logger" linenums="1"
         import "fmt"
 
-        func logCurried(level string) func(string) {
-            return func(message string) {
+        func logCurried(level string) func(string) {  // (1)!
+            return func(message string) {  // (2)!
                 fmt.Printf("%s: %s\n", level, message)
             }
         }
         ```
+
+        1. **Return Type**: `func(string)` returns a function that takes a string (no return value).
+        2. **Closure for Config**: Inner function remembers `level` for all future calls.
 
         **Usage:**
 
@@ -929,10 +993,13 @@ This "chain of machines" allows you to stop at any point. If you only have `x`, 
     === ":material-language-rust: Rust"
 
         ```rust title="Curried Logger" linenums="1"
-        fn log_curried(level: String) -> impl Fn(String) {
-            move |message| println!("{}: {}", level, message)
+        fn log_curried(level: String) -> impl Fn(String) {  // (1)!
+            move |message| println!("{}: {}", level, message)  // (2)!
         }
         ```
+
+        1. **Trait Return**: `impl Fn(String)` returns any closure that implements the Fn trait.
+        2. **Move Ownership**: `move` transfers ownership of `level` into the closure.
 
         **Usage:**
 
@@ -946,10 +1013,13 @@ This "chain of machines" allows you to stop at any point. If you only have `x`, 
         ```java title="Curried Logger" linenums="1"
         import java.util.function.Consumer;
 
-        public static Consumer<String> logCurried(String level) {
-            return (message) -> System.out.println(level + ": " + message);
+        public static Consumer<String> logCurried(String level) {  // (1)!
+            return (message) -> System.out.println(level + ": " + message);  // (2)!
         }
         ```
+
+        1. **Consumer Type**: `Consumer<String>` accepts a String but returns nothing (void).
+        2. **Lambda Capture**: Lambda automatically captures `level` from enclosing scope.
 
         **Usage:**
 
@@ -965,12 +1035,15 @@ This "chain of machines" allows you to stop at any point. If you only have `x`, 
         #include <string>
         #include <functional>
 
-        std::function<void(std::string)> logCurried(std::string level) {
-            return [level](std::string message) {
+        std::function<void(std::string)> logCurried(std::string level) {  // (1)!
+            return [level](std::string message) {  // (2)!
                 std::cout << level << ": " << message << std::endl;
             };
         }
         ```
+
+        1. **Void Return**: `std::function<void(std::string)>` takes a string, returns nothing.
+        2. **Capture String**: Lambda captures `level` by value (copied into closure).
 
         **Usage:**
 
@@ -1215,5 +1288,11 @@ Higher-order functions, in particular, represent a shift in thinking: instead of
 ---
 
 Procedures transform sequences of steps into reusable building blocks. Higher-order functions let you compose those blocks in infinitely flexible ways. Together, they form the foundation of abstraction—the single most important idea in computer science. Master them, and you've mastered the art of managing complexity.
+
+## Video Summary
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/8kKHmtYHlpM" title="Procedures and Higher-Order Functions" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
 
 
