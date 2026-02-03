@@ -95,6 +95,10 @@ In [Binary Trees](../building_blocks/binary_trees_and_representation.md), every 
 | **Recursive Case** | Breaks the problem into a smaller version of itself. |
 | **Call Stack** | The memory where the computer tracks recursive calls ($O(N)$ space). |
 
+## Further Reading
+
+- **[Scheme Primer](../programming_languages/scheme_primer.md)** — A guide to a language that uses recursion for *everything* (no loops allowed!)
+
 ---
 
 Recursion is a mindset shift. Instead of thinking about "Doing this 10 times," you think about "Doing this once, then doing it again for the rest." Mastering recursion is the key to unlocking the most powerful and elegant algorithms in computer science.

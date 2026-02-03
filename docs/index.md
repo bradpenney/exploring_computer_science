@@ -26,6 +26,8 @@ A subsection of [BradPenney.io](https://bradpenney.io), this site documents my j
 
     ---
 
+    **Languages** — [Scheme Primer](programming_languages/scheme_primer.md)
+
     **Paradigms** — [Procedures & Higher-Order Functions](programming_languages/procedures_and_higher_order_functions.md)
 
     **Coming Soon** — OOP, Programming Paradigms, Interpreters vs. Compilers
@@ -38,13 +40,13 @@ A subsection of [BradPenney.io](https://bradpenney.io), this site documents my j
 
     **Advanced Structures** — Binary Search Trees, Heaps, and Graphs
 
-- :material-graph-outline: **Algorithms** *(Coming Soon)*
+- :material-graph-outline: **Algorithms**
 
     ---
 
-    **Complexity** — Big-O Notation (Time & Space), Turing Machines
+    **Logic** — [Recursion](algorithms_complexity/recursion.md)
 
-    **Logic** — Searching, Sorting, Recursion, and Graph Traversal
+    **Coming Soon** — Big-O Notation, Turing Machines, Searching, Sorting, and Graph Traversal
 
 - :material-server-network: **Systems** *(Coming Soon)*
 

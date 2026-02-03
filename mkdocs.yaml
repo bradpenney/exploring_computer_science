@@ -100,6 +100,7 @@ nav:
   #      - Queues & Deques: data_structures/queues_and_deques.md  # COMP200 Unit 2
   #      - Linked Lists: data_structures/linked_lists.md  # COMP200 Unit 2
   - Programming & Languages:
+      - Scheme Primer: programming_languages/scheme_primer.md
       #      - Programming Paradigms: programming_languages/programming_paradigms.md  # COMP200 Unit 3
       - Procedures & Higher-Order Functions: programming_languages/procedures_and_higher_order_functions.md
 #      - OOP: Classes & Objects: programming_languages/oop_classes_and_objects.md  # COMP200 Unit 3

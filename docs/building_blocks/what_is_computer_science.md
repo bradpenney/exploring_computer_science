@@ -41,6 +41,8 @@ This is the study of **computational complexity**—categorizing problems by how
 
 This is where programming languages come in. But beneath the syntax lies a deeper question: What are the fundamental ways to describe processes? [Finite State Machines](finite_state_machines.md), [Recursive Transition Networks](recursive_transition_networks.md), [BNF grammars](backus_naur_form.md), lambda calculus, Turing machines—these are all answers to "How do we write down what we want a computer to do?"
 
+You can see these principles in action in our **[Scheme Primer](../programming_languages/scheme_primer.md)**, which explores a language designed specifically to be a minimal and elegant expression of computation.
+
 ### How do we build reliable systems?
 
 Software is among the most complex things humans create. A modern operating system has tens of millions of lines of code. How do we build systems that work? That don't crash? That hackers can't break into? That scale to billions of users?
@@ -222,18 +224,18 @@ Computer science is philosophy made executable. 💭→💻
 
 ## Getting Started
 
-If you're new to CS, start here:
+If you're new to CS, follow this roadmap:
 
 1. **[Computational Thinking](computational_thinking.md)** — The mental toolkit
 2. **[Finite State Machines](finite_state_machines.md)** — Simple computation models
 3. **[Recursive Transition Networks](recursive_transition_networks.md)** — Describing languages visually
 4. **[Backus-Naur Form](backus_naur_form.md)** — Describing languages textually
+5. **[Scheme Primer](../programming_languages/scheme_primer.md)** — Your first look at a functional language
+6. **[Procedures & HOFs](../programming_languages/procedures_and_higher_order_functions.md)** — Mastering abstraction
 
 *Coming soon:*
-5. Regular Expressions — Practical pattern matching
-6. How Parsers Work — From theory to implementation
-
-Each topic builds on the previous, moving from abstract thinking to concrete tools.
+7. Regular Expressions — Practical pattern matching
+8. How Parsers Work — From theory to implementation
 
 ??? example "How These Subfields Connect: A Google Search"
 

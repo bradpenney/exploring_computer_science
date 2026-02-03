@@ -1283,6 +1283,7 @@ Higher-order functions, in particular, represent a shift in thinking: instead of
 - **David Evans, [Introduction to Computing](https://computingbook.org/)** — Chapters 3-4 cover procedures and abstraction
 - **Abelson & Sussman, [Structure and Interpretation of Computer Programs](https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/index.html)** — Definitive text on procedures and higher-order functions
 - **[Computational Thinking](../building_blocks/computational_thinking.md)** — Abstraction and algorithm design
+- **[Scheme Primer](scheme_primer.md)** — A beginner-friendly guide to the language where these concepts were born
 - **[Scheme and Parse Trees](../building_blocks/scheme_and_parse_trees.md)** — First-class functions in Scheme
 
 ---
