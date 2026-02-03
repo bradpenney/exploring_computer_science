@@ -1,3 +1,6 @@
+---
+description: Understanding Finite State Machines (FSMs), the elegant model behind traffic lights, game AI, and compilers.
+---
 # Finite State Machines (FSMs)
 
 Imagine modeling any system that moves through distinct states—a traffic light cycling through red, yellow, and green; a turnstile that's either locked or unlocked; a video game enemy switching between patrolling, chasing, and attacking. These are all **Finite State Machines**, one of the most elegant and foundational models in computer science.

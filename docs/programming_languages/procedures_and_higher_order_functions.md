@@ -1,3 +1,6 @@
+---
+description: Learn how procedures abstract logic and how higher-order functions treat code as data.
+---
 # Procedures and Higher-Order Functions
 
 When you calculate the total price of an item including tax, you don't rederive the formula every time. You have a mental procedure: multiply the price by the tax rate, add the result to the original price, done. When a chef teaches an apprentice to make a sauce, they don't list every molecular interaction—they provide a procedure: heat butter, add flour, whisk until smooth, gradually add milk.

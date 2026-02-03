@@ -1,3 +1,6 @@
+---
+description: Computer science isn't about computers. It's the systematic study of what can be computed, how efficiently, and how to solve problems algorithmically.
+---
 # What is Computer Science?
 
 Here's a trick question: What do computers have to do with computer science?

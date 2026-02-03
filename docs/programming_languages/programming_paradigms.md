@@ -1,3 +1,6 @@
+---
+description: Imperative vs. Declarative: Understanding the major styles of programming.
+---
 # Programming Paradigms: Imperative vs. Declarative
 
 When you learn your first programming language (usually Python, C, or Java), you are implicitly learning a specific "style" of thinking. This style is called a **Programming Paradigm**.

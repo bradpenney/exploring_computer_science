@@ -1,3 +1,6 @@
+---
+description: Exploring Computer Science transforms raw lecture notes into structured, teaching-focused articles designed to explain why things work, not just how.
+---
 <img src="images/exploring_computer_science.png" alt="Exploring Computer Science" class="img-responsive-right" width="300">
 
 # Exploring Computer Science

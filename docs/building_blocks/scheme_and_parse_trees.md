@@ -1,3 +1,6 @@
+---
+description: Why Lisp and Scheme use parentheses: Understanding prefix notation and parse trees.
+---
 # Scheme, Lisp, and Parse Trees
 
 When you write `3 + 4 * 5` in mathematics, everyone agrees it means `3 + (4 * 5) = 23`, not `(3 + 4) * 5 = 35`. Operator precedence rules—memorized through years of schooling—determine this. But what if there were a notation that never needed precedence rules? What if the structure of the expression itself made evaluation order crystal clear?

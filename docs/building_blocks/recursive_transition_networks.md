@@ -1,3 +1,6 @@
+---
+description: Recursive Transition Networks (RTNs): The visual way to describe complex, nested grammars.
+---
 # Recursive Transition Networks (RTNs)
 
 When you write `x = 3 + 4 * 2` in any programming language, the compiler knows—without ambiguity—that this means `3 + (4 * 2)`, not `(3 + 4) * 2`. When you type "The cat sat on the mat," a grammar checker can instantly tell it's valid English, while "Cat the mat on sat the" is nonsense. How do these systems make such determinations?

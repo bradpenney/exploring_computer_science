@@ -1,3 +1,6 @@
+---
+description: Backus-Naur Form (BNF) explained: The standard notation for defining programming language syntax.
+---
 # Backus-Naur Form (BNF)
 
 If [Recursive Transition Networks](recursive_transition_networks.md) are the *visual* way to describe a grammar, then **Backus-Naur Form** (BNF) is the *textual* equivalent. Same idea, different notation—and one that's far easier to type into a computer.

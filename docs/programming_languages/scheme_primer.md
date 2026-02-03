@@ -1,3 +1,6 @@
+---
+description: A beginner-friendly introduction to the Scheme programming language, covering lists, recursion, and higher-order functions.
+---
 # A Beginner's Guide to Scheme
 
 Scheme is one of the most elegant programming languages ever designed. Created in the 1970s at MIT by Guy Steele and Gerald Sussman, it strips programming down to its essential elements: expressions, definitions, and procedures. While Scheme isn't widely used in industry today, learning it teaches you to think about computation in a fundamentally different way.

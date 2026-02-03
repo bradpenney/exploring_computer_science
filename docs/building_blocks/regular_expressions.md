@@ -1,3 +1,6 @@
+---
+description: A practical guide to Regex: the text processing powerhouse used in every modern programming language.
+---
 # Regular Expressions
 
 You've seen [Finite State Machines](finite_state_machines.md)—elegant diagrams showing states and transitions. You've seen [BNF](backus_naur_form.md)—formal grammar notation. But when you need to actually *use* pattern matching in your code, you reach for **regular expressions** (regex).

@@ -1,4 +1,6 @@
 site_name: "Exploring Computer Science"
+site_url: https://cs.bradpenney.io
+site_description: Decoding the machines that run our world.
 extra_css:
   - stylesheets/extra.css
 theme:
@@ -31,8 +33,14 @@ theme:
     - content.tooltips
     - content.code.mermaid
 
+extra:
+  analytics:
+    provider: google
+    property: G-ZN2BGBVH7Q
+
 plugins:
   - search
+  - social
   - htmlproofer:
       enabled: true
       validate_rendered_template: true

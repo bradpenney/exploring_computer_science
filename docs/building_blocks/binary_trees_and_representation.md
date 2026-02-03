@@ -1,3 +1,6 @@
+---
+description: Binary representation and trees: The foundation of how computers store and organize information.
+---
 # Binary Trees and Binary Representation
 
 When you fill out a form and select your country from a dropdown menu, how does the system find "United States" among 195 countries in milliseconds? When a compiler checks your code's syntax tree for errors, what structure lets it traverse thousands of nodes efficiently? When your computer represents the number 42, why does it use `101010` instead of `42`?

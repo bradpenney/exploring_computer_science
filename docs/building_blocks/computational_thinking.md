@@ -1,3 +1,6 @@
+---
+description: Master the mental toolkit of computer science: Decomposition, Pattern Recognition, Abstraction, and Algorithm Design.
+---
 # Computational Thinking
 
 Before you can write code, you need to *think* in a way that computers can follow. That's not about memorizing syntax or learning keyboard shortcuts—it's about developing a mental toolkit for breaking down problems, spotting patterns, and building solutions that scale.

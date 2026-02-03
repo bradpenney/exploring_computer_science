@@ -1,3 +1,6 @@
+---
+description: OOP Encapsulation: Hiding complexity behind clean interfaces.
+---
 # OOP: Encapsulation
 
 Imagine you are using a TV remote. To turn up the volume, you press a button labeled `+`. You don't need to open the remote, touch the copper wires, or understand the infrared signals being sent. The complex internal "wiring" is hidden from you, and you are given a simple "interface" (the buttons).

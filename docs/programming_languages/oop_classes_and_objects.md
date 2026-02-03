@@ -1,3 +1,6 @@
+---
+description: The foundation of Object-Oriented Programming: Understanding Classes as blueprints and Objects as instances.
+---
 # OOP: Classes & Objects
 
 In early programming, software was just a list of instructions (Procedural Programming). If you wanted to simulate a car, you’d have variables for `car_color`, `car_speed`, and a function `drive(car_speed)`.

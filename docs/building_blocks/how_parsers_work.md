@@ -1,3 +1,6 @@
+---
+description: From raw text to meaning: How parsers use grammars to understand code and data.
+---
 # How Parsers Work
 
 You've learned about [RTNs](recursive_transition_networks.md), [BNF](backus_naur_form.md), and [Finite State Machines](finite_state_machines.md). These are all ways to *describe* languages. But how do we actually *use* these descriptions to process text? How does Python know that `print("hello")` is valid but `print("hello` isn't?
