@@ -1,0 +1,2099 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Decoding the machines that run our world.">
+      
+      
+        <meta name="author" content="Brad Penney">
+      
+      
+        <link rel="canonical" href="https://cs.bradpenney.io/building_blocks/scheme_and_parse_trees/">
+      
+      
+        <link rel="prev" href="../binary_trees_and_representation/">
+      
+      
+        <link rel="next" href="../../data_structures/abstract_data_types_and_stack/">
+      
+      
+      <link rel="icon" href="../../images/exploring_computer_science.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Scheme & Parse Trees - Exploring Computer Science</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+  
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M1%207.775V2.75C1%201.784%201.784%201%202.75%201h5.025c.464%200%20.91.184%201.238.513l6.25%206.25a1.75%201.75%200%200%201%200%202.474l-5.026%205.026a1.75%201.75%200%200%201-2.474%200l-6.25-6.25A1.75%201.75%200%200%201%201%207.775m1.5%200c0%20.066.026.13.073.177l6.25%206.25a.25.25%200%200%200%20.354%200l5.025-5.025a.25.25%200%200%200%200-.354l-6.25-6.25a.25.25%200%200%200-.177-.073H2.75a.25.25%200%200%200-.25.25ZM6%205a1%201%200%201%201%200%202%201%201%200%200%201%200-2%22/%3E%3C/svg%3E');--md-admonition-icon--abstract:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M2.5%201.75v11.5c0%20.138.112.25.25.25h3.17a.75.75%200%200%201%200%201.5H2.75A1.75%201.75%200%200%201%201%2013.25V1.75C1%20.784%201.784%200%202.75%200h8.5C12.216%200%2013%20.784%2013%201.75v7.736a.75.75%200%200%201-1.5%200V1.75a.25.25%200%200%200-.25-.25h-8.5a.25.25%200%200%200-.25.25m13.274%209.537zl-4.557%204.45a.75.75%200%200%201-1.055-.008l-1.943-1.95a.75.75%200%200%201%201.062-1.058l1.419%201.425%204.026-3.932a.75.75%200%201%201%201.048%201.074M4.75%204h4.5a.75.75%200%200%201%200%201.5h-4.5a.75.75%200%200%201%200-1.5M4%207.75A.75.75%200%200%201%204.75%207h2a.75.75%200%200%201%200%201.5h-2A.75.75%200%200%201%204%207.75%22/%3E%3C/svg%3E');--md-admonition-icon--info:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M0%208a8%208%200%201%201%2016%200A8%208%200%200%201%200%208m8-6.5a6.5%206.5%200%201%200%200%2013%206.5%206.5%200%200%200%200-13M6.5%207.75A.75.75%200%200%201%207.25%207h1a.75.75%200%200%201%20.75.75v2.75h.25a.75.75%200%200%201%200%201.5h-2a.75.75%200%200%201%200-1.5h.25v-2h-.25a.75.75%200%200%201-.75-.75M8%206a1%201%200%201%201%200-2%201%201%200%200%201%200%202%22/%3E%3C/svg%3E');--md-admonition-icon--tip:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M3.499.75a.75.75%200%200%201%201.5%200v.996C5.9%202.903%206.793%203.65%207.662%204.376l.24.202c-.036-.694.055-1.422.426-2.163C9.1.873%2010.794-.045%2012.622.26%2014.408.558%2016%201.94%2016%204.25c0%201.278-.954%202.575-2.44%202.734l.146.508.065.22c.203.701.412%201.455.476%202.226.142%201.707-.4%203.03-1.487%203.898C11.714%2014.671%2010.27%2015%208.75%2015h-6a.75.75%200%200%201%200-1.5h1.376a4.5%204.5%200%200%201-.563-1.191%203.84%203.84%200%200%201-.05-2.063%204.65%204.65%200%200%201-2.025-.293.75.75%200%200%201%20.525-1.406c1.357.507%202.376-.006%202.698-.318l.009-.01a.747.747%200%200%201%201.06%200%20.75.75%200%200%201-.012%201.074c-.912.92-.992%201.835-.768%202.586.221.74.745%201.337%201.196%201.621H8.75c1.343%200%202.398-.296%203.074-.836.635-.507%201.036-1.31.928-2.602-.05-.603-.216-1.224-.422-1.93l-.064-.221c-.12-.407-.246-.84-.353-1.29a2.4%202.4%200%200%201-.507-.441%203.1%203.1%200%200%201-.633-1.248.75.75%200%200%201%201.455-.364c.046.185.144.436.31.627.146.168.353.305.712.305.738%200%201.25-.615%201.25-1.25%200-1.47-.95-2.315-2.123-2.51-1.172-.196-2.227.387-2.706%201.345-.46.92-.27%201.774.019%203.062l.042.19.01.05c.348.443.666.949.94%201.553a.75.75%200%201%201-1.365.62c-.553-1.217-1.32-1.94-2.3-2.768L6.7%205.527c-.814-.68-1.75-1.462-2.692-2.619a3.7%203.7%200%200%200-1.023.88c-.406.495-.663%201.036-.722%201.508.116.122.306.21.591.239.388.038.797-.06%201.032-.19a.75.75%200%200%201%20.728%201.31c-.515.287-1.23.439-1.906.373-.682-.067-1.473-.38-1.879-1.193L.75%205.677V5.5c0-.984.48-1.94%201.077-2.664.46-.559%201.05-1.055%201.673-1.353z%22/%3E%3C/svg%3E');--md-admonition-icon--success:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M13.78%204.22a.75.75%200%200%201%200%201.06l-7.25%207.25a.75.75%200%200%201-1.06%200L2.22%209.28a.75.75%200%200%201%20.018-1.042.75.75%200%200%201%201.042-.018L6%2010.94l6.72-6.72a.75.75%200%200%201%201.06%200%22/%3E%3C/svg%3E');--md-admonition-icon--question:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M0%208a8%208%200%201%201%2016%200A8%208%200%200%201%200%208m8-6.5a6.5%206.5%200%201%200%200%2013%206.5%206.5%200%200%200%200-13M6.92%206.085h.001a.749.749%200%201%201-1.342-.67c.169-.339.436-.701.849-.977C6.845%204.16%207.369%204%208%204a2.76%202.76%200%200%201%201.637.525c.503.377.863.965.863%201.725%200%20.448-.115.83-.329%201.15-.205.307-.47.513-.692.662-.109.072-.22.138-.313.195l-.006.004a6%206%200%200%200-.26.16%201%201%200%200%200-.276.245.75.75%200%200%201-1.248-.832c.184-.264.42-.489.692-.661q.154-.1.313-.195l.007-.004c.1-.061.182-.11.258-.161a1%201%200%200%200%20.277-.245C8.96%206.514%209%206.427%209%206.25a.61.61%200%200%200-.262-.525A1.27%201.27%200%200%200%208%205.5c-.369%200-.595.09-.74.187a1%201%200%200%200-.34.398M9%2011a1%201%200%201%201-2%200%201%201%200%200%201%202%200%22/%3E%3C/svg%3E');--md-admonition-icon--warning:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M6.457%201.047c.659-1.234%202.427-1.234%203.086%200l6.082%2011.378A1.75%201.75%200%200%201%2014.082%2015H1.918a1.75%201.75%200%200%201-1.543-2.575Zm1.763.707a.25.25%200%200%200-.44%200L1.698%2013.132a.25.25%200%200%200%20.22.368h12.164a.25.25%200%200%200%20.22-.368Zm.53%203.996v2.5a.75.75%200%200%201-1.5%200v-2.5a.75.75%200%200%201%201.5%200M9%2011a1%201%200%201%201-2%200%201%201%200%200%201%202%200%22/%3E%3C/svg%3E');--md-admonition-icon--failure:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M2.344%202.343za8%208%200%200%201%2011.314%2011.314A8.002%208.002%200%200%201%20.234%2010.089a8%208%200%200%201%202.11-7.746m1.06%2010.253a6.5%206.5%200%201%200%209.108-9.275%206.5%206.5%200%200%200-9.108%209.275M6.03%204.97%208%206.94l1.97-1.97a.749.749%200%200%201%201.275.326.75.75%200%200%201-.215.734L9.06%208l1.97%201.97a.749.749%200%200%201-.326%201.275.75.75%200%200%201-.734-.215L8%209.06l-1.97%201.97a.749.749%200%200%201-1.275-.326.75.75%200%200%201%20.215-.734L6.94%208%204.97%206.03a.75.75%200%200%201%20.018-1.042.75.75%200%200%201%201.042-.018%22/%3E%3C/svg%3E');--md-admonition-icon--danger:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M9.504.43a1.516%201.516%200%200%201%202.437%201.713L10.415%205.5h2.123c1.57%200%202.346%201.909%201.22%203.004l-7.34%207.142a1.25%201.25%200%200%201-.871.354h-.302a1.25%201.25%200%200%201-1.157-1.723L5.633%2010.5H3.462c-1.57%200-2.346-1.909-1.22-3.004zm1.047%201.074L3.286%208.571A.25.25%200%200%200%203.462%209H6.75a.75.75%200%200%201%20.694%201.034l-1.713%204.188%206.982-6.793A.25.25%200%200%200%2012.538%207H9.25a.75.75%200%200%201-.683-1.06l2.008-4.418.003-.006-.004-.009-.006-.006-.008-.001q-.005%200-.009.004%22/%3E%3C/svg%3E');--md-admonition-icon--bug:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M4.72.22a.75.75%200%200%201%201.06%200l1%20.999a3.5%203.5%200%200%201%202.441%200l.999-1a.748.748%200%200%201%201.265.332.75.75%200%200%201-.205.729l-.775.776c.616.63.995%201.493.995%202.444v.327q0%20.15-.025.292c.408.14.764.392%201.029.722l1.968-.787a.75.75%200%200%201%20.556%201.392L13%207.258V9h2.25a.75.75%200%200%201%200%201.5H13v.5q-.002.615-.141%201.186l2.17.868a.75.75%200%200%201-.557%201.392l-2.184-.873A5%205%200%200%201%208%2016a5%205%200%200%201-4.288-2.427l-2.183.873a.75.75%200%200%201-.558-1.392l2.17-.868A5%205%200%200%201%203%2011v-.5H.75a.75.75%200%200%201%200-1.5H3V7.258L.971%206.446a.75.75%200%200%201%20.558-1.392l1.967.787c.265-.33.62-.583%201.03-.722a1.7%201.7%200%200%201-.026-.292V4.5c0-.951.38-1.814.995-2.444L4.72%201.28a.75.75%200%200%201%200-1.06m.53%206.28a.75.75%200%200%200-.75.75V11a3.5%203.5%200%201%200%207%200V7.25a.75.75%200%200%200-.75-.75ZM6.173%205h3.654A.17.17%200%200%200%2010%204.827V4.5a2%202%200%201%200-4%200v.327c0%20.096.077.173.173.173%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M5%205.782V2.5h-.25a.75.75%200%200%201%200-1.5h6.5a.75.75%200%200%201%200%201.5H11v3.282l3.666%205.76C15.619%2013.04%2014.543%2015%2012.767%2015H3.233c-1.776%200-2.852-1.96-1.899-3.458Zm-2.4%206.565a.75.75%200%200%200%20.633%201.153h9.534a.75.75%200%200%200%20.633-1.153L12.225%2010.5h-8.45ZM9.5%202.5h-3V6c0%20.143-.04.283-.117.403L4.73%209h6.54L9.617%206.403A.75.75%200%200%201%209.5%206Z%22/%3E%3C/svg%3E');--md-admonition-icon--quote:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M1.75%202.5h10.5a.75.75%200%200%201%200%201.5H1.75a.75.75%200%200%201%200-1.5m4%205h8.5a.75.75%200%200%201%200%201.5h-8.5a.75.75%200%200%201%200-1.5m0%205h8.5a.75.75%200%200%201%200%201.5h-8.5a.75.75%200%200%201%200-1.5M2.5%207.75v6a.75.75%200%200%201-1.5%200v-6a.75.75%200%200%201%201.5%200%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-ZN2BGBVH7Q"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-ZN2BGBVH7Q",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-ZN2BGBVH7Q",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+      
+        <meta  property="og:type"  content="website" >
+      
+        <meta  property="og:title"  content="Scheme & Parse Trees - Exploring Computer Science" >
+      
+        <meta  property="og:description"  content="Decoding the machines that run our world." >
+      
+        <meta  property="og:image"  content="https://cs.bradpenney.io/assets/images/social/building_blocks/scheme_and_parse_trees.png" >
+      
+        <meta  property="og:image:type"  content="image/png" >
+      
+        <meta  property="og:image:width"  content="1200" >
+      
+        <meta  property="og:image:height"  content="630" >
+      
+        <meta  property="og:url"  content="https://cs.bradpenney.io/building_blocks/scheme_and_parse_trees/" >
+      
+        <meta  name="twitter:card"  content="summary_large_image" >
+      
+        <meta  name="twitter:title"  content="Scheme & Parse Trees - Exploring Computer Science" >
+      
+        <meta  name="twitter:description"  content="Decoding the machines that run our world." >
+      
+        <meta  name="twitter:image"  content="https://cs.bradpenney.io/assets/images/social/building_blocks/scheme_and_parse_trees.png" >
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#description-why-lisp-and-scheme-use-parentheses-understanding-prefix-notation-and-parse-trees" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Exploring Computer Science" class="md-header__button md-logo" aria-label="Exploring Computer Science" data-md-component="logo">
+      
+  <img src="../../images/exploring_computer_science.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Exploring Computer Science
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Scheme & Parse Trees
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Exploring Computer Science" class="md-nav__button md-logo" aria-label="Exploring Computer Science" data-md-component="logo">
+      
+  <img src="../../images/exploring_computer_science.png" alt="logo">
+
+    </a>
+    Exploring Computer Science
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Building Blocks
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Building Blocks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../what_is_computer_science/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    What is Computer Science?
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../computational_thinking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Computational Thinking
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../finite_state_machines/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Finite State Machines
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../regular_expressions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Regular Expressions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backus_naur_form/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Backus-Naur Form (BNF)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recursive_transition_networks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Recursive Transition Networks
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../how_parsers_work/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    How Parsers Work
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../binary_trees_and_representation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Binary Trees & Representation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Scheme & Parse Trees
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Scheme & Parse Trees
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#description-why-lisp-and-scheme-use-parentheses-understanding-prefix-notation-and-parse-trees" class="md-nav__link">
+    <span class="md-ellipsis">
+      description: Why Lisp and Scheme use parentheses: Understanding prefix notation and parse trees.
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scheme-lisp-and-parse-trees" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scheme, Lisp, and Parse Trees
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Scheme, Lisp, and Parse Trees">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is Scheme?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What is Scheme?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-prefix-notation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Prefix Notation?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s-expressions" class="md-nav__link">
+    <span class="md-ellipsis">
+      S-Expressions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="S-Expressions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#visualizing-s-expressions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Visualizing S-Expressions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-symbolic" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why "Symbolic"?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lists-as-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lists as Code
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#special-forms-breaking-the-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Special Forms: Breaking the Rules
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reading-scheme-expressions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reading Scheme Expressions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parse-trees-for-scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parse Trees for Scheme
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evaluation-order-post-order-traversal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Evaluation Order: Post-Order Traversal
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Evaluation Order: Post-Order Traversal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-5-6-7-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example: (+ (+ 5 6) (* 7 8))
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-ambiguity-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Ambiguity Problem
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Ambiguity Problem">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-parsers-love-prefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Parsers Love Prefix
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#historical-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      Historical Context
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scheme-in-action" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scheme in Action
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-study-scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Study Scheme?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#practice-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      Practice Problems
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-takeaways" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Takeaways
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-scheme-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Scheme Matters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#further-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      Further Reading
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#video-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Video Summary
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Data Structures
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Data Structures
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_structures/abstract_data_types_and_stack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Abstract Data Types & Stacks
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Programming & Languages
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Programming & Languages
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../programming_languages/scheme_primer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Scheme Primer
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../programming_languages/procedures_and_higher_order_functions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Procedures & Higher-Order Functions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#description-why-lisp-and-scheme-use-parentheses-understanding-prefix-notation-and-parse-trees" class="md-nav__link">
+    <span class="md-ellipsis">
+      description: Why Lisp and Scheme use parentheses: Understanding prefix notation and parse trees.
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scheme-lisp-and-parse-trees" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scheme, Lisp, and Parse Trees
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Scheme, Lisp, and Parse Trees">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is Scheme?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What is Scheme?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-prefix-notation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Prefix Notation?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s-expressions" class="md-nav__link">
+    <span class="md-ellipsis">
+      S-Expressions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="S-Expressions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#visualizing-s-expressions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Visualizing S-Expressions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-symbolic" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why "Symbolic"?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lists-as-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lists as Code
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#special-forms-breaking-the-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Special Forms: Breaking the Rules
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reading-scheme-expressions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reading Scheme Expressions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parse-trees-for-scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parse Trees for Scheme
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evaluation-order-post-order-traversal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Evaluation Order: Post-Order Traversal
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Evaluation Order: Post-Order Traversal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-5-6-7-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example: (+ (+ 5 6) (* 7 8))
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-ambiguity-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Ambiguity Problem
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Ambiguity Problem">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-parsers-love-prefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Parsers Love Prefix
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#historical-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      Historical Context
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scheme-in-action" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scheme in Action
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-study-scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Study Scheme?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#practice-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      Practice Problems
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-takeaways" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Takeaways
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-scheme-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Scheme Matters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#further-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      Further Reading
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#video-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Video Summary
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<hr />
+<h2 id="description-why-lisp-and-scheme-use-parentheses-understanding-prefix-notation-and-parse-trees">description: Why Lisp and Scheme use parentheses: Understanding prefix notation and parse trees.</h2>
+<h1 id="scheme-lisp-and-parse-trees">Scheme, Lisp, and Parse Trees</h1>
+<p>When you write <code>3 + 4 * 5</code> in mathematics, everyone agrees it means <code>3 + (4 * 5) = 23</code>, not <code>(3 + 4) * 5 = 35</code>. Operator precedence rules—memorized through years of schooling—determine this. But what if there were a notation that never needed precedence rules? What if the structure of the expression itself made evaluation order crystal clear?</p>
+<p>Enter <strong>Lisp</strong> and its dialect <strong>Scheme</strong>: languages where parentheses aren't decorative—they're structural. Where <code>(+ 3 (* 4 5))</code> is unambiguous. Where the written form directly reflects the parse tree that represents it.</p>
+<p>Understanding Scheme's prefix notation and its parse trees reveals something profound: the notation you choose shapes how you think about computation.</p>
+<details class="tip">
+<summary>The Lisp Family: A Quick Map</summary>
+<p>If you’ve heard of <strong>Emacs Lisp (Elisp)</strong> or <strong>Common Lisp</strong>, you’re looking at the same family tree. Lisp isn’t a single language, but a lineage of dialects that share the same "code is data" DNA.</p>
+<ul>
+<li><strong>Common Lisp</strong>: The "industrial" version—massive, feature-rich, and standardized.</li>
+<li><strong>Emacs Lisp (Elisp)</strong>: The specialized dialect used to build and extend the Emacs text editor. (Yes, the editor is mostly written in its own language.)</li>
+<li><strong>Scheme</strong>: The "academic" version—minimalist, elegant, and the focus of this article.</li>
+</ul>
+<p>We use Scheme because its syntax is so stripped-down that you can’t help but see the underlying structure of the computation.</p>
+</details>
+<h2 id="what-is-scheme">What is Scheme?</h2>
+<p>In most programming languages, you write:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>3 + 4
+</span></code></pre></div>
+<p>This is <strong>infix notation</strong>—the operator (<code>+</code>) sits between its operands.</p>
+<p>In Scheme, you write:</p>
+<div class="language-scheme highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span>
+</span></code></pre></div>
+<p>This is <strong>prefix notation</strong>—the operator comes first, followed by its operands.</p>
+<p><strong>Comparison:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Notation</th>
+<th style="text-align: left;">Addition</th>
+<th style="text-align: left;">Multiplication</th>
+<th style="text-align: left;">Nested</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Infix</strong></td>
+<td style="text-align: left;"><code>3 + 4</code></td>
+<td style="text-align: left;"><code>4 * 5</code></td>
+<td style="text-align: left;"><code>3 + 4 * 5</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Prefix (Scheme)</strong></td>
+<td style="text-align: left;"><code>(+ 3 4)</code></td>
+<td style="text-align: left;"><code>(* 4 5)</code></td>
+<td style="text-align: left;"><code>(+ 3 (* 4 5))</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="why-prefix-notation">Why Prefix Notation?</h3>
+<p><strong>Advantages:</strong></p>
+<ol>
+<li><strong>No precedence rules needed</strong>: Parentheses make structure explicit</li>
+<li><strong>Uniform syntax</strong>: Everything is <code>(function arg1 arg2 ...)</code></li>
+<li><strong>Easy to parse</strong>: No need for precedence-climbing or <a href="../how_parsers_work/">shunting-yard algorithms</a></li>
+<li><strong>Variable number of arguments</strong>: <code>(+ 1 2 3 4 5)</code> works naturally</li>
+</ol>
+<p><strong>Disadvantages:</strong></p>
+<ol>
+<li><strong>Unfamiliar</strong>: Humans learn infix in school</li>
+<li><strong>Lots of parentheses</strong>: Can be harder to read for complex expressions</li>
+</ol>
+<h2 id="s-expressions">S-Expressions</h2>
+<p>The term <strong>S-expression</strong> (symbolic expression) sounds complex, but it describes a very simple, recursive structure.</p>
+<p>Think of it like a system of <strong>nested boxes</strong>:</p>
+<ol>
+<li><strong>Atoms</strong>: These are the contents. A number (<code>42</code>) or a symbol (<code>+</code>) is an atom. It cannot be split further.</li>
+<li><strong>Lists</strong>: These are the boxes. A list is wrapped in parentheses <code>( ... )</code>.</li>
+</ol>
+<p><strong>The Golden Rule:</strong> A list can contain atoms, <em>or it can contain other lists.</em></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Definition</th>
+<th style="text-align: left;">Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Atom</strong></td>
+<td style="text-align: left;">A fundamental unit (number, symbol, string)</td>
+<td style="text-align: left;"><code>42</code>, <code>x</code>, <code>+</code>, <code>"hello"</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>List</strong></td>
+<td style="text-align: left;">A container holding zero or more S-expressions</td>
+<td style="text-align: left;"><code>(1 2 3)</code>, <code>(a (b c) d)</code>, <code>()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Because lists can contain lists, you naturally build a <strong>tree structure</strong>.</p>
+<h3 id="visualizing-s-expressions">Visualizing S-Expressions</h3>
+<p>Consider the S-expression: <code>(* (+ 1 2) 3)</code></p>
+<p>It is a <strong>List</strong> containing three things:</p>
+<ol>
+<li><strong>Atom</strong>: <code>*</code></li>
+<li><strong>List</strong>: <code>(+ 1 2)</code> (which itself contains three atoms)</li>
+<li><strong>Atom</strong>: <code>3</code></li>
+</ol>
+<p>If we draw this hierarchy, it is identical to a tree:</p>
+<pre class="mermaid"><code>graph TD
+    Root[List: * ... 3] --&gt; Atom1["Atom: *"]
+    Root --&gt; InnerList[List: + 1 2]
+    Root --&gt; Atom2["Atom: 3"]
+    InnerList --&gt; Atom3["Atom: +"]
+    InnerList --&gt; Atom4["Atom: 1"]
+    InnerList --&gt; Atom5["Atom: 2"]
+
+    style Root fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style InnerList fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff</code></pre>
+<h3 id="why-symbolic">Why "Symbolic"?</h3>
+<p>In most languages (like C or Java), variable names like <code>x</code> or <code>calculate</code> disappear when you compile the code—they turn into memory addresses.</p>
+<p>In an <strong>S-expression</strong>, symbols (words like <code>x</code>, <code>foo</code>, <code>+</code>) are distinct data types, just like numbers. The language can manipulate words and names as easily as it manipulates math. This is why it's called a <em>Symbolic</em> Expression.</p>
+<details class="info">
+<summary>Under the Hood: How does the CPU handle symbols?</summary>
+<p>In languages like C, a variable name like <code>radius</code> is completely erased during compilation and replaced with a memory address (e.g., <code>0x7ffe...</code>). The CPU only sees the address.</p>
+<p>In Lisp/Scheme, symbols <strong>persist</strong> during execution because the language uses an <strong>Environment</strong>: a giant lookup table in memory.</p>
+<ol>
+<li><strong>The Environment</strong>: When you call <code>(square 7)</code>, the language looks up the symbol <code>square</code> in its table to find the code it needs to run.</li>
+<li><strong>Pointers</strong>: To keep this fast, the language "interns" symbols. Every instance of <code>x</code> in your code points to the exact same "Symbol Object" in memory. The CPU doesn't compare the string "x"; it just compares the memory pointers to see if they match.</li>
+<li><strong>Code as Data</strong>: Because symbols aren't erased, a Lisp program can read its own source code, move symbols around, and even generate new functions while it is running.</li>
+</ol>
+</details>
+<p><strong>Examples of valid S-expressions:</strong></p>
+<div class="language-scheme highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="mi">42</span><span class="w">                  </span><span class="c1">; Atom (number)</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">hello</span><span class="w">               </span><span class="c1">; Atom (symbol)</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w">             </span><span class="c1">; List of three atoms</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">             </span><span class="c1">; List (function call)</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w">       </span><span class="c1">; List containing another list (nested)</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="p">()</span><span class="w">                  </span><span class="c1">; The Empty List (also called &quot;nil&quot;)</span>
+</span></code></pre></div>
+<h3 id="lists-as-code">Lists as Code</h3>
+<p>In Scheme, <strong>code is lists</strong>. A function call is a list where:</p>
+<ul>
+<li>The first element is the function (operator)</li>
+<li>Remaining elements are arguments (operands)</li>
+</ul>
+<div class="language-scheme highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">             </span><span class="c1">; Call function + with arguments 1 and 2</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w">             </span><span class="c1">; Call function * with arguments 3 and 4</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="p">(</span><span class="nb">-</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w">            </span><span class="c1">; Call function - with arguments 10 and 5</span>
+</span></code></pre></div>
+<p>This <strong>homoiconicity</strong> (code as data) makes Lisp/Scheme uniquely powerful for metaprogramming—programs that manipulate programs.</p>
+<details class="tip">
+<summary>Common Misconception: Code vs. Data</summary>
+<p>When we say "Code is Data," we don't mean <strong>hardcoding</strong> (mixing magic numbers or strings into your logic), which is generally bad practice.</p>
+<p>We mean that the <strong>structure</strong> of the program is exposed as a data structure you can edit.</p>
+<ul>
+<li><strong>In Python/Java:</strong> Code is text. To change it, you have to cut and paste strings.</li>
+<li><strong>In Lisp:</strong> Code is a <strong>List</strong>. You can use standard list functions (like <code>map</code> or <code>reverse</code>) to rewrite your own program while it is loading. This allows you to add new features to the language (like loops or classes) without waiting for the compiler developers to add them.</li>
+</ul>
+</details>
+<h3 id="special-forms-breaking-the-rules">Special Forms: Breaking the Rules</h3>
+<p>There is one catch. Normally, Scheme evaluates <strong>all</strong> arguments before passing them to a function. But some things, like defining variables, wouldn't work if we did that.</p>
+<div class="language-scheme highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">(</span><span class="k">define</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span>
+</span></code></pre></div>
+<p>If <code>define</code> were a normal function, Scheme would try to find the value of <code>x</code> <em>before</em> running the line. But <code>x</code> doesn't exist yet!</p>
+<p>To handle this, Scheme has <strong>Special Forms</strong> (like <code>define</code>, <code>if</code>, and <code>quote</code>) that have their own custom evaluation rules. They don't evaluate all their arguments.</p>
+<h2 id="reading-scheme-expressions">Reading Scheme Expressions</h2>
+<p>Let's build intuition by reading Scheme expressions aloud.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17h-2V9h-2V7h4m5-4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Simple</label><label for="__tabbed_1_2"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 11a2 2 0 0 1-2 2h-2v2h4v2H9v-4a2 2 0 0 1 2-2h2V9H9V7h4a2 2 0 0 1 2 2m4-6H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Nested</label><label for="__tabbed_1_3"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 10.5a1.5 1.5 0 0 1-1.5 1.5c.84 0 1.5.67 1.5 1.5V15c0 1.11-.89 2-2 2H9v-2h4v-2h-2v-2h2V9H9V7h4c1.11 0 2 .89 2 2m4-6H5c-1.09 0-2 .9-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Complex</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-scheme highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Read as:</strong> "Add 5 and 6"
+<strong>Evaluates to:</strong> <code>11</code></p>
+<div class="language-scheme highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Read as:</strong> "Multiply 7 and 8"
+<strong>Evaluates to:</strong> <code>56</code></p>
+</div>
+<div class="tabbed-block">
+<div class="language-scheme highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">8</span><span class="p">))</span>
+</span></code></pre></div>
+<p><strong>Read as:</strong> "Add the result of (add 5 and 6) to the result of (multiply 7 and 8)"</p>
+<p><strong>Step-by-step evaluation:</strong></p>
+<ol>
+<li>Evaluate inner expressions first:</li>
+<li><code>(+ 5 6)</code> → <code>11</code></li>
+<li><code>(* 7 8)</code> → <code>56</code></li>
+<li>Substitute results: <code>(+ 11 56)</code></li>
+<li>Evaluate outer expression: <code>67</code></li>
+</ol>
+<div class="admonition abstract">
+<p class="admonition-title">Key Insight</p>
+<p>The structure of nested parentheses <strong>directly mirrors</strong> the evaluation order. Innermost expressions evaluate first, working outward.</p>
+</div>
+</div>
+<div class="tabbed-block">
+<div class="language-scheme highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nb">-</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Read as:</strong> "Add the result of (multiply 2 and 3), the result of (subtract 4 from 10), and 5"</p>
+<p><strong>Evaluation:</strong></p>
+<ol>
+<li><code>(* 2 3)</code> → <code>6</code></li>
+<li><code>(- 10 4)</code> → <code>6</code></li>
+<li><code>(+ 6 6 5)</code> → <code>17</code></li>
+</ol>
+<p><strong>Notice:</strong> <code>+</code> can take more than two arguments in Scheme—another advantage of prefix notation.</p>
+</div>
+</div>
+</div>
+<h2 id="parse-trees-for-scheme">Parse Trees for Scheme</h2>
+<p>A <strong><a href="../binary_trees_and_representation/">parse tree</a></strong> (or <strong>abstract syntax tree</strong>, AST) represents the grammatical structure of an expression as a tree.</p>
+<p>For Scheme, the correspondence between written form and parse tree is particularly direct—parentheses literally define tree structure.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 21v-4.26c-.47.17-.97.26-1.5.26C7 17 5 15 5 12.5c0-1.27.5-2.41 1.36-3.23C6.13 8.73 6 8.13 6 7.5 6 5 8 3 10.5 3c1.56 0 2.94.8 3.75 2h.25a5.5 5.5 0 0 1 5.5 5.5 5.5 5.5 0 0 1-5.5 5.5q-.75 0-1.5-.21V21z"/></svg></span> Simple Tree</label><label for="__tabbed_2_2"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 12 9 2 2 12h1.86L0 18h7v4h4v-4h7l-3.86-6zm4.14 0H22L15 2l-2.39 3.41L17.92 13h-1.95l3.22 5H24zM13 19h4v3h-4z"/></svg></span> Nested Tree</label><label for="__tabbed_2_3"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"/></svg></span> Drawing Algorithm</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><strong>Expression:</strong> <code>(+ 5 6)</code></p>
+<p><strong>Structure:</strong>
+- <strong>Root</strong>: The operator <code>+</code>
+- <strong>Children</strong>: The operands <code>5</code> and <code>6</code></p>
+<pre class="mermaid"><code>graph TD
+    Plus["+"] --&gt; Five["5"]
+    Plus --&gt; Six["6"]
+
+    style Plus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Five fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Six fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff</code></pre>
+</div>
+<div class="tabbed-block">
+<p><strong>Expression:</strong> <code>(+ (+ 5 6) (* 7 8))</code></p>
+<p><strong>Structure:</strong>
+- <strong>Root</strong>: Outer <code>+</code> operator
+- <strong>Left subtree</strong>: <code>(+ 5 6)</code>
+- <strong>Right subtree</strong>: <code>(* 7 8)</code></p>
+<pre class="mermaid"><code>graph TD
+    RootPlus["+"] --&gt; LeftPlus["+"]
+    RootPlus --&gt; RightTimes["*"]
+    LeftPlus --&gt; Five["5"]
+    LeftPlus --&gt; Six["6"]
+    RightTimes --&gt; Seven["7"]
+    RightTimes --&gt; Eight["8"]
+
+    style RootPlus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style LeftPlus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style RightTimes fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Five fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Six fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Seven fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Eight fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff</code></pre>
+<p><strong>Evaluation order</strong> (post-order traversal):</p>
+<ol>
+<li>Evaluate left subtree: <code>5 + 6 = 11</code></li>
+<li>Evaluate right subtree: <code>7 * 8 = 56</code></li>
+<li>Evaluate root: <code>11 + 56 = 67</code></li>
+</ol>
+</div>
+<div class="tabbed-block">
+<p><strong>How to draw a parse tree from Scheme:</strong></p>
+<ol>
+<li>The outermost parentheses define the root node (the operator)</li>
+<li>Each argument becomes a child</li>
+<li>If an argument is itself a list (nested expression), recurse</li>
+</ol>
+<p><strong>Example:</strong> <code>(* (+ 3 4) (- 10 5) 2)</code></p>
+<p><pre class="mermaid"><code>graph TD
+    Times["*"] --&gt; Plus["+"]
+    Times --&gt; Minus["-"]
+    Times --&gt; Two["2"]
+    Plus --&gt; Three["3"]
+    Plus --&gt; Four["4"]
+    Minus --&gt; Ten["10"]
+    Minus --&gt; Five["5"]
+
+    style Times fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Plus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Minus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Two fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Three fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Four fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Ten fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Five fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff</code></pre>
+<strong>Evaluation:</strong></p>
+<ol>
+<li><code>(+ 3 4)</code> → <code>7</code></li>
+<li><code>(- 10 5)</code> → <code>5</code></li>
+<li><code>(* 7 5 2)</code> → <code>70</code></li>
+</ol>
+</div>
+</div>
+</div>
+<h2 id="evaluation-order-post-order-traversal">Evaluation Order: Post-Order Traversal</h2>
+<p>Scheme expressions evaluate using <strong>post-order traversal</strong>:</p>
+<ol>
+<li>Evaluate left subtree</li>
+<li>Evaluate right subtree</li>
+<li>Apply operator at root</li>
+</ol>
+<p>This ensures arguments are computed before the function that uses them—a fundamental principle in most programming languages.</p>
+<h3 id="example-5-6-7-8">Example: <code>(+ (+ 5 6) (* 7 8))</code></h3>
+<p><strong>Tree:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>       +
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>      / \
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>     +   *
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    / \ / \
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>   5  6 7  8
+</span></code></pre></div>
+<p><strong>Post-order traversal:</strong></p>
+<ol>
+<li>Visit left subtree (<code>+</code>):</li>
+<li>Visit <code>5</code> (leaf) → value is <code>5</code></li>
+<li>Visit <code>6</code> (leaf) → value is <code>6</code></li>
+<li>Apply <code>+</code> → <code>5 + 6 = 11</code></li>
+<li>Visit right subtree (<code>*</code>):</li>
+<li>Visit <code>7</code> (leaf) → value is <code>7</code></li>
+<li>Visit <code>8</code> (leaf) → value is <code>8</code></li>
+<li>Apply <code>*</code> → <code>7 * 8 = 56</code></li>
+<li>Visit root (<code>+</code>):</li>
+<li>Apply <code>+</code> to results → <code>11 + 56 = 67</code></li>
+</ol>
+<p><strong>Result:</strong> <code>67</code></p>
+<p>The tree structure <strong>guarantees</strong> correct evaluation order—no precedence rules needed.</p>
+<h2 id="the-ambiguity-problem">The Ambiguity Problem</h2>
+<p>Why did Lisp choose such a strange notation? To eliminate <strong>ambiguity</strong>.</p>
+<p>Infix notation (standard math) is inherently ambiguous. Consider:</p>
+<p><code>3 + 4 * 5</code></p>
+<p>Does this mean <code>(3 + 4) * 5</code> or <code>3 + (4 * 5)</code>?</p>
+<p>To solve this, we rely on <strong>Precedence Rules</strong> (PEMDAS). You have to memorize that <code>*</code> beats <code>+</code>. These are "invisible parentheses" that the parser adds for you. Scheme removes the need for invisible rules by forcing you to make the structure explicit.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 18h2v-2h-2zm1-16A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m0-14a4 4 0 0 0-4 4h2a2 2 0 0 1 2-2 2 2 0 0 1 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5a4 4 0 0 0-4-4"/></svg></span> Infix (Implicit)</label><label for="__tabbed_3_2"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z"/></svg></span> Prefix (Explicit)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><strong>Expression:</strong> <code>3 + 4 * 5</code></p>
+<p><strong>The Problem:</strong>
+Who owns the <code>4</code>? Does <code>+</code> claim it, or does <code>*</code> claim it? The notation doesn't say.</p>
+<p><strong>The Fix:</strong>
+We apply an arbitrary rule: "Multiplication before Addition." We need a <strong>lookup table</strong> of rules to read the code.</p>
+<p><strong>The Hidden Tree:</strong>
+The computer implicitly builds this tree based on the rulebook:</p>
+<pre class="mermaid"><code>graph TD
+    T1["3"] --- T2["+"] --- T3["4"] --- T4["*"] --- T5["5"]
+
+    subgraph Rules ["The Rulebook (PEMDAS)"]
+        R1["Rule: * beats +"]
+    end
+
+    Plus["+"] --&gt; Three["3"]
+    Plus --&gt; Times["*"]
+    Times --&gt; Four["4"]
+    Times --&gt; Five["5"]
+
+    T3 --&gt; Rules
+    Rules -.-&gt; Plus
+
+    style Plus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Times fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Rules fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style R1 fill:#48bb78,stroke:#cbd5e0,stroke-width:2px,color:#fff</code></pre>
+</div>
+<div class="tabbed-block">
+<p><strong>Expression:</strong> <code>(+ 3 (* 4 5))</code></p>
+<p><strong>The Solution:</strong>
+There is no question about who owns the <code>4</code>. It is physically inside the <code>(* ...)</code> list. The structure is undeniable.</p>
+<p><strong>The Explicit Tree:</strong>
+The notation maps 1:1 to the tree.</p>
+<pre class="mermaid"><code>graph TD
+    Plus["+"] --&gt; Three["3"]
+    Plus --&gt; Times["*"]
+    Times --&gt; Four["4"]
+    Times --&gt; Five["5"]
+    style Plus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Times fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff</code></pre>
+</div>
+</div>
+</div>
+<h3 id="why-parsers-love-prefix">Why Parsers Love Prefix</h3>
+<p>The difference in complexity is staggering when you try to write a program to read these expressions.</p>
+<p><strong>Parsing Infix (<code>3 + 4 * 5</code>) requires:</strong></p>
+<ol>
+<li><strong>Tokenizing</strong>: Breaking string into parts.</li>
+<li><strong>Precedence Logic</strong>: Knowing <code>*</code> &gt; <code>+</code>.</li>
+<li><strong>Associativity Logic</strong>: Knowing <code>1 - 2 - 3</code> is <code>(1 - 2) - 3</code>.</li>
+<li><strong>Complex Algorithms</strong>: Shunting-yard (Dijkstra) or Operator-precedence parsing.</li>
+</ol>
+<p><strong>Parsing Prefix (<code>(+ 3 (* 4 5))</code>) requires:</strong></p>
+<ol>
+<li><strong>Tokenizing</strong>.</li>
+<li><strong>Recursion</strong>: "See a paren? Start a new node."</li>
+</ol>
+<p>There is no Step 3 or 4. The parser is trivial:</p>
+<div class="language-python highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Simple Scheme Parser</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-10-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-10-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-10-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-10-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-10-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-10-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-10-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-10-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-10-10">10</a></span>
+<span class="normal"><a href="#__codelineno-10-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">tokens</span><span class="p">):</span>  <span class="c1"># (1)!</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2"></a>    <span class="n">token</span> <span class="o">=</span> <span class="n">tokens</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3"></a>    <span class="k">if</span> <span class="n">token</span> <span class="o">==</span> <span class="s1">&#39;(&#39;</span><span class="p">:</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4"></a>        <span class="n">operator</span> <span class="o">=</span> <span class="n">tokens</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># (3)!</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5"></a>        <span class="n">operands</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6"></a>        <span class="k">while</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;)&#39;</span><span class="p">:</span>  <span class="c1"># (4)!</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7"></a>            <span class="n">operands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parse</span><span class="p">(</span><span class="n">tokens</span><span class="p">))</span>  <span class="c1"># (5)!</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8"></a>        <span class="n">tokens</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># (6)!</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9"></a>        <span class="k">return</span> <span class="p">(</span><span class="n">operator</span><span class="p">,</span> <span class="n">operands</span><span class="p">)</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10"></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11"></a>        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>  <span class="c1"># (7)!</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li>Recursively parse a list of tokens</li>
+<li>If we see an opening paren, we're starting a new expression</li>
+<li>First token after '(' is the operator</li>
+<li>Collect all operands until we hit the closing paren</li>
+<li>Each operand might itself be an expression, so recurse</li>
+<li>Consume the closing paren</li>
+<li>Base case: if it's not a paren, it's a number (or symbol)</li>
+</ol>
+<p><strong>No precedence table needed.</strong> Structure is explicit.</p>
+<h2 id="historical-context">Historical Context</h2>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:3"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><input id="__tabbed_4_3" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 1-1.26 2.75L15 5l2.74 1.26L19 9l1.25-2.74L23 5l-2.75-1.25M9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5M19 15l-1.26 2.74L15 19l2.74 1.25L19 23l1.25-2.75L23 19l-2.75-1.26"/></svg></span> The Birth of Lisp</label><label for="__tabbed_4_2"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17z"/></svg></span> Scheme</label><label for="__tabbed_4_3"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.5 17c-.13 0-.26 0-.39.04l-1.61-3.25a2.5 2.5 0 0 0-1.75-4.29c-.13 0-.25 0-.39.04l-1.63-3.25c.48-.45.77-1.08.77-1.79a2.5 2.5 0 0 0-5 0c0 .71.29 1.34.76 1.79L8.64 9.54c-.14-.04-.26-.04-.39-.04a2.5 2.5 0 0 0-1.75 4.29l-1.61 3.25C4.76 17 4.63 17 4.5 17a2.5 2.5 0 0 0 0 5A2.5 2.5 0 0 0 7 19.5c0-.7-.29-1.34-.76-1.79l1.62-3.25c.14.04.26.04.39.04s.25 0 .39-.04l1.63 3.25c-.47.45-.77 1.09-.77 1.79a2.5 2.5 0 0 0 5 0A2.5 2.5 0 0 0 12 17c-.13 0-.26 0-.39.04L10 13.79c.46-.45.75-1.08.75-1.79s-.29-1.34-.75-1.79l1.61-3.25c.13.04.26.04.39.04s.26 0 .39-.04L14 10.21c-.45.45-.75 1.09-.75 1.79a2.5 2.5 0 0 0 2.5 2.5c.13 0 .25 0 .39-.04l1.63 3.25c-.47.45-.77 1.09-.77 1.79a2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0-2.5-2.5"/></svg></span> Influence</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><strong>Lisp</strong> was created by John McCarthy in 1958 at MIT as part of his research on artificial intelligence. McCarthy wanted a language that:</p>
+<ul>
+<li>Could manipulate symbolic expressions (not just numbers)</li>
+<li>Treated code as data (enabling metaprogramming)</li>
+<li>Supported recursive functions naturally</li>
+</ul>
+<p>S-expressions were McCarthy's solution—simple, uniform, and powerful.</p>
+</div>
+<div class="tabbed-block">
+<p><strong>Scheme</strong> emerged from MIT in 1975 as Guy Steele and Gerald Sussman explored λ-calculus and programming language semantics. They wanted a "purer" Lisp:</p>
+<ul>
+<li>Lexical scoping (instead of dynamic)</li>
+<li>First-class continuations</li>
+<li>Tail-call optimization</li>
+<li>Minimalist design</li>
+</ul>
+<p>Scheme's simplicity made it ideal for teaching and research, culminating in the influential textbook <strong>Structure and Interpretation of Computer Programs</strong> (SICP) by Abelson and Sussman (1984).</p>
+</div>
+<div class="tabbed-block">
+<p>Lisp's ideas permeate modern programming:</p>
+<ul>
+<li><strong>Garbage collection</strong>: Pioneered by Lisp (McCarthy, 1960)</li>
+<li><strong>First-class functions</strong>: Lisp made them mainstream</li>
+<li><strong>Closures</strong>: Scheme formalized them</li>
+<li><strong>Dynamic typing</strong>: Common in scripting languages</li>
+<li><strong>Homoiconicity</strong>: Inspired Clojure, Julia's metaprogramming</li>
+</ul>
+<p>Even languages that don't look like Lisp (JavaScript, Python, Ruby) adopted its core ideas.</p>
+</div>
+</div>
+</div>
+<h2 id="scheme-in-action">Scheme in Action</h2>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:4"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><input id="__tabbed_5_3" name="__tabbed_5" type="radio" /><input id="__tabbed_5_4" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2m0 2v4h10V4zm0 6v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2zm-8 4v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2zm-8 4v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2z"/></svg></span> Basic Arithmetic</label><label for="__tabbed_5_2"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.6 5.29c-1.1-.1-2.07.71-2.17 1.82L13.18 10H16v2h-3l-.44 5.07a3.986 3.986 0 0 1-4.33 3.63 4 4 0 0 1-3.06-1.87l1.5-1.5c.24.74.9 1.31 1.73 1.38 1.1.1 2.07-.71 2.17-1.82L11 12H8v-2h3.17l.27-3.07c.19-2.2 2.13-3.83 4.33-3.63 1.31.11 2.41.84 3.06 1.87l-1.5 1.5c-.24-.74-.9-1.31-1.73-1.38"/></svg></span> Variables &amp; Functions</label><label for="__tabbed_5_3"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14 4 2.29 2.29-2.88 2.88 1.42 1.42 2.88-2.88L20 10V4M10 4H4v6l2.29-2.29 4.71 4.7V20h2v-8.41l-5.29-5.3"/></svg></span> Control Flow</label><label for="__tabbed_5_4"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.65 6.35A7.96 7.96 0 0 0 12 4a8 8 0 0 0-8 8 8 8 0 0 0 8 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18a6 6 0 0 1-6-6 6 6 0 0 1 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4z"/></svg></span> Recursion</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Scheme arithmetic supports variable arguments naturally.</p>
+<div class="language-scheme highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w">       </span><span class="c1">; 15 (variadic function)</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w">           </span><span class="c1">; 24</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="p">(</span><span class="nb">-</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w">            </span><span class="c1">; 7</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="p">(</span><span class="nb">/</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w">            </span><span class="c1">; 5</span>
+</span></code></pre></div>
+<p><strong>Nested Arithmetic:</strong></p>
+<div class="language-scheme highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nb">/</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nb">-</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="mi">3</span><span class="p">))</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="c1">; Evaluates to: (+ 6 5 5) → 16</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>Definitions use <code>define</code>. Notice how defining a function looks just like calling it, but with a body.</p>
+<div class="language-scheme highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">(</span><span class="k">define</span><span class="w"> </span><span class="nv">pi</span><span class="w"> </span><span class="mf">3.14159</span><span class="p">)</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="p">(</span><span class="k">define</span><span class="w"> </span><span class="nv">radius</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="nv">pi</span><span class="w"> </span><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="nv">radius</span><span class="w"> </span><span class="nv">radius</span><span class="p">))</span><span class="w">    </span><span class="c1">; Area of circle: 78.53975</span>
+</span></code></pre></div>
+<p><strong>Defining Functions:</strong></p>
+<div class="language-scheme highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="p">(</span><span class="k">define</span><span class="w"> </span><span class="p">(</span><span class="nf">square</span><span class="w"> </span><span class="nv">x</span><span class="p">)</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">  </span><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="nv">x</span><span class="p">))</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="p">(</span><span class="nf">square</span><span class="w"> </span><span class="mi">7</span><span class="p">)</span><span class="w">          </span><span class="c1">; 49</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>Scheme uses <code>if</code> for conditional logic. It returns a value (like the ternary operator <code>? :</code> in C-style languages) rather than executing statements.</p>
+<div class="language-scheme highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="p">(</span><span class="k">define</span><span class="w"> </span><span class="p">(</span><span class="nb">abs</span><span class="w"> </span><span class="nv">x</span><span class="p">)</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span><span class="p">(</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">&lt;</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">      </span><span class="p">(</span><span class="nb">-</span><span class="w"> </span><span class="nv">x</span><span class="p">)</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">      </span><span class="nv">x</span><span class="p">))</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="p">(</span><span class="nb">abs</span><span class="w"> </span><span class="mi">-5</span><span class="p">)</span><span class="w">            </span><span class="c1">; 5</span>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="p">(</span><span class="nb">abs</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w">             </span><span class="c1">; 3</span>
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>Recursion is the primary way to loop in Scheme.</p>
+<div class="language-scheme highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="p">(</span><span class="k">define</span><span class="w"> </span><span class="p">(</span><span class="nf">factorial</span><span class="w"> </span><span class="nv">n</span><span class="p">)</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="p">(</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">&lt;=</span><span class="w"> </span><span class="nv">n</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">      </span><span class="mi">1</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">      </span><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="nv">n</span><span class="w"> </span><span class="p">(</span><span class="nf">factorial</span><span class="w"> </span><span class="p">(</span><span class="nb">-</span><span class="w"> </span><span class="nv">n</span><span class="w"> </span><span class="mi">1</span><span class="p">)))))</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="p">(</span><span class="nf">factorial</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w">       </span><span class="c1">; 120</span>
+</span></code></pre></div>
+<details class="tip">
+<summary>Recursion and the Call Stack</summary>
+<p>Every recursive call relies on the <strong><a href="../../data_structures/abstract_data_types_and_stack/#function-call-stack">function call stack</a></strong>—a fundamental data structure that manages function execution.</p>
+<p>When <code>(factorial 5)</code> runs, the stack grows with each recursive call:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>factorial(5)
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>  → factorial(4)
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>    → factorial(3)
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>      → factorial(2)
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>        → factorial(1)  ← base case reached, starts returning
+</span></code></pre></div></p>
+<p>Each call waits on the stack until its nested call completes, then pops off and returns its result. This LIFO behavior is what makes recursion possible.</p>
+</details>
+</div>
+</div>
+</div>
+<h2 id="why-study-scheme">Why Study Scheme?</h2>
+<p>You might reasonably ask: why learn Scheme when modern languages like Python, JavaScript, or Rust dominate industry?</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:5"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><input id="__tabbed_6_3" name="__tabbed_6" type="radio" /><input id="__tabbed_6_4" name="__tabbed_6" type="radio" /><input id="__tabbed_6_5" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9z"/></svg></span> Conceptual Clarity</label><label for="__tabbed_6_2"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 3h6v4H3zm12 7h6v4h-6zm0 7h6v4h-6zm-2-4H7v5h6v2H5V9h2v2h6z"/></svg></span> Understanding Parsers</label><label for="__tabbed_6_3"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.42 5.29c-1.1-.1-2.07.71-2.17 1.82L10 10h2.82v2h-3l-.44 5.07A4.001 4.001 0 0 1 2 18.83l1.5-1.5c.33 1.05 1.46 1.64 2.5 1.3.78-.24 1.33-.93 1.4-1.74L7.82 12h-3v-2H8l.27-3.07a4.01 4.01 0 0 1 4.33-3.65c1.26.11 2.4.81 3.06 1.89l-1.5 1.5c-.25-.77-.93-1.31-1.74-1.38M22 13.65l-1.41-1.41-2.83 2.83-2.83-2.83-1.43 1.41 2.85 2.85-2.85 2.81 1.43 1.41 2.83-2.83 2.83 2.83L22 19.31l-2.83-2.81z"/></svg></span> Functional Programming</label><label for="__tabbed_6_4"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.5 8H12v5l4.28 2.54.72-1.21-3.5-2.08zM13 3a9 9 0 0 0-9 9H1l3.96 4.03L9 12H6a7 7 0 0 1 7-7 7 7 0 0 1 7 7 7 7 0 0 1-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.9 8.9 0 0 0 13 21a9 9 0 0 0 9-9 9 9 0 0 0-9-9"/></svg></span> Historical Perspective</label><label for="__tabbed_6_5"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17z"/></svg></span> Academic Rigor</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Scheme strips away syntax complexity, letting you focus on computational concepts:</p>
+<ul>
+<li>Recursion without boilerplate</li>
+<li><a href="../../programming_languages/procedures_and_higher_order_functions/">Higher-order functions</a> without ceremony</li>
+<li>Closures and scope made explicit</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>Scheme's direct mapping from text to parse tree demystifies how languages work. Once you see how prefix notation avoids precedence, you understand why parsing infix is hard.</p>
+</div>
+<div class="tabbed-block">
+<p>Scheme is functional-first, teaching patterns now common in JavaScript, Python, Haskell, and Rust:</p>
+<ul>
+<li><code>map</code>, <code>filter</code>, <code>reduce</code></li>
+<li>Immutability</li>
+<li>Function composition</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>Understanding Lisp/Scheme helps you appreciate language evolution. Many "modern" features (lambdas, closures, garbage collection) were invented in Lisp decades ago.</p>
+</div>
+<div class="tabbed-block">
+<p>Scheme's minimalism makes it perfect for studying:</p>
+<ul>
+<li>Programming language semantics</li>
+<li>Interpreters and compilers</li>
+<li>Type theory and λ-calculus</li>
+</ul>
+<p>MIT's SICP remains a gold standard in CS education precisely because Scheme gets out of the way, letting ideas shine through.</p>
+</div>
+</div>
+</div>
+<h2 id="practice-problems">Practice Problems</h2>
+<details class="question">
+<summary>Practice Problem 1: Reading Scheme</summary>
+<p>What does this Scheme expression evaluate to?</p>
+<div class="language-scheme highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nb">-</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Show the evaluation steps.</p>
+<details class="tip">
+<summary>Solution</summary>
+<p><strong>Expression:</strong> <code>(+ (* 3 4) (- 10 2) 5)</code></p>
+<p><strong>Step 1: Evaluate subexpressions</strong></p>
+<ul>
+<li><code>(* 3 4)</code> → <code>12</code></li>
+<li><code>(- 10 2)</code> → <code>8</code></li>
+</ul>
+<p><strong>Step 2: Substitute results</strong></p>
+<ul>
+<li><code>(+ 12 8 5)</code></li>
+</ul>
+<p><strong>Step 3: Evaluate outer expression</strong></p>
+<ul>
+<li><code>12 + 8 + 5 = 25</code></li>
+</ul>
+<p><strong>Answer:</strong> <code>25</code></p>
+</details>
+</details>
+<details class="question">
+<summary>Practice Problem 2: Convert Infix to Prefix</summary>
+<p>Convert this infix expression to Scheme prefix notation:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>(5 + 6) * (7 - 2)
+</span></code></pre></div>
+<p>Then draw the parse tree.</p>
+<details class="tip">
+<summary>Solution</summary>
+<p><strong>Infix:</strong> <code>(5 + 6) * (7 - 2)</code></p>
+<p><strong>Prefix (Scheme):</strong> <code>(* (+ 5 6) (- 7 2))</code></p>
+<p><strong>Parse Tree:</strong></p>
+<pre class="mermaid"><code>graph TD
+    Times["*"] --&gt; Plus["+"]
+    Times --&gt; Minus["-"]
+    Plus --&gt; Five["5"]
+    Plus --&gt; Six["6"]
+    Minus --&gt; Seven["7"]
+    Minus --&gt; Two["2"]
+
+    style Times fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Plus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Minus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Five fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Six fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Seven fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Two fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff</code></pre>
+<p><strong>Evaluation:</strong></p>
+<ol>
+<li><code>(+ 5 6)</code> → <code>11</code></li>
+<li><code>(- 7 2)</code> → <code>5</code></li>
+<li><code>(* 11 5)</code> → <code>55</code></li>
+</ol>
+<p><strong>Answer:</strong> <code>55</code></p>
+</details>
+</details>
+<details class="question">
+<summary>Practice Problem 3: Draw Parse Tree</summary>
+<p>Draw the parse tree for this Scheme expression:</p>
+<div class="language-scheme highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">8</span><span class="p">))</span>
+</span></code></pre></div>
+<p>Then trace the post-order evaluation.</p>
+<details class="tip">
+<summary>Solution</summary>
+<p><strong>Parse Tree:</strong></p>
+<pre class="mermaid"><code>graph TD
+    RootPlus["+"] --&gt; LeftPlus["+"]
+    RootPlus --&gt; RightTimes["*"]
+    LeftPlus --&gt; Five["5"]
+    LeftPlus --&gt; Six["6"]
+    RightTimes --&gt; Seven["7"]
+    RightTimes --&gt; Eight["8"]
+
+    style RootPlus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style LeftPlus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style RightTimes fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Five fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Six fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Seven fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Eight fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff</code></pre>
+<p><strong>Post-Order Evaluation:</strong></p>
+<ol>
+<li>Visit left subtree (<code>+</code>):</li>
+<li>Visit <code>5</code> → <code>5</code></li>
+<li>Visit <code>6</code> → <code>6</code></li>
+<li>Apply <code>+</code> → <code>5 + 6 = 11</code></li>
+<li>Visit right subtree (<code>*</code>):</li>
+<li>Visit <code>7</code> → <code>7</code></li>
+<li>Visit <code>8</code> → <code>8</code></li>
+<li>Apply <code>*</code> → <code>7 * 8 = 56</code></li>
+<li>Visit root (<code>+</code>):</li>
+<li>Apply <code>+</code> → <code>11 + 56 = 67</code></li>
+</ol>
+<p><strong>Answer:</strong> <code>67</code></p>
+</details>
+</details>
+<details class="question">
+<summary>Practice Problem 4: Complex Nesting</summary>
+<p>Evaluate this Scheme expression step-by-step:</p>
+<div class="language-scheme highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nb">-</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">(</span><span class="nb">/</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">3</span><span class="p">))</span>
+</span></code></pre></div>
+<details class="tip">
+<summary>Solution</summary>
+<p><strong>Expression:</strong> <code>(* (+ 1 2) (- 10 (/ 8 2)) (+ 3 3))</code></p>
+<p><strong>Step 1: Evaluate innermost subexpressions</strong></p>
+<ul>
+<li><code>(/ 8 2)</code> → <code>4</code></li>
+</ul>
+<p><strong>Step 2: Substitute and evaluate next level</strong></p>
+<ul>
+<li><code>(+ 1 2)</code> → <code>3</code></li>
+<li><code>(- 10 4)</code> → <code>6</code></li>
+<li><code>(+ 3 3)</code> → <code>6</code></li>
+</ul>
+<p><strong>Step 3: Evaluate outer expression</strong></p>
+<ul>
+<li><code>(* 3 6 6)</code> → <code>108</code></li>
+</ul>
+<p><strong>Answer:</strong> <code>108</code></p>
+</details>
+</details>
+<h2 id="key-takeaways">Key Takeaways</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Concept</th>
+<th style="text-align: left;">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Prefix Notation</strong></td>
+<td style="text-align: left;">Operator comes before operands: <code>(+ 1 2)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>S-Expression</strong></td>
+<td style="text-align: left;">Atom or list of S-expressions</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Parse Tree</strong></td>
+<td style="text-align: left;">Tree representation of expression structure</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Post-Order Traversal</strong></td>
+<td style="text-align: left;">Evaluate children before parent (bottom-up)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Homoiconicity</strong></td>
+<td style="text-align: left;">Code is data; programs are lists</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>No Precedence Rules</strong></td>
+<td style="text-align: left;">Parentheses make structure explicit</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Scheme/Lisp</strong></td>
+<td style="text-align: left;">Languages using prefix notation and S-expressions</td>
+</tr>
+</tbody>
+</table>
+<h2 id="why-scheme-matters">Why Scheme Matters</h2>
+<p>Scheme and prefix notation reveal:</p>
+<ul>
+<li><strong>How notation shapes thought</strong>: Explicit structure changes how you reason about programs</li>
+<li><strong>How parsers work</strong>: Prefix notation is trivial to parse; infix requires precedence</li>
+<li><strong>How trees encode meaning</strong>: Parse trees are the "compiled" form of expressions</li>
+<li><strong>How code can be data</strong>: S-expressions let programs manipulate programs</li>
+<li><strong>How functional programming works</strong>: Scheme pioneered ideas now common in modern languages</li>
+</ul>
+<p>You don't need to write Scheme professionally to benefit from understanding it. The insights it provides—about parsing, recursion, abstraction, and the relationship between notation and computation—are universal.</p>
+<h2 id="further-reading">Further Reading</h2>
+<ul>
+<li><strong>Abelson &amp; Sussman, <a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/index.html">Structure and Interpretation of Computer Programs</a></strong> — The definitive Scheme textbook</li>
+<li><strong>David Evans, <a href="https://computingbook.org/">Introduction to Computing</a></strong> — Chapter 2 covers RTNs and parsing</li>
+<li><strong><a href="../recursive_transition_networks/">Recursive Transition Networks</a></strong> — How grammars define parse trees</li>
+<li><strong><a href="../computational_thinking/">Computational Thinking</a></strong> — Abstraction and decomposition in practice</li>
+</ul>
+<hr />
+<p>Scheme strips programming down to its essence: <a href="../../programming_languages/procedures_and_higher_order_functions/">functions</a>, data, and recursion. What remains is computation in its purest form—no syntax tricks, no precedence tables, just structure made explicit through parentheses. It's not the notation most programmers use daily, but understanding it changes how you think about all the notations you do use.</p>
+<h2 id="video-summary">Video Summary</h2>
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/2v6XPK6N4ok" title="Scheme and Parse Trees" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/bradpenney" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://bradpenney.io" target="_blank" rel="noopener" title="bradpenney.io" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M352 256c0 22.2-1.2 43.6-3.3 64H163.4c-2.2-20.4-3.3-41.8-3.3-64s1.2-43.6 3.3-64h185.3c2.2 20.4 3.3 41.8 3.3 64m28.8-64h123.1c5.3 20.5 8.1 41.9 8.1 64s-2.8 43.5-8.1 64H380.8c2.1-20.6 3.2-42 3.2-64s-1.1-43.4-3.2-64m112.6-32H376.7c-10-63.9-29.8-117.4-55.3-151.6 78.3 20.7 142 77.5 171.9 151.6zm-149.1 0H167.7c6.1-36.4 15.5-68.6 27-94.7 10.5-23.6 22.2-40.7 33.5-51.5C239.4 3.2 248.7 0 256 0s16.6 3.2 27.8 13.8c11.3 10.8 23 27.9 33.5 51.5 11.6 26 20.9 58.2 27 94.7m-209 0H18.6c30-74.1 93.6-130.9 172-151.6-25.5 34.2-45.3 87.7-55.3 151.6M8.1 192h123.1c-2.1 20.6-3.2 42-3.2 64s1.1 43.4 3.2 64H8.1C2.8 299.5 0 278.1 0 256s2.8-43.5 8.1-64m186.6 254.6c-11.6-26-20.9-58.2-27-94.6h176.6c-6.1 36.4-15.5 68.6-27 94.6-10.5 23.6-22.2 40.7-33.5 51.5-11.2 10.7-20.5 13.9-27.8 13.9s-16.6-3.2-27.8-13.8c-11.3-10.8-23-27.9-33.5-51.5zM135.3 352c10 63.9 29.8 117.4 55.3 151.6-78.4-20.7-142-77.5-172-151.6zm358.1 0c-30 74.1-93.6 130.9-171.9 151.6 25.5-34.2 45.2-87.7 55.3-151.6h116.7z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "content.tabs.link", "content.code.highlight", "content.tooltips", "content.code.mermaid"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
