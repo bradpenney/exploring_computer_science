@@ -1,6 +1,7 @@
 site_name: "Exploring Computer Science"
 site_url: https://cs.bradpenney.io
 site_description: Decoding the machines that run our world.
+site_author: Brad Penney
 extra_css:
   - stylesheets/extra.css
 theme:
@@ -37,10 +38,19 @@ extra:
   analytics:
     provider: google
     property: G-ZN2BGBVH7Q
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/bradpenney
+    - icon: fontawesome/solid/globe
+      link: https://bradpenney.io
 
 plugins:
   - search
-  - social
+  - social:
+      cards: true
+      cards_layout_options:
+        background_color: "#1a202c"  # Slate-900 (dark background)
+        color: "#cbd5e0"  # Light text for contrast
   - htmlproofer:
       enabled: true
       validate_rendered_template: true
