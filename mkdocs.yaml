@@ -2,6 +2,10 @@ site_name: "Exploring Computer Science"
 site_url: https://cs.bradpenney.io
 site_description: Decoding the machines that run our world.
 site_author: Brad Penney
+extra:
+  analytics:
+    provider: google
+    property: G-V01MJ4R3SQ
 extra_css:
   - stylesheets/extra.css
 theme:
@@ -35,9 +39,6 @@ theme:
     - content.code.mermaid
 
 extra:
-  analytics:
-    provider: google
-    property: G-ZN2BGBVH7Q
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/bradpenney

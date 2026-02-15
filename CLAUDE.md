@@ -4,13 +4,159 @@ This file provides guidance to Claude Code when working with this repository.
 
 ## Repository Overview
 
-This is a Material for MkDocs site documenting Computer Science concepts learned during the CS degree program. The site serves as a teaching tool, portfolio, and personal reference.
+**Exploring Computer Science** teaches CS theory to working engineers. It transforms raw lecture notes from university CS coursework into structured, teaching-focused articles that bridge the gap between practical engineering experience and formal computer science theory.
+
+**Target Audience:** Back-end engineers, platform engineers, and software developers who write production code daily but lack formal CS training. They know HOW to code—these articles teach them WHY things work the way they do.
+
+**Teaching Philosophy:** Every article starts with real-world engineering experience (debugging, code review, production issues) before introducing CS theory. Theory is connected to tools they use daily (Python dicts, JSON parsing, stack traces, database queries, etc.).
+
+The site serves as a teaching tool, portfolio, and personal reference for engineers filling CS knowledge gaps.
+
+## Critical Persona Insight
+
+**IMPORTANT**: This site has a unique audience assumption that sets it apart from typical CS educational content:
+
+### The Persona: Working Engineer Learning CS Theory
+
+**Who they are:**
+- Back-end engineer / platform engineer / software developer
+- Writes production code daily (Python, Go, Java, JavaScript, etc.)
+- Has real-world experience shipping features and debugging production issues
+- **Lacks formal CS training** and wants to fill that gap
+- May be self-taught, bootcamp graduate, or career changer
+- Taking university CS coursework while working full-time
+
+**What they already know:**
+- How to write code and ship features
+- Git, testing, deployment, CI/CD, production concerns
+- Frameworks, libraries, and tools of their trade
+- How to debug issues and read stack traces
+- Code patterns and best practices from experience
+
+**What they want to learn:**
+- The CS theory behind the tools they use daily
+- Why some algorithms are faster than others
+- Theoretical limits of computation (halting problem, complexity classes)
+- How compilers, interpreters, and parsers actually work
+- The math and formal definitions underlying their work
+- How to answer theory questions in technical interviews
+
+**What they DON'T need:**
+- "Hello World" tutorials
+- Basic programming concepts (they already code)
+- Overly academic explanations disconnected from practice
+- Theory without practical relevance
+
+**Teaching approach:**
+- **Ground theory in practice**: Connect every CS concept to real-world engineering problems
+- **Start with their experience**: Open with a scenario they've encountered, THEN introduce the theory
+- **Bridge the gap**: They know HOW things work practically—teach them WHY theoretically
+- **Provide context**: Show where they've already used this concept without knowing the formal theory
+- **Make it relevant**: Explain why understanding this theory makes them better engineers
+
+### Article Opening Patterns
+
+Every article should follow this pattern:
+
+**❌ Don't start with abstract theory:**
+```markdown
+# Recursion
+
+Recursion is when a function calls itself...
+```
+
+**✅ Start with their experience, then theory:**
+```markdown
+# Recursion: The Art of Self-Reference
+
+You've written recursive functions in Python. You know they work. But when your colleague asked "Why recursion instead of a loop here?" you couldn't quite articulate it beyond "it felt cleaner."
+
+**This is the theory you were missing.**
+
+Recursion isn't just a coding trick—it's a fundamental computational pattern that's been around since before programming languages existed. Understanding the CS theory behind it will make you better at recognizing when to use it (and when not to).
+```
+
+### Required Sections for Persona
+
+1. **Opening with real-world context** - Start with a scenario they've experienced
+2. **"Where You've Seen This"** section - Connect theory to their daily work:
+   - Stacks → "Every exception stacktrace you've debugged"
+   - Trees → "Your JSON responses, your file system, your DOM"
+   - Graphs → "Your database relationships, your microservices architecture"
+3. **"Why This Matters for Production Code"** - Practical implications:
+   - Big-O → "Why your O(n²) query times out at scale"
+   - Space Complexity → "Why your recursive solution causes stack overflows"
+   - Halting Problem → "Why linters can't catch every bug"
+4. **"Technical Interview Context"** (when relevant) - What questions this helps answer
+5. **Formal CS theory** - The mathematical definitions and rigorous explanations
+6. **Real-world examples in their languages** - Python, JavaScript, Go especially
+
+### Examples of Persona-Driven Connections
+
+**Data Structures:**
+- **Stacks**: "Every time you see a stacktrace, you're seeing this data structure. Here's the theory..."
+- **Trees**: "Your JSON is a tree. Your file system is a tree. The DOM is a tree. Here's what CS says about trees..."
+- **Graphs**: "Your microservices architecture? That's a directed graph. Database foreign keys? Graph edges. Here's the theory..."
+- **Hash Tables**: "Python's `dict`, JavaScript's `Object`, Go's `map`—all hash tables. Here's how they actually work..."
+
+**Algorithms:**
+- **Big-O Notation**: "Your PR got rejected because the reviewer said it's O(n²). Here's how to analyze that formally..."
+- **Sorting**: "You call `.sort()` without thinking. Here's what's happening underneath and why it matters..."
+- **Search**: "Binary search is why database indexes are fast. Here's the CS behind it..."
+
+**Language Theory:**
+- **Parsing**: "You work with JSON, YAML, XML, and config files daily. Here's how parsers actually work..."
+- **Regular Expressions**: "You've used regex for validation. Here's the formal language theory behind it..."
+- **Compilers vs Interpreters**: "Python is 'interpreted,' Go is 'compiled'—what does that actually mean?"
+
+**Systems:**
+- **Operating Systems**: "Every time you spawn a process or thread, this is what's happening..."
+- **Virtual Machines**: "Docker containers, JVM, Python's interpreter—all virtual machines. Here's the theory..."
+- **Networking**: "REST APIs, WebSockets, gRPC—here's the networking fundamentals underneath..."
+
+### The Transformation
+
+This site is NOT:
+- ❌ "Here's what I learned in CS class"
+- ❌ A traditional textbook for CS students
+- ❌ Beginner programming tutorials
+
+This site IS:
+- ✅ "Here's the CS theory behind the production code you write"
+- ✅ A working engineer's guide to filling CS knowledge gaps
+- ✅ Theory with practical relevance and real-world connections
 
 ## Important Preferences
 
 **Git Operations**: The user handles all git operations (commits, pushes, etc.) themselves. Do not commit or push changes.
 
 **MkDocs Operations**: The user handles running `mkdocs serve` and `mkdocs build` themselves. Do not run these commands.
+
+## CRITICAL: No Repetition - Respect Reader's Time
+
+**This is an absolute deal-breaker for content quality.**
+
+### The Principle
+
+Avoid duplication and repetition at all costs. Every time we repeat information, we waste the reader's time and make the content feel bloated.
+
+### The Rules
+
+1. **Cross-link instead of repeating** - If a concept is explained elsewhere, link to it
+2. **Only repeat for significantly different perspectives** - Brief intro vs. deep dive is acceptable; same explanation twice is not
+3. **Progressive depth, not repetition** - Each article builds WITHOUT re-explaining previous articles
+4. **Audit before publishing** - Search for repeated concepts across published articles
+
+### Before Explaining Any Concept, Ask:
+
+1. Have we explained this elsewhere in this section?
+2. If yes, is my perspective SIGNIFICANTLY different?
+3. If no, add a cross-link: "Remember X from [Article]? Now let's see how..."
+4. If yes, explicitly state the new angle: "Earlier we covered X practically - now let's understand the theory"
+
+### Required: Pre-Publication Repetition Audit
+
+Before marking any article complete, use the Explore agent to search for repeated concepts across published articles in the same section. If found, consolidate and cross-link.
 
 ## Project Structure
 
@@ -73,42 +219,69 @@ poetry run mkdocs build --strict
 
 ### Tone and Style
 
-Articles must balance **playfulness with professionalism** and be **technically accurate** while remaining **accessible**. The goal: meaningful for beginners, yet useful for intermediate computer scientists.
+Articles must balance **playfulness with professionalism** and be **technically accurate** while remaining **accessible**. The goal: bridge the gap between practical engineering experience and formal CS theory.
 
-**Core Principles:**
+**Core Principles (Persona-Driven):**
 
-- **Strong openings**: Ground in real-world scenarios that readers experience (compilers, grammar checkers, everyday systems)
+- **Start with their experience**: Open with a scenario they've encountered in production code, THEN introduce theory
+- **Connect theory to practice**: Every concept must link to real-world engineering (databases, APIs, debugging, frameworks)
 - **Professional yet engaging**: Use wit in parentheticals and asides, not emoji spam (limit to 1-3 per article, used strategically)
-- **Technical rigor**: Include formal definitions (5-tuples, mathematical notation), historical context (who invented it, when, why), and precise terminology
-- **Structured learning**: Build from simple to complex examples; use clear section headers
-- **Thoughtful closings**: Tie concepts to broader CS themes; avoid jokey endings
-- **Direct voice**: Address reader as "you"; be confident but not arrogant; educational but not preachy
+- **Technical rigor with relevance**: Include formal definitions (5-tuples, mathematical notation), but explain WHY they matter for production code
+- **Structured learning**: Build from familiar concepts (their code) to formal theory; use clear section headers
+- **Thoughtful closings**: Tie concepts to their work as engineers; avoid jokey endings
+- **Direct voice**: Address reader as "you"—a working engineer; be confident but not arrogant; educational but not preachy
+- **Make it useful**: Every article should make them better at their job or technical interviews
 
-**Required Sections:**
+**Required Sections (Updated for Persona):**
 
-1. Opening paragraph(s) - hook with real-world relevance
-2. Formal definition (if applicable) - table format for mathematical notation
-3. Simple examples building to complex
-4. Historical context - who, when, why (when relevant)
-5. "Why [Topic] Matters" section
-6. Practice Problems with full solutions (use `??? question` and `??? tip`)
-7. "Key Takeaways" table
-8. "Further Reading" section with links
-9. Closing paragraph(s) - thoughtful reflection on broader significance
+1. **Opening paragraph(s)** - Start with their engineering experience (debugging, code review, production issue), THEN introduce theory
+2. **"Where You've Seen This"** - Connect to tools/code they use daily (Python dicts, JSON parsing, stack traces, etc.)
+3. **Formal definition** (if applicable) - Table format for mathematical notation with practical examples
+4. **Simple examples building to complex** - Use languages they know (Python, JavaScript, Go)
+5. **"Why This Matters for Production Code"** - Practical implications (performance, debugging, design decisions)
+6. **Historical context** - Who invented it, when, why (when relevant and interesting)
+7. **"Technical Interview Context"** (when relevant) - What questions this helps answer
+8. **Practice Problems with full solutions** (use `??? question` and `??? tip`)
+9. **"Key Takeaways"** table - What they should remember for their work
+10. **"Further Reading"** section with links
+11. **Closing paragraph(s)** - How understanding this theory makes them better engineers
 
-**Examples of Good Tone:**
+**Examples of Good Tone (Persona-Driven):**
+- "You've written recursive functions in Python. You know they work. But when your colleague asked 'Why recursion instead of a loop here?' you couldn't quite articulate it..." (starts with their experience)
+- "Every time you see a stacktrace, you're seeing this data structure in action." (connects theory to their daily work)
+- "Your PR got rejected because the reviewer said it's O(n²). Here's how to analyze that formally..." (practical motivation)
 - "That's not hyperbole—it's history." (confident assertion)
 - "(Pack a lunch.)" (playful aside in parenthetical)
-- "This compact representation says 'one or more digits'—a pattern that would require infinitely many states if we tried to enumerate every possible number explicitly." (precise yet accessible)
+- "This is why your recursive solution caused a stack overflow in production." (real consequence, not abstract)
 
 **Avoid:**
 - Excessive emojis (🍝✨🎮😄 scattered everywhere)
 - Over-the-top phrases like "amazing!", "incredible!", "mind-blowing!"
+- Starting with abstract theory before establishing relevance
+- Writing for CS students instead of working engineers
+- Explaining basic programming concepts they already know
+- Theory without practical connections to production code
 - Condescending language or talking down to readers
 - Jokey closings that undermine the technical content
-- Creating files unless absolutely necessary
 
 ### Content Structure
+
+**Technical Terms and Commands in Prose:**
+
+ALWAYS wrap technical terms, command names, and function names in backticks when mentioned in regular text:
+
+- ✅ Correct: "Use `grep` to search files"
+- ✅ Correct: "The `malloc()`, `free()`, and `realloc()` functions"
+- ✅ Correct: "Algorithm names like `quicksort` and `mergesort`"
+- ❌ Wrong: "Use grep to search files"
+- ❌ Wrong: "The malloc(), free(), and realloc() functions"
+
+**Common items to wrap:** Unix commands (`ls`, `grep`, `find`), programming functions, algorithm names, data structure operations (`push`, `pop`, `enqueue`), system calls, technical terms when used as code references
+
+**Exceptions:**
+- Code inside code blocks (already formatted)
+- Terms in mermaid diagrams
+- Casual use of technical terms in normal prose (e.g., "sorting algorithms" vs "`quicksort`" specifically)
 
 - Articles should be teaching-focused, not just notes
 - Use mermaid diagrams for visual concepts. **Follow the project's 'Slate' color scheme for consistency:**
@@ -359,3 +532,44 @@ Use `=== "Tab Name"` syntax for **detailed, related content**:
 - Tabs: RTN - Expression Hierarchy (Expression, Term, Factor)
 - Tabs: Parsers - Parsing Strategies (Top-Down, Bottom-Up)
 - Tabs: Parsers - Real-World Parsing (JSON, HTML, Programming Languages)
+
+## Quality Standards Checklist
+
+Before publishing an article:
+
+**✅ Content Quality:**
+
+- [ ] Opening hooks with real-world engineering experience (persona-driven)
+- [ ] "Where You've Seen This" section connecting theory to daily work
+- [ ] "Why This Matters for Production Code" section
+- [ ] "Technical Interview Context" (when relevant)
+- [ ] Clear learning objectives
+- [ ] Code examples in multiple languages (Python, JavaScript, Go, Java)
+- [ ] Practice exercises with nested solutions
+- [ ] Key takeaways or quick recap
+- [ ] Further Reading organized into categories
+
+**✅ Formatting:**
+
+- [ ] All code blocks have `title=` attribute
+- [ ] **CRITICAL: Blank lines before ALL lists** (recurring issue - check every list in article)
+- [ ] Code tabs properly indented (4 spaces for content, more for nested elements)
+- [ ] Admonitions used appropriately
+- [ ] Mermaid diagrams follow site color scheme
+- [ ] Internal links use relative paths
+- [ ] **External links validated with WebFetch before publishing** (URLs break over time)
+
+**✅ Integration and Links:**
+
+- [ ] Pre-publication link audit completed
+- [ ] **NEVER link to unpublished articles** - only link to articles uncommented in mkdocs.yaml
+- [ ] Cross-links to related articles
+- [ ] Navigation uncommented in `mkdocs.yaml`
+- [ ] No broken links
+
+**✅ Persona Alignment:**
+
+- [ ] Article starts with engineering experience, not abstract theory
+- [ ] Connects CS theory to tools reader uses daily
+- [ ] Appropriate for working engineer, not CS student
+- [ ] Answers "why does this make me a better engineer?"
