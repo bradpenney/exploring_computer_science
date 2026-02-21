@@ -1,5 +1,5 @@
 ---
-description: Binary representation and trees: The foundation of how computers store and organize information.
+description: "Binary representation and trees: The foundation of how computers store and organize information."
 ---
 # Binary Trees and Binary Representation
 

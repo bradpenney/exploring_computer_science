@@ -1,5 +1,5 @@
 ---
-description: Why Lisp and Scheme use parentheses: Understanding prefix notation and parse trees.
+description: "Why Lisp and Scheme use parentheses: Understanding prefix notation and parse trees."
 ---
 # Scheme, Lisp, and Parse Trees
 

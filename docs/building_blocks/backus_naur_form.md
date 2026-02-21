@@ -1,5 +1,5 @@
 ---
-description: Backus-Naur Form (BNF) explained: The standard notation for defining programming language syntax.
+description: "Backus-Naur Form (BNF) explained: The standard notation for defining programming language syntax."
 ---
 # Backus-Naur Form (BNF)
 

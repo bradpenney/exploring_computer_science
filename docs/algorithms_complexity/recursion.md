@@ -1,5 +1,5 @@
 ---
-description: Master the art of self-reference: Understanding base cases, recursive steps, and how the call stack works.
+description: "Master the art of self-reference: Understanding base cases, recursive steps, and how the call stack works."
 ---
 # Recursion: The Art of Self-Reference
 

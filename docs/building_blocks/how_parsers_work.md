@@ -1,5 +1,5 @@
 ---
-description: From raw text to meaning: How parsers use grammars to understand code and data.
+description: "From raw text to meaning: How parsers use grammars to understand code and data."
 ---
 # How Parsers Work
 

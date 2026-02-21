@@ -1,5 +1,5 @@
 ---
-description: Recursive Transition Networks (RTNs): The visual way to describe complex, nested grammars.
+description: "Recursive Transition Networks (RTNs): The visual way to describe complex, nested grammars."
 ---
 # Recursive Transition Networks (RTNs)
 

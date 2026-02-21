@@ -1,5 +1,5 @@
 ---
-description: The foundation of Object-Oriented Programming: Understanding Classes as blueprints and Objects as instances.
+description: "The foundation of Object-Oriented Programming: Understanding Classes as blueprints and Objects as instances."
 ---
 # OOP: Classes & Objects
 

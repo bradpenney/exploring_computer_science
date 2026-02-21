@@ -1,5 +1,5 @@
 ---
-description: Imperative vs. Declarative: Understanding the major styles of programming.
+description: "Imperative vs. Declarative: Understanding the major styles of programming."
 ---
 # Programming Paradigms: Imperative vs. Declarative
 

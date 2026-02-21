@@ -1,5 +1,5 @@
 ---
-description: A practical guide to Regex: the text processing powerhouse used in every modern programming language.
+description: "A practical guide to Regex: the text processing powerhouse used in every modern programming language."
 ---
 # Regular Expressions
 

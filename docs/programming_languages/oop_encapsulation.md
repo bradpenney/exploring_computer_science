@@ -1,5 +1,5 @@
 ---
-description: OOP Encapsulation: Hiding complexity behind clean interfaces.
+description: "OOP Encapsulation: Hiding complexity behind clean interfaces."
 ---
 # OOP: Encapsulation
 

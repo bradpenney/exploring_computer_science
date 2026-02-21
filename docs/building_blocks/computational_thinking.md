@@ -1,5 +1,5 @@
 ---
-description: Master the mental toolkit of computer science: Decomposition, Pattern Recognition, Abstraction, and Algorithm Design.
+description: "Master the mental toolkit of computer science: Decomposition, Pattern Recognition, Abstraction, and Algorithm Design."
 ---
 # Computational Thinking
 
