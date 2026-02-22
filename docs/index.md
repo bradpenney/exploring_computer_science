@@ -1,76 +1,99 @@
 ---
-description: Exploring Computer Science transforms raw lecture notes into structured, teaching-focused articles designed to explain why things work, not just how.
+title: Exploring Computer Science - CS Theory for Working Engineers
+description: The CS theory behind the production code you write. Big-O, data structures, algorithms, and computational theory for back-end and platform engineers.
 ---
-<img src="images/exploring_computer_science.png" alt="Exploring Computer Science" class="img-responsive-right" width="300">
 
 # Exploring Computer Science
 
-**Decoding the machines that run our world.**
+**The CS theory behind the production code you write.**
 
-A subsection of [BradPenney.io](https://bradpenney.io), this site documents my journey through the Computer Science curriculum. It transforms raw lecture notes into structured, teaching-focused articles designed to explain *why* things work, not just *how*.
+<img src="images/exploring_computer_science.png" alt="Exploring Computer Science" class="img-responsive-right" width="300">
 
----
+Welcome to a practical guide for working engineers who want to understand the computer science foundations underneath the code they ship every day.
 
-## Curriculum Areas
+## The Problem
+
+Your PR got rejected because the reviewer said it's "O(n²)". You nodded, made some changes, but couldn't quite explain *why* the new version is faster. You've debugged stack traces without understanding why they're called "stacks." You use hash tables (Python dicts, JavaScript objects) constantly but couldn't explain how they achieve O(1) lookup.
+
+**You know HOW to code. This site teaches you WHY things work.**
+
+## The Solution
+
+While [Exploring Linux](https://linux.bradpenney.io), [Exploring Python](https://python.bradpenney.io), and [Exploring Kubernetes](https://k8s.bradpenney.io) teach practical skills, this site teaches the *theory* that makes you a stronger engineer. Understand these concepts and you'll:
+
+- Confidently discuss time/space complexity in code reviews
+- Recognize when your algorithm won't scale
+- Understand what's happening under the hood in your tools
+- Answer theory questions in technical interviews
+- Debug more effectively by understanding fundamentals
+
+## How It's Organized
+
+Content is structured by **practical value and depth**:
 
 <div class="grid cards" markdown>
 
-- :material-cube-outline: **Building Blocks**
+-   :material-package-variant: **Essentials**
 
     ---
 
-    **Theory** — [What is CS?](building_blocks/what_is_computer_science.md), [Computational Thinking](building_blocks/computational_thinking.md), [FSMs](building_blocks/finite_state_machines.md)
+    **The CS you need for interviews and understanding performance.** Can't call yourself a well-rounded engineer without these.
 
-    **Languages** — [Regex](building_blocks/regular_expressions.md), [BNF](building_blocks/backus_naur_form.md), [RTNs](building_blocks/recursive_transition_networks.md)
+    - **[Big-O Notation](essentials/big_o_notation.md)** — Why your code is slow and how to talk about it
+    - Core Data Structures: arrays, hash tables, stacks, queues, trees (coming soon)
+    - Fundamental Algorithms: recursion, searching, sorting (coming soon)
 
-    **Implementation** — [Parsers](building_blocks/how_parsers_work.md), [Trees](building_blocks/binary_trees_and_representation.md), [Scheme](building_blocks/scheme_and_parse_trees.md)
-
-- :material-code-braces: **Programming & Languages**
-
-    ---
-
-    **Languages** — [Scheme Primer](programming_languages/scheme_primer.md)
-
-    **Paradigms** — [Procedures & Higher-Order Functions](programming_languages/procedures_and_higher_order_functions.md)
-
-    **Coming Soon** — OOP, Programming Paradigms, Interpreters vs. Compilers
-
-- :material-database-outline: **Data Structures** *(Coming Soon)*
+-   :material-lightning-bolt: **Efficiency**
 
     ---
 
-    **Abstract Data Types** — Stacks, Queues, Deques, & Linked Lists
+    **CS that makes you better at debugging and system design.** Deeper understanding that pays dividends.
 
-    **Advanced Structures** — Binary Search Trees, Heaps, and Graphs
+    - Computational Thinking (coming soon)
+    - Finite State Machines (coming soon)
+    - Regular Expressions (coming soon)
+    - How Parsers Work (coming soon)
+    - Graphs & Graph Algorithms (coming soon)
 
-- :material-graph-outline: **Algorithms**
-
-    ---
-
-    **Logic** — [Recursion](algorithms_complexity/recursion.md)
-
-    **Coming Soon** — Big-O Notation, Turing Machines, Searching, Sorting, and Graph Traversal
-
-- :material-server-network: **Systems** *(Coming Soon)*
+-   :material-target: **Mastery**
 
     ---
 
-    **Architecture** — Operating Systems, Virtual Machines, and Networking
+    **Deep theory for understanding the limits of computation.** For when you want to go beyond practical and into foundational.
 
-    **Infrastructure** — Processes, Threads, Cloud & Edge Computing
-
-- :material-robot-outline: **Modern Topics** *(Coming Soon)*
-
-    ---
-
-    **Intelligence** — AI Concepts, Generative Models, & Computer Graphics
-
-    **Impact** — Information Security, Cryptography, and Ethics
+    - Formal Languages: BNF, grammars, RTNs (coming soon)
+    - Computability: Turing machines, halting problem, P vs NP (coming soon)
+    - Functional Programming: Scheme, higher-order functions (coming soon)
 
 </div>
 
-## Connect
+## Who This Is For
 
-- Main site: [bradpenney.io](https://bradpenney.io)
-- Source code: [GitHub](https://github.com/bradpenney/exploring_computer_science)
+You're a **back-end engineer, platform engineer, or software developer** who:
 
+- Writes production code daily (Python, Go, Java, JavaScript, etc.)
+- Has real-world experience shipping features and debugging issues
+- **Lacks formal CS training** and wants to fill that gap
+- May be self-taught, bootcamp graduate, or career changer
+- Wants to understand the "why" behind the tools you use
+
+You already know how to code. **This site teaches the theory underneath.**
+
+## Integration with Other Sites
+
+This site is part of the [BradPenney.io](https://bradpenney.io) learning ecosystem:
+
+- **[Exploring Linux](https://linux.bradpenney.io)** - Linux commands and system administration
+- **[Exploring Kubernetes](https://k8s.bradpenney.io)** - Kubernetes for platform engineers
+- **[Exploring Python](https://python.bradpenney.io)** - Python automation and scripting
+- **[Exploring Software Development Tools](https://tools.bradpenney.io)** - Git, tmux, vim, and developer tooling
+
+**How they connect:**
+
+- CS site + Python site = Understanding why your code performs the way it does
+- CS site + Tools site = Knowing the theory behind grep (regex), git (DAGs), parsers (compilers)
+- CS site + K8s site = Understanding distributed systems concepts
+
+---
+
+**Ready to understand the theory?** Start with **[Big-O Notation](essentials/big_o_notation.md)** to understand why some code is fast and other code times out at scale.

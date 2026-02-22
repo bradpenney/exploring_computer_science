@@ -1,6 +1,6 @@
 site_name: "Exploring Computer Science"
 site_url: https://cs.bradpenney.io
-site_description: Decoding the machines that run our world.
+site_description: The CS theory behind the production code you write.
 site_author: Brad Penney
 extra:
   analytics:
@@ -47,11 +47,25 @@ extra:
 
 plugins:
   - search
+  - meta
+  - exclude:
+      glob:
+        - "essentials/what_is_computer_science.md"
+        - "essentials/stacks_and_queues.md"
+        - "essentials/linked_lists.md"
+        - "essentials/queues_and_deques.md"
+        - "essentials/trees_basics.md"
+        - "essentials/recursion.md"
+        - "essentials/searching_linear_vs_binary.md"
+        - "essentials/sorting_elementary.md"
+        - "essentials/big_o_time_complexity.md"
+        - "efficiency/**"
+        - "mastery/**"
   - social:
       cards: true
       cards_layout_options:
-        background_color: "#1a202c"  # Slate-900 (dark background)
-        color: "#cbd5e0"  # Light text for contrast
+        background_color: "#1a202c"
+        color: "#cbd5e0"
   - htmlproofer:
       enabled: true
       validate_rendered_template: true
@@ -91,62 +105,71 @@ extra_javascript:
 
 nav:
   - Home: index.md
-  - Building Blocks:
-      - What is Computer Science?: building_blocks/what_is_computer_science.md
-      - Computational Thinking: building_blocks/computational_thinking.md
-      - Finite State Machines: building_blocks/finite_state_machines.md
-      - Regular Expressions: building_blocks/regular_expressions.md
-      - Backus-Naur Form (BNF): building_blocks/backus_naur_form.md
-      - Recursive Transition Networks: building_blocks/recursive_transition_networks.md
-      - How Parsers Work: building_blocks/how_parsers_work.md
-      - Binary Trees & Representation: building_blocks/binary_trees_and_representation.md
-      - Scheme & Parse Trees: building_blocks/scheme_and_parse_trees.md
-  #  - Algorithms & Complexity:
-  #      - Turing Machines: algorithms_complexity/turing_machines.md  # COMP200 Unit 2
-  #      - The Halting Problem: algorithms_complexity/the_halting_problem.md  # COMP200 Unit 2
-  #      - Big O: Time Complexity: algorithms_complexity/big_o_time_complexity.md  # COMP200 Unit 2
-  #      - Big O: Space Complexity: algorithms_complexity/big_o_space_complexity.md  # COMP200 Unit 2
-  #      - Searching: Linear vs Binary: algorithms_complexity/searching_linear_vs_binary.md  # COMP200 Unit 2
-  #      - Sorting: Elementary Sorts: algorithms_complexity/sorting_elementary.md  # COMP200 Unit 2
-  #      - Sorting: Insertion Sort: algorithms_complexity/sorting_insertion.md  # COMP200 Unit 2
-  #      - Sorting: Merge Sort: algorithms_complexity/sorting_merge.md  # COMP200 Unit 2
-  #      - Sorting: Quick Sort: algorithms_complexity/sorting_quick.md  # COMP200 Unit 2
-  #      - Recursion: algorithms_complexity/recursion.md  # COMP200 Unit 2
-  #      - Graph Traversal: algorithms_complexity/graph_traversal.md  # COMP200 Unit 2
-  - Data Structures:
-      - Abstract Data Types & Stacks: data_structures/abstract_data_types_and_stack.md
-  #      - Binary Search Trees: data_structures/binary_search_trees.md  # COMP200 Unit 2
-  #      - Queues & Deques: data_structures/queues_and_deques.md  # COMP200 Unit 2
-  #      - Linked Lists: data_structures/linked_lists.md  # COMP200 Unit 2
-  - Programming & Languages:
-      - Scheme Primer: programming_languages/scheme_primer.md
-      #      - Programming Paradigms: programming_languages/programming_paradigms.md  # COMP200 Unit 3
-      - Procedures & Higher-Order Functions: programming_languages/procedures_and_higher_order_functions.md
-#      - OOP: Classes & Objects: programming_languages/oop_classes_and_objects.md  # COMP200 Unit 3
-#      - OOP: Encapsulation: programming_languages/oop_encapsulation.md  # COMP200 Unit 3
-#      - OOP: Inheritance: programming_languages/oop_inheritance.md  # COMP200 Unit 3
-#      - OOP: Polymorphism: programming_languages/oop_polymorphism.md  # COMP200 Unit 3
-#      - Compilers vs Interpreters: programming_languages/compilers_vs_interpreters.md  # COMP200 Unit 3
-#      - How Interpreters Work: programming_languages/how_interpreters_work.md  # COMP200 Unit 3
-#  - Systems & Architecture:
-#      - Operating System Basics: systems_architecture/operating_system_basics.md  # COMP200 Unit 4
-#      - Processes & Threads: systems_architecture/processes_and_threads.md  # COMP200 Unit 4
-#      - Virtual Machines: systems_architecture/virtual_machines.md  # COMP200 Unit 4
-#      - Network Fundamentals: systems_architecture/network_fundamentals.md  # COMP200 Unit 4
-#      - Internet vs WWW: systems_architecture/internet_vs_www.md  # COMP200 Unit 4
-#      - Cloud & Edge Computing: systems_architecture/cloud_and_edge_computing.md  # COMP200 Unit 4
-#  - Data & Security:
-#      - Database Fundamentals: data_security/database_fundamentals.md  # COMP200 Unit 4
-#      - ACID & Normalization: data_security/database_acid_and_normalization.md  # COMP200 Unit 4
-#      - Big Data & NoSQL: data_security/big_data_and_nosql.md  # COMP200 Unit 4
-#      - Information Security Basics: data_security/information_security_basics.md  # COMP200 Unit 4
-#      - Cryptography Basics: data_security/cryptography_basics.md  # COMP200 Unit 4
-#  - Modern Topics:
-#      - Artificial Intelligence: modern_topics/artificial_intelligence_concepts.md  # COMP200 Unit 4
-#      - Generative AI: modern_topics/generative_ai.md  # COMP200 Unit 4
-#      - Computer Graphics: modern_topics/computer_graphics.md  # COMP200 Unit 4
-#      - Ethics in Computing: modern_topics/ethics_in_computing.md  # COMP200 Unit 4
-#  - Deep Dives:
-#      - Information Theory: deep_dives/information_theory.md  # Advanced Topic
-#      - P vs NP: deep_dives/p_vs_np.md  # Advanced Topic (relates to Unit 2)
-
+  - 📦 Essentials:
+      - Big-O Notation: essentials/big_o_notation.md
+#      - What is Computer Science?: essentials/what_is_computer_science.md
+#      - Big-O (old draft): essentials/big_o_time_complexity.md
+#      - Data Structures:
+#          - Stacks & Queues: essentials/stacks_and_queues.md
+#          - Linked Lists: essentials/linked_lists.md
+#          - Queues & Deques: essentials/queues_and_deques.md
+#          - Trees: essentials/trees_basics.md
+#      - Core Algorithms:
+#          - Recursion: essentials/recursion.md
+#          - Searching: essentials/searching_linear_vs_binary.md
+#          - Sorting Basics: essentials/sorting_elementary.md
+#  - ⚡ Efficiency:
+#      - Computational Thinking: efficiency/computational_thinking.md
+#      - Big-O Space Complexity: efficiency/big_o_space_complexity.md
+#      - Data Structures:
+#          - Binary Search Trees: efficiency/binary_search_trees.md
+#          - Graph Traversal: efficiency/graph_traversal.md
+#      - Sorting Algorithms:
+#          - Insertion Sort: efficiency/sorting_insertion.md
+#          - Merge Sort: efficiency/sorting_merge.md
+#          - Quick Sort: efficiency/sorting_quick.md
+#      - Languages & Parsing:
+#          - Regular Expressions: efficiency/regular_expressions.md
+#          - Finite State Machines: efficiency/finite_state_machines.md
+#          - How Parsers Work: efficiency/how_parsers_work.md
+#          - Compilers vs Interpreters: efficiency/compilers_vs_interpreters.md
+#          - Programming Paradigms: efficiency/programming_paradigms.md
+#      - Object-Oriented Programming:
+#          - Classes & Objects: efficiency/oop/oop_classes_and_objects.md
+#          - Encapsulation: efficiency/oop/oop_encapsulation.md
+#          - Inheritance: efficiency/oop/oop_inheritance.md
+#          - Polymorphism: efficiency/oop/oop_polymorphism.md
+#      - Systems:
+#          - Operating System Basics: efficiency/systems/operating_system_basics.md
+#          - Processes & Threads: efficiency/systems/processes_and_threads.md
+#          - Network Fundamentals: efficiency/systems/network_fundamentals.md
+#          - Internet vs WWW: efficiency/systems/internet_vs_www.md
+#      - Data & Security:
+#          - Database Fundamentals: efficiency/database_fundamentals.md
+#          - Information Security Basics: efficiency/information_security_basics.md
+#  - 🎯 Mastery:
+#      - Formal Languages:
+#          - Backus-Naur Form: mastery/formal_languages/backus_naur_form.md
+#          - Recursive Transition Networks: mastery/formal_languages/recursive_transition_networks.md
+#      - Computability Theory:
+#          - Turing Machines: mastery/computability/turing_machines.md
+#          - The Halting Problem: mastery/computability/the_halting_problem.md
+#      - Functional Programming:
+#          - Scheme Primer: mastery/functional_programming/scheme_primer.md
+#          - Higher-Order Functions: mastery/functional_programming/higher_order_functions.md
+#          - Scheme & Parse Trees: mastery/functional_programming/scheme_and_parse_trees.md
+#      - Systems:
+#          - Virtual Machines: mastery/systems/virtual_machines.md
+#          - Cloud & Edge Computing: mastery/systems/cloud_and_edge_computing.md
+#      - Data & Theory:
+#          - How Interpreters Work: mastery/how_interpreters_work.md
+#          - ACID & Normalization: mastery/database_acid_and_normalization.md
+#          - Big Data & NoSQL: mastery/big_data_and_nosql.md
+#          - Information Theory: mastery/information_theory.md
+#      - Security:
+#          - Cryptography Basics: mastery/security/cryptography_basics.md
+#      - Modern Topics:
+#          - AI Concepts: mastery/modern/artificial_intelligence_concepts.md
+#          - Generative AI: mastery/modern/generative_ai.md
+#          - Computer Graphics: mastery/modern/computer_graphics.md
+#          - Ethics in Computing: mastery/modern/ethics_in_computing.md
