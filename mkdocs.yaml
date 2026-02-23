@@ -33,7 +33,6 @@ theme:
   features:
     - content.code.annotate
     - content.code.copy
-    - content.tabs.link
     - content.code.highlight
     - content.tooltips
     - content.code.mermaid

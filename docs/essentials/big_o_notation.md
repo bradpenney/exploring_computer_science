@@ -1,37 +1,62 @@
 ---
-title: Big-O Notation - Understanding Algorithm Performance
-description: Learn Big-O notation for analyzing algorithm performance. Practical guide for working engineers covering time complexity, common patterns, and real-world examples.
+title: Big-O Notation - Understanding Algorithmic Efficiency
+description: Understand Big-O notation for software engineers. Learn how to identify O(n²), O(n log n), O(n) complexities and optimize your code for production.
 ---
 
 # Big-O Notation: Why Your Code Is Slow
 
-Your PR got rejected. The reviewer said it's "$O(n^2)$" and suggested a "more efficient approach." You nodded, made some changes, and it got approved. But you couldn't quite explain *why* the new version was faster—or predict when your code might become a problem.
+Your PR got rejected. The reviewer said it's "$O(n^2)$" and suggested a "more efficient approach." You nodded, made some changes, and it got approved. But you couldn't quite explain *why* the new version was faster—or predict when your code might become a problem next time.
 
 **This is the theory you were missing.**
 
-Big-O notation isn't academic gatekeeping. It's the language engineers use to discuss performance, predict scaling issues, and make informed decisions about trade-offs. Understanding it will change how you think about code.
+Big-O notation isn't academic gatekeeping. It's the language engineers use to discuss performance, predict scaling issues, and make informed decisions about trade-offs. Once you understand it, you'll start seeing it everywhere—in code reviews, in architecture discussions, and in every `.sort()` call you've ever made without thinking twice.
 
 ## Where You've Seen This
 
-You've already encountered Big-O thinking, even if you didn't call it that:
+You've already been doing Big-O thinking, even if you didn't have the vocabulary for it:
 
-- **Database queries**: "This query is fine with 1,000 rows but times out with 1 million"
-- **Code review feedback**: "This nested loop will be slow at scale"
-- **Production incidents**: "Response times spiked when traffic increased"
-- **Interview questions**: "What's the time complexity of your solution?"
+- **Database queries:** That query that's "fine with 1,000 rows but times out with 1 million"? That's an $O(n)$ full table scan where n grew to a painful size. Adding an index changed it to $O(\log n)$—that's why your DBA keeps asking about missing indexes.
+- **Code review feedback:** When a reviewer says "this nested loop will be slow at scale," they're telling you you've written $O(n^2)$ code. They've seen where this ends up in production.
+- **Production incidents:** "Response times spiked when we hit 100k users" means an algorithm that was acceptable at n=1,000 became intolerable at n=100,000. The code didn't change—the input size did.
+- **Interview questions:** "What's the time complexity of your solution?" is the interviewer asking you to think in Big-O. "$O(n)$" or "$O(n \log n)$" is the vocabulary they're looking for.
 
-Every time someone talks about code "not scaling," they're talking about Big-O.
+Every time someone talks about code "not scaling," they're describing a Big-O problem.
 
 ## What Big-O Actually Measures
 
-Big-O describes how an algorithm's resource usage grows as the input size grows. It answers: **"If I double my input, how much longer will this take?"**
+Big-O notation describes how an algorithm's resource usage **grows** as input size grows. That word—*grows*—is doing all the work here.
 
-- $O(1)$ — Constant: Time doesn't change with input size
-- $O(\log n)$ — Logarithmic: Time grows slowly (doubles input = one more step)
-- $O(n)$ — Linear: Time grows proportionally (double input = double time)
-- $O(n \log n)$ — Linearithmic: Slightly worse than linear (efficient sorting)
-- $O(n^2)$ — Quadratic: Time grows with square of input (double input = 4x time)
-- $O(2^n)$ — Exponential: Time doubles with each additional input element
+Big-O doesn't tell you how fast your code is in absolute terms. It tells you how performance changes as your data gets bigger. The key question to ask is: **"If I double my input, what happens to the time?"**
+
+- $O(1)$: Double the input → same time
+- $O(n)$: Double the input → double the time
+- $O(n^2)$: Double the input → four times the time
+- $O(\log n)$: Double the input → one extra step
+
+That framing cuts through a lot of confusion. A function that takes 10ms with 1,000 items and 10,000ms with 10,000 items is obviously not $O(n)$. The input grew 10x, but the time grew 1,000x. That's $O(n^2)$ behavior, and the table below will show you why.
+
+### The Simplification Rules
+
+When you analyze real code, you'll end up with expressions like $O(2n + 5)$ or $O(n^2 + n)$. Big-O simplifies these with two rules:
+
+1. **Drop constants.** $O(2n)$ becomes $O(n)$. $O(500)$ is still $O(1)$. Why? Because constants don't change the *shape* of growth. Whether your algorithm does 2 operations per element or 200, doubling the input still doubles the time. The constant shifts the curve up—it doesn't change how it grows. At production scale, the shape is what kills you.
+
+2. **Drop lower-order terms.** $O(n^2 + n)$ becomes $O(n^2)$. At large $n$, the $n^2$ term so completely dominates the $n$ term that $n$ is noise. When $n = 1,000$: $n^2 = 1,000,000$ and $n = 1,000$. The $n$ term is 0.1% of the total—irrelevant.
+
+This is why Big-O feels intentionally imprecise at first. It captures growth behavior, not exact performance. And growth rate is what determines whether your code survives production.
+
+### The Numbers That Matter
+
+| Big-O | n=10 | n=100 | n=1,000 | n=1,000,000 |
+|:------|-----:|------:|--------:|------------:|
+| $O(1)$ | 1 | 1 | 1 | 1 |
+| $O(\log n)$ | 3 | 7 | 10 | 20 |
+| $O(n)$ | 10 | 100 | 1,000 | 1,000,000 |
+| $O(n \log n)$ | 33 | 664 | 9,966 | 19,931,569 |
+| $O(n^2)$ | 100 | 10,000 | 1,000,000 | 1,000,000,000,000 |
+| $O(2^n)$ | 1,024 | $1.27 \times 10^{30}$ | $\infty$ | $\infty$ |
+
+That $O(n^2)$ algorithm that runs in 1 second with 1,000 items? With 1 million items, it takes **11.5 days**. The code didn't change. The data did.
 
 ```mermaid
 flowchart LR
@@ -56,679 +81,1286 @@ flowchart LR
     style F fill:#822727,stroke:#cbd5e0,stroke-width:2px,color:#fff
 ```
 
-### The Numbers That Matter
-
-| Big-O | n=10 | n=100 | n=1,000 | n=1,000,000 |
-|:------|-----:|------:|--------:|------------:|
-| $O(1)$ | 1 | 1 | 1 | 1 |
-| $O(\log n)$ | 3 | 7 | 10 | 20 |
-| $O(n)$ | 10 | 100 | 1,000 | 1,000,000 |
-| $O(n \log n)$ | 33 | 664 | 9,966 | 19,931,569 |
-| $O(n^2)$ | 100 | 10,000 | 1,000,000 | 1,000,000,000,000 |
-| $O(2^n)$ | 1,024 | $1.27 \times 10^{30}$ | $\infty$ | $\infty$ |
-
-That $O(n^2)$ algorithm that runs in 1 second with 1,000 items? With 1 million items, it takes **11.5 days**. That's why Big-O matters.
-
 ## Analyzing Your Code
 
-### O(1) — Constant Time
+=== "O(1) — Constant Time"
 
-The operation takes the same time regardless of input size.
+    An $O(1)$ operation takes the same amount of time regardless of input size. Ten items or ten million—same cost.
 
-=== ":material-language-python: Python"
+    The mental model: **the size of the collection is irrelevant.** When you do `users["alice"]`, Python doesn't scan through all the users looking for Alice. It runs Alice's key through a hash function that produces a number, uses that number to jump directly to the right memory location, and returns the value. One operation, regardless of how many users exist.
 
-    ```python title="O(1) Examples" linenums="1"
-    def get_first(items):
-        return items[0]  # (1)!
+    Array indexing works the same way. `items[42]` isn't a search—it's arithmetic. The runtime calculates `base_address + (42 × element_size)` and jumps straight there. Whether the array has 100 elements or 100 million, the calculation is identical.
 
-    def lookup_user(users_dict, user_id):
-        return users_dict.get(user_id)  # (2)!
+    This is why hash tables (Python `dict`, JavaScript `Map`, Go `map`) are such a foundational tool. They give you $O(1)$ lookups that scale to any size.
 
-    def check_flag(config):
-        return config.get("feature_enabled", False)  # (3)!
-    ```
+    === ":material-language-python: Python"
 
-    1. Array index access is O(1) — directly calculated from memory address
-    2. Dictionary lookup is O(1) average — hash tables are powerful
-    3. Doesn't matter if config has 5 keys or 500
+        ```python title="O(1) Examples" linenums="1"
+        def get_first(items):
+            return items[0]  # (1)!
 
-=== ":material-language-javascript: JavaScript"
+        def lookup_user(users_dict, user_id):
+            return users_dict.get(user_id)  # (2)!
 
-    ```javascript title="O(1) Examples" linenums="1"
-    function getFirst(items) {
-        return items[0];  // Array index access
-    }
+        def check_flag(config):
+            return config.get("feature_enabled", False)  # (3)!
+        ```
 
-    function lookupUser(usersMap, userId) {
-        return usersMap.get(userId);  // Map lookup is O(1)
-    }
+        1. Array index access is $O(1)$ — directly calculated from memory address
+        2. Dictionary lookup is $O(1)$ average — hash tables are powerful
+        3. Doesn't matter if config has 5 keys or 500
 
-    function checkFlag(config) {
-        return config.featureEnabled ?? false;  // Object property access
-    }
-    ```
+    === ":material-language-javascript: JavaScript"
 
-=== ":material-language-go: Go"
-
-    ```go title="O(1) Examples" linenums="1"
-    func getFirst(items []string) string {
-        return items[0]  // Slice index access
-    }
-
-    func lookupUser(users map[string]User, userID string) (User, bool) {
-        user, ok := users[userID]  // Map lookup is O(1) average
-        return user, ok
-    }
-
-    func checkFlag(config map[string]bool) bool {
-        return config["featureEnabled"]  // Map access
-    }
-    ```
-
-=== ":material-language-rust: Rust"
-
-    ```rust title="O(1) Examples" linenums="1"
-    fn get_first(items: &[i32]) -> Option<&i32> {
-        items.first()  // Slice index access
-    }
-
-    fn lookup_user(users: &HashMap<String, User>, user_id: &str) -> Option<&User> {
-        users.get(user_id)  // HashMap lookup is O(1) average
-    }
-
-    fn check_flag(config: &HashMap<String, bool>) -> bool {
-        *config.get("feature_enabled").unwrap_or(&false)
-    }
-    ```
-
-=== ":material-language-java: Java"
-
-    ```java title="O(1) Examples" linenums="1"
-    public String getFirst(List<String> items) {
-        return items.get(0);  // ArrayList index access is O(1)
-    }
-
-    public User lookupUser(Map<String, User> users, String userId) {
-        return users.get(userId);  // HashMap lookup is O(1) average
-    }
-
-    public boolean checkFlag(Map<String, Boolean> config) {
-        return config.getOrDefault("featureEnabled", false);
-    }
-    ```
-
-=== ":material-language-cpp: C++"
-
-    ```cpp title="O(1) Examples" linenums="1"
-    std::string getFirst(const std::vector<std::string>& items) {
-        return items[0];  // Vector index access
-    }
-
-    User lookupUser(const std::unordered_map<std::string, User>& users,
-                    const std::string& userId) {
-        auto it = users.find(userId);  // unordered_map lookup is O(1) average
-        return it != users.end() ? it->second : User{};
-    }
-
-    bool checkFlag(const std::unordered_map<std::string, bool>& config) {
-        auto it = config.find("featureEnabled");
-        return it != config.end() ? it->second : false;
-    }
-    ```
-
-**Where you see $O(1)$:** Hash table lookups (dicts, maps, sets), array indexing, stack push/pop, queue enqueue/dequeue.
-
-### O(n) — Linear Time
-
-The operation examines each element once.
-
-=== ":material-language-python: Python"
-
-    ```python title="O(n) Examples" linenums="1"
-    def find_max(items):
-        max_val = items[0]
-        for item in items:  # (1)!
-            if item > max_val:
-                max_val = item
-        return max_val
-
-    def contains(items, target):
-        for item in items:  # (2)!
-            if item == target:
-                return True
-        return False
-
-    def sum_all(numbers):
-        total = 0
-        for num in numbers:  # (3)!
-            total += num
-        return total
-    ```
-
-    1. One pass through all items
-    2. Worst case: target is last or not present
-    3. Must touch every element to compute sum
-
-=== ":material-language-javascript: JavaScript"
-
-    ```javascript title="O(n) Examples" linenums="1"
-    function findMax(items) {
-        let maxVal = items[0];
-        for (const item of items) {
-            if (item > maxVal) {
-                maxVal = item;
-            }
+        ```javascript title="O(1) Examples" linenums="1"
+        function getFirst(items) {
+            return items[0];  // Array index access
         }
-        return maxVal;
-    }
 
-    function contains(items, target) {
-        for (const item of items) {
-            if (item === target) {
-                return true;
-            }
+        function lookupUser(usersMap, userId) {
+            return usersMap.get(userId);  // Map lookup is O(1)
         }
-        return false;
-    }
 
-    function sumAll(numbers) {
-        return numbers.reduce((total, num) => total + num, 0);
-    }
-    ```
-
-=== ":material-language-go: Go"
-
-    ```go title="O(n) Examples" linenums="1"
-    func findMax(items []int) int {
-        maxVal := items[0]
-        for _, item := range items {
-            if item > maxVal {
-                maxVal = item
-            }
+        function checkFlag(config) {
+            return config.featureEnabled ?? false;  // Object property access
         }
-        return maxVal
-    }
+        ```
 
-    func contains(items []string, target string) bool {
-        for _, item := range items {
-            if item == target {
-                return true
-            }
+    === ":material-language-go: Go"
+
+        ```go title="O(1) Examples" linenums="1"
+        func getFirst(items []string) string {
+            return items[0]  // Slice index access
         }
-        return false
-    }
 
-    func sumAll(numbers []int) int {
-        total := 0
-        for _, num := range numbers {
-            total += num
+        func lookupUser(users map[string]User, userID string) (User, bool) {
+            user, ok := users[userID]  // Map lookup is O(1) average
+            return user, ok
         }
-        return total
-    }
-    ```
 
-=== ":material-language-rust: Rust"
-
-    ```rust title="O(n) Examples" linenums="1"
-    fn find_max(items: &[i32]) -> i32 {
-        *items.iter().max().unwrap()
-    }
-
-    fn contains(items: &[String], target: &str) -> bool {
-        items.iter().any(|item| item == target)
-    }
-
-    fn sum_all(numbers: &[i32]) -> i32 {
-        numbers.iter().sum()
-    }
-    ```
-
-=== ":material-language-java: Java"
-
-    ```java title="O(n) Examples" linenums="1"
-    public int findMax(int[] items) {
-        int maxVal = items[0];
-        for (int item : items) {
-            if (item > maxVal) {
-                maxVal = item;
-            }
+        func checkFlag(config map[string]bool) bool {
+            return config["featureEnabled"]  // Map access
         }
-        return maxVal;
-    }
+        ```
 
-    public boolean contains(String[] items, String target) {
-        for (String item : items) {
-            if (item.equals(target)) {
-                return true;
-            }
+    === ":material-language-rust: Rust"
+
+        ```rust title="O(1) Examples" linenums="1"
+        fn get_first(items: &[i32]) -> Option<&i32> {
+            items.first()  // Slice index access
         }
-        return false;
-    }
 
-    public int sumAll(int[] numbers) {
-        int total = 0;
-        for (int num : numbers) {
-            total += num;
+        fn lookup_user(users: &HashMap<String, User>, user_id: &str) -> Option<&User> {
+            users.get(user_id)  // HashMap lookup is O(1) average
         }
-        return total;
-    }
-    ```
 
-=== ":material-language-cpp: C++"
+        fn check_flag(config: &HashMap<String, bool>) -> bool {
+            *config.get("feature_enabled").unwrap_or(&false)
+        }
+        ```
 
-    ```cpp title="O(n) Examples" linenums="1"
-    int findMax(const std::vector<int>& items) {
-        return *std::max_element(items.begin(), items.end());
-    }
+    === ":material-language-java: Java"
 
-    bool contains(const std::vector<std::string>& items,
-                  const std::string& target) {
-        return std::find(items.begin(), items.end(), target) != items.end();
-    }
+        ```java title="O(1) Examples" linenums="1"
+        public String getFirst(List<String> items) {
+            return items.get(0);  // ArrayList index access is O(1)
+        }
 
-    int sumAll(const std::vector<int>& numbers) {
-        return std::accumulate(numbers.begin(), numbers.end(), 0);
-    }
-    ```
+        public User lookupUser(Map<String, User> users, String userId) {
+            return users.get(userId);  // HashMap lookup is O(1) average
+        }
 
-**Where you see $O(n)$:** Linear search, iterating through arrays/lists, counting occurrences, finding min/max in unsorted data.
+        public boolean checkFlag(Map<String, Boolean> config) {
+            return config.getOrDefault("featureEnabled", false);
+        }
+        ```
 
-### O(n²) — Quadratic Time (The Performance Killer)
+    === ":material-language-cpp: C++"
 
-Nested loops where both depend on input size. **This is usually what reviewers flag.**
+        ```cpp title="O(1) Examples" linenums="1"
+        std::string getFirst(const std::vector<std::string>& items) {
+            return items[0];  // Vector index access
+        }
 
-=== ":material-language-python: Python"
+        User lookupUser(const std::unordered_map<std::string, User>& users,
+                        const std::string& userId) {
+            auto it = users.find(userId);  // unordered_map lookup is O(1) average
+            return it != users.end() ? it->second : User{};
+        }
 
-    ```python title="O(n²) — The Problem" linenums="1"
-    def find_duplicates_slow(items):
-        """O(n²) - comparing every pair"""
-        duplicates = []
-        for i in range(len(items)):  # (1)!
-            for j in range(i + 1, len(items)):  # (2)!
-                if items[i] == items[j]:
-                    duplicates.append(items[i])
-        return duplicates
+        bool checkFlag(const std::unordered_map<std::string, bool>& config) {
+            auto it = config.find("featureEnabled");
+            return it != config.end() ? it->second : false;
+        }
+        ```
 
-    def find_duplicates_fast(items):
-        """O(n) - using a set"""
-        seen = set()
-        duplicates = []
-        for item in items:  # (3)!
-            if item in seen:  # (4)!
-                duplicates.append(item)
-            seen.add(item)
-        return duplicates
-    ```
+    **Where you see $O(1)$:** Hash table lookups (dicts, maps, sets), array indexing by position, stack `push`/`pop`, queue `enqueue`/`dequeue`, checking `len()` on most collections. If you're not iterating, you're likely $O(1)$.
 
-    1. Outer loop: n iterations
-    2. Inner loop: up to n iterations for each outer iteration = n × n = n²
-    3. Single pass through items
-    4. Set lookup is O(1), so total is O(n)
+=== "O(n) — Linear Time"
 
-=== ":material-language-javascript: JavaScript"
+    An $O(n)$ operation touches each element once. Double the input, double the time—it scales proportionally.
 
-    ```javascript title="O(n²) — The Problem" linenums="1"
-    function findDuplicatesSlow(items) {
-        // O(n²) - comparing every pair
-        const duplicates = [];
-        for (let i = 0; i < items.length; i++) {
-            for (let j = i + 1; j < items.length; j++) {
-                if (items[i] === items[j]) {
-                    duplicates.push(items[i]);
+    Here's something important to internalize: **$O(n)$ is often the best you can do.** If you need to find the maximum value in an unsorted list, you *must* look at every element. There's no shortcut. There's no clever trick. An $O(n)$ solution to that problem isn't slow—it's *optimal*.
+
+    The tell in your code is a single loop that runs from start to end of your input. One pass = $O(n)$. The contents of the loop don't change this, as long as those contents are themselves $O(1)$. Comparisons, arithmetic, hash lookups, assignments inside the loop—all $O(1)$. The loop is the $O(n)$ part.
+
+    Every time you call `.map()`, `.filter()`, `.forEach()`, `reduce()`, or write a `for` loop over a list, you're doing $O(n)$ work. That's completely normal and expected.
+
+    === ":material-language-python: Python"
+
+        ```python title="O(n) Examples" linenums="1"
+        def find_max(items):
+            max_val = items[0]
+            for item in items:  # (1)!
+                if item > max_val:
+                    max_val = item
+            return max_val
+
+        def contains(items, target):
+            for item in items:  # (2)!
+                if item == target:
+                    return True
+            return False
+
+        def sum_all(numbers):
+            total = 0
+            for num in numbers:  # (3)!
+                total += num
+            return total
+        ```
+
+        1. One pass through all items — no way around it for unsorted data
+        2. Worst case: target is last or not present — we look at everything
+        3. Must touch every element to compute sum — can't skip any
+
+    === ":material-language-javascript: JavaScript"
+
+        ```javascript title="O(n) Examples" linenums="1"
+        function findMax(items) {
+            let maxVal = items[0];
+            for (const item of items) {
+                if (item > maxVal) {
+                    maxVal = item;
                 }
             }
+            return maxVal;
         }
-        return duplicates;
-    }
 
-    function findDuplicatesFast(items) {
-        // O(n) - using a Set
-        const seen = new Set();
-        const duplicates = [];
-        for (const item of items) {
-            if (seen.has(item)) {
-                duplicates.push(item);
-            }
-            seen.add(item);
-        }
-        return duplicates;
-    }
-    ```
-
-=== ":material-language-go: Go"
-
-    ```go title="O(n²) — The Problem" linenums="1"
-    func findDuplicatesSlow(items []string) []string {
-        // O(n²) - comparing every pair
-        var duplicates []string
-        for i := 0; i < len(items); i++ {
-            for j := i + 1; j < len(items); j++ {
-                if items[i] == items[j] {
-                    duplicates = append(duplicates, items[i])
+        function contains(items, target) {
+            for (const item of items) {
+                if (item === target) {
+                    return true;
                 }
             }
+            return false;
         }
-        return duplicates
-    }
 
-    func findDuplicatesFast(items []string) []string {
-        // O(n) - using a map
-        seen := make(map[string]bool)
-        var duplicates []string
-        for _, item := range items {
-            if seen[item] {
-                duplicates = append(duplicates, item)
-            }
-            seen[item] = true
+        function sumAll(numbers) {
+            return numbers.reduce((total, num) => total + num, 0);
         }
-        return duplicates
-    }
-    ```
+        ```
 
-=== ":material-language-rust: Rust"
+    === ":material-language-go: Go"
 
-    ```rust title="O(n²) — The Problem" linenums="1"
-    fn find_duplicates_slow(items: &[String]) -> Vec<String> {
-        // O(n²) - comparing every pair
-        let mut duplicates = Vec::new();
-        for i in 0..items.len() {
-            for j in (i + 1)..items.len() {
-                if items[i] == items[j] {
-                    duplicates.push(items[i].clone());
+        ```go title="O(n) Examples" linenums="1"
+        func findMax(items []int) int {
+            maxVal := items[0]
+            for _, item := range items {
+                if item > maxVal {
+                    maxVal = item
                 }
             }
+            return maxVal
         }
-        duplicates
-    }
 
-    fn find_duplicates_fast(items: &[String]) -> Vec<String> {
-        // O(n) - using a HashSet
-        let mut seen = std::collections::HashSet::new();
-        let mut duplicates = Vec::new();
-        for item in items {
-            if !seen.insert(item) {
-                duplicates.push(item.clone());
-            }
-        }
-        duplicates
-    }
-    ```
-
-=== ":material-language-java: Java"
-
-    ```java title="O(n²) — The Problem" linenums="1"
-    public List<String> findDuplicatesSlow(String[] items) {
-        // O(n²) - comparing every pair
-        List<String> duplicates = new ArrayList<>();
-        for (int i = 0; i < items.length; i++) {
-            for (int j = i + 1; j < items.length; j++) {
-                if (items[i].equals(items[j])) {
-                    duplicates.add(items[i]);
+        func contains(items []string, target string) bool {
+            for _, item := range items {
+                if item == target {
+                    return true
                 }
             }
+            return false
         }
-        return duplicates;
-    }
 
-    public List<String> findDuplicatesFast(String[] items) {
-        // O(n) - using a HashSet
-        Set<String> seen = new HashSet<>();
-        List<String> duplicates = new ArrayList<>();
-        for (String item : items) {
-            if (!seen.add(item)) {
-                duplicates.add(item);
+        func sumAll(numbers []int) int {
+            total := 0
+            for _, num := range numbers {
+                total += num
             }
+            return total
         }
-        return duplicates;
-    }
-    ```
+        ```
 
-=== ":material-language-cpp: C++"
+    === ":material-language-rust: Rust"
 
-    ```cpp title="O(n²) — The Problem" linenums="1"
-    std::vector<std::string> findDuplicatesSlow(
-            const std::vector<std::string>& items) {
-        // O(n²) - comparing every pair
-        std::vector<std::string> duplicates;
-        for (size_t i = 0; i < items.size(); i++) {
-            for (size_t j = i + 1; j < items.size(); j++) {
-                if (items[i] == items[j]) {
-                    duplicates.push_back(items[i]);
+        ```rust title="O(n) Examples" linenums="1"
+        fn find_max(items: &[i32]) -> i32 {
+            *items.iter().max().unwrap()
+        }
+
+        fn contains(items: &[String], target: &str) -> bool {
+            items.iter().any(|item| item == target)
+        }
+
+        fn sum_all(numbers: &[i32]) -> i32 {
+            numbers.iter().sum()
+        }
+        ```
+
+    === ":material-language-java: Java"
+
+        ```java title="O(n) Examples" linenums="1"
+        public int findMax(int[] items) {
+            int maxVal = items[0];
+            for (int item : items) {
+                if (item > maxVal) {
+                    maxVal = item;
                 }
             }
+            return maxVal;
         }
-        return duplicates;
-    }
 
-    std::vector<std::string> findDuplicatesFast(
-            const std::vector<std::string>& items) {
-        // O(n) - using unordered_set
-        std::unordered_set<std::string> seen;
-        std::vector<std::string> duplicates;
-        for (const auto& item : items) {
-            if (!seen.insert(item).second) {
-                duplicates.push_back(item);
+        public boolean contains(String[] items, String target) {
+            for (String item : items) {
+                if (item.equals(target)) {
+                    return true;
+                }
             }
+            return false;
         }
-        return duplicates;
-    }
-    ```
 
-**The pattern:** When you see nested loops both iterating over the input, think "Can I use a hash table to eliminate the inner loop?"
-
-### O(log n) — Logarithmic Time
-
-Each step eliminates half the remaining data. This is why binary search and balanced trees are fast.
-
-=== ":material-language-python: Python"
-
-    ```python title="O(log n) — Binary Search" linenums="1"
-    def binary_search(sorted_items, target):
-        """O(log n) - halving the search space each step"""
-        left, right = 0, len(sorted_items) - 1
-
-        while left <= right:
-            mid = (left + right) // 2  # (1)!
-
-            if sorted_items[mid] == target:
-                return mid
-            elif sorted_items[mid] < target:
-                left = mid + 1  # (2)!
-            else:
-                right = mid - 1  # (3)!
-
-        return -1  # Not found
-    ```
-
-    1. Check the middle element
-    2. Target is larger — eliminate left half
-    3. Target is smaller — eliminate right half
-
-=== ":material-language-javascript: JavaScript"
-
-    ```javascript title="O(log n) — Binary Search" linenums="1"
-    function binarySearch(sortedItems, target) {
-        let left = 0;
-        let right = sortedItems.length - 1;
-
-        while (left <= right) {
-            const mid = Math.floor((left + right) / 2);
-
-            if (sortedItems[mid] === target) {
-                return mid;
-            } else if (sortedItems[mid] < target) {
-                left = mid + 1;
-            } else {
-                right = mid - 1;
+        public int sumAll(int[] numbers) {
+            int total = 0;
+            for (int num : numbers) {
+                total += num;
             }
+            return total;
+        }
+        ```
+
+    === ":material-language-cpp: C++"
+
+        ```cpp title="O(n) Examples" linenums="1"
+        int findMax(const std::vector<int>& items) {
+            return *std::max_element(items.begin(), items.end());
         }
 
-        return -1;
-    }
-    ```
+        bool contains(const std::vector<std::string>& items,
+                      const std::string& target) {
+            return std::find(items.begin(), items.end(), target) != items.end();
+        }
 
-=== ":material-language-go: Go"
+        int sumAll(const std::vector<int>& numbers) {
+            return std::accumulate(numbers.begin(), numbers.end(), 0);
+        }
+        ```
 
-    ```go title="O(log n) — Binary Search" linenums="1"
-    func binarySearch(sortedItems []int, target int) int {
-        left, right := 0, len(sortedItems)-1
+    **Where you see $O(n)$:** Linear search, iterating through arrays/lists, `map()`, `filter()`, `reduce()`, counting occurrences, finding min/max in unsorted data. Essentially anything with a single `for` loop over your input.
 
-        for left <= right {
-            mid := (left + right) / 2
+=== "O(n²) — Quadratic Time"
 
-            if sortedItems[mid] == target {
-                return mid
-            } else if sortedItems[mid] < target {
-                left = mid + 1
-            } else {
-                right = mid - 1
+    $O(n^2)$ typically means a loop inside a loop, and both loops iterate over your input. The intuition to burn into your memory: **for every item in your collection, you look at every other item.** With 1,000 items, that's roughly 1,000,000 operations. With 10,000 items, it's 100,000,000.
+
+    This is almost always what code reviewers are flagging. $O(n^2)$ functions are deceptively fine in development—your test data has 50 items and it runs in milliseconds. Promote that code to production against 500,000 records and you're looking at a timeout, a page full of alerts, and a very unpleasant post-mortem.
+
+    The tell: a `for` loop inside a `for` loop, where both loops depend on the same input size. The critical question to ask yourself: *does the work inside the inner loop grow with the size of my data?* If yes, you're at $O(n^2)$ or worse.
+
+    The fix is almost always the same move: **trade memory for time.** Replace the inner loop with an $O(1)$ hash table lookup. You spend $O(n)$ extra memory to build the lookup structure, and you eliminate the quadratic behavior entirely.
+
+    === ":material-language-python: Python"
+
+        ```python title="O(n²) — The Problem and the Fix" linenums="1"
+        def find_duplicates_slow(items):
+            """O(n²) - comparing every pair"""
+            duplicates = []
+            for i in range(len(items)):  # (1)!
+                for j in range(i + 1, len(items)):  # (2)!
+                    if items[i] == items[j]:
+                        duplicates.append(items[i])
+            return duplicates
+
+        def find_duplicates_fast(items):
+            """O(n) - using a set"""
+            seen = set()
+            duplicates = []
+            for item in items:  # (3)!
+                if item in seen:  # (4)!
+                    duplicates.append(item)
+                seen.add(item)
+            return duplicates
+        ```
+
+        1. Outer loop: n iterations
+        2. Inner loop: up to n iterations for each outer iteration = n × n = n²
+        3. Single pass through items — one loop, not two
+        4. Set lookup is $O(1)$ — the inner loop is gone entirely
+
+    === ":material-language-javascript: JavaScript"
+
+        ```javascript title="O(n²) — The Problem and the Fix" linenums="1"
+        function findDuplicatesSlow(items) {
+            // O(n²) - comparing every pair
+            const duplicates = [];
+            for (let i = 0; i < items.length; i++) {
+                for (let j = i + 1; j < items.length; j++) {
+                    if (items[i] === items[j]) {
+                        duplicates.push(items[i]);
+                    }
+                }
             }
+            return duplicates;
         }
 
-        return -1
-    }
-    ```
-
-=== ":material-language-rust: Rust"
-
-    ```rust title="O(log n) — Binary Search" linenums="1"
-    fn binary_search(sorted_items: &[i32], target: i32) -> Option<usize> {
-        let mut left = 0;
-        let mut right = sorted_items.len();
-
-        while left < right {
-            let mid = left + (right - left) / 2;
-
-            match sorted_items[mid].cmp(&target) {
-                std::cmp::Ordering::Equal => return Some(mid),
-                std::cmp::Ordering::Less => left = mid + 1,
-                std::cmp::Ordering::Greater => right = mid,
+        function findDuplicatesFast(items) {
+            // O(n) - using a Set
+            const seen = new Set();
+            const duplicates = [];
+            for (const item of items) {
+                if (seen.has(item)) {
+                    duplicates.push(item);
+                }
+                seen.add(item);
             }
+            return duplicates;
         }
+        ```
 
-        None
-    }
-    ```
+    === ":material-language-go: Go"
 
-=== ":material-language-java: Java"
-
-    ```java title="O(log n) — Binary Search" linenums="1"
-    public int binarySearch(int[] sortedItems, int target) {
-        int left = 0;
-        int right = sortedItems.length - 1;
-
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-
-            if (sortedItems[mid] == target) {
-                return mid;
-            } else if (sortedItems[mid] < target) {
-                left = mid + 1;
-            } else {
-                right = mid - 1;
+        ```go title="O(n²) — The Problem and the Fix" linenums="1"
+        func findDuplicatesSlow(items []string) []string {
+            // O(n²) - comparing every pair
+            var duplicates []string
+            for i := 0; i < len(items); i++ {
+                for j := i + 1; j < len(items); j++ {
+                    if items[i] == items[j] {
+                        duplicates = append(duplicates, items[i])
+                    }
+                }
             }
+            return duplicates
         }
 
-        return -1;
-    }
-    ```
-
-=== ":material-language-cpp: C++"
-
-    ```cpp title="O(log n) — Binary Search" linenums="1"
-    int binarySearch(const std::vector<int>& sortedItems, int target) {
-        int left = 0;
-        int right = sortedItems.size() - 1;
-
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-
-            if (sortedItems[mid] == target) {
-                return mid;
-            } else if (sortedItems[mid] < target) {
-                left = mid + 1;
-            } else {
-                right = mid - 1;
+        func findDuplicatesFast(items []string) []string {
+            // O(n) - using a map
+            seen := make(map[string]bool)
+            var duplicates []string
+            for _, item := range items {
+                if seen[item] {
+                    duplicates = append(duplicates, item)
+                }
+                seen[item] = true
             }
+            return duplicates
+        }
+        ```
+
+    === ":material-language-rust: Rust"
+
+        ```rust title="O(n²) — The Problem and the Fix" linenums="1"
+        fn find_duplicates_slow(items: &[String]) -> Vec<String> {
+            // O(n²) - comparing every pair
+            let mut duplicates = Vec::new();
+            for i in 0..items.len() {
+                for j in (i + 1)..items.len() {
+                    if items[i] == items[j] {
+                        duplicates.push(items[i].clone());
+                    }
+                }
+            }
+            duplicates
         }
 
-        return -1;
-    }
-    ```
+        fn find_duplicates_fast(items: &[String]) -> Vec<String> {
+            // O(n) - using a HashSet
+            let mut seen = std::collections::HashSet::new();
+            let mut duplicates = Vec::new();
+            for item in items {
+                if !seen.insert(item) {
+                    duplicates.push(item.clone());
+                }
+            }
+            duplicates
+        }
+        ```
 
-**Where you see $O(\log n)$:** Binary search, balanced tree operations (insert, lookup, delete), finding elements in sorted data.
+    === ":material-language-java: Java"
 
-**Why it matters:** Searching 1 billion sorted items takes only ~30 comparisons with binary search vs 1 billion with linear search.
+        ```java title="O(n²) — The Problem and the Fix" linenums="1"
+        public List<String> findDuplicatesSlow(String[] items) {
+            // O(n²) - comparing every pair
+            List<String> duplicates = new ArrayList<>();
+            for (int i = 0; i < items.length; i++) {
+                for (int j = i + 1; j < items.length; j++) {
+                    if (items[i].equals(items[j])) {
+                        duplicates.add(items[i]);
+                    }
+                }
+            }
+            return duplicates;
+        }
 
-## Common Operations Cheat Sheet
+        public List<String> findDuplicatesFast(String[] items) {
+            // O(n) - using a HashSet
+            Set<String> seen = new HashSet<>();
+            List<String> duplicates = new ArrayList<>();
+            for (String item : items) {
+                if (!seen.add(item)) {
+                    duplicates.add(item);
+                }
+            }
+            return duplicates;
+        }
+        ```
 
-| Operation | Array/List | Hash Table | Sorted Array | Balanced Tree |
-|:----------|:-----------|:-----------|:-------------|:--------------|
-| Access by index | $O(1)$ | — | $O(1)$ | — |
-| Search | $O(n)$ | $O(1)$ avg | $O(\log n)$ | $O(\log n)$ |
-| Insert at end | $O(1)$ | $O(1)$ avg | $O(n)$ | $O(\log n)$ |
-| Insert at start | $O(n)$ | — | $O(n)$ | $O(\log n)$ |
-| Delete | $O(n)$ | $O(1)$ avg | $O(n)$ | $O(\log n)$ |
+    === ":material-language-cpp: C++"
 
-**Key insight:** Hash tables give you $O(1)$ lookup but don't maintain order. Trees give you $O(\log n)$ everything while staying sorted.
+        ```cpp title="O(n²) — The Problem and the Fix" linenums="1"
+        std::vector<std::string> findDuplicatesSlow(
+                const std::vector<std::string>& items) {
+            // O(n²) - comparing every pair
+            std::vector<std::string> duplicates;
+            for (size_t i = 0; i < items.size(); i++) {
+                for (size_t j = i + 1; j < items.size(); j++) {
+                    if (items[i] == items[j]) {
+                        duplicates.push_back(items[i]);
+                    }
+                }
+            }
+            return duplicates;
+        }
+
+        std::vector<std::string> findDuplicatesFast(
+                const std::vector<std::string>& items) {
+            // O(n) - using unordered_set
+            std::unordered_set<std::string> seen;
+            std::vector<std::string> duplicates;
+            for (const auto& item : items) {
+                if (!seen.insert(item).second) {
+                    duplicates.push_back(item);
+                }
+            }
+            return duplicates;
+        }
+        ```
+
+    **The pattern to recognize:** Nested loops both iterating over your input is your signal. Ask "can I use a hash table to eliminate the inner loop?" The answer is usually yes, and the fix is almost always the same: build a set or map in one pass, then use $O(1)$ lookups instead of re-scanning.
+
+=== "O(log n) — Logarithmic Time"
+
+    Logarithmic time is remarkable—and the intuition is simpler than the notation suggests.
+
+    Imagine you're playing the "guess the number" game. Someone is thinking of a number between 1 and 1,000. Instead of guessing randomly, you ask: "Higher or lower than 500?" They say "higher." You ask: "Higher or lower than 750?" And so on. Every question cuts the remaining possibilities in half.
+
+    How many questions do you need to find any number between 1 and 1,000? About 10. Between 1 and 1,000,000? About 20. Between 1 and 1,000,000,000? About 30. You added three zeros to the input size, and you only needed 10 more questions.
+
+    **That's $O(\log n)$.** Every step cuts the problem in half, which means the number of steps grows incredibly slowly as the input grows. Doubling your input adds exactly one step. Adding a zero to your input adds about three steps.
+
+    This is how binary search works, and it's why database indexes are fast. A B-tree index on your `users.email` column lets the database play that same halving game. Instead of checking every row ($O(n)$), it finds any email in about 20–30 comparisons even with millions of rows ($O(\log n)$).
+
+    The catch: **you need sorted data or a tree structure.** You can't discard half the remaining elements if you don't know which half contains your target. Binary search only works on sorted arrays. B-tree indexes work because the database maintains the tree structure itself, sorted, on your behalf.
+
+    === ":material-language-python: Python"
+
+        ```python title="O(log n) — Binary Search" linenums="1"
+        def binary_search(sorted_items, target):
+            """O(log n) - halving the search space each step"""
+            left, right = 0, len(sorted_items) - 1
+
+            while left <= right:
+                mid = (left + right) // 2  # (1)!
+
+                if sorted_items[mid] == target:
+                    return mid
+                elif sorted_items[mid] < target:
+                    left = mid + 1  # (2)!
+                else:
+                    right = mid - 1  # (3)!
+
+            return -1  # Not found
+        ```
+
+        1. Check the middle element — is this the target?
+        2. Target is larger — discard the entire left half
+        3. Target is smaller — discard the entire right half
+
+    === ":material-language-javascript: JavaScript"
+
+        ```javascript title="O(log n) — Binary Search" linenums="1"
+        function binarySearch(sortedItems, target) {
+            let left = 0;
+            let right = sortedItems.length - 1;
+
+            while (left <= right) {
+                const mid = Math.floor((left + right) / 2);
+
+                if (sortedItems[mid] === target) {
+                    return mid;
+                } else if (sortedItems[mid] < target) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+
+            return -1;
+        }
+        ```
+
+    === ":material-language-go: Go"
+
+        ```go title="O(log n) — Binary Search" linenums="1"
+        func binarySearch(sortedItems []int, target int) int {
+            left, right := 0, len(sortedItems)-1
+
+            for left <= right {
+                mid := (left + right) / 2
+
+                if sortedItems[mid] == target {
+                    return mid
+                } else if sortedItems[mid] < target {
+                    left = mid + 1
+                } else {
+                    right = mid - 1
+                }
+            }
+
+            return -1
+        }
+        ```
+
+    === ":material-language-rust: Rust"
+
+        ```rust title="O(log n) — Binary Search" linenums="1"
+        fn binary_search(sorted_items: &[i32], target: i32) -> Option<usize> {
+            let mut left = 0;
+            let mut right = sorted_items.len();
+
+            while left < right {
+                let mid = left + (right - left) / 2;
+
+                match sorted_items[mid].cmp(&target) {
+                    std::cmp::Ordering::Equal => return Some(mid),
+                    std::cmp::Ordering::Less => left = mid + 1,
+                    std::cmp::Ordering::Greater => right = mid,
+                }
+            }
+
+            None
+        }
+        ```
+
+    === ":material-language-java: Java"
+
+        ```java title="O(log n) — Binary Search" linenums="1"
+        public int binarySearch(int[] sortedItems, int target) {
+            int left = 0;
+            int right = sortedItems.length - 1;
+
+            while (left <= right) {
+                int mid = left + (right - left) / 2;
+
+                if (sortedItems[mid] == target) {
+                    return mid;
+                } else if (sortedItems[mid] < target) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+
+            return -1;
+        }
+        ```
+
+    === ":material-language-cpp: C++"
+
+        ```cpp title="O(log n) — Binary Search" linenums="1"
+        int binarySearch(const std::vector<int>& sortedItems, int target) {
+            int left = 0;
+            int right = sortedItems.size() - 1;
+
+            while (left <= right) {
+                int mid = left + (right - left) / 2;
+
+                if (sortedItems[mid] == target) {
+                    return mid;
+                } else if (sortedItems[mid] < target) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+
+            return -1;
+        }
+        ```
+
+    **Where you see $O(\log n)$:** Binary search, balanced tree operations (insert, lookup, delete), database B-tree index lookups. Any algorithm that repeatedly halves its remaining work.
+
+=== "O(n log n) — Linearithmic Time"
+
+    $O(n \log n)$ sits between linear and quadratic. It's "slightly worse than linear"—but dramatically better than $O(n^2)$. In practice, this is the complexity class of **efficient sorting algorithms**, and it comes up every time you call `.sort()`.
+
+    Why does sorting land here? Think about it this way: to sort n items using comparisons, each element needs to find its correct position. With a clever algorithm like merge sort, each element participates in approximately log n comparisons as data is repeatedly split in half and merged back together in order. n elements, each doing log n work = $O(n \log n)$.
+
+    In fact, $O(n \log n)$ is the *theoretical lower bound* for comparison-based sorting. No algorithm that determines order purely by comparing elements can be faster than this for general data—it's been mathematically proven. When you call `.sort()` in Python, JavaScript's `Array.prototype.sort()`, or Java's `Arrays.sort()`, this is what's running (Python uses Timsort, modern JavaScript engines typically use Timsort too—both $O(n \log n)$ average and worst case).
+
+    The practical implication: if your algorithm sorts data as a step and then does one linear pass, your total complexity is $O(n \log n)$ + $O(n)$. Since $O(n \log n)$ dominates, you're $O(n \log n)$ overall. The sort controls your ceiling.
+
+    === ":material-language-python: Python"
+
+        ```python title="O(n log n) — Merge Sort" linenums="1"
+        def merge_sort(items):
+            if len(items) <= 1:  # (1)!
+                return items
+
+            mid = len(items) // 2  # (2)!
+            left = merge_sort(items[:mid])
+            right = merge_sort(items[mid:])
+
+            return merge(left, right)
+
+        def merge(left, right):
+            result = []
+            i = j = 0
+            while i < len(left) and j < len(right):  # (3)!
+                if left[i] <= right[j]:
+                    result.append(left[i])
+                    i += 1
+                else:
+                    result.append(right[j])
+                    j += 1
+            result.extend(left[i:])
+            result.extend(right[j:])
+            return result
+        ```
+
+        1. Base case — a list of 0 or 1 items is already sorted
+        2. Split in half — this is where the log n comes from (log n levels of splitting)
+        3. Merge two sorted halves — O(n) work at each level, log n levels = O(n log n) total
+
+    === ":material-language-javascript: JavaScript"
+
+        ```javascript title="O(n log n) — Merge Sort" linenums="1"
+        function mergeSort(items) {
+            if (items.length <= 1) {
+                return items;
+            }
+
+            const mid = Math.floor(items.length / 2);
+            const left = mergeSort(items.slice(0, mid));
+            const right = mergeSort(items.slice(mid));
+
+            return merge(left, right);
+        }
+
+        function merge(left, right) {
+            const result = [];
+            let i = 0, j = 0;
+            while (i < left.length && j < right.length) {
+                if (left[i] <= right[j]) {
+                    result.push(left[i++]);
+                } else {
+                    result.push(right[j++]);
+                }
+            }
+            return result.concat(left.slice(i)).concat(right.slice(j));
+        }
+        ```
+
+    === ":material-language-go: Go"
+
+        ```go title="O(n log n) — Merge Sort" linenums="1"
+        func mergeSort(items []int) []int {
+            if len(items) <= 1 {
+                return items
+            }
+
+            mid := len(items) / 2
+            left := mergeSort(items[:mid])
+            right := mergeSort(items[mid:])
+
+            return merge(left, right)
+        }
+
+        func merge(left, right []int) []int {
+            result := make([]int, 0, len(left)+len(right))
+            i, j := 0, 0
+            for i < len(left) && j < len(right) {
+                if left[i] <= right[j] {
+                    result = append(result, left[i])
+                    i++
+                } else {
+                    result = append(result, right[j])
+                    j++
+                }
+            }
+            result = append(result, left[i:]...)
+            result = append(result, right[j:]...)
+            return result
+        }
+        ```
+
+    === ":material-language-rust: Rust"
+
+        ```rust title="O(n log n) — Merge Sort" linenums="1"
+        fn merge_sort(items: &[i32]) -> Vec<i32> {
+            if items.len() <= 1 {
+                return items.to_vec();
+            }
+
+            let mid = items.len() / 2;
+            let left = merge_sort(&items[..mid]);
+            let right = merge_sort(&items[mid..]);
+
+            merge(&left, &right)
+        }
+
+        fn merge(left: &[i32], right: &[i32]) -> Vec<i32> {
+            let mut result = Vec::with_capacity(left.len() + right.len());
+            let (mut i, mut j) = (0, 0);
+            while i < left.len() && j < right.len() {
+                if left[i] <= right[j] {
+                    result.push(left[i]);
+                    i += 1;
+                } else {
+                    result.push(right[j]);
+                    j += 1;
+                }
+            }
+            result.extend_from_slice(&left[i..]);
+            result.extend_from_slice(&right[j..]);
+            result
+        }
+        ```
+
+    === ":material-language-java: Java"
+
+        ```java title="O(n log n) — Merge Sort" linenums="1"
+        public int[] mergeSort(int[] items) {
+            if (items.length <= 1) {
+                return items;
+            }
+
+            int mid = items.length / 2;
+            int[] left = mergeSort(Arrays.copyOfRange(items, 0, mid));
+            int[] right = mergeSort(Arrays.copyOfRange(items, mid, items.length));
+
+            return merge(left, right);
+        }
+
+        private int[] merge(int[] left, int[] right) {
+            int[] result = new int[left.length + right.length];
+            int i = 0, j = 0, k = 0;
+            while (i < left.length && j < right.length) {
+                if (left[i] <= right[j]) {
+                    result[k++] = left[i++];
+                } else {
+                    result[k++] = right[j++];
+                }
+            }
+            while (i < left.length) result[k++] = left[i++];
+            while (j < right.length) result[k++] = right[j++];
+            return result;
+        }
+        ```
+
+    === ":material-language-cpp: C++"
+
+        ```cpp title="O(n log n) — Merge Sort" linenums="1"
+        std::vector<int> mergeSort(std::vector<int> items) {
+            if (items.size() <= 1) {
+                return items;
+            }
+
+            size_t mid = items.size() / 2;
+            auto left = mergeSort(std::vector<int>(items.begin(), items.begin() + mid));
+            auto right = mergeSort(std::vector<int>(items.begin() + mid, items.end()));
+
+            return merge(left, right);
+        }
+
+        std::vector<int> merge(const std::vector<int>& left,
+                               const std::vector<int>& right) {
+            std::vector<int> result;
+            result.reserve(left.size() + right.size());
+            size_t i = 0, j = 0;
+            while (i < left.size() && j < right.size()) {
+                if (left[i] <= right[j]) {
+                    result.push_back(left[i++]);
+                } else {
+                    result.push_back(right[j++]);
+                }
+            }
+            result.insert(result.end(), left.begin() + i, left.end());
+            result.insert(result.end(), right.begin() + j, right.end());
+            return result;
+        }
+        ```
+
+    **Where you see $O(n \log n)$:** Every call to `.sort()`, merge sort, quicksort (average case), heapsort. Any algorithm where you sort first and query later.
+
+=== "O(2^n) — Exponential Time"
+
+    $O(2^n)$ is the complexity class you want to avoid entirely. The table showed you the numbers: at $n=100$, you're beyond $10^{30}$ operations—more than the number of atoms in the observable universe, regardless of hardware.
+
+    The intuition: **every new input doubles the work.** A recursive function that calls itself twice per input, without caching results, is the archetype. `fibonacci(5)` calls `fibonacci(4)` and `fibonacci(3)`. `fibonacci(4)` then calls `fibonacci(3)` again, and `fibonacci(2)`. The same subproblems are solved over and over, and the call tree doubles in size at each level.
+
+    The fix is almost always **memoization**—cache results you've already computed. What was $O(2^n)$ becomes $O(n)$: one computation per unique subproblem. This is the foundational insight of dynamic programming.
+
+    === ":material-language-python: Python"
+
+        ```python title="O(2^n) — and the memoized fix" linenums="1"
+        import functools
+
+        def fibonacci_slow(n):
+            # O(2^n) — call tree doubles at every level
+            if n <= 1:
+                return n
+            return fibonacci_slow(n - 1) + fibonacci_slow(n - 2)  # (1)!
+
+        @functools.lru_cache(maxsize=None)  # (2)!
+        def fibonacci_fast(n):
+            # O(n) — each value computed exactly once
+            if n <= 1:
+                return n
+            return fibonacci_fast(n - 1) + fibonacci_fast(n - 2)
+        ```
+
+        1. Both recursive calls re-solve overlapping subproblems. `fibonacci_slow(40)` makes over a billion calls.
+        2. `@lru_cache` memoizes automatically — subsequent calls return the cached result instantly instead of recursing.
+
+    === ":material-language-javascript: JavaScript"
+
+        ```javascript title="O(2^n) — and the memoized fix" linenums="1"
+        function fibonacciSlow(n) {
+            // O(2^n) — call tree doubles at every level
+            if (n <= 1) return n;
+            return fibonacciSlow(n - 1) + fibonacciSlow(n - 2);
+        }
+
+        function fibonacciFast(n, memo = new Map()) {
+            // O(n) — each value computed exactly once
+            if (memo.has(n)) return memo.get(n);
+            if (n <= 1) return n;
+            const result = fibonacciFast(n - 1, memo) + fibonacciFast(n - 2, memo);
+            memo.set(n, result);
+            return result;
+        }
+        ```
+
+    === ":material-language-go: Go"
+
+        ```go title="O(2^n) — and the memoized fix" linenums="1"
+        func fibonacciSlow(n int) int {
+            // O(2^n) — call tree doubles at every level
+            if n <= 1 {
+                return n
+            }
+            return fibonacciSlow(n-1) + fibonacciSlow(n-2)
+        }
+
+        func fibonacciFast(n int, memo map[int]int) int {
+            // O(n) — each value computed exactly once
+            if val, ok := memo[n]; ok {
+                return val
+            }
+            if n <= 1 {
+                return n
+            }
+            result := fibonacciFast(n-1, memo) + fibonacciFast(n-2, memo)
+            memo[n] = result
+            return result
+        }
+        ```
+
+    === ":material-language-rust: Rust"
+
+        ```rust title="O(2^n) — and the memoized fix" linenums="1"
+        fn fibonacci_slow(n: u64) -> u64 {
+            // O(2^n) — call tree doubles at every level
+            if n <= 1 {
+                return n;
+            }
+            fibonacci_slow(n - 1) + fibonacci_slow(n - 2)
+        }
+
+        fn fibonacci_fast(n: u64, memo: &mut std::collections::HashMap<u64, u64>) -> u64 {
+            // O(n) — each value computed exactly once
+            if let Some(&val) = memo.get(&n) {
+                return val;
+            }
+            if n <= 1 {
+                return n;
+            }
+            let result = fibonacci_fast(n - 1, memo) + fibonacci_fast(n - 2, memo);
+            memo.insert(n, result);
+            result
+        }
+        ```
+
+    === ":material-language-java: Java"
+
+        ```java title="O(2^n) — and the memoized fix" linenums="1"
+        public long fibonacciSlow(int n) {
+            // O(2^n) — call tree doubles at every level
+            if (n <= 1) return n;
+            return fibonacciSlow(n - 1) + fibonacciSlow(n - 2);
+        }
+
+        public long fibonacciFast(int n, Map<Integer, Long> memo) {
+            // O(n) — each value computed exactly once
+            if (memo.containsKey(n)) return memo.get(n);
+            if (n <= 1) return n;
+            long result = fibonacciFast(n - 1, memo) + fibonacciFast(n - 2, memo);
+            memo.put(n, result);
+            return result;
+        }
+        ```
+
+    === ":material-language-cpp: C++"
+
+        ```cpp title="O(2^n) — and the memoized fix" linenums="1"
+        long long fibonacciSlow(int n) {
+            // O(2^n) — call tree doubles at every level
+            if (n <= 1) return n;
+            return fibonacciSlow(n - 1) + fibonacciSlow(n - 2);
+        }
+
+        long long fibonacciFast(int n, std::unordered_map<int, long long>& memo) {
+            // O(n) — each value computed exactly once
+            auto it = memo.find(n);
+            if (it != memo.end()) return it->second;
+            if (n <= 1) return n;
+            long long result = fibonacciFast(n - 1, memo) + fibonacciFast(n - 2, memo);
+            memo[n] = result;
+            return result;
+        }
+        ```
+
+    **Where you see $O(2^n)$:** Naive recursive solutions without memoization, brute-force combinatorics (generating all subsets of a set), some backtracking algorithms. Any function with `return f(n-1) + f(n-2)` and no cache is a red flag. The fix is almost always memoization or dynamic programming.
 
 ## Why This Matters for Production Code
 
-### Database Queries
+=== ":material-database: Database Queries"
 
-```sql
--- O(n) - full table scan
-SELECT * FROM users WHERE email = 'user@example.com';
+    ```sql title="Same query — completely different behavior" linenums="1"
+    -- O(n): full table scan — the database checks every single row
+    SELECT * FROM users WHERE email = 'alice@example.com';
 
--- O(log n) - with index on email column
--- Same query, but database uses B-tree index
-```
+    -- O(log n): with a B-tree index on email — same query, completely different behavior
+    ```
 
-That's why you add indexes. A B-tree index turns $O(n)$ scans into $O(\log n)$ lookups.
+    When your users table has 100 rows, both queries are fast. At 10 million rows, the unindexed version reads every row—potentially thousands of disk I/O operations. The indexed version traverses a B-tree in about 24 comparisons and returns.
 
-### API Response Times
+    That's the entire reason indexes exist. It's not magic—it's the database maintaining a sorted, tree-structured copy of that column, so it can binary-search instead of scan. When your DBA says "you need an index on that column," they're telling you your query is $O(n)$ and they want to make it $O(\log n)$.
 
-| Input Size | $O(n^2)$ Time | $O(n)$ Time |
-|:-----------|:--------------|:------------|
-| $n = 100$ users | 10ms | 0.1ms |
-| $n = 10,000$ users | **100 seconds** | 10ms |
+=== ":material-alert-circle: Works in Dev, Dies in Production"
 
-Your endpoint works in dev. It times out in production. This is why.
+    Here's a scenario that plays out constantly. You have an API endpoint that loads users and checks their role against a list of allowed roles.
 
-### Memory vs. Time Trade-offs
+    With 100 users, 5 roles each, checked against 10 allowed roles: 100 × 5 × 10 = 5,000 operations. Instant in dev.
 
-The $O(n)$ duplicate finder uses extra memory (the set). The $O(n^2)$ version uses no extra memory. Sometimes you choose the slower algorithm because memory is constrained. **Big-O helps you make informed trade-offs.**
+    With 50,000 users, 20 roles each, against 500 allowed roles: 50,000 × 20 × 500 = **500 million operations**. Your server is down.
 
-## Technical Interview Context
+    The fix is one line—convert `allowed_roles` to a set for $O(1)$ lookups:
 
-Big-O questions are standard in technical interviews. Interviewers want to see:
+    === ":material-language-python: Python"
 
-1. **You can analyze complexity**: "This is $O(n^2)$ because of the nested loops"
-2. **You recognize trade-offs**: "I can get $O(n)$ time by using $O(n)$ extra space"
-3. **You can optimize**: "Let me refactor this from $O(n^2)$ to $O(n \log n)$"
+        ```python title="A hidden O(n²) problem — and the fix" linenums="1"
+        def get_authorized_users(users, allowed_roles):
+            authorized = []
+            for user in users:                  # O(n) — loop over users
+                for role in user.roles:         # O(r) — loop over user's roles
+                    if role in allowed_roles:   # O(a) — linear scan of a list!
+                        authorized.append(user)
+                        break
+            return authorized
 
-Common follow-ups:
+        # Fix: one line converts list to set — O(1) lookups instead of O(a)
+        allowed_roles = set(allowed_roles)  # Build once: O(a)
+        ```
 
-- "Can you do better than $O(n^2)$?"
-- "What's the space complexity?"
-- "What if the input is already sorted?"
+    === ":material-language-javascript: JavaScript"
 
-## Formal Definition
+        ```javascript title="A hidden O(n²) problem — and the fix" linenums="1"
+        function getAuthorizedUsers(users, allowedRoles) {
+            const authorized = [];
+            for (const user of users) {                // O(n) — loop over users
+                for (const role of user.roles) {       // O(r) — loop over user's roles
+                    if (allowedRoles.includes(role)) { // O(a) — array scan!
+                        authorized.push(user);
+                        break;
+                    }
+                }
+            }
+            return authorized;
+        }
 
-For the mathematically inclined:
+        // Fix: convert to Set for O(1) lookups
+        const allowedRolesSet = new Set(allowedRoles);  // Build once: O(a)
+        // Now: allowedRolesSet.has(role) is O(1)
+        ```
 
-$O(g(n))$ is the set of functions $f(n)$ where there exist positive constants $c$ and $n_0$ such that:
+    === ":material-language-go: Go"
 
-$$0 \leq f(n) \leq c \cdot g(n) \quad \text{for all } n \geq n_0$$
+        ```go title="A hidden O(n²) problem — and the fix" linenums="1"
+        func getAuthorizedUsers(users []User, allowedRoles []string) []User {
+            authorized := []User{}
+            for _, user := range users {                   // O(n) — loop over users
+                for _, role := range user.Roles {          // O(r) — loop over user's roles
+                    for _, allowed := range allowedRoles { // O(a) — slice scan!
+                        if role == allowed {
+                            authorized = append(authorized, user)
+                            break
+                        }
+                    }
+                }
+            }
+            return authorized
+        }
 
-In plain English: Big-O describes an **upper bound** on growth. When we say an algorithm is $O(n^2)$, we mean its running time grows no faster than some constant times $n^2$, once the input is large enough.
+        // Fix: build a map once for O(1) lookups
+        allowedSet := make(map[string]bool, len(allowedRoles))
+        for _, r := range allowedRoles {
+            allowedSet[r] = true  // Build once: O(a)
+        }
+        // Now: allowedSet[role] is O(1)
+        ```
 
-**Related notations:**
+    === ":material-language-rust: Rust"
 
-- $\Omega$ **(Omega)**: Lower bound — "at least this fast"
-- $\Theta$ **(Theta)**: Tight bound — "exactly this fast"
+        ```rust title="A hidden O(n²) problem — and the fix" linenums="1"
+        fn get_authorized_users<'a>(users: &'a [User], allowed_roles: &[String]) -> Vec<&'a User> {
+            let mut authorized = Vec::new();
+            'outer: for user in users {
+                for role in &user.roles {
+                    if allowed_roles.contains(role) {  // O(a) — linear scan!
+                        authorized.push(user);
+                        continue 'outer;
+                    }
+                }
+            }
+            authorized
+        }
 
-In practice, engineers usually say "Big-O" even when they mean $\Theta$.
+        // Fix: build a HashSet once for O(1) lookups
+        use std::collections::HashSet;
+        let allowed_set: HashSet<&String> = allowed_roles.iter().collect();  // Build once: O(a)
+        // Now: allowed_set.contains(role) is O(1)
+        ```
+
+    === ":material-language-java: Java"
+
+        ```java title="A hidden O(n²) problem — and the fix" linenums="1"
+        public List<User> getAuthorizedUsers(List<User> users, List<String> allowedRoles) {
+            List<User> authorized = new ArrayList<>();
+            for (User user : users) {                  // O(n) — loop over users
+                for (String role : user.getRoles()) {  // O(r) — loop over user's roles
+                    if (allowedRoles.contains(role)) { // O(a) — list scan!
+                        authorized.add(user);
+                        break;
+                    }
+                }
+            }
+            return authorized;
+        }
+
+        // Fix: use HashSet for O(1) lookups
+        Set<String> allowedSet = new HashSet<>(allowedRoles);  // Build once: O(a)
+        // Now: allowedSet.contains(role) is O(1)
+        ```
+
+    === ":material-language-cpp: C++"
+
+        ```cpp title="A hidden O(n²) problem — and the fix" linenums="1"
+        std::vector<User> getAuthorizedUsers(
+                const std::vector<User>& users,
+                const std::vector<std::string>& allowedRoles) {
+            std::vector<User> authorized;
+            for (const auto& user : users) {
+                for (const auto& role : user.roles) {
+                    // O(a) — linear scan through allowedRoles vector
+                    auto it = std::find(allowedRoles.begin(), allowedRoles.end(), role);
+                    if (it != allowedRoles.end()) {
+                        authorized.push_back(user);
+                        break;
+                    }
+                }
+            }
+            return authorized;
+        }
+
+        // Fix: use unordered_set for O(1) lookups
+        std::unordered_set<std::string> allowedSet(
+            allowedRoles.begin(), allowedRoles.end());  // Build once: O(a)
+        // Now: allowedSet.count(role) is O(1)
+        ```
+
+    Total complexity drops from $O(n \times r \times a)$ to $O(n \times r)$. With 50,000 users: 50,000 × 20 = 1,000,000 operations. Completely manageable.
+
+=== ":material-scale-balance: Memory vs. Time"
+
+    The $O(n)$ duplicate finder uses extra memory (the set). The $O(n^2)$ version uses no extra memory. This is the fundamental trade-off in algorithm design—**time versus space**—and it shows up constantly.
+
+    === ":material-language-python: Python"
+
+        ```python title="The same problem, two trade-offs" linenums="1"
+        def has_duplicate_slow(items):
+            # O(n²) time, O(1) extra space — no extra memory used
+            for i in range(len(items)):
+                for j in range(i + 1, len(items)):
+                    if items[i] == items[j]:
+                        return True
+            return False
+
+        def has_duplicate_fast(items):
+            # O(n) time, O(n) extra space — trades memory for speed
+            seen = set()  # grows with input size
+            for item in items:
+                if item in seen:
+                    return True
+                seen.add(item)
+            return False
+        ```
+
+    === ":material-language-javascript: JavaScript"
+
+        ```javascript title="The same problem, two trade-offs" linenums="1"
+        function hasDuplicateSlow(items) {
+            // O(n²) time, O(1) extra space — no extra memory used
+            for (let i = 0; i < items.length; i++) {
+                for (let j = i + 1; j < items.length; j++) {
+                    if (items[i] === items[j]) return true;
+                }
+            }
+            return false;
+        }
+
+        function hasDuplicateFast(items) {
+            // O(n) time, O(n) extra space — trades memory for speed
+            const seen = new Set();  // grows with input size
+            for (const item of items) {
+                if (seen.has(item)) return true;
+                seen.add(item);
+            }
+            return false;
+        }
+        ```
+
+    === ":material-language-go: Go"
+
+        ```go title="The same problem, two trade-offs" linenums="1"
+        func hasDuplicateSlow(items []string) bool {
+            // O(n²) time, O(1) extra space — no extra memory used
+            for i := 0; i < len(items); i++ {
+                for j := i + 1; j < len(items); j++ {
+                    if items[i] == items[j] {
+                        return true
+                    }
+                }
+            }
+            return false
+        }
+
+        func hasDuplicateFast(items []string) bool {
+            // O(n) time, O(n) extra space — trades memory for speed
+            seen := make(map[string]bool)  // grows with input size
+            for _, item := range items {
+                if seen[item] {
+                    return true
+                }
+                seen[item] = true
+            }
+            return false
+        }
+        ```
+
+    === ":material-language-rust: Rust"
+
+        ```rust title="The same problem, two trade-offs" linenums="1"
+        fn has_duplicate_slow(items: &[String]) -> bool {
+            // O(n²) time, O(1) extra space — no extra memory used
+            for i in 0..items.len() {
+                for j in (i + 1)..items.len() {
+                    if items[i] == items[j] {
+                        return true;
+                    }
+                }
+            }
+            false
+        }
+
+        fn has_duplicate_fast(items: &[String]) -> bool {
+            // O(n) time, O(n) extra space — trades memory for speed
+            let mut seen = std::collections::HashSet::new();  // grows with input size
+            for item in items {
+                if !seen.insert(item) {
+                    return true;
+                }
+            }
+            false
+        }
+        ```
+
+    === ":material-language-java: Java"
+
+        ```java title="The same problem, two trade-offs" linenums="1"
+        public boolean hasDuplicateSlow(String[] items) {
+            // O(n²) time, O(1) extra space — no extra memory used
+            for (int i = 0; i < items.length; i++) {
+                for (int j = i + 1; j < items.length; j++) {
+                    if (items[i].equals(items[j])) return true;
+                }
+            }
+            return false;
+        }
+
+        public boolean hasDuplicateFast(String[] items) {
+            // O(n) time, O(n) extra space — trades memory for speed
+            Set<String> seen = new HashSet<>();  // grows with input size
+            for (String item : items) {
+                if (!seen.add(item)) return true;
+            }
+            return false;
+        }
+        ```
+
+    === ":material-language-cpp: C++"
+
+        ```cpp title="The same problem, two trade-offs" linenums="1"
+        bool hasDuplicateSlow(const std::vector<std::string>& items) {
+            // O(n²) time, O(1) extra space — no extra memory used
+            for (size_t i = 0; i < items.size(); i++) {
+                for (size_t j = i + 1; j < items.size(); j++) {
+                    if (items[i] == items[j]) return true;
+                }
+            }
+            return false;
+        }
+
+        bool hasDuplicateFast(const std::vector<std::string>& items) {
+            // O(n) time, O(n) extra space — trades memory for speed
+            std::unordered_set<std::string> seen;  // grows with input size
+            for (const auto& item : items) {
+                if (!seen.insert(item).second) return true;
+            }
+            return false;
+        }
+        ```
+
+    Neither version is wrong — they answer different constraints. Most of the time you choose the fast one. But on a device with 512KB of RAM processing a 10MB dataset, the slow one might be your only option.
+
+    Sometimes you deliberately choose a slower algorithm because memory is constrained: embedded systems, serverless functions with tight memory limits, processing datasets larger than RAM. Big-O gives you the vocabulary to make that trade-off explicitly and deliberately, rather than discovering it accidentally during an incident at 2am.
+
+## A Brief History
+
+Big-O notation predates computing by 60 years. German mathematician Paul Bachmann introduced it in 1894 in a number theory text. His colleague Edmund Landau popularized it—hence the formal name, "Bachmann-Landau notation." The *O* stands for *Ordnung*, German for "order of magnitude."
+
+Computer science borrowed the notation wholesale. Donald Knuth standardized its use for algorithm analysis in *The Art of Computer Programming* (1968) and introduced the companion notations Big-Θ (theta, for tight bounds) and Big-Ω (omega, for lower bounds). When your tech lead says "order of n squared," they're using a 130-year-old mathematical convention that was originally developed to describe the behavior of prime numbers—not sorting algorithms.
+
+The abstraction turns out to be exactly right for comparing algorithms: constants depend on hardware, language, and implementation. Growth rate is intrinsic to the algorithm itself.
 
 ## Practice Problems
 
@@ -736,7 +1368,7 @@ In practice, engineers usually say "Big-O" even when they mean $\Theta$.
 
     What's the time complexity?
 
-    ```python
+    ```python title="What's the complexity?" linenums="1"
     def mystery(items):
         result = []
         for item in items:
@@ -749,24 +1381,24 @@ In practice, engineers usually say "Big-O" even when they mean $\Theta$.
 
         **$O(n^2)$**
 
-        The loop runs $n$ times. Inside the loop, `item not in result` checks membership in a list, which is $O(n)$ in the worst case (when result grows to size $n$).
+        The outer `for` loop runs $n$ times. Inside the loop, `item not in result` checks membership in a *list*. List membership is $O(n)$ in the worst case—Python has to scan the entire list to confirm absence.
 
-        $n$ iterations $\times$ $n$ membership checks $= O(n^2)$
+        As `result` grows toward size $n$, each membership check gets slower. On average, you're scanning half of `result` per iteration. The total: n iterations × up to n checks each = $O(n^2)$.
 
         **To optimize:** Use a set for $O(1)$ membership checks:
 
-        ```python
+        ```python title="Optimized: O(n) with a set" linenums="1"
         def mystery_optimized(items):
             seen = set()
             result = []
             for item in items:
-                if item not in seen:
+                if item not in seen:  # O(1) now, not O(n)
                     seen.add(item)
                     result.append(item)
             return result
         ```
 
-        Now it's $O(n)$.
+        Now it's $O(n)$. One pass, $O(1)$ work per item.
 
 ??? question "Problem 2: Which Is Faster?"
 
@@ -778,20 +1410,21 @@ In practice, engineers usually say "Big-O" even when they mean $\Theta$.
 
     ??? tip "Answer"
 
-        A is faster for **large inputs**.
+        A is faster for **large inputs**—and in practice, "large" is smaller than you might think.
 
-        For very small inputs ($n < 10$ or so), the constant factors might make B faster. But as $n$ grows:
+        For very small inputs ($n < 10$ or so), constant factors might make B faster in absolute wall-clock time. But as $n$ grows, the difference becomes enormous:
 
-        - $n=100$: A ≈ 664 operations, B = 10,000
-        - $n=1000$: A ≈ 9,966 operations, B = 1,000,000
+        - $n=100$: A ≈ 664 operations, B = 10,000 — A is 15x faster
+        - $n=1,000$: A ≈ 9,966 operations, B = 1,000,000 — A is 100x faster
+        - $n=10,000$: A ≈ 133,000 operations, B = 100,000,000 — A is 750x faster
 
-        In practice, $O(n \log n)$ beats $O(n^2)$ for any non-trivial input size. This is why efficient sorting algorithms (merge sort, quicksort) are $O(n \log n)$.
+        This is why efficient sorting algorithms (merge sort, quicksort, Timsort) are $O(n \log n)$. The alternative—bubble sort, insertion sort—are $O(n^2)$, and they collapse completely at scale.
 
 ??? question "Problem 3: Two Sum"
 
     Given an array of integers and a target sum, find two numbers that add up to the target. What's the optimal complexity?
 
-    ```python
+    ```python title="Example input" linenums="1"
     # Example: [2, 7, 11, 15], target=9 → return [2, 7]
     ```
 
@@ -799,49 +1432,56 @@ In practice, engineers usually say "Big-O" even when they mean $\Theta$.
 
         **Optimal: $O(n)$ time, $O(n)$ space**
 
-        ```python
+        ```python title="Two Sum: O(n) with a hash map" linenums="1"
         def two_sum(numbers, target):
             seen = {}  # value -> index
             for i, num in enumerate(numbers):
                 complement = target - num
-                if complement in seen:
+                if complement in seen:   # O(1) hash lookup
                     return [complement, num]
                 seen[num] = i
             return None
         ```
 
-        - Brute force (nested loops): $O(n^2)$
-        - Sort + two pointers: $O(n \log n)$
-        - Hash table: $O(n)$ — each lookup is $O(1)$
+        The insight: for each number, you need to know if its complement (target - num) has already appeared. Storing what you've seen in a hash map makes that check $O(1)$. One pass = $O(n)$ total.
+
+        Compare the three approaches:
+
+        - Brute force (nested loops): $O(n^2)$ — check every pair
+        - Sort + two pointers: $O(n \log n)$ — sort first, then scan from both ends
+        - Hash table: $O(n)$ — this solution, one pass with $O(1)$ lookups
+
+        The hash table approach wins by trading $O(n)$ space for linear time — a classic example of the time/space trade-off in action.
 
 ## Key Takeaways
 
 | Concept | What to Remember |
 |:--------|:-----------------|
-| $O(1)$ | Hash tables, array indexing — instant |
-| $O(\log n)$ | Binary search, balanced trees — very fast |
-| $O(n)$ | Single loop — acceptable for most cases |
-| $O(n \log n)$ | Efficient sorting — the best you can do for comparison sorts |
-| $O(n^2)$ | Nested loops — often the thing to optimize away |
-| **Trade-offs** | Faster algorithms often use more memory |
-| **Indexes** | Database indexes turn $O(n)$ into $O(\log n)$ |
+| $O(1)$ | Hash tables, array indexing — size of collection is irrelevant |
+| $O(\log n)$ | Halving the search space each step — needs sorted/tree data |
+| $O(n)$ | Single loop — proportional, often optimal for unsorted data |
+| $O(n \log n)$ | Every `.sort()` call — theoretical minimum for comparison sorts |
+| $O(n^2)$ | Nested loops over input — the thing to spot and eliminate |
+| $O(2^n)$ | Naive recursion without memoization — avoid; fix with dynamic programming |
+| **Drop constants** | $O(2n)$ → $O(n)$, $O(500)$ → $O(1)$ |
+| **Drop lower terms** | $O(n^2 + n)$ → $O(n^2)$ |
+| **Trade-offs** | Faster algorithms often use more memory — that's usually the right call |
+| **Indexes** | Database B-tree indexes turn $O(n)$ table scans into $O(\log n)$ lookups |
 
 ## Further Reading
 
-### Official Resources
+### Reference
 
-- [Big-O Cheat Sheet](https://www.bigocheatsheet.com/) — Visual reference for common data structures and algorithms
+- [Big-O Cheat Sheet](https://www.bigocheatsheet.com/) — Visual reference mapping common data structures and algorithms to their complexity classes
+- [Big O Notation — Wikipedia](https://en.wikipedia.org/wiki/Big_O_notation) — Mathematical foundations and formal definitions
+- [Bachmann-Landau Notation — Wikipedia](https://en.wikipedia.org/wiki/Bachmann%E2%80%93Landau_notation) — History and the full family of notations (Big-O, Big-Θ, Big-Ω)
+- [Timsort — Wikipedia](https://en.wikipedia.org/wiki/Timsort) — How Python's and JavaScript's `.sort()` actually works under the hood
 
-### Books
+### Courses
 
-- *Introduction to Algorithms* (CLRS) — The definitive algorithms textbook, Chapter 3 covers asymptotic notation
-- *Grokking Algorithms* by Aditya Bhargava — Beginner-friendly with great visualizations
+- [MIT 6.006: Introduction to Algorithms](https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/) — Full lecture notes and problem sets from MIT's algorithms course, free on OpenCourseWare
 
-### Practice
 
-- [LeetCode](https://leetcode.com/) — Practice problems sorted by difficulty and topic
-- [NeetCode](https://neetcode.io/) — Curated list of 150 essential problems with video explanations
+## What's Next
 
----
-
-**What's Next:** Understanding Big-O is the foundation. Next, explore specific data structures and see how their design determines their Big-O characteristics—starting with arrays, linked lists, and hash tables.
+Understanding Big-O is the foundation. Next, explore how specific data structures are designed to hit target complexity classes—starting with arrays, linked lists, and hash tables. Every data structure you use daily was built around a Big-O target.

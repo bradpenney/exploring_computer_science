@@ -540,7 +540,7 @@ Flags (also called modifiers) change how the regex engine interprets your patter
 
 ### Flag Syntax by Language
 
-=== ":material-language-python: Python - Flags"
+=== ":material-language-python: Python"
 
     ```python title="Flags in Python" linenums="1"
     import re
@@ -552,7 +552,7 @@ Flags (also called modifiers) change how the regex engine interprets your patter
     re.search(r'hello', text, re.I | re.M)       # Multiple flags with |
     ```
 
-=== ":material-language-javascript: JavaScript - Flags"
+=== ":material-language-javascript: JavaScript"
 
     ```javascript title="Flags in JavaScript" linenums="1"
     /pattern/flags
@@ -564,7 +564,7 @@ Flags (also called modifiers) change how the regex engine interprets your patter
     /hello/gi         // Multiple flags: global + case insensitive
     ```
 
-=== ":material-language-go: Go - Flags"
+=== ":material-language-go: Go"
 
     ```go title="Flags in Go" linenums="1"
     import "regexp"
@@ -577,7 +577,7 @@ Flags (also called modifiers) change how the regex engine interprets your patter
     regexp.MatchString(`(?im)hello`, text)       // Multiple flags (inline)
     ```
 
-=== ":material-language-rust: Rust - Flags"
+=== ":material-language-rust: Rust"
 
     ```rust title="Flags in Rust" linenums="1"
     use regex::Regex;
@@ -600,7 +600,7 @@ Flags (also called modifiers) change how the regex engine interprets your patter
     let re = Regex::new(r"(?im)hello").unwrap();
     ```
 
-=== ":material-language-java: Java - Flags"
+=== ":material-language-java: Java"
 
     ```java title="Flags in Java" linenums="1"
     import java.util.regex.*;
@@ -624,7 +624,7 @@ Flags (also called modifiers) change how the regex engine interprets your patter
     Pattern.compile("hello", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
     ```
 
-=== ":material-language-cpp: C++ - Flags"
+=== ":material-language-cpp: C++"
 
     ```cpp title="Flags in C++" linenums="1"
     #include <regex>
@@ -665,7 +665,7 @@ With `i` flag:
 
 The global flag controls whether to find just the first match or all matches:
 
-=== ":material-language-python: Python - Global"
+=== ":material-language-python: Python"
 
     ```python title="Find All vs Find First in Python" linenums="1"
     import re
@@ -681,7 +681,7 @@ The global flag controls whether to find just the first match or all matches:
     print(all_matches)  # ["2024", "12", "15"]
     ```
 
-=== ":material-language-javascript: JavaScript - Global"
+=== ":material-language-javascript: JavaScript"
 
     ```javascript title="Global vs Non-Global in JavaScript" linenums="1"
     const text = "2024-12-15";
@@ -693,7 +693,7 @@ The global flag controls whether to find just the first match or all matches:
     text.match(/\d+/g)    // ["2024", "12", "15"]
     ```
 
-=== ":material-language-go: Go - Global"
+=== ":material-language-go: Go"
 
     ```go title="Find All vs Find First in Go" linenums="1"
     package main
@@ -721,7 +721,7 @@ The global flag controls whether to find just the first match or all matches:
     2. `FindString` returns first match as string (empty string if no match)
     3. Second parameter `-1` means find all matches (positive number limits results)
 
-=== ":material-language-rust: Rust - Global"
+=== ":material-language-rust: Rust"
 
     ```rust title="Find All vs Find First in Rust" linenums="1"
     use regex::Regex;
@@ -748,7 +748,7 @@ The global flag controls whether to find just the first match or all matches:
     3. `find_iter()` returns iterator over all matches (lazy evaluation)
     4. `map()` extracts string slice from each Match object
 
-=== ":material-language-java: Java - Global"
+=== ":material-language-java: Java"
 
     ```java title="Find All vs Find First in Java" linenums="1"
     import java.util.regex.*;
@@ -782,7 +782,7 @@ The global flag controls whether to find just the first match or all matches:
     4. `reset()` returns matcher to start of string for re-scanning
     5. Loop repeatedly calling `find()` to get all matches (Java's "global" approach)
 
-=== ":material-language-cpp: C++ - Global"
+=== ":material-language-cpp: C++"
 
     ```cpp title="Find All vs Find First in C++" linenums="1"
     #include <iostream>
@@ -827,7 +827,7 @@ The global flag controls whether to find just the first match or all matches:
 
 Changes how `^` and `$` work:
 
-=== ":material-language-python: Python - Multiline"
+=== ":material-language-python: Python"
 
     ```python title="Multiline Flag in Python" linenums="1"
     import re
@@ -845,7 +845,7 @@ Changes how `^` and `$` work:
     print(matches)  # ['Line', 'Line', 'Line'] - all three lines
     ```
 
-=== ":material-language-javascript: JavaScript - Multiline"
+=== ":material-language-javascript: JavaScript"
 
     ```javascript title="Multiline Flag in JavaScript" linenums="1"
     const text = `Line 1
@@ -862,7 +862,7 @@ Changes how `^` and `$` work:
     Array.from(text.matchAll(/^Line/gm))  // 3 matches
     ```
 
-=== ":material-language-go: Go - Multiline"
+=== ":material-language-go: Go"
 
     ```go title="Multiline Flag in Go" linenums="1"
     package main
@@ -885,7 +885,7 @@ Changes how `^` and `$` work:
     }
     ```
 
-=== ":material-language-rust: Rust - Multiline"
+=== ":material-language-rust: Rust"
 
     ```rust title="Multiline Flag in Rust" linenums="1"
     use regex::Regex;
@@ -905,7 +905,7 @@ Changes how `^` and `$` work:
     }
     ```
 
-=== ":material-language-java: Java - Multiline"
+=== ":material-language-java: Java"
 
     ```java title="Multiline Flag in Java" linenums="1"
     import java.util.regex.*;
@@ -931,7 +931,7 @@ Changes how `^` and `$` work:
     }
     ```
 
-=== ":material-language-cpp: C++ - Multiline"
+=== ":material-language-cpp: C++"
 
     ```cpp title="Multiline Flag in C++" linenums="1"
     #include <iostream>
@@ -959,7 +959,7 @@ Changes how `^` and `$` work:
 
 Makes `.` match newlines:
 
-=== ":material-language-python: Python - Dotall"
+=== ":material-language-python: Python"
 
     ```python title="Dotall Flag in Python" linenums="1"
     import re
@@ -975,7 +975,7 @@ Makes `.` match newlines:
     print(match.group())  # "Hello\nWorld"
     ```
 
-=== ":material-language-javascript: JavaScript - Dotall"
+=== ":material-language-javascript: JavaScript"
 
     ```javascript title="Dotall Flag in JavaScript" linenums="1"
     const text = "Hello\nWorld";
@@ -990,7 +990,7 @@ Makes `.` match newlines:
     /Hello.World/s.test(text)  // true
     ```
 
-=== ":material-language-go: Go - Dotall"
+=== ":material-language-go: Go"
 
     ```go title="Dotall Flag in Go" linenums="1"
     package main
@@ -1013,7 +1013,7 @@ Makes `.` match newlines:
     }
     ```
 
-=== ":material-language-rust: Rust - Dotall"
+=== ":material-language-rust: Rust"
 
     ```rust title="Dotall Flag in Rust" linenums="1"
     use regex::Regex;
@@ -1031,7 +1031,7 @@ Makes `.` match newlines:
     }
     ```
 
-=== ":material-language-java: Java - Dotall"
+=== ":material-language-java: Java"
 
     ```java title="Dotall Flag in Java" linenums="1"
     import java.util.regex.*;
@@ -1053,7 +1053,7 @@ Makes `.` match newlines:
     }
     ```
 
-=== ":material-language-cpp: C++ - Dotall"
+=== ":material-language-cpp: C++"
 
     ```cpp title="Dotall Flag in C++" linenums="1"
     #include <iostream>
@@ -1174,7 +1174,7 @@ Makes `.` match newlines:
 
 Most languages use similar syntax, with minor variations:
 
-=== ":material-language-python: Python - Usage"
+=== ":material-language-python: Python"
 
     ```python title="Regular Expressions in Python" linenums="1"
     import re
@@ -1196,7 +1196,7 @@ Most languages use similar syntax, with minor variations:
     2. `findall()` returns a list of all non-overlapping matches
     3. `sub()` replaces all matches with a replacement string
 
-=== ":material-language-javascript: JavaScript - Usage"
+=== ":material-language-javascript: JavaScript"
 
     ```javascript title="Regular Expressions in JavaScript" linenums="1"
     // Test if pattern matches
@@ -1213,7 +1213,7 @@ Most languages use similar syntax, with minor variations:
     2. `match()` returns array of matches (use `/g` flag for all matches)
     3. `replace()` substitutes first match with replacement (use `/g` for all)
 
-=== ":material-language-rust: Rust - Usage"
+=== ":material-language-rust: Rust"
 
     ```rust title="Regular Expressions in Rust" linenums="1"
     use regex::Regex;  // (1)!

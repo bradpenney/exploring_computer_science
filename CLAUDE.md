@@ -46,6 +46,8 @@ The site serves as a teaching tool, portfolio, and personal reference for engine
 - Basic programming concepts (they already code)
 - Overly academic explanations disconnected from practice
 - Theory without practical relevance
+- Formal definitions and mathematical proofs (save for Mastery tier)
+- Interview prep content (this is a separate concern from learning CS theory)
 
 **Teaching approach:**
 - **Ground theory in practice**: Connect every CS concept to real-world engineering problems
@@ -53,6 +55,8 @@ The site serves as a teaching tool, portfolio, and personal reference for engine
 - **Bridge the gap**: They know HOW things work practically—teach them WHY theoretically
 - **Provide context**: Show where they've already used this concept without knowing the formal theory
 - **Make it relevant**: Explain why understanding this theory makes them better engineers
+- **Stay sharp**: Every sentence should earn its place. If a section doesn't clearly serve the article's core purpose, cut it — don't pad.
+- **Cross-link, don't cram**: When a concept touches adjacent topics (data structures, sorting algorithms, etc.), link to the future article rather than covering it inline. Articles should be focused and tight, not encyclopedic.
 
 ### Article Opening Patterns
 
@@ -183,12 +187,9 @@ plugins:
   - meta
   - exclude:
       glob:
-        - "level_1/*"
-        - "level_2/*"
-        - "level_3/*"
-        - "level_4/*"
-        - "level_5/*"
-        - "level_6/*"
+        - "essentials/what_is_computer_science.md"
+        - "efficiency/**"
+        - "mastery/**"
   # ... other plugins
 ```
 
@@ -213,25 +214,24 @@ Edit `mkdocs.yaml` and remove the directory from the exclude plugin:
 ```yaml
 - exclude:
     glob:
-      - "level_1/*"  # Article is excluded
-      - "level_2/*"
+      - "essentials/new_topic.md"  # Article is excluded
+      - "efficiency/**"
 ```
 
 **After (published):**
 ```yaml
 - exclude:
     glob:
-      # - "level_1/*"  # REMOVED - now published
-      - "level_2/*"
+      # - "essentials/new_topic.md"  # REMOVED - now published
+      - "efficiency/**"
 ```
 
 **IMPORTANT**:
 - Remove the ENTIRE line, don't just comment it
 - If publishing individual files (not whole directories), use specific paths:
   ```yaml
-  - "level_1/overview.md"  # Still draft
-  - "level_1/pods.md"      # Still draft
-  # level_1/services.md is published (not in exclude list)
+  - "essentials/draft_topic.md"  # Still draft
+  # essentials/published_topic.md is published (not in exclude list)
   ```
 
 #### 3. Add to Navigation
@@ -240,17 +240,17 @@ Uncomment the article in the `nav:` section of `mkdocs.yaml`:
 
 **Before:**
 ```yaml
-# - Level 1 - Core Primitives:
-#     - Overview: level_1/overview.md
-#     - Pods Deep Dive: level_1/pods.md
+# - Essentials:
+#     - Overview: essentials/overview.md
+#     - Big-O Notation: essentials/big_o_notation.md
 ```
 
 **After:**
 ```yaml
-- Level 1 - Core Primitives:
-    - Overview: level_1/overview.md
-    - Pods Deep Dive: level_1/pods.md
-    # - Services: level_1/services.md  # Still in draft
+- Essentials:
+    - Overview: essentials/overview.md
+    - Big-O Notation: essentials/big_o_notation.md
+    # - Recursion: essentials/recursion.md  # Still in draft
 ```
 
 #### 4. Verify Publication
@@ -262,10 +262,10 @@ Run these commands to verify:
 poetry run mkdocs build --strict
 
 # Check sitemap includes the new article
-grep -o '<loc>[^<]*</loc>' site/sitemap.xml | grep level_1
+grep -o '<loc>[^<]*</loc>' site/sitemap.xml | grep essentials
 
 # Verify the article appears in search index
-grep -i "pods deep dive" site/search/search_index.json
+grep -i "big o notation" site/search/search_index.json
 ```
 
 **Expected results:**
@@ -338,18 +338,16 @@ Before marking any article complete, use the Explore agent to search for repeate
 ## Project Structure
 
 - `docs/` - Markdown content organized by category (matches site navigation)
-  - `building_blocks/` - Core CS theory and concepts (published)
-  - `data_structures/` - Data structures and ADTs
-  - `algorithms_complexity/` - Algorithms and complexity theory
-  - `programming_languages/` - Programming paradigms and languages
-  - `systems_architecture/` - OS, networking, virtualization
-  - `data_security/` - Databases, security, cryptography
-  - `modern_topics/` - AI, graphics, ethics
-  - `deep_dives/` - Advanced theoretical topics
+  - `essentials/` - Core concepts and definitions
+  - `efficiency/` - Complexity, algorithms, and performance
+  - `mastery/` - Advanced theory and systems
+  - `images/` - Diagrams and illustrations
+  - `stylesheets/` - Custom CSS overrides
+  - `javascripts/` - Custom JS (MathJax, etc.)
 - `mkdocs.yaml` - Site configuration and navigation
 - `pyproject.toml` - Poetry dependencies
 
-**Important:** Directory structure mirrors site navigation. Articles reference each other using relative paths (e.g., `../building_blocks/filename.md`).
+**Important:** Directory structure mirrors site navigation. Articles reference each other using relative paths (e.g., `../essentials/filename.md`).
 
 ## Course Materials & References
 

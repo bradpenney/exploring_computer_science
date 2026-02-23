@@ -145,7 +145,7 @@ stateDiagram-v2
 
 Here's a simple lexer implementation:
 
-=== ":material-language-python: Python - Lexer"
+=== ":material-language-python: Python"
 
     ```python title="Simple Lexer in Python" linenums="1"
     import re
@@ -193,7 +193,7 @@ Here's a simple lexer implementation:
     7. Move position forward past the matched token
     8. If no pattern matches, we have an invalid character
 
-=== ":material-language-javascript: JavaScript - Lexer"
+=== ":material-language-javascript: JavaScript"
 
     ```javascript title="Simple Lexer in JavaScript" linenums="1"
     const TOKEN_SPEC = [  // (1)!
@@ -253,7 +253,7 @@ Here's a simple lexer implementation:
     8. Move position forward by length of matched token
     9. No pattern matched - input contains invalid character
 
-=== ":material-language-go: Go - Lexer"
+=== ":material-language-go: Go"
 
     ```go title="Simple Lexer in Go" linenums="1"
     package main
@@ -332,7 +332,7 @@ Here's a simple lexer implementation:
     10. Advance position by length of matched string
     11. No pattern matched - return error with unknown character
 
-=== ":material-language-rust: Rust - Lexer"
+=== ":material-language-rust: Rust"
 
     ```rust title="Simple Lexer in Rust" linenums="1"
     use regex::Regex;
@@ -407,7 +407,7 @@ Here's a simple lexer implementation:
     12. No pattern matched - return Err variant with error message
     13. Return Ok variant wrapping the successful token vector
 
-=== ":material-language-java: Java - Lexer"
+=== ":material-language-java: Java"
 
     ```java title="Simple Lexer in Java" linenums="1"
     import java.util.*;
@@ -499,7 +499,7 @@ Here's a simple lexer implementation:
     10. Advance position by length of matched region
     11. No pattern matched - throw runtime exception with character
 
-=== ":material-language-cpp: C++ - Lexer"
+=== ":material-language-cpp: C++"
 
     ```cpp title="Simple Lexer in C++" linenums="1"
     #include <iostream>
@@ -807,7 +807,7 @@ For most projects: start with **recursive descent** (top-down) because it's intu
 
     Here's a recursive descent parser implementation:
 
-    === ":material-language-python: Python - Parser"
+    === ":material-language-python: Python"
 
         ```python title="Recursive Descent Parser in Python" linenums="1"
         class Parser:
@@ -886,7 +886,7 @@ For most projects: start with **recursive descent** (top-down) because it's intu
         10. Handle parenthesized sub-expressions
         11. Recursively parse the expression inside parentheses
 
-    === ":material-language-javascript: JavaScript - Parser"
+    === ":material-language-javascript: JavaScript"
 
         ```javascript title="Recursive Descent Parser in JavaScript" linenums="1"
         class Parser {
@@ -979,7 +979,7 @@ For most projects: start with **recursive descent** (top-down) because it's intu
         10. Handle parenthesized sub-expressions for grouping
         11. Recursively parse expression inside parentheses
 
-    === ":material-language-go: Go - Parser"
+    === ":material-language-go: Go"
 
         ```go title="Recursive Descent Parser in Go" linenums="1"
         package main
@@ -1084,7 +1084,7 @@ For most projects: start with **recursive descent** (top-down) because it's intu
         10. Handle parenthesized sub-expressions for grouping
         11. Recursive call parses expression inside parentheses
 
-    === ":material-language-rust: Rust - Parser"
+    === ":material-language-rust: Rust"
 
         ```rust title="Recursive Descent Parser in Rust" linenums="1"
         #[derive(Debug, Clone)]
@@ -1213,7 +1213,7 @@ For most projects: start with **recursive descent** (top-down) because it's intu
         12. Handle parenthesized sub-expressions for grouping
         13. Recursive call parses expression inside parentheses
 
-    === ":material-language-java: Java - Parser"
+    === ":material-language-java: Java"
 
         ```java title="Recursive Descent Parser in Java" linenums="1"
         import java.util.*;
@@ -1342,7 +1342,7 @@ For most projects: start with **recursive descent** (top-down) because it's intu
         10. Handle parenthesized sub-expressions for grouping
         11. Recursive call parses expression inside parentheses
 
-    === ":material-language-cpp: C++ - Parser"
+    === ":material-language-cpp: C++"
 
         ```cpp title="Recursive Descent Parser in C++" linenums="1"
         #include <iostream>
@@ -1663,7 +1663,7 @@ Once you have a parse tree or AST, you need to do something with it—evaluate i
 
 Once you have an AST, you can walk it to compute results:
 
-=== ":material-language-python: Python - Evaluator"
+=== ":material-language-python: Python"
 
             ```python title="AST Evaluator in Python" linenums="1"
         def evaluate(node):  # (1)!
@@ -1694,7 +1694,7 @@ Once you have an AST, you can walk it to compute results:
     5. Recursively evaluate left and right subtrees first
     6. Apply the operator to the evaluated operands
 
-=== ":material-language-javascript: JavaScript - Evaluator"
+=== ":material-language-javascript: JavaScript"
 
     ```javascript title="AST Evaluator in JavaScript" linenums="1"
     function evaluate(node) {
@@ -1721,7 +1721,7 @@ Once you have an AST, you can walk it to compute results:
     console.log(evaluate(ast));  // 14
     ```
 
-=== ":material-language-go: Go - Evaluator"
+=== ":material-language-go: Go"
 
     ```go title="AST Evaluator in Go" linenums="1"
     func evaluate(node ASTNode) float64 {
@@ -1762,7 +1762,7 @@ Once you have an AST, you can walk it to compute results:
     fmt.Println(evaluate(ast))  // 14
     ```
 
-=== ":material-language-rust: Rust - Evaluator"
+=== ":material-language-rust: Rust"
 
     ```rust title="AST Evaluator in Rust" linenums="1"
     fn evaluate(node: &ASTNode) -> Result<i32, String> {
@@ -1797,7 +1797,7 @@ Once you have an AST, you can walk it to compute results:
     println!("{}", evaluate(&ast).unwrap());  // 14
     ```
 
-=== ":material-language-java: Java - Evaluator"
+=== ":material-language-java: Java"
 
     ```java title="AST Evaluator in Java" linenums="1"
     public static int evaluate(ASTNode node) {
@@ -1829,7 +1829,7 @@ Once you have an AST, you can walk it to compute results:
     System.out.println(evaluate(ast));  // 14
     ```
 
-=== ":material-language-cpp: C++ - Evaluator"
+=== ":material-language-cpp: C++"
 
     ```cpp title="AST Evaluator in C++" linenums="1"
     int evaluate(const ASTNode* node) {

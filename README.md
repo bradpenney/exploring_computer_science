@@ -1,47 +1,104 @@
 # Exploring Computer Science
 
-A Material for MkDocs site documenting Computer Science concepts learned during my CS degree program. This site serves as a teaching tool, portfolio, and personal reference.
+**The CS theory behind the production code you write.**
 
-## About
+A Material for MkDocs site that bridges the gap between practical engineering experience and formal Computer Science theory. This site serves as a teaching tool, portfolio, and personal reference for engineers filling CS knowledge gaps.
 
-This project synthesizes knowledge from coursework into teaching-focused articles. Writing to teach reinforces learning and creates a public-facing record of my CS journey.
+🌐 **Live Site:** [cs.bradpenney.io](https://cs.bradpenney.io)
+
+---
+
+## Who This Is For
+
+**The Working Engineer**
+
+This site is designed for back-end engineers, platform engineers, and software developers who:
+- Write production code daily (Python, Go, Java, etc.)
+- Have real-world experience shipping features and debugging issues
+- **Lack formal CS training** or want to refresh their theoretical foundations
+- Want to understand the *why* behind the tools they use
+
+**What This Is NOT:**
+- A traditional CS textbook
+- "Hello World" programming tutorials
+- Academic theory disconnected from practice
+
+---
+
+## Philosophy
+
+**Ground Theory in Practice**
+
+Every article starts with real-world engineering experience—debugging a stack trace, optimizing a database query, or designing an API—before introducing the underlying CS theory.
+
+1.  **Start with Experience**: We open with scenarios you've encountered in production.
+2.  **Bridge the Gap**: You know *how* it works practically; we teach *why* it works theoretically.
+3.  **Make it Relevant**: We explain why understanding the theory makes you a better engineer.
+
+---
 
 ## Site Structure
 
-- **Fundamentals** - Core CS concepts: computational thinking, finite state machines, parsers, BNF, regex
-- **Algorithms** - Big-O notation, Turing machines, sorting, searching, recursion (planned)
-- **Programming** - Paradigms, OOP, interpreters vs compilers (planned)
-- **Systems** - Operating systems, networks, databases (planned)
-- **Modern Topics** - AI, security, ethics in computing (planned)
+The content is organized into three progressive tiers:
+
+- **📦 Essentials**: Core concepts that underpin every line of code (Big-O, Data Structures, Recursion).
+- **⚡ Efficiency**: Algorithms, complexity analysis, and system performance.
+- **🎯 Mastery**: Advanced topics, formal languages, compilation, and modern computing frontiers.
+
+---
+
+## Current Status: Under Development
+
+This site is currently under active development. Articles are being written, reviewed, and published incrementally.
+
+**Process:**
+- Content is drafted in private branches.
+- Articles undergo a rigorous quality review against the standards in `CLAUDE.md`.
+- Only vetted, high-quality content appears in the navigation.
+
+---
 
 ## Tech Stack
 
-- Python 3.11+
-- [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)
-- Poetry for dependency management
-- Mermaid for diagrams
+- **[Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)**: Documentation framework
+- **Python 3.11+**: Runtime environment
+- **Poetry**: Dependency management
+- **Mermaid**: Diagrams and visualizations
+
+---
 
 ## Local Development
+
+### Prerequisites
+
+- Python 3.11+
+- [Poetry](https://python-poetry.org/)
+
+### Setup
 
 ```bash
 # Install dependencies
 poetry install
 
-# Serve locally at http://localhost:8000
+# Serve locally (http://localhost:8000)
 poetry run mkdocs serve
 
 # Build static site
-poetry run mkdocs build
+poetry run mkdocs build --strict
 ```
 
-## Deployment
+---
 
-The site deploys to GitHub Pages at [cs.bradpenney.io](https://cs.bradpenney.io).
+## Contributing
 
-```bash
-poetry run mkdocs gh-deploy
-```
+See `CLAUDE.md` for comprehensive writing guidelines, including:
+- Persona details and tone
+- Multi-language code example requirements
+- SEO and publication checklist
+- Quality standards
+
+---
 
 ## Author
 
-Brad Penney - [bradpenney.io](https://bradpenney.io)
+**Brad Penney** - [bradpenney.io](https://bradpenney.io)
