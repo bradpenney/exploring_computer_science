@@ -27,7 +27,7 @@ Understanding FSMs requires [computational thinking](computational_thinking.md):
 FSMs appear throughout production software:
 
 - **TCP/IP protocol** — every TCP connection moves through states (`LISTEN` → `SYN_RECEIVED` → `ESTABLISHED` → `FIN_WAIT` → `CLOSED`). The Linux kernel's TCP implementation is essentially one large FSM
-- **Regex engines** — every regular expression compiles to an FSM internally. This is why regex matching is fast: it's a single linear pass through an FSM, not recursive backtracking (usually)
+- **Regex engines** — every regular expression compiles to an FSM internally. DFA-based engines (Go's `regexp`, Rust's `regex`, `re2`) make a guaranteed linear pass through the state machine. Backtracking engines (Python `re`, JavaScript, Java, PHP, Ruby — the majority in production) can be exponential on adversarial input. Understanding FSMs is what explains the difference
 - **Lexers** — the first stage of every compiler or parser breaks source text into tokens using FSMs. Each token type (identifier, number, string literal) is recognized by a state machine
 - **Authentication flows** — unauthenticated → authenticating → authenticated → expired → locked is a classic FSM. Implementing it explicitly prevents bugs like "how did a locked user end up in the authenticated state?"
 - **Game AI** — enemies with patrol → alert → attack → retreat states; game characters with idle → running → jumping → falling states
@@ -399,17 +399,6 @@ FSMs aren't just a theoretical curiosity — they're a practical design tool.
 
 **Lexers are FSMs.** The first stage of every compiler — tokenization — uses FSMs to scan source code. Understanding this explains lexer performance characteristics and why some patterns are tokenized in one pass.
 
-## Technical Interview Context
-
-FSMs appear in system design interviews as state modeling problems, and in lower-level discussions about regex engines and protocol parsers.
-
-**Questions you'll be able to answer:**
-
-- *"Design the state model for a payment / order / user account lifecycle"* — This is an FSM problem whether or not the interviewer uses that term. Define the states, enumerate valid transitions, and sketch a transition table. The exercise of drawing it out prevents invalid state combinations from creeping into the implementation.
-- *"How would you enforce that a cancelled order can't become pending again?"* — Explicit FSM: only permit transitions that appear in the transition table; reject all others. Contrast this with implicit state scattered across boolean flags, where invalid transitions happen when conditions are checked out of order.
-- *"How does a regex engine work?"* — A regex pattern compiles to a finite automaton (NFA or DFA). The engine reads input characters and follows state transitions; acceptance means the string matched. This is why regex is fast for simple patterns and why certain patterns cause exponential blowup on adversarial input.
-- *"Why can't a regex match balanced parentheses?"* — FSMs have no memory beyond their current state — they cannot count. Matching arbitrary nesting requires a stack (pushdown automaton), which is a more powerful computational model than an FSM.
-
 ## Beyond FSMs: Adding Memory
 
 While FSMs are powerful for many tasks, they hit a fundamental limitation: they can't count or handle nested structures. More powerful computational models extend FSMs by adding memory:
@@ -669,6 +658,26 @@ FSMs translate directly into code. Here's a turnstile implementation:
     3. C++ allows `==` for string comparison (std::string overloads the operator)
 
 For complex FSMs with many states, a transition table (dictionary/map keyed on `(state, input)`) scales better than nested conditionals — the logic stays data rather than code.
+
+## Technical Interview Context
+
+FSMs appear in system design interviews as state modeling problems, and in lower-level discussions about regex engines and protocol parsers.
+
+??? question "Design the state model for a payment / order / user account lifecycle"
+
+    This is an FSM problem whether or not the interviewer uses that term. Define the states, enumerate valid transitions, and sketch a transition table. The exercise of drawing it out prevents invalid state combinations from creeping into the implementation.
+
+??? question "How would you enforce that a cancelled order can't become pending again?"
+
+    Explicit FSM: only permit transitions that appear in the transition table; reject all others. Contrast this with implicit state scattered across boolean flags, where invalid transitions happen when conditions are checked out of order.
+
+??? question "How does a regex engine work?"
+
+    A regex pattern compiles to a finite automaton (NFA or DFA). The engine reads input characters and follows state transitions; acceptance means the string matched. This is why regex is fast for simple patterns and why certain patterns cause exponential blowup on adversarial input.
+
+??? question "Why can't a regex match balanced parentheses?"
+
+    FSMs have no memory beyond their current state — they cannot count. Matching arbitrary nesting requires a stack (pushdown automaton), which is a more powerful computational model than an FSM.
 
 ## Practice Problems
 

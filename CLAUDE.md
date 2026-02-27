@@ -47,7 +47,7 @@ The site serves as a teaching tool, portfolio, and personal reference for engine
 - Overly academic explanations disconnected from practice
 - Theory without practical relevance
 - Formal definitions and mathematical proofs (save for Mastery tier)
-- Interview prep content (this is a separate concern from learning CS theory)
+- Rote interview summaries that restate what the article already covered — TIC questions must surface non-obvious insights, cross-topic connections, or common misconceptions not made explicit in the article body
 
 **Teaching approach:**
 - **Ground theory in practice**: Connect every CS concept to real-world engineering problems
@@ -92,9 +92,12 @@ Recursion isn't just a coding trick—it's a fundamental computational pattern t
    - Big-O → "Why your O(n²) query times out at scale"
    - Space Complexity → "Why your recursive solution causes stack overflows"
    - Halting Problem → "Why linters can't catch every bug"
-4. **"Technical Interview Context"** (when relevant) - What questions this helps answer
-5. **Formal CS theory** - The mathematical definitions and rigorous explanations
-6. **Real-world examples in their languages** - Python, JavaScript, Go especially
+4. **Formal CS theory** - The mathematical definitions and rigorous explanations
+5. **Real-world examples in their languages** - Python, JavaScript, Go especially
+6. **"Technical Interview Context"** (when relevant) - Placed near the end, just before Practice Problems, so readers have the full article context before being asked to test themselves. **Quality bar:** each question must reveal something not obvious from reading the article alone — a non-obvious implication, a cross-topic connection, a common misconception, or a production scenario that reframes the theory. Questions that merely restate article content should be cut.
+7. **Practice Problems** with full solutions (`??? question` / `??? tip`)
+8. **Key Takeaways** table
+9. **Further Reading** (split internal links from external)
 
 ### Examples of Persona-Driven Connections
 

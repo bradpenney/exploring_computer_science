@@ -291,17 +291,6 @@ This is exactly what [Big-O Notation](big_o_notation.md) is describing when it t
 
     See **[How Parsers Work](../efficiency/how_parsers_work.md)** for the full story.
 
-## Technical Interview Context
-
-Trees are one of the most common interview topics — both as explicit problems and as the underlying structure in problems about paths, hierarchies, and search.
-
-**Questions you'll be able to answer:**
-
-- *"What's the difference between BFS and DFS on a tree?"* — BFS uses a queue, explores level by level, and finds the shortest path in unweighted graphs. DFS uses recursion (or an explicit stack) and explores depth-first. In-order, pre-order, and post-order traversals are all DFS variants.
-- *"What are the time complexities for BST operations?"* — Search, insert, and delete are all $O(\log n)$ on a balanced BST, $O(n)$ worst case on a degenerate tree (e.g., inserting sorted data into a plain BST produces a linked list). Database B-trees maintain balance by construction; plain BSTs don't.
-- *"Find the lowest common ancestor of two nodes"* — A classic recursive problem: if both nodes are in the left subtree, recurse left; if both are in the right, recurse right; otherwise the current node is the LCA.
-- *"Validate that a binary tree is a valid BST"* — Not just "left child < parent < right child" per node. The constraint must hold for every node relative to its entire ancestry. The clean approach: pass a valid range `[min, max]` through the recursion, narrowing it at each step.
-
 ## Real-World Applications
 
 === "File Systems"
@@ -352,6 +341,26 @@ Trees are one of the most common interview topics — both as explicit problems 
 ??? tip "The 20 Questions Insight"
 
     The classic "20 Questions" game is a binary tree of depth 20. With 20 yes/no questions, you can distinguish among \(2^{20} = 1{,}048{,}576\) possible answers. This exponential relationship between depth and distinguishable values is the fundamental insight behind binary search, Huffman encoding, and decision trees.
+
+## Technical Interview Context
+
+Trees are one of the most common interview topics — both as explicit problems and as the underlying structure in problems about paths, hierarchies, and search.
+
+??? question "What's the difference between BFS and DFS on a tree?"
+
+    BFS uses a queue, explores level by level, and finds the shortest path in unweighted graphs. DFS uses recursion (or an explicit stack) and explores depth-first. In-order, pre-order, and post-order traversals are all DFS variants.
+
+??? question "What are the time complexities for BST operations?"
+
+    Search, insert, and delete are all $O(\log n)$ on a balanced BST, $O(n)$ worst case on a degenerate tree (e.g., inserting sorted data into a plain BST produces a linked list). Database B-trees maintain balance by construction; plain BSTs don't.
+
+??? question "Find the lowest common ancestor of two nodes"
+
+    A classic recursive problem: if both nodes are in the left subtree, recurse left; if both are in the right, recurse right; otherwise the current node is the LCA.
+
+??? question "Validate that a binary tree is a valid BST"
+
+    Not just "left child < parent < right child" per node. The constraint must hold for every node relative to its entire ancestry. The clean approach: pass a valid range `[min, max]` through the recursion, narrowing it at each step.
 
 ## Practice Problems
 

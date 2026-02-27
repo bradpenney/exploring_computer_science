@@ -68,18 +68,6 @@ Type systems permeate every production codebase:
 
     Once you see types as structures — products, sums, functions — you can design cleaner data models. Rust's `enum` (sum types), TypeScript's discriminated unions, and Haskell's algebraic data types all express this directly.
 
-## Technical Interview Context
-
-Type systems come up in interviews both as a direct topic ("what's the difference between static and dynamic typing?") and as background knowledge for explaining language choices and architectural decisions.
-
-**Questions you'll be able to answer:**
-
-- *"What's the difference between static and dynamic typing?"* — The distinction is when type checking happens: before the program runs (static) or during execution (dynamic). Go and Rust catch type errors at compile time; Python and JavaScript catch them at runtime, only when the bad code path actually executes.
-- *"What is type inference?"* — A static type system where the compiler deduces types from context rather than requiring explicit annotations. Go infers the type in `x := 42`; Rust infers types throughout an entire function from how values are used.
-- *"Why did your team add TypeScript to your JavaScript codebase?"* — Moving type errors from runtime to compile time. As a codebase grows, runtime type errors multiply faster than tests can catch them. TypeScript is the pragmatic answer to that scaling problem.
-- *"What's the difference between strong and weak typing?"* — Strong typing means the language refuses implicit coercions (`"1" + 1` is an error); weak typing performs them silently. Python and Go are strongly typed; JavaScript is weakly typed.
-- *"What is null safety?"* — Null safety prevents null pointer dereferences at compile time by requiring code to handle the absent case explicitly. Kotlin, Rust (`Option<T>`), and Swift make this a type-system feature; Java and Python leave it to runtime checks and defensive code.
-
 ## What a Type Actually Is
 
 In CS theory, a **datatype** is precisely defined: it is a set of possible values together with the operations that can be applied to those values.
@@ -335,6 +323,30 @@ Neither is strictly better; they involve trade-offs:
 | Codebase scale | Scales well | Gets painful at large scale |
 
 Python threads the needle with **optional static typing**: the language is dynamically typed, but type hints + `mypy` let you add static checking incrementally.
+
+## Technical Interview Context
+
+Type systems come up in interviews both as a direct topic ("what's the difference between static and dynamic typing?") and as background knowledge for explaining language choices and architectural decisions.
+
+??? question "What's the difference between static and dynamic typing?"
+
+    The distinction is when type checking happens: before the program runs (static) or during execution (dynamic). Go and Rust catch type errors at compile time; Python and JavaScript catch them at runtime, only when the bad code path actually executes.
+
+??? question "What is type inference?"
+
+    A static type system where the compiler deduces types from context rather than requiring explicit annotations. Go infers the type in `x := 42`; Rust infers types throughout an entire function from how values are used.
+
+??? question "Why did your team add TypeScript to your JavaScript codebase?"
+
+    Moving type errors from runtime to compile time. As a codebase grows, runtime type errors multiply faster than tests can catch them. TypeScript is the pragmatic answer to that scaling problem.
+
+??? question "What's the difference between strong and weak typing?"
+
+    Strong typing means the language refuses implicit coercions (`"1" + 1` is an error); weak typing performs them silently. Python and Go are strongly typed; JavaScript is weakly typed.
+
+??? question "What is null safety?"
+
+    Null safety prevents null pointer dereferences at compile time by requiring code to handle the absent case explicitly. Kotlin, Rust (`Option<T>`), and Swift make this a type-system feature; Java and Python leave it to runtime checks and defensive code.
 
 ## Practice Problems
 

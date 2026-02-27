@@ -48,17 +48,6 @@ These are the situations where the formal model matters:
 
     Balanced parentheses, matching XML tags at arbitrary nesting depth, validating that a string has equal numbers of `a`s and `b`s — none of these are regular languages. No regex, no matter how clever, can correctly handle them for all possible inputs. Understanding why tells you when to stop reaching for regex and start reaching for a parser.
 
-## Technical Interview Context
-
-The formal model of regex engines is relevant in security-focused interviews and in systems discussions about high-throughput input processing.
-
-**Questions you'll be able to answer:**
-
-- *"What is ReDoS and how do you prevent it?"* — Regex Denial of Service exploits catastrophic backtracking in NFA/backtracking engines. Patterns with nested quantifiers on the same character class (like `(a+)+`) create exponential backtracking on adversarial input. Prevention: flatten nested quantifiers, switch to a DFA engine (`re2`, Rust's `regex` crate), or add input length limits.
-- *"Why is `re2` safer than Python's `re`?"* — `re2` uses a DFA engine with guaranteed $O(n)$ matching regardless of the pattern. Python's `re` uses backtracking and can exhibit exponential runtime on crafted input, making it exploitable if the pattern accepts user-controlled input.
-- *"What's the difference between an NFA and a DFA?"* — Both are finite automata, but an NFA can be in multiple states simultaneously; a DFA has exactly one state at each step. DFAs are faster to execute but cannot support backreferences. NFA engines support `\1`-style backreferences; DFA engines structurally cannot.
-- *"Can regex match balanced parentheses?"* — No. Balanced parentheses require counting to arbitrary depth, which requires unbounded memory. Finite automata have no memory beyond their current state — this problem is formally outside the regular language class and requires a parser.
-
 ## From Pattern to Automaton
 
 When you call `re.compile(r'\d+')`, your regex engine doesn't interpret the pattern character by character at match time. It *compiles* the pattern to a state machine first.
@@ -305,6 +294,26 @@ JavaScript and Java require fixed-length lookbehind. Python's `re` module unique
 | Programming language syntax | Parser — regex cannot do this |
 
 The [FSM article](finite_state_machines.md#what-fsms-cannot-do) covers why FSMs — and therefore regex — cannot handle nested or counting problems. When you hit that boundary, the tool you reach for is a [parser](how_parsers_work.md).
+
+## Technical Interview Context
+
+The formal model of regex engines is relevant in security-focused interviews and in systems discussions about high-throughput input processing.
+
+??? question "What is ReDoS and how do you prevent it?"
+
+    Regex Denial of Service exploits catastrophic backtracking in NFA/backtracking engines. Patterns with nested quantifiers on the same character class (like `(a+)+`) create exponential backtracking on adversarial input. Prevention: flatten nested quantifiers, switch to a DFA engine (`re2`, Rust's `regex` crate), or add input length limits.
+
+??? question "Why is `re2` safer than Python's `re`?"
+
+    `re2` uses a DFA engine with guaranteed $O(n)$ matching regardless of the pattern. Python's `re` uses backtracking and can exhibit exponential runtime on crafted input, making it exploitable if the pattern accepts user-controlled input.
+
+??? question "What's the difference between an NFA and a DFA?"
+
+    Both are finite automata, but an NFA can be in multiple states simultaneously; a DFA has exactly one state at each step. DFAs are faster to execute but cannot support backreferences. NFA engines support `\1`-style backreferences; DFA engines structurally cannot.
+
+??? question "Can regex match balanced parentheses?"
+
+    No. Balanced parentheses require counting to arbitrary depth, which requires unbounded memory. Finite automata have no memory beyond their current state — this problem is formally outside the regular language class and requires a parser.
 
 ## Practice Problems
 

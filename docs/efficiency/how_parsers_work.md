@@ -59,17 +59,6 @@ Parsers run constantly behind the scenes in your daily work:
 
     Parameterized queries work because they keep user input outside the parse boundary. Understanding parsers is foundational to writing code that handles untrusted input safely.
 
-## Technical Interview Context
-
-Parsers come up in security-focused interviews (injection attacks) and in any discussion about building interpreters, config file processors, or DSLs.
-
-**Questions you'll be able to answer:**
-
-- *"Why does parameterized SQL prevent SQL injection?"* — SQL injection exploits the parser boundary: user input is treated as SQL syntax rather than data. Parameterized queries keep user data outside the parse boundary entirely — the SQL structure is fixed before user input arrives, so no amount of crafted input can modify the query structure.
-- *"What is an AST and where do you see them?"* — An Abstract Syntax Tree is the parsed representation of structured input. Python's `ast` module exposes the AST for any Python file. Linters, type checkers, transpilers, and compilers all operate on ASTs rather than raw source text.
-- *"What's the difference between top-down and bottom-up parsing?"* — Top-down parsers start from the root grammar rule and work toward the leaves; recursive descent parsers are top-down. Bottom-up parsers build the tree from leaves up, recognizing patterns as they accumulate input. Most hand-written parsers are top-down; most generated parsers (yacc, LALR) are bottom-up.
-- *"When would you write a parser vs use an existing library?"* — Use an existing library for any standard format (JSON, YAML, TOML, SQL). Write a parser when you're defining a custom DSL or config format — and even then, parser generators (ANTLR, PLY, `pest` in Rust) are usually faster to build with than hand-rolling from scratch.
-
 ## Why Is Parsing Necessary?
 
 Computers can't directly understand text—not even simple code like `x = 2 + 3`. Here's why parsing is essential:
@@ -2040,6 +2029,26 @@ You write the grammar, the tool generates the parser code. Parser generators mak
     **Incremental parsing** — Fast re-parsing on edits by only updating changed parts of the tree
 
     **Loose parsing** modes — Handle incomplete code during typing for real-time feedback
+
+## Technical Interview Context
+
+Parsers come up in security-focused interviews (injection attacks) and in any discussion about building interpreters, config file processors, or DSLs.
+
+??? question "Why does parameterized SQL prevent SQL injection?"
+
+    SQL injection exploits the parser boundary: user input is treated as SQL syntax rather than data. Parameterized queries keep user data outside the parse boundary entirely — the SQL structure is fixed before user input arrives, so no amount of crafted input can modify the query structure.
+
+??? question "What is an AST and where do you see them?"
+
+    An Abstract Syntax Tree is the parsed representation of structured input. Python's `ast` module exposes the AST for any Python file. Linters, type checkers, transpilers, and compilers all operate on ASTs rather than raw source text.
+
+??? question "What's the difference between top-down and bottom-up parsing?"
+
+    Top-down parsers start from the root grammar rule and work toward the leaves; recursive descent parsers are top-down. Bottom-up parsers build the tree from leaves up, recognizing patterns as they accumulate input. Most hand-written parsers are top-down; most generated parsers (yacc, LALR) are bottom-up.
+
+??? question "When would you write a parser vs use an existing library?"
+
+    Use an existing library for any standard format (JSON, YAML, TOML, SQL). Write a parser when you're defining a custom DSL or config format — and even then, parser generators (ANTLR, PLY, `pest` in Rust) are usually faster to build with than hand-rolling from scratch.
 
 ## Practice Problems
 

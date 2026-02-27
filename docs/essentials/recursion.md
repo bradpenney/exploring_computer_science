@@ -79,17 +79,6 @@ Recursive structure appears in the code you work with every day:
 
     The base case runs once; the recursive case runs until no new rows are found. Same structure as a recursive procedure.
 
-## Technical Interview Context
-
-Recursion is central to technical interviews — nearly every tree, graph, and divide-and-conquer problem has a natural recursive solution. Interviewers also probe your understanding of the call stack.
-
-**Questions you'll be able to answer:**
-
-- *"Traverse a binary tree in-order / pre-order / post-order"* — Tree traversal is inherently recursive: the structure of the code mirrors the structure of the tree. In-order visits left subtree, then current node, then right subtree. The recursive call on each subtree handles all depth automatically.
-- *"What's the space complexity of your recursive solution?"* — Each recursive call adds a stack frame. A function that recurses $O(n)$ deep uses $O(n)$ stack space. Interviewers often follow "give me a recursive solution" with "now tell me its space complexity" — the answer is the depth of the recursion tree.
-- *"What's wrong with the naive recursive Fibonacci?"* — $O(2^n)$ time: `fib(n)` calls `fib(n-1)` and `fib(n-2)`, each of which calls two more, exponentially. The same subproblems are recomputed many times. Memoization caches results, reducing to $O(n)$.
-- *"When would you use recursion vs iteration?"* — When the data structure is recursive (trees, graphs, nested structures), recursion is the natural fit and the code mirrors the data. When processing a flat list of known size, a loop is simpler. When stack depth is a concern (Python's default recursion limit is 1,000), iteration or explicit stack management is safer.
-
 ## The Core Idea: Divide and Conquer
 
 Recursion is the primary technique for *divide-and-conquer* problem solving: take a problem you don't know how to solve directly, break it into simpler subproblems, solve those, and combine the results.
@@ -450,6 +439,26 @@ graph TB
 Stack frames consume memory proportional to their number. `factorial(3)` needs 4 frames; `factorial(10000)` needs 10,001 frames. That's why Python's default recursion limit is 1000 — deep recursion is a memory concern, not a correctness concern.
 
 When you see a stack trace that shows `factorial` repeated 100 times, that's this diagram: each repetition is one stack frame, and the error occurred when the stack ran out of room.
+
+## Technical Interview Context
+
+Recursion questions go beyond "implement factorial." Interviewers probe the limits: what happens at depth, why certain languages handle it differently, and whether you understand the relationship between the call stack and your data structures.
+
+??? question "Your recursive solution passes tests but hits a RecursionError in production — what's the actual fix?"
+
+    Not `sys.setrecursionlimit`. The fix is converting to an explicit stack on the heap: every recursive algorithm can be rewritten iteratively because the call stack IS a stack. Iterative DFS manages a `list` explicitly; recursive DFS uses the call stack implicitly. The iterative version eliminates Python's 1,000-frame default limit and gives you control over memory allocation — useful when processing trees with millions of nodes.
+
+??? question "What is tail call optimization, and why doesn't Python implement it?"
+
+    A tail call is when the last operation in a function is a recursive call — nothing happens after it returns. Languages with TCO (Scheme, Erlang, some Scala) convert these into loops, giving $O(1)$ stack space regardless of recursion depth. Python's creator explicitly rejected TCO: it would collapse stack frames and make tracebacks ambiguous. Python prioritizes debuggability over this optimization. Knowing which languages implement TCO changes how you write recursive code in each.
+
+??? question "Can every recursive algorithm be converted to an iterative one?"
+
+    Yes, always — the call stack is a stack, and you can simulate it with an explicit data structure. Iterative DFS uses a `list` as a stack; recursive DFS uses the call stack. The tradeoff: explicit stack gives you more control (custom ordering, early termination) at the cost of more verbose code. The recursive version is clearer when the data structure is itself recursive — trees, grammars, nested structures.
+
+??? question "What's the connection between recursion and mathematical induction?"
+
+    The structure is identical. A proof by induction: base case (prove it for n=0) and inductive step (assume it holds for n, prove it for n+1). A recursive function: base case (return the direct answer for the smallest input) and recursive case (call itself on smaller input, combine results). Writing a correct recursive function is constructing an inductive proof — which is why formal verification tools can prove recursive functions correct more directly than iterative equivalents.
 
 ## Practice Problems
 

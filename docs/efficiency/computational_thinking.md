@@ -491,17 +491,6 @@ These aren't abstract principles — they have direct consequences in how you wr
 
 **Algorithm design** is the prerequisite for performance analysis. You can't reason about [Big-O complexity](../essentials/big_o_notation.md) until you can articulate the steps your code takes. "It scans every element, then for each match it scans again" is the description of $O(n^2)$ — but you have to have designed the algorithm explicitly to see that.
 
-## Technical Interview Context
-
-Computational thinking is the problem-solving process that underpins every coding interview — interviewers aren't just evaluating your solution, they're watching how you think.
-
-**Questions you'll be able to answer:**
-
-- *"Walk me through how you'd approach this problem"* — This is decomposition in action. Don't jump to code. Break the problem into inputs, outputs, and the steps between. Narrating your decomposition shows structured thinking, and it often reveals the key constraints before you've written a line.
-- *"Have you seen a similar problem before?"* — Pattern recognition question. Connect the current problem to known patterns (sliding window, BFS traversal, producer-consumer queue). The ability to say "this is essentially a topological sort" or "this is a cache invalidation problem" signals engineering maturity.
-- *"How would you simplify this?"* — Abstraction question. Hide the unnecessary detail, focus on the essential structure. Often the right answer is: "I'd model this as a graph and run BFS," stripping away the domain-specific framing to reveal the underlying algorithm.
-- *"What are the edge cases?"* — Structured decomposition applied to failure modes. Enumerate systematically: empty input, single element, duplicates, null values, maximum bounds. Interviewers check whether you think about boundaries before they become production bugs.
-
 ## Computational Thinking Beyond Code
 
 Here's the thing: computational thinking isn't just for programmers. These skills apply everywhere.
@@ -536,6 +525,22 @@ Good abstraction hides complexity while preserving essential behavior. Bad abstr
 ### Ambiguous Algorithms
 
 "Sort the list" isn't an algorithm—it's a wish. Algorithms must be precise enough to execute mechanically.
+
+## Technical Interview Context
+
+Computational thinking is the meta-skill interviewers are measuring when they watch you work through a problem. These questions probe the less obvious aspects — where the framework breaks down, and what separates pattern recognition from raw problem-solving.
+
+??? question "When does decomposing a system make it harder to understand, not easier?"
+
+    When component boundaries don't match the natural seams of the problem, the interfaces between components carry all the complexity you tried to hide. Microservices split at technical layers (auth, data, notifications) instead of business domains distribute state without simplifying it — the result is harder to debug than a well-structured monolith. Good decomposition requires understanding the problem's natural boundaries before cutting. Decomposing prematurely is one of the most common sources of accidental complexity in distributed systems.
+
+??? question "What's the difference between an algorithm and a heuristic, and when is each the right choice?"
+
+    An algorithm guarantees a correct or optimal result in bounded time. A heuristic trades that guarantee for tractability — finding a good enough answer faster. When a problem is NP-hard (no polynomial-time exact solution exists), heuristics aren't a compromise; they're the only practical option. Recognizing whether you're facing a tractable or intractable problem determines which category of solution to reach for — and prevents spending weeks on an algorithm that cannot exist.
+
+??? question "Why do senior engineers reach for pattern recognition before decomposing a problem from scratch?"
+
+    Recognizing "this is a shortest-path problem" or "this is a producer-consumer problem" immediately provides a proven solution structure, known complexity bounds, and years of prior work on edge cases — for free. Building from scratch is slower, more error-prone, and produces solutions teammates can't reason about using shared vocabulary. The jump from junior to senior isn't speed; it's the library of patterns that makes decomposition faster and better-bounded.
 
 ## Practice Problems
 

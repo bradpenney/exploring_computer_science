@@ -1345,18 +1345,6 @@ That $O(n^2)$ algorithm that runs in 1 second with 1,000 items? With 1 million i
 
     Sometimes you deliberately choose a slower algorithm because memory is constrained: embedded systems, serverless functions with tight memory limits, processing datasets larger than RAM. Big-O gives you the vocabulary to make that trade-off explicitly and deliberately, rather than discovering it accidentally during an incident at 2am.
 
-## Technical Interview Context
-
-Big-O analysis is one of the most consistently tested interview topics across the industry. The questions are predictable — but the expected depth varies. Junior candidates state the complexity; senior candidates justify it.
-
-**Questions you'll be able to answer:**
-
-- *"What is the time complexity of this code snippet?"* — Walk through the nested loops or recursive calls, identify what grows with $n$, then apply the rules: drop constants, keep the dominant term. A loop inside a loop is $O(n^2)$; a loop containing a binary search is $O(n \log n)$.
-- *"Why is your solution $O(n \log n)$ and not $O(n)$?"* — Justify your analysis, don't just state it. Trace through: "the outer loop is $O(n)$; the binary search inside it is $O(\log n)$ per iteration; multiply, giving $O(n \log n)$."
-- *"How would you optimize this from $O(n^2)$ to $O(n)$?"* — The standard technique: replace the inner linear scan with a hash table lookup. Build the table once in $O(n)$; each lookup is $O(1)$; total is $O(n)$. This pattern (nested loop → hash table) solves a huge fraction of interview optimization problems.
-- *"What's the space complexity?"* — Big-O applies to memory too. Recursive algorithms use $O(n)$ stack space (one frame per recursive call). Hash table solutions use $O(n)$ auxiliary space. In-place algorithms use $O(1)$. Interviewers frequently follow "what's the time complexity?" with this question.
-- *"Is $O(n \log n)$ always faster than $O(n^2)$?"* — Not at small $n$ — constants matter when inputs are tiny. But for production-scale data, yes: the growth rate dominates. The practical answer is "asymptotically yes, and at the scale where performance actually matters, yes."
-
 ## A Brief History
 
 Big-O notation predates computing by 60 years. German mathematician Paul Bachmann introduced it in 1894 in a number theory text. His colleague Edmund Landau popularized it—hence the formal name, "Bachmann-Landau notation." The *O* stands for *Ordnung*, German for "order of magnitude."
@@ -1364,6 +1352,22 @@ Big-O notation predates computing by 60 years. German mathematician Paul Bachman
 Computer science borrowed the notation wholesale. Donald Knuth standardized its use for algorithm analysis in *The Art of Computer Programming* (1968) and introduced the companion notations Big-Θ (theta, for tight bounds) and Big-Ω (omega, for lower bounds). When your tech lead says "order of n squared," they're using a 130-year-old mathematical convention that was originally developed to describe the behavior of prime numbers—not sorting algorithms.
 
 The abstraction turns out to be exactly right for comparing algorithms: constants depend on hardware, language, and implementation. Growth rate is intrinsic to the algorithm itself.
+
+## Technical Interview Context
+
+Big-O fluency is table stakes — every engineer knows $O(n^2)$ is worse than $O(n \log n)$. The questions that separate candidates reveal whether you understand what Big-O *doesn't* capture.
+
+??? question "What does 'amortized O(1)' mean, and why does Python's list.append() qualify?"
+
+    Python's `list` resizes by doubling its backing array when full. Most appends are $O(1)$; occasional ones are $O(n)$ (copying all elements to the new array). Amortized analysis asks: what is the average cost across all operations? Total copy work across $n$ appends is $1 + 2 + 4 + \ldots + n = O(n)$. Spread over $n$ operations, that is $O(1)$ per append. The same logic applies to hash table rehashing — a single insert can be $O(n)$, but amortized across all inserts, it's $O(1)$. This is why these operations are documented as amortized $O(1)$, not just $O(1)$.
+
+??? question "Why can an O(n) algorithm be slower than O(n log n) in practice?"
+
+    Big-O drops constants and says nothing about memory access patterns. A linked-list traversal ($O(n)$) with random memory jumps can be slower than an array sort ($O(n \log n)$) with cache-friendly sequential access, at production scale. Cache misses cost roughly 100x more than cache hits. Big-O describes asymptotic growth — not wall-clock time. At small $n$, constants dominate; at large $n$, cache behavior and memory layout often matter more than the notation suggests.
+
+??? question "What does it mean for a problem to be NP-hard, and what should an engineer do when they recognize one?"
+
+    NP-hard problems (Traveling Salesman, graph coloring, bin packing) have no known polynomial-time solution, and most researchers believe none exists. Recognizing one changes your approach: stop searching for a better algorithm and switch to heuristics, approximation algorithms, or constraint relaxation. Spending weeks optimizing an NP-hard problem is usually a sign the framing is wrong, not the implementation. Knowing which problems are NP-hard is as important as knowing how to analyze the ones that aren't.
 
 ## Practice Problems
 

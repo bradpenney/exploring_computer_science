@@ -102,17 +102,6 @@ Understanding CS theory makes you a better engineer in concrete, measurable ways
 
     Knowing what's computationally hard versus easy changes how you design systems. Some problems have no efficient general solution — knowing this upfront means you can design around them rather than discovering it when the system is down.
 
-## Technical Interview Context
-
-CS fundamentals appear throughout technical interviews — both as explicit theory questions and as the vocabulary behind algorithm and design discussions.
-
-**Questions you'll be able to answer:**
-
-- *"What's the difference between computer science and software engineering?"* — CS is the study of computation: what can be computed, how efficiently, and what the theoretical limits are. Software engineering is the discipline of building reliable systems from those computational building blocks. CS is the science; software engineering is the application of it.
-- *"What is the Halting Problem, and why does it matter?"* — Turing proved in 1936 that no general algorithm can determine whether an arbitrary program will halt or run forever. It matters because it sets a hard limit on what automated tools can verify — it's why linters and static analyzers can catch *some* bugs but can never catch them all.
-- *"Why can't a static analysis tool guarantee it will catch every bug?"* — Because doing so is equivalent to solving the Halting Problem, which is provably undecidable. Tools like mypy, ESLint, and Rust's borrow checker are useful precisely because they catch a well-defined *subset* of bugs — not because they can catch everything.
-- *"What is computational complexity?"* — The study of how resource requirements (time, memory) grow as problem size grows. This is the formal theory behind Big-O notation — it tells you not just how fast your code is, but whether a *faster* algorithm for the same problem is even theoretically possible.
-
 ## The Major Subfields
 
 Computer science is vast. Here's a map of the territory:
@@ -299,6 +288,26 @@ Computer science is philosophy made executable.
     - **Human-Centered**: The clean, minimal interface hides all this complexity behind a single text box
 
     One search. Four subfields. That's computer science in action.
+
+## Technical Interview Context
+
+CS fundamentals appear throughout technical interviews — both as explicit theory questions and as the vocabulary behind algorithm and design discussions.
+
+??? question "What's the difference between computer science and software engineering?"
+
+    CS is the study of computation: what can be computed, how efficiently, and what the theoretical limits are. Software engineering is the discipline of building reliable systems from those computational building blocks. CS is the science; software engineering is the application of it.
+
+??? question "What is the Halting Problem, and why does it matter?"
+
+    Turing proved in 1936 that no general algorithm can determine whether an arbitrary program will halt or run forever. It matters because it sets a hard limit on what automated tools can verify — it's why linters and static analyzers can catch *some* bugs but can never catch them all.
+
+??? question "Why can't a static analysis tool guarantee it will catch every bug?"
+
+    Because doing so is equivalent to solving the Halting Problem, which is provably undecidable. Tools like mypy, ESLint, and Rust's borrow checker are useful precisely because they catch a well-defined *subset* of bugs — not because they can catch everything.
+
+??? question "What is computational complexity?"
+
+    The study of how resource requirements (time, memory) grow as problem size grows. This is the formal theory behind Big-O notation — it tells you not just how fast your code is, but whether a *faster* algorithm for the same problem is even theoretically possible.
 
 ## Practice Problems
 

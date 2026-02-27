@@ -54,17 +54,6 @@ Regex appears throughout a working engineer's day:
 
     The practical fix: avoid nested quantifiers. For the theory of *why* this happens — how regex engines compile to automata and where the explosion comes from — see [Regular Expressions: The Formal Model](../efficiency/regular_expressions.md).
 
-## Technical Interview Context
-
-Regex problems appear in interviews either as direct tasks ("write a pattern to extract all URLs") or as discussion topics in code review and security scenarios.
-
-**Questions you'll be able to answer:**
-
-- *"Write a regex to validate a phone number / extract all URLs from this text"* — You'll be expected to know `\d`, `\w`, `\s`, quantifiers (`+`, `*`, `?`, `{n,m}`), anchors (`^`, `$`), and groups `()`. The key technique: read a pattern aloud — "one or more digits, then a hyphen, then more digits" maps directly to `\d+-\d+`.
-- *"What's the difference between greedy and lazy matching?"* — Greedy (`.*`) matches as much as possible; lazy (`.*?`) matches as little as possible. On `<a>foo</b>`, `<.+>` matches the whole string; `<.+?>` matches just `<a>` and `</b>` separately.
-- *"Why shouldn't you parse HTML with regex?"* — HTML allows arbitrary nesting, which requires counting and memory beyond what finite automata provide. Any regex that looks like it handles nesting will fail on edge cases — malformed input, deeply nested tags, or attributes with angle brackets. Use a proper HTML parser.
-- *"What is catastrophic backtracking / ReDoS?"* — Certain patterns like `(a+)+` create exponential backtracking on adversarial input — 30 characters can trigger billions of match attempts. Nested quantifiers on overlapping character classes are the warning sign.
-
 ## What is a Regular Expression?
 
 A regular expression is a pattern that describes a set of strings. Instead of listing every valid string, you describe the *rules* for what makes a string valid.
@@ -510,6 +499,26 @@ To match literal special characters, escape them with `\`:
 ```
 
 Inside a character class, most special characters are literal: `[.*+?]` matches `.`, `*`, `+`, or `?`.
+
+## Technical Interview Context
+
+Regex problems appear in interviews either as direct tasks ("write a pattern to extract all URLs") or as discussion topics in code review and security scenarios.
+
+??? question "Write a regex to validate a phone number / extract all URLs from this text"
+
+    You'll be expected to know `\d`, `\w`, `\s`, quantifiers (`+`, `*`, `?`, `{n,m}`), anchors (`^`, `$`), and groups `()`. The key technique: read a pattern aloud — "one or more digits, then a hyphen, then more digits" maps directly to `\d+-\d+`.
+
+??? question "What's the difference between greedy and lazy matching?"
+
+    Greedy (`.*`) matches as much as possible; lazy (`.*?`) matches as little as possible. On `<a>foo</b>`, `<.+>` matches the whole string; `<.+?>` matches just `<a>` and `</b>` separately.
+
+??? question "Why shouldn't you parse HTML with regex?"
+
+    HTML allows arbitrary nesting, which requires counting and memory beyond what finite automata provide. Any regex that looks like it handles nesting will fail on edge cases — malformed input, deeply nested tags, or attributes with angle brackets. Use a proper HTML parser.
+
+??? question "What is catastrophic backtracking / ReDoS?"
+
+    Certain patterns like `(a+)+` create exponential backtracking on adversarial input — 30 characters can trigger billions of match attempts. Nested quantifiers on overlapping character classes are the warning sign.
 
 ## Practice Problems
 

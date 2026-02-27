@@ -67,17 +67,6 @@ The compile/interpret distinction shapes your daily development workflow:
 
     Compiled languages without debug symbols lose source-level information entirely — the binary just knows addresses. Debug builds (`-g` flags) embed source location information back into the binary so debuggers can show you source lines. The production binaries you ship usually strip this for size.
 
-## Technical Interview Context
-
-The compile/interpret distinction is relevant for system design interviews, language choice discussions, and questions about build pipelines and deployment.
-
-**Questions you'll be able to answer:**
-
-- *"Why does Go start up faster than Python?"* — Go compiles to native machine code ahead of time; the resulting binary runs directly on the CPU. Python parses source, compiles to bytecode, and starts the CPython VM on every invocation. The difference is when translation work happens — AOT vs. at runtime.
-- *"What causes Lambda / container cold start latency?"* — JIT-compiled runtimes (JVM, Node.js V8) need time to identify hot paths and compile them to native code. A freshly initialized container starts with interpreted bytecode execution; cold start latency is the cost of the JIT not yet having warmed up.
-- *"What is AOT vs JIT compilation?"* — Ahead-of-time (AOT) compiles before the program runs (Go, Rust, C); the binary is fully optimized at build time. Just-in-time (JIT) compiles hot paths at runtime (JVM, V8, PyPy); startup is slower but the JIT can optimize based on actual runtime behavior.
-- *"Why does TypeScript need a build step if JavaScript doesn't?"* — TypeScript adds a compilation phase that type-checks your code and emits JavaScript. This catches type errors at build time — before any code runs — at the cost of a build step. It's a compiled layer over an interpreted language: the type safety of static analysis without changing the runtime.
-
 ## What a Compiler Actually Does
 
 A compiler is a program that translates source code in one language into equivalent code in another language. Usually the target is machine code (native instructions for a specific CPU), but it could also be bytecode or even another high-level language.
@@ -268,6 +257,26 @@ The trade-off: JIT compilation adds complexity and startup cost. This is why Lam
 | **Bytecode VM** | Bytecode at build, execution at runtime | CPython, JVM languages | Portable bytecode; moderate performance |
 | **JIT** | Hot paths at runtime | V8, HotSpot, PyPy | Near-native performance after warmup; cold start cost |
 | **Transpiled** | Build time, target is another language | TypeScript → JS, Babel | Source-level benefits; adds build step |
+
+## Technical Interview Context
+
+The compile/interpret distinction is relevant for system design interviews, language choice discussions, and questions about build pipelines and deployment.
+
+??? question "Why does Go start up faster than Python?"
+
+    Go compiles to native machine code ahead of time; the resulting binary runs directly on the CPU. Python parses source and compiles to bytecode on first run (caching the result in `__pycache__`), then starts the CPython VM on every invocation. The difference is when translation work happens — AOT vs. at runtime.
+
+??? question "What causes Lambda / container cold start latency?"
+
+    JIT-compiled runtimes (JVM, Node.js V8) need time to identify hot paths and compile them to native code. A freshly initialized container starts with interpreted bytecode execution; cold start latency is the cost of the JIT not yet having warmed up.
+
+??? question "What is AOT vs JIT compilation?"
+
+    Ahead-of-time (AOT) compiles before the program runs (Go, Rust, C); the binary is fully optimized at build time. Just-in-time (JIT) compiles hot paths at runtime (JVM, V8, PyPy); startup is slower but the JIT can optimize based on actual runtime behavior.
+
+??? question "Why does TypeScript need a build step if JavaScript doesn't?"
+
+    TypeScript adds a compilation phase that type-checks your code and emits JavaScript. This catches type errors at build time — before any code runs — at the cost of a build step. It's a compiled layer over an interpreted language: the type safety of static analysis without changing the runtime.
 
 ## Practice Problems
 

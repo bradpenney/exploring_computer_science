@@ -46,9 +46,9 @@ The recursive structure of lists appears everywhere in production code:
 
 === ":material-function-variant: Immutable List Patterns"
 
-    Immutable data structures in functional languages (and increasingly in modern JavaScript, Python, and Go) rely on cons-style prepending. When you do `[newItem, ...existingList]` in JavaScript or `[new_item] + existing_list` in Python, you're constructing a new list that shares its tail with the original.
+    Immutable data structures in functional languages (Clojure, Haskell, Erlang) use cons-style prepending with true structural sharing: prepending creates a new head node that points to the existing list, so the new list and the old list share the same tail in memory. This makes prepend $O(1)$ in both time and space.
 
-    This is $O(1)$ for prepend (just add a new head), $O(n)$ for append (must traverse to the end). This is why functional style tends to build lists by prepending and then reversing, rather than appending directly.
+    Python `list` and JavaScript `Array` are dynamic arrays, not linked cons lists. `[new_item] + existing_list` in Python copies all elements into a new array — that's $O(n)$. The same for JavaScript's spread syntax `[newItem, ...existingList]`. When you see functional-style code building lists by prepending and reversing, it is following the *pattern* from cons-list theory — but in Python/JavaScript, the reversal at the end is the cheaper part; it's the intermediate prepends that can add up.
 
 === ":material-code-braces: Recursive Data Processing"
 
@@ -67,17 +67,6 @@ The recursive structure of lists appears everywhere in production code:
     - **reduce** — fold that produces a scalar
 
     They're all the same recursive pattern with different accumulator functions.
-
-## Technical Interview Context
-
-List operations and their time complexities are classic interview territory. Understanding the recursive structure explains why these operations have the costs they do — rather than requiring you to memorize a lookup table.
-
-**Questions you'll be able to answer:**
-
-- *"What's the time complexity of prepend vs append on a linked list?"* — Prepend is $O(1)$: create a new head that points to the existing list. Append is $O(n)$: traverse to the tail before adding. This asymmetry is why functional languages build lists by prepending and reversing, rather than appending directly.
-- *"Implement `map` / `filter` / `reduce` from scratch"* — All three are specializations of the `fold` pattern: recurse to the tail, apply the function (or condition, or accumulator) at each step, combine results on the way back up. Understanding the recursive structure makes implementing them from scratch straightforward.
-- *"When would you use a linked list vs an array?"* — Arrays have $O(1)$ random access and cache-friendly sequential access but $O(n)$ insertion at the head. Linked lists have $O(1)$ head insertion but $O(n)$ random access and poor cache locality. In practice, arrays win for most use cases; linked lists are valuable for queue implementations and scenarios requiring frequent head insertion without copying.
-- *"What is structural sharing in immutable data structures?"* — When you prepend to an immutable list, the new list shares its tail with the original — both point to the same cons cells. This makes `[new_head] + existing_list` $O(1)$ in both time and space, with no copying required.
 
 ## The Recursive Definition of a List
 
@@ -569,6 +558,26 @@ A common operation: take a list of lists and produce a single flat list.
     1. Empty list: return empty result
     2. Scalar value: append directly
     3. Inner list: extend result with all elements
+
+## Technical Interview Context
+
+List operations and their time complexities are classic interview territory. Understanding the recursive structure explains why these operations have the costs they do — rather than requiring you to memorize a lookup table.
+
+??? question "What's the time complexity of prepend vs append on a linked list?"
+
+    Prepend is $O(1)$: create a new head that points to the existing list. Append is $O(n)$: traverse to the tail before adding. This asymmetry is why functional languages build lists by prepending and reversing, rather than appending directly.
+
+??? question "Implement `map` / `filter` / `reduce` from scratch"
+
+    All three are specializations of the `fold` pattern: recurse to the tail, apply the function (or condition, or accumulator) at each step, combine results on the way back up. Understanding the recursive structure makes implementing them from scratch straightforward.
+
+??? question "When would you use a linked list vs an array?"
+
+    Arrays have $O(1)$ random access and cache-friendly sequential access but $O(n)$ insertion at the head. Linked lists have $O(1)$ head insertion but $O(n)$ random access and poor cache locality. In practice, arrays win for most use cases; linked lists are valuable for queue implementations and scenarios requiring frequent head insertion without copying.
+
+??? question "What is structural sharing in immutable data structures?"
+
+    In languages with cons-cell linked lists (Clojure, Haskell, Erlang), prepending creates a new head node pointing to the existing list — both share the same tail in memory, so prepend is $O(1)$ with no copying. In Python and JavaScript (dynamic arrays), `[new_head] + existing_list` allocates a new array and copies all elements: $O(n)$. Structural sharing is a property of the data structure, not the language syntax.
 
 ## Practice Problems
 
