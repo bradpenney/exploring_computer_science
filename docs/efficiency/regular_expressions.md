@@ -1,1276 +1,92 @@
 ---
-description: "A practical guide to Regex: the text processing powerhouse used in every modern programming language."
+title: "Regular Expressions: The Formal Model"
+description: How regex engines compile patterns to automata, why backtracking causes production outages, and what regular expressions fundamentally cannot match.
 ---
-# Regular Expressions
+# Regular Expressions: The Formal Model
 
-You've seen [Finite State Machines](finite_state_machines.md)—elegant diagrams showing states and transitions. You've seen [BNF](backus_naur_form.md)—formal grammar notation. But when you need to actually *use* pattern matching in your code, you reach for **regular expressions** (regex).
+You already write regex. You know `\d+` matches digits and `.*` matches everything. But when a colleague asks "why did that regex take down the server?" or "why can't I match balanced parentheses with regex?" — the answer isn't in any syntax guide.
 
-Regex is the practical face of formal language theory. It's the same mathematical power as FSMs, wrapped in a terse syntax that fits in a single line. Love them or hate them (often both), regular expressions are an essential tool.
+**This is the theory behind the tool.**
 
-## Why Regular Expressions Matter
+Understanding how regex engines work explains ReDoS, why some engines are faster than others, why backreferences are controversial, and why your regex-based HTML parser is formally broken. This article assumes you know regex syntax — if you need a refresher, start with [Regular Expressions](../essentials/regular_expressions.md).
 
-Regular expressions are embedded in virtually every modern programming language and tool. They're the Swiss Army knife of text processing:
+!!! info "Learning Objectives"
 
-- **Validation**: Email addresses, phone numbers, passwords, credit cards
-- **Search and Replace**: Find complex patterns across codebases (grep, IDE search)
-- **Parsing**: Extract data from logs, CSV files, API responses
-- **Lexical Analysis**: The first stage of compilation—breaking source code into tokens
-- **Data Cleaning**: Normalize messy input, strip unwanted characters
-- **URL Routing**: Web frameworks use regex to match request paths
+    By the end of this article, you'll be able to:
 
-The return on investment is massive. Spend an hour learning regex fundamentals, unlock decades of productivity. What would take 50 lines of string manipulation code becomes a single elegant pattern.
+    - Explain how Thompson's construction compiles a regex pattern into an NFA
+    - Distinguish DFA engines (guaranteed $O(n)$) from NFA/backtracking engines and their practical tradeoffs
+    - Identify patterns vulnerable to catastrophic backtracking and explain the mechanism (ReDoS)
+    - Explain why backreferences make regex non-regular — and what that means for engine design
+    - Know when regex cannot solve a problem and why a parser is the correct tool instead
 
-They're not just for programmers. Journalists use regex to analyze leaked documents. Scientists extract data from research papers. Anyone working with text at scale needs this tool.
+## Where You've Seen This
 
-## What is a Regular Expression?
+These are the situations where the formal model matters:
 
-A regular expression is a pattern that describes a set of strings. Instead of listing every valid string, you describe the *rules* for what makes a string valid.
+- **ReDoS CVEs** — Vulnerability reports like Cloudflare's 2019 outage trace back to the backtracking model described here; the root cause is always a mathematical property of the pattern, not a code bug
+- **`re2` vs `re`** — Google's `re2` library guarantees $O(n)$ matching by using a DFA engine; Python's `re` module uses backtracking and can be exponential on adversarial input
+- **Regex101's "explain" mode** — The NFA diagram it generates is literally what your engine compiles your pattern into
+- **"You can't parse HTML with regex"** — This isn't snobbery; it's a formal result about what regular languages can and cannot express
+- **Database regex performance** — PostgreSQL's `~` operator and MySQL's `REGEXP` have different performance characteristics based on their underlying engine architectures
 
-``` title="Email Address Pattern" linenums="1"
-^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
-```
+## Why This Matters for Production Code
 
-That monstrosity? It matches email addresses. 😅 Let's learn to read (and write) these things.
+=== ":material-alert: The ReDoS Mechanism"
 
-## Basic Building Blocks
+    In July 2019, a regex in Cloudflare's WAF firewall ruleset caused CPU usage to spike to 100% across their entire network for 27 minutes. A minor pattern update introduced catastrophic backtracking — exponential runtime against certain inputs.
 
-### Literal Characters
+    This was not a bug in the code. It was a mathematical property of the pattern interacting with the backtracking engine. The same mechanism has caused multiple Stack Overflow outages and is tracked as a vulnerability class (CWE-1333).
 
-Most characters match themselves:
+=== ":material-speedometer: Engine Choice Has Consequences"
 
-| Pattern | Matches |
-|:--------|:--------|
-| `cat` | "cat" |
-| `hello` | "hello" |
-| `123` | "123" |
+    When you install `google-re2` in Python or reach for Rust's `regex` crate, you're trading away backtracking features for guaranteed $O(n)$ performance. That trade-off only makes sense if you understand what the backtracking engine is doing — and when it becomes dangerous.
 
-### Metacharacters
+    High-traffic input validation (URL routing, request filtering, log parsing) benefits from DFA engines. Complex extraction with backreferences requires NFA/backtracking engines. Knowing the difference helps you pick the right tool.
 
-Some characters have special meaning:
+=== ":material-code-not-equal-variant: The Hard Limits Are Real"
 
-| Character | Meaning | Example | Matches |
-|:----------|:--------|:--------|:--------|
-| `.` | Any single character | `c.t` | "cat", "cot", "c9t" |
-| `^` | Start of string | `^hello` | "hello world" (at start) |
-| `$` | End of string | `world$` | "hello world" (at end) |
-| `\` | Escape special char | `\.` | literal "." |
+    Balanced parentheses, matching XML tags at arbitrary nesting depth, validating that a string has equal numbers of `a`s and `b`s — none of these are regular languages. No regex, no matter how clever, can correctly handle them for all possible inputs. Understanding why tells you when to stop reaching for regex and start reaching for a parser.
 
-### Character Classes
+## Technical Interview Context
 
-Match one character from a set:
+The formal model of regex engines is relevant in security-focused interviews and in systems discussions about high-throughput input processing.
 
-| Pattern | Meaning | Matches |
-|:--------|:--------|:--------|
-| `[aeiou]` | Any vowel | "a", "e", "i", "o", "u" |
-| `[0-9]` | Any digit | "0" through "9" |
-| `[a-zA-Z]` | Any letter | "a"-"z", "A"-"Z" |
-| `[^0-9]` | NOT a digit | anything except "0"-"9" |
+**Questions you'll be able to answer:**
 
-### Shorthand Classes
+- *"What is ReDoS and how do you prevent it?"* — Regex Denial of Service exploits catastrophic backtracking in NFA/backtracking engines. Patterns with nested quantifiers on the same character class (like `(a+)+`) create exponential backtracking on adversarial input. Prevention: flatten nested quantifiers, switch to a DFA engine (`re2`, Rust's `regex` crate), or add input length limits.
+- *"Why is `re2` safer than Python's `re`?"* — `re2` uses a DFA engine with guaranteed $O(n)$ matching regardless of the pattern. Python's `re` uses backtracking and can exhibit exponential runtime on crafted input, making it exploitable if the pattern accepts user-controlled input.
+- *"What's the difference between an NFA and a DFA?"* — Both are finite automata, but an NFA can be in multiple states simultaneously; a DFA has exactly one state at each step. DFAs are faster to execute but cannot support backreferences. NFA engines support `\1`-style backreferences; DFA engines structurally cannot.
+- *"Can regex match balanced parentheses?"* — No. Balanced parentheses require counting to arbitrary depth, which requires unbounded memory. Finite automata have no memory beyond their current state — this problem is formally outside the regular language class and requires a parser.
 
-Common patterns have shortcuts:
+## From Pattern to Automaton
 
-| Shorthand | Equivalent | Meaning |
-|:----------|:-----------|:--------|
-| `\d` | `[0-9]` | Digit |
-| `\D` | `[^0-9]` | Not a digit |
-| `\w` | `[a-zA-Z0-9_]` | Word character |
-| `\W` | `[^a-zA-Z0-9_]` | Not a word character |
-| `\s` | `[ \t\n\r]` | Whitespace |
-| `\S` | `[^ \t\n\r]` | Not whitespace |
+When you call `re.compile(r'\d+')`, your regex engine doesn't interpret the pattern character by character at match time. It *compiles* the pattern to a state machine first.
 
-??? warning "Unicode Characters"
+The compilation pipeline:
 
-    By default in many regex engines, `\w` matches only ASCII characters (a-z, A-Z, 0-9, _).
+| Stage | Operation | Output |
+|:------|:----------|:-------|
+| 1 | Parse the regex | Syntax tree |
+| 2 | Thompson's construction | NFA |
+| 3 | Subset construction *(optional)* | DFA |
+| 4 | Execute against input | Match / No match |
 
-    **This means `\w` WON'T match:**
+**Thompson's construction** converts a regex to an NFA systematically — each regex operator maps to a small NFA fragment that gets composed into a larger machine:
 
-    - Accented letters: "é", "ñ", "ü"
-    - Non-Latin alphabets: "π", "こ", "א"
-    - Emoji: "😀"
+| Regex | NFA structure |
+|:------|:-------------|
+| `a` | Two states, one transition labeled `a` |
+| `a\|b` | Split state with two paths, both joining at end |
+| `ab` | Chain: state for `a` → state for `b` |
+| `a*` | Loop: `a` transition back to same state, epsilon path to exit |
 
-    **Solutions:**
-
-    - **JavaScript**: Use the `u` flag: `/\w+/u`
-    - **Python**: Use `re.UNICODE` flag (default in Python 3): `re.search(r'\w+', text, re.UNICODE)`
-    - **Or be explicit**: Use `[a-zA-ZÀ-ÿ]` for Latin with accents, or custom character classes
-
-    For truly international text, consider using Unicode categories like `\p{L}` (any letter) if your engine supports them.
-
-??? example "Concept Check 1: Three-Letter Words"
-
-    Write a regex pattern that matches three letters starting with a vowel.
-
-    ??? tip "Solution"
-
-        **Pattern**: `[aeiouAEIOU][a-zA-Z][a-zA-Z]`
-
-        - `[aeiouAEIOU]` - starts with a vowel
-        - `[a-zA-Z]` - second letter
-        - `[a-zA-Z]` - third letter
-
-        Note: This matches the pattern anywhere in text. Later we'll learn about word boundaries (`\b`) to match complete words only.
-
-??? example "Concept Check 2: Postal Codes"
-
-    Write a regex pattern that matches a Canadian postal code format (like "K1A 0B1" - letter, digit, letter, space, digit, letter, digit).
-
-    ??? tip "Solution"
-
-        **Pattern**: `[A-Z]\d[A-Z] \d[A-Z]\d`
-
-        - `[A-Z]` - uppercase letter
-        - `\d` - digit
-        - `[A-Z]` - uppercase letter
-        - ` ` - space
-        - `\d` - digit
-        - `[A-Z]` - uppercase letter
-        - `\d` - digit
-
-## Quantifiers: How Many?
-
-Quantifiers specify repetition:
-
-| Quantifier | Meaning | Example | Matches |
-|:-----------|:--------|:--------|:--------|
-| `*` | Zero or more | `ab*c` | "ac", "abc", "abbc", "abbbc"... |
-| `+` | One or more | `ab+c` | "abc", "abbc", "abbbc"... (not "ac") |
-| `?` | Zero or one | `colou?r` | "color", "colour" |
-| `{n}` | Exactly n | `a{3}` | "aaa" |
-| `{n,}` | n or more | `a{2,}` | "aa", "aaa", "aaaa"... |
-| `{n,m}` | Between n and m | `a{2,4}` | "aa", "aaa", "aaaa" |
-
-### Greedy vs Lazy
-
-By default, quantifiers are *greedy*—they match as much as possible.
-
-``` title="Greedy Matching Example" linenums="1"
-Pattern: <.*>
-String:  <div>hello</div>
-Match:   <div>hello</div>  (the whole thing!)
-```
-
-Add `?` for *lazy* matching—match as little as possible:
-
-``` title="Lazy Matching Example" linenums="1"
-Pattern: <.*?>
-String:  <div>hello</div>
-Match:   <div>  (just the first tag)
-```
-
-??? example "Concept Check 3: Password Length"
-
-    Write a regex pattern for a password that's exactly 8-16 characters long (no more, no less).
-
-    ??? tip "Solution"
-
-        **Pattern**: `^.{8,16}$`
-
-        - `^` - start of string
-        - `.` - any character
-        - `{8,16}` - between 8 and 16 times
-        - `$` - end of string
-
-??? example "Concept Check 4: Hashtags"
-
-    Write a regex pattern that matches a hashtag (starts with #, followed by one or more word characters).
-
-    ??? tip "Solution"
-
-        **Pattern**: `#\w+`
-
-        - `#` - literal hashtag
-        - `\w+` - one or more word characters
-
-??? example "Concept Check 5: Multiple Spaces"
-
-    Write a regex pattern that matches multiple spaces (two or more consecutive spaces).
-
-    ??? tip "Solution"
-
-        **Pattern**: ` {2,}` or `  +`
-
-        - ` {2,}` - space character, 2 or more times
-        - `  +` - two spaces followed by zero or more spaces
-
-## Grouping and Alternatives
-
-### Groups: `( )`
-
-Parentheses group patterns together:
-
-``` title="Grouping Examples" linenums="1"
-(ab)+     # One or more "ab": "ab", "abab", "ababab"
-(cat|dog) # "cat" or "dog"
-```
-
-### Capturing Groups
-
-Groups also *capture* what they match for later use. Think of parentheses as creating a "memory slot" that saves whatever matched inside them.
-
-**Why capture?** You often want to extract specific parts of a match, not just verify a pattern exists.
-
-For example, if you're matching a phone number like `555-1234`, you might want to:
-
-- Extract just the first three digits (`555`)
-- Extract just the last four digits (`1234`)
-- Rearrange the parts into a different format
-
-**How it works:**
-
-```python title="Capturing Groups in Python" linenums="1"
-import re
-
-match = re.search(r'(\d{3})-(\d{4})', 'Call 555-1234')  # (1)!
-print(match.group(0))  # "555-1234" (entire match)  # (2)!
-print(match.group(1))  # "555" (first capture group)  # (3)!
-print(match.group(2))  # "1234" (second capture group)  # (4)!
-```
-
-1. Search for pattern with two capturing groups: 3 digits, hyphen, 4 digits
-2. Group 0 is always the entire matched string
-3. Group 1 captures the first parenthesized sub-pattern (3 digits)
-4. Group 2 captures the second parenthesized sub-pattern (4 digits)
-
-**Breaking it down:**
-
-| Part | What it does |
-|:-----|:-------------|
-| `(\d{3})` | **Group 1**: Captures first 3 digits |
-| `-` | Matches literal hyphen (not captured) |
-| `(\d{4})` | **Group 2**: Captures last 4 digits |
-
-The parentheses create numbered groups (1, 2, 3...). Group 0 is always the entire match.
-
-**Another example - Parsing dates:**
-
-```python title="Extracting Date Components" linenums="1"
-import re
-
-text = "Born on 1995-08-23"
-match = re.search(r'(\d{4})-(\d{2})-(\d{2})', text)  # (1)!
-
-year = match.group(1)   # "1995"  # (2)!
-month = match.group(2)  # "08"
-day = match.group(3)    # "23"
-
-print(f"Year: {year}, Month: {month}, Day: {day}")
-# Output: Year: 1995, Month: 08, Day: 23
-```
-
-1. Pattern with three groups: 4 digits (year), 2 digits (month), 2 digits (day)
-2. Extract each component by accessing numbered capture groups
-
-**Practical use - Reformatting:**
-
-```python title="Reformatting Phone Numbers" linenums="1"
-import re
-
-phone = "555-123-4567"
-# Capture three groups
-match = re.search(r'(\d{3})-(\d{3})-(\d{4})', phone)  # (1)!
-
-# Rearrange into different format
-formatted = f"({match.group(1)}) {match.group(2)}-{match.group(3)}"  # (2)!
-print(formatted)  # Output: (555) 123-4567
-```
-
-1. Capture three groups: area code, exchange, and line number
-2. Reconstruct the phone number in a different format using the captured groups
-
-**Key insight:** Parentheses do two things:
-
-1. **Group** patterns together for quantifiers (like `(ab)+`)
-2. **Capture** the matched text for later use
-
-When you need grouping but don't want to capture, use non-capturing groups `(?:...)` (explained next).
-
-### Non-Capturing Groups: `(?: )`
-
-When you need grouping but don't need to capture:
-
-``` title="Non-Capturing Group Example" linenums="1"
-(?:ab)+   # Groups without capturing
-```
-
-### Backreferences
-
-A backreference lets you match *the same text again* that was captured by an earlier group. Instead of matching a pattern, you're matching the exact string that was already captured.
-
-**Why use backreferences?** To find repeated or matching patterns where you don't know in advance what the text will be, only that it should be the same.
-
-**Basic example - Finding duplicate words:**
-
-``` title="Backreference Example" linenums="1"
-(\w+)\s+\1   # Matches repeated words: "the the", "is is"
-```
-
-**How it works:**
-
-1. `(\w+)` - Captures one or more word characters (this is Group 1)
-2. `\s+` - Matches one or more whitespace characters
-3. `\1` - Matches *exactly the same text* that Group 1 captured
-
-So if Group 1 captured "the", then `\1` will only match "the" (not "a" or "dog" or anything else).
-
-**Step-by-step with "the the":**
-
-| Step | Pattern Part | Matches | Group 1 Contains |
-|:-----|:-------------|:--------|:-----------------|
-| 1 | `(\w+)` | "the" | "the" |
-| 2 | `\s+` | " " (space) | "the" |
-| 3 | `\1` | "the" (must match exactly!) | "the" |
-
-If the text were "the dog", it wouldn't match because `\1` looks for "the" again (not "dog").
-
-**Finding matching HTML tags:**
-
-``` title="Matching Opening and Closing Tags" linenums="1"
-<(\w+)>.*?</\1>
-```
-
-This matches paired HTML tags like `<div>content</div>` or `<span>text</span>`:
-
-- `<(\w+)>` - Captures the opening tag name (Group 1)
-- `.*?` - Matches any content (lazy)
-- `</\1>` - Matches closing tag with the *same* name as Group 1
-
-**Breaking it down:**
-
-For the string `<div>hello</div>`:
-
-| Part | Matches | Group 1 |
-|:-----|:--------|:--------|
-| `<(\w+)>` | `<div>` | "div" |
-| `.*?` | "hello" | "div" |
-| `</\1>` | `</div>` | "div" |
-
-But `<div>hello</span>` wouldn't match because `\1` is "div", not "span".
-
-**Multiple backreferences:**
-
-``` title="Multiple Backreferences Example" linenums="1"
-(\w+) and \1, (\w+) and \2
-```
-
-This matches patterns like "cats and cats, dogs and dogs":
-
-- `(\w+)` - Group 1 captures first word
-- ` and \1` - Matches " and " followed by same word as Group 1
-- `, (\w+)` - Group 2 captures second word
-- ` and \2` - Matches " and " followed by same word as Group 2
-
-**Backreference numbers:**
-
-- `\1` refers to Group 1
-- `\2` refers to Group 2
-- `\3` refers to Group 3
-- And so on...
-
-**Important:** Backreferences match the captured *text*, not the *pattern*. If `(\d+)` captures "42", then `\1` will only match "42" exactly, not any other number.
-
-??? example "Concept Check 6: Color Spelling"
-
-    Write a regex pattern that matches either "color" or "colour" using alternation.
-
-    ??? tip "Solution"
-
-        **Pattern**: `colou?r` (simpler) or `col(o|ou)r` (using alternation)
-
-        - Both work, but `colou?r` is more concise
-
-??? example "Concept Check 7: HTML Tag Capture"
-
-    Write a regex pattern that matches HTML tags like `<div>`, `<span>`, `<p>` and captures the tag name.
-
-    ??? tip "Solution"
-
-        **Pattern**: `<(\w+)>`
-
-        - `<` - literal less-than
-        - `(\w+)` - capture group for tag name (one or more word chars)
-        - `>` - literal greater-than
-
-??? example "Concept Check 8: Doubled Words"
-
-    Write a regex pattern that finds doubled words like "the the" or "is is".
-
-    ??? tip "Solution"
-
-        **Pattern**: `(\w+)\s+\1`
-
-        - `(\w+)` - capture one or more word characters
-        - `\s+` - one or more whitespace
-        - `\1` - backreference to first captured group (must match the same text)
-
-        Note: This pattern works but may match partial words. Later we'll learn about word boundaries (`\b`) to match complete words only.
-
-## Anchors and Boundaries
-
-| Anchor | Meaning |
-|:-------|:--------|
-| `^` | Start of string (or line with multiline flag) |
-| `$` | End of string (or line with multiline flag) |
-| `\b` | Word boundary |
-| `\B` | Not a word boundary |
-
-**Word boundaries** are incredibly useful:
-
-``` title="Word Boundary Example" linenums="1"
-Pattern: \bcat\b
-Matches: "the cat sat" ✓
-Doesn't match: "category" ✗, "bobcat" ✗
-```
-
-??? example "Concept Check 9: TODO Lines"
-
-    Write a regex pattern that matches lines that start with "TODO:".
-
-    ??? tip "Solution"
-
-        **Pattern**: `^TODO:`
-
-        - `^` - start of line
-        - `TODO:` - literal text
-
-??? example "Concept Check 10: File Extensions"
-
-    Write a regex pattern that matches files that end with `.md` or `.txt`.
-
-    ??? tip "Solution"
-
-        **Pattern**: `\.(md|txt)$`
-
-        - `\.` - literal dot (escaped)
-        - `(md|txt)` - either "md" or "txt"
-        - `$` - end of string
-
-??? example "Concept Check 11: Word Boundaries"
-
-    Write a regex pattern that matches the word "run" as a standalone word (not in "running" or "runner").
-
-    ??? tip "Solution"
-
-        **Pattern**: `\brun\b`
-
-        - `\b` - word boundary
-        - `run` - literal text
-        - `\b` - word boundary
-        - This won't match "running" or "runner" because of the boundaries
-
-## Lookahead and Lookbehind
-
-These match a position without consuming characters:
-
-| Syntax | Name | Meaning |
-|:-------|:-----|:--------|
-| `(?=...)` | Positive lookahead | Followed by ... |
-| `(?!...)` | Negative lookahead | NOT followed by ... |
-| `(?<=...)` | Positive lookbehind | Preceded by ... |
-| `(?<!...)` | Negative lookbehind | NOT preceded by ... |
-
-**Example: Password Validation**
-
-Password must have a digit and a letter:
-
-``` title="Password Validation Pattern" linenums="1"
-^(?=.*\d)(?=.*[a-zA-Z]).{8,}$
-```
-
-Breaking it down:
-
-- `^` — start
-- `(?=.*\d)` — somewhere ahead, there's a digit
-- `(?=.*[a-zA-Z])` — somewhere ahead, there's a letter
-- `.{8,}` — at least 8 characters total
-- `$` — end
-
-??? example "Concept Check 12: Contains Uppercase"
-
-    Write a regex pattern that matches a string that contains at least one uppercase letter (anywhere).
-
-    ??? tip "Solution"
-
-        **Pattern**: `^(?=.*[A-Z]).+$`
-
-        - `^` - start
-        - `(?=.*[A-Z])` - positive lookahead: somewhere there's an uppercase
-        - `.+` - one or more characters
-        - `$` - end
-
-??? example "Concept Check 13: Password Validation"
-
-    Write a regex pattern for a password with at least one digit AND at least one special character (!@#$%).
-
-    ??? tip "Solution"
-
-        **Pattern**: `^(?=.*\d)(?=.*[!@#$%]).{8,}$`
-
-        - `^` - start
-        - `(?=.*\d)` - lookahead: contains a digit
-        - `(?=.*[!@#$%])` - lookahead: contains a special character
-        - `.{8,}` - at least 8 characters
-        - `$` - end
-
-??? example "Concept Check 14: Lookahead Without Capture"
-
-    Write a regex pattern that matches a dollar amount that's followed by "USD" (but don't capture "USD").
-
-    ??? tip "Solution"
-
-        **Pattern**: `\$\d+(?:\.\d{2})?(?= USD)`
-
-        - `\$` - literal dollar sign
-        - `\d+` - one or more digits
-        - `(?:\.\d{2})?` - optional decimal point and 2 digits
-        - `(?= USD)` - positive lookahead: followed by " USD" (not captured)
-
-## Flags and Modifiers
-
-Flags (also called modifiers) change how the regex engine interprets your pattern. They're added after the closing delimiter in most languages.
-
-### Common Flags
-
-| Flag | Name | What It Does |
-|:-----|:-----|:-------------|
-| `i` | Case insensitive | Match both uppercase and lowercase |
-| `g` | Global | Find all matches (not just first) |
-| `m` | Multiline | `^` and `$` match line starts/ends, not just string |
-| `s` | Dotall | `.` matches newlines too |
-
-### Flag Syntax by Language
-
-=== ":material-language-python: Python"
-
-    ```python title="Flags in Python" linenums="1"
-    import re
-
-    re.search(r'hello', text, re.I)              # Case insensitive (re.IGNORECASE)
-    re.findall(r'\d+', text)                     # findall is inherently global
-    re.search(r'^line', text, re.M)              # Multiline (re.MULTILINE)
-    re.search(r'.', text, re.S)                  # Dotall (re.DOTALL)
-    re.search(r'hello', text, re.I | re.M)       # Multiple flags with |
-    ```
-
-=== ":material-language-javascript: JavaScript"
-
-    ```javascript title="Flags in JavaScript" linenums="1"
-    /pattern/flags
-
-    /hello/i          // Case insensitive
-    /\d+/g            // Global - find all numbers
-    /^line/m          // Multiline - ^ matches line starts
-    /./s              // Dotall - . matches newlines
-    /hello/gi         // Multiple flags: global + case insensitive
-    ```
-
-=== ":material-language-go: Go"
-
-    ```go title="Flags in Go" linenums="1"
-    import "regexp"
-
-    // Go regex is always case-sensitive by default
-    regexp.MatchString(`(?i)hello`, text)        // Case insensitive (inline flag)
-    regexp.FindAllString(`\d+`, text, -1)        // Find all (use -1 for all matches)
-    regexp.MatchString(`(?m)^line`, text)        // Multiline (inline flag)
-    regexp.MatchString(`(?s).`, text)            // Dotall (inline flag)
-    regexp.MatchString(`(?im)hello`, text)       // Multiple flags (inline)
-    ```
-
-=== ":material-language-rust: Rust"
-
-    ```rust title="Flags in Rust" linenums="1"
-    use regex::Regex;
-
-    // Case insensitive - use (?i) inline flag
-    let re = Regex::new(r"(?i)hello").unwrap();
-    re.is_match(text);
-
-    // Find all matches
-    let re = Regex::new(r"\d+").unwrap();
-    let matches: Vec<_> = re.find_iter(text).collect();
-
-    // Multiline - use (?m) inline flag
-    let re = Regex::new(r"(?m)^line").unwrap();
-
-    // Dotall - use (?s) inline flag
-    let re = Regex::new(r"(?s).").unwrap();
-
-    // Multiple flags
-    let re = Regex::new(r"(?im)hello").unwrap();
-    ```
-
-=== ":material-language-java: Java"
-
-    ```java title="Flags in Java" linenums="1"
-    import java.util.regex.*;
-
-    // Case insensitive
-    Pattern.compile("hello", Pattern.CASE_INSENSITIVE);
-    Pattern.compile("(?i)hello");  // Inline flag alternative
-
-    // Find all matches (use Matcher.find() in loop)
-    Pattern p = Pattern.compile("\\d+");
-    Matcher m = p.matcher(text);
-    while (m.find()) { /* ... */ }
-
-    // Multiline
-    Pattern.compile("^line", Pattern.MULTILINE);
-
-    // Dotall
-    Pattern.compile(".", Pattern.DOTALL);
-
-    // Multiple flags
-    Pattern.compile("hello", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
-    ```
-
-=== ":material-language-cpp: C++"
-
-    ```cpp title="Flags in C++" linenums="1"
-    #include <regex>
-
-    // Case insensitive
-    std::regex re("hello", std::regex::icase);
-
-    // Find all matches (use std::sregex_iterator)
-    std::regex re("\\d+");
-    auto matches = std::sregex_iterator(text.begin(), text.end(), re);
-
-    // Multiline (use ECMAScript grammar with multiline)
-    std::regex re("^line", std::regex::multiline);
-
-    // Dotall - not directly supported in C++11, use [\s\S] instead
-    std::regex re("[\\s\\S]");  // Workaround for dotall
-
-    // Multiple flags
-    std::regex re("hello", std::regex::icase | std::regex::multiline);
-    ```
-
-### Example: Case Insensitive Matching
-
-Without flag:
-
-``` title="Case Sensitive (Default)" linenums="1"
-/cat/              # Matches: "cat"
-                   # Doesn't match: "Cat", "CAT"
-```
-
-With `i` flag:
-
-``` title="Case Insensitive" linenums="1"
-/cat/i             # Matches: "cat", "Cat", "CAT", "CaT"
-```
-
-### Example: Global Flag
-
-The global flag controls whether to find just the first match or all matches:
-
-=== ":material-language-python: Python"
-
-    ```python title="Find All vs Find First in Python" linenums="1"
-    import re
-
-    text = "2024-12-15"
-
-    # Find first match only
-    first = re.search(r'\d+', text)
-    print(first.group())  # "2024"
-
-    # Find all matches
-    all_matches = re.findall(r'\d+', text)
-    print(all_matches)  # ["2024", "12", "15"]
-    ```
-
-=== ":material-language-javascript: JavaScript"
-
-    ```javascript title="Global vs Non-Global in JavaScript" linenums="1"
-    const text = "2024-12-15";
-
-    // Without g - finds first match only
-    text.match(/\d+/)     // ["2024"]
-
-    // With g - finds all matches
-    text.match(/\d+/g)    // ["2024", "12", "15"]
-    ```
-
-=== ":material-language-go: Go"
-
-    ```go title="Find All vs Find First in Go" linenums="1"
-    package main
-
-    import (
-        "fmt"
-        "regexp"
-    )
-
-    func main() {
-        text := "2024-12-15"
-        re := regexp.MustCompile(`\d+`)  // (1)!
-
-        // Find first match only
-        first := re.FindString(text)  // (2)!
-        fmt.Println(first)  // "2024"
-
-        // Find all matches
-        all := re.FindAllString(text, -1)  // (3)!
-        fmt.Println(all)  // ["2024" "12" "15"]
-    }
-    ```
-
-    1. `MustCompile` panics on invalid regex (use `Compile` for error handling)
-    2. `FindString` returns first match as string (empty string if no match)
-    3. Second parameter `-1` means find all matches (positive number limits results)
-
-=== ":material-language-rust: Rust"
-
-    ```rust title="Find All vs Find First in Rust" linenums="1"
-    use regex::Regex;
-
-    fn main() {
-        let text = "2024-12-15";
-        let re = Regex::new(r"\d+").unwrap();  // (1)!
-
-        // Find first match only
-        if let Some(first) = re.find(text) {  // (2)!
-            println!("{}", first.as_str());  // "2024"
-        }
-
-        // Find all matches
-        let all: Vec<&str> = re.find_iter(text)  // (3)!
-            .map(|m| m.as_str())  // (4)!
-            .collect();
-        println!("{:?}", all);  // ["2024", "12", "15"]
-    }
-    ```
-
-    1. `unwrap()` panics on invalid regex (prefer `?` in real code)
-    2. `find()` returns `Option<Match>` - use `if let` to handle
-    3. `find_iter()` returns iterator over all matches (lazy evaluation)
-    4. `map()` extracts string slice from each Match object
-
-=== ":material-language-java: Java"
-
-    ```java title="Find All vs Find First in Java" linenums="1"
-    import java.util.regex.*;
-    import java.util.*;
-
-    public class GlobalFlag {
-        public static void main(String[] args) {
-            String text = "2024-12-15";
-            Pattern pattern = Pattern.compile("\\d+");  // (1)!
-            Matcher matcher = pattern.matcher(text);  // (2)!
-
-            // Find first match only
-            if (matcher.find()) {  // (3)!
-                System.out.println(matcher.group());  // "2024"
-            }
-
-            // Find all matches
-            matcher.reset();  // (4)!
-            List<String> all = new ArrayList<>();
-            while (matcher.find()) {  // (5)!
-                all.add(matcher.group());
-            }
-            System.out.println(all);  // [2024, 12, 15]
-        }
-    }
-    ```
-
-    1. Compile pattern once for reuse (throws `PatternSyntaxException` on invalid regex)
-    2. Create Matcher object that performs operations on the input text
-    3. `find()` advances to next match each call (stateful operation)
-    4. `reset()` returns matcher to start of string for re-scanning
-    5. Loop repeatedly calling `find()` to get all matches (Java's "global" approach)
-
-=== ":material-language-cpp: C++"
-
-    ```cpp title="Find All vs Find First in C++" linenums="1"
-    #include <iostream>
-    #include <regex>
-    #include <string>
-    #include <vector>
-
-    int main() {
-        std::string text = "2024-12-15";
-        std::regex re(R"(\d+)");  // (1)!
-
-        // Find first match only
-        std::smatch match;  // (2)!
-        if (std::regex_search(text, match, re)) {  // (3)!
-            std::cout << match[0] << std::endl;  // "2024"
-        }
-
-        // Find all matches
-        auto begin = std::sregex_iterator(text.begin(), text.end(), re);  // (4)!
-        auto end = std::sregex_iterator();  // (5)!
-        std::vector<std::string> all;
-        for (auto i = begin; i != end; ++i) {  // (6)!
-            all.push_back(i->str());
-        }
-        // Prints: 2024, 12, 15
-        for (const auto& s : all) {
-            std::cout << s << " ";
-        }
-        std::cout << std::endl;
-        return 0;
-    }
-    ```
-
-    1. Raw string literal `R"(...)"` avoids escaping backslashes
-    2. `std::smatch` stores match results for strings (use `std::cmatch` for C-strings)
-    3. `regex_search` finds first match and populates match object
-    4. `sregex_iterator` iterates over all matches (begin points to first match)
-    5. Default-constructed iterator serves as end sentinel
-    6. Dereference iterator to get match_results, then call `str()` for matched text
-
-### Example: Multiline Flag
-
-Changes how `^` and `$` work:
-
-=== ":material-language-python: Python"
-
-    ```python title="Multiline Flag in Python" linenums="1"
-    import re
-
-    text = """Line 1
-    Line 2
-    Line 3"""
-
-    # Without MULTILINE: ^ matches only start of entire string
-    matches = re.findall(r'^Line', text)
-    print(matches)  # ['Line'] - only first line
-
-    # With MULTILINE: ^ matches start of any line
-    matches = re.findall(r'^Line', text, re.MULTILINE)
-    print(matches)  # ['Line', 'Line', 'Line'] - all three lines
-    ```
-
-=== ":material-language-javascript: JavaScript"
-
-    ```javascript title="Multiline Flag in JavaScript" linenums="1"
-    const text = `Line 1
-    Line 2
-    Line 3`;
-
-    // Without m: ^ matches only start of entire string
-    /^Line/              // Matches "Line 1" only
-
-    // With m: ^ matches start of any line
-    /^Line/m             // Matches at start of each line
-
-    // Example with matchAll
-    Array.from(text.matchAll(/^Line/gm))  // 3 matches
-    ```
-
-=== ":material-language-go: Go"
-
-    ```go title="Multiline Flag in Go" linenums="1"
-    package main
-
-    import (
-        "fmt"
-        "regexp"
-    )
-
-    func main() {
-        text := `Line 1
-    Line 2
-    Line 3`
-
-        // Without multiline mode (default in Go is multiline)
-        // Go's regexp always treats ^ and $ as multiline
-        re := regexp.MustCompile(`(?m)^Line`)
-        matches := re.FindAllString(text, -1)
-        fmt.Println(matches)  // [Line Line Line]
-    }
-    ```
-
-=== ":material-language-rust: Rust"
-
-    ```rust title="Multiline Flag in Rust" linenums="1"
-    use regex::Regex;
-
-    fn main() {
-        let text = "Line 1\nLine 2\nLine 3";
-
-        // Without multiline: ^ matches only start of entire string
-        let re = Regex::new(r"^Line").unwrap();
-        let count = re.find_iter(text).count();
-        println!("{}", count);  // 1 - only first line
-
-        // With multiline: ^ matches start of any line
-        let re_multi = Regex::new(r"(?m)^Line").unwrap();
-        let count = re_multi.find_iter(text).count();
-        println!("{}", count);  // 3 - all three lines
-    }
-    ```
-
-=== ":material-language-java: Java"
-
-    ```java title="Multiline Flag in Java" linenums="1"
-    import java.util.regex.*;
-
-    public class MultilineFlag {
-        public static void main(String[] args) {
-            String text = "Line 1\nLine 2\nLine 3";
-
-            // Without MULTILINE: ^ matches only start of entire string
-            Pattern pattern = Pattern.compile("^Line");
-            Matcher matcher = pattern.matcher(text);
-            int count = 0;
-            while (matcher.find()) count++;
-            System.out.println(count);  // 1
-
-            // With MULTILINE: ^ matches start of any line
-            Pattern multiPattern = Pattern.compile("^Line", Pattern.MULTILINE);
-            Matcher multiMatcher = multiPattern.matcher(text);
-            count = 0;
-            while (multiMatcher.find()) count++;
-            System.out.println(count);  // 3
-        }
-    }
-    ```
-
-=== ":material-language-cpp: C++"
-
-    ```cpp title="Multiline Flag in C++" linenums="1"
-    #include <iostream>
-    #include <regex>
-    #include <string>
-
-    int main() {
-        std::string text = "Line 1\nLine 2\nLine 3";
-
-        // Without multiline (C++ default is NOT multiline)
-        std::regex re("^Line");
-        auto begin = std::sregex_iterator(text.begin(), text.end(), re);
-        auto end = std::sregex_iterator();
-        std::cout << std::distance(begin, end) << std::endl;  // 1
-
-        // With multiline (use ECMAScript multiline syntax)
-        std::regex re_multi("^Line", std::regex::multiline);
-        begin = std::sregex_iterator(text.begin(), text.end(), re_multi);
-        std::cout << std::distance(begin, end) << std::endl;  // 3
-        return 0;
-    }
-    ```
-
-### Example: Dotall Flag
-
-Makes `.` match newlines:
-
-=== ":material-language-python: Python"
-
-    ```python title="Dotall Flag in Python" linenums="1"
-    import re
-
-    text = "Hello\nWorld"
-
-    # Without DOTALL: . doesn't match newlines
-    match = re.search(r'Hello.World', text)
-    print(match)  # None
-
-    # With DOTALL: . matches newlines too
-    match = re.search(r'Hello.World', text, re.DOTALL)
-    print(match.group())  # "Hello\nWorld"
-    ```
-
-=== ":material-language-javascript: JavaScript"
-
-    ```javascript title="Dotall Flag in JavaScript" linenums="1"
-    const text = "Hello\nWorld";
-
-    // Without s: . doesn't match newlines
-    /Hello.World/        // Doesn't match
-
-    // With s: . matches newlines too
-    /Hello.World/s       // Matches!
-
-    // Using test()
-    /Hello.World/s.test(text)  // true
-    ```
-
-=== ":material-language-go: Go"
-
-    ```go title="Dotall Flag in Go" linenums="1"
-    package main
-
-    import (
-        "fmt"
-        "regexp"
-    )
-
-    func main() {
-        text := "Hello\nWorld"
-
-        // Without dotall: . doesn't match newlines (Go default)
-        re := regexp.MustCompile(`Hello.World`)
-        fmt.Println(re.MatchString(text))  // false
-
-        // With dotall: . matches newlines (use (?s) flag)
-        re_dotall := regexp.MustCompile(`(?s)Hello.World`)
-        fmt.Println(re_dotall.MatchString(text))  // true
-    }
-    ```
-
-=== ":material-language-rust: Rust"
-
-    ```rust title="Dotall Flag in Rust" linenums="1"
-    use regex::Regex;
-
-    fn main() {
-        let text = "Hello\nWorld";
-
-        // Without dotall: . doesn't match newlines
-        let re = Regex::new(r"Hello.World").unwrap();
-        println!("{}", re.is_match(text));  // false
-
-        // With dotall: . matches newlines (use (?s) flag)
-        let re_dotall = Regex::new(r"(?s)Hello.World").unwrap();
-        println!("{}", re_dotall.is_match(text));  // true
-    }
-    ```
-
-=== ":material-language-java: Java"
-
-    ```java title="Dotall Flag in Java" linenums="1"
-    import java.util.regex.*;
-
-    public class DotallFlag {
-        public static void main(String[] args) {
-            String text = "Hello\nWorld";
-
-            // Without DOTALL: . doesn't match newlines
-            Pattern pattern = Pattern.compile("Hello.World");
-            Matcher matcher = pattern.matcher(text);
-            System.out.println(matcher.find());  // false
-
-            // With DOTALL: . matches newlines
-            Pattern dotallPattern = Pattern.compile("Hello.World", Pattern.DOTALL);
-            Matcher dotallMatcher = dotallPattern.matcher(text);
-            System.out.println(dotallMatcher.find());  // true
-        }
-    }
-    ```
-
-=== ":material-language-cpp: C++"
-
-    ```cpp title="Dotall Flag in C++" linenums="1"
-    #include <iostream>
-    #include <regex>
-    #include <string>
-
-    int main() {
-        std::string text = "Hello\nWorld";
-
-        // Without dotall: . doesn't match newlines (C++ default)
-        std::regex re("Hello.World");
-        std::cout << std::regex_search(text, re) << std::endl;  // false (0)
-
-        // C++ doesn't have direct dotall flag
-        // Workaround: use [\s\S] instead of .
-        std::regex re_workaround(R"(Hello[\s\S]World)");
-        std::cout << std::regex_search(text, re_workaround) << std::endl;  // true (1)
-        return 0;
-    }
-    ```
-
-??? example "Concept Check 15: Case Insensitive Email"
-
-    Modify the email pattern to match emails regardless of case (e.g., "User@EXAMPLE.COM").
-
-    ??? tip "Solution"
-
-        **JavaScript**: `/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i`
-
-        **Python**: `re.search(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email, re.I)`
-
-        The `i` flag makes the match case insensitive, so you don't need both `[a-z]` and `[A-Z]` anymore.
-
-## Practical Examples
-
-=== ":material-email: Email Address"
-
-    ``` title="Email Address Pattern" linenums="1"
-    ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
-    ```
-
-    | Part | Meaning |
-    |:-----|:--------|
-    | `^` | Start |
-    | `[a-zA-Z0-9._%+-]+` | Local part (one or more valid chars) |
-    | `@` | Literal @ |
-    | `[a-zA-Z0-9.-]+` | Domain name |
-    | `\.` | Literal dot |
-    | `[a-zA-Z]{2,}` | TLD (at least 2 letters) |
-    | `$` | End |
-
-    ??? warning "Email Validation Reality"
-
-        This regex is a simplification. The actual email spec ([RFC 5322](https://www.rfc-editor.org/rfc/rfc5322.html)) is absurdly complex. 🤯
-        In practice, just check for `@` and send a confirmation email.
-
-=== ":material-phone: Phone Numbers"
-
-    ``` title="US Phone Number Pattern (Simplified)" linenums="1"
-    ^\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})$
-    ```
-
-    Matches:
-
-    - `5551234567`
-    - `555-123-4567`
-    - `(555) 123-4567`
-    - `555.123.4567`
-
-    ??? warning "Mismatched Parentheses"
-
-        This pattern has a flaw: it allows **mismatched** parentheses!
-
-        **Invalid matches it allows:**
-
-        - `(555-123-4567` (opening paren, no closing)
-        - `555)-123-4567` (closing paren, no opening)
-
-        **Fixed version** (requires both or neither):
-
-        ``` title="Phone Number with Matched Parentheses" linenums="1"
-        ^(\d{3}|(\(\d{3}\)))[-.\s]?(\d{3})[-.\s]?(\d{4})$
-        ```
-
-        Or more explicitly with alternation:
-
-        ``` title="Phone Number - Strict Parentheses" linenums="1"
-        ^(\(\d{3}\)|\d{3})[-.\s]?(\d{3})[-.\s]?(\d{4})$
-        ```
-
-        This says: "Either `(555)` OR `555`, but not a mix."
-
-=== ":material-ip-network: IP Address"
-
-    ``` title="IPv4 Address Pattern" linenums="1"
-    ^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$
-    ```
-
-    ??? warning "This Isn't Perfect"
-
-        This matches `999.999.999.999`, which isn't a valid IP.
-        For true validation, you'd need `(?:25[0-5]|2[0-4]\d|[01]?\d\d?)` for each octet,
-        or just parse the numbers and check in code.
-
-=== ":material-file-document: Log Parsing"
-
-    ``` title="Log Parsing Pattern" linenums="1"
-    ^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\] \[(\w+)\] (.*)$
-    ```
-
-    For: `[2024-03-15 14:30:45] [ERROR] Something went wrong`
-
-    - Group 1: `2024-03-15 14:30:45`
-    - Group 2: `ERROR`
-    - Group 3: `Something went wrong`
-
-## Regex in Different Languages
-
-Most languages use similar syntax, with minor variations:
-
-=== ":material-language-python: Python"
-
-    ```python title="Regular Expressions in Python" linenums="1"
-    import re
-
-    # Search for pattern
-    match = re.search(r'\d+', 'Order 12345')  # (1)!
-    print(match.group())  # "12345"
-
-    # Find all matches
-    matches = re.findall(r'\d+', 'Items: 5, 10, 15')  # (2)!
-    print(matches)  # ['5', '10', '15']
-
-    # Replace
-    result = re.sub(r'\d+', 'X', 'Order 123')  # (3)!
-    print(result)  # "Order X"
-    ```
-
-    1. `search()` finds the first match in the string and returns a match object
-    2. `findall()` returns a list of all non-overlapping matches
-    3. `sub()` replaces all matches with a replacement string
-
-=== ":material-language-javascript: JavaScript"
-
-    ```javascript title="Regular Expressions in JavaScript" linenums="1"
-    // Test if pattern matches
-    /\d+/.test('Order 12345')  // true  // (1)!
-
-    // Find match
-    'Order 12345'.match(/\d+/)  // ['12345']  // (2)!
-
-    // Replace
-    'Order 123'.replace(/\d+/, 'X')  // "Order X"  // (3)!
-    ```
-
-    1. `test()` returns boolean - true if pattern is found anywhere in string
-    2. `match()` returns array of matches (use `/g` flag for all matches)
-    3. `replace()` substitutes first match with replacement (use `/g` for all)
-
-=== ":material-language-rust: Rust"
-
-    ```rust title="Regular Expressions in Rust" linenums="1"
-    use regex::Regex;  // (1)!
-
-    // Search for pattern
-    let re = Regex::new(r"\d+").unwrap();
-    if let Some(mat) = re.find("Order 12345") {  // (2)!
-        println!("{}", mat.as_str());  // "12345"
-    }
-
-    // Find all matches
-    let caps: Vec<&str> = re
-        .find_iter("Items: 5, 10, 15")  // (3)!
-        .map(|m| m.as_str())
-        .collect();
-    println!("{:?}", caps);  // ["5", "10", "15"]
-
-    // Replace
-    let result = re.replace_all("Order 123", "X");  // (4)!
-    println!("{}", result);  // "Order X"
-    ```
-
-    1. Requires `regex` crate: add `regex = "1"` to `Cargo.toml`
-    2. `find()` returns `Option<Match>` for the first match
-    3. `find_iter()` returns an iterator over all matches
-    4. `replace_all()` substitutes all matches with replacement string
-
-=== ":material-console: Command Line (grep)"
-
-    ```bash title="Regular Expressions in grep" linenums="1"
-    # Find lines containing "error"
-    grep -E 'error' logfile.txt
-
-    # Find lines starting with a date
-    grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}' logfile.txt
-    ```
-
-## The Connection to Theory
-
-Remember how we said [FSMs](finite_state_machines.md) and regular expressions describe the same languages? Here's the connection:
-
-| Regex | FSM Equivalent |
-|:------|:---------------|
-| `ab` | Sequence of states |
-| `a|b` | Branch (two paths from same state) |
-| `a*` | Loop back to same state |
-| `a+` | Transition + loop |
-| `a?` | Optional path (epsilon transition) |
-
-Every regex can be converted to an [NFA (Non-deterministic Finite Automaton)](finite_state_machines.md#deterministic-vs-non-deterministic), then to a [DFA (Deterministic Finite Automaton)](finite_state_machines.md#deterministic-vs-non-deterministic), then executed efficiently. That's what regex engines do under the hood.
-
-**Example:** The regex `ab*c` converts to this FSM:
+The regex `ab*c` compiles to this automaton:
 
 ```mermaid
 stateDiagram-v2
     direction LR
-    
+
     [*] --> S0
     S0 --> S1: a
     S1 --> S1: b
@@ -1278,148 +94,291 @@ stateDiagram-v2
     S2 --> [*]
 ```
 
-- Start at S0
-- Read 'a' → move to S1
-- Read zero or more 'b's → loop on S1
-- Read 'c' → move to S2 (accepting state)
+- S0 → S1 on `a` (must see exactly one `a`)
+- S1 → S1 on `b` (loop: zero or more `b`s)
+- S1 → S2 on `c` (exit loop, accept)
 
-## Common Pitfalls
+Complex patterns are built by composing these fragments. Every regex you've ever written has an equivalent state machine — regex101's "explain" diagram visualizes exactly this.
 
-### Catastrophic Backtracking
+## Two Engine Architectures
 
-Some patterns cause exponential backtracking:
+You already know [how DFAs and NFAs differ](finite_state_machines.md#deterministic-vs-non-deterministic). Real regex engines implement one model or the other, and the choice has concrete consequences for every regex you run in production.
 
-``` title="Catastrophic Backtracking" linenums="1"
-(a+)+b
+### DFA Engines
+
+DFA engines convert the NFA to a deterministic automaton before execution. At match time, they make exactly one state transition per input character — guaranteed $O(n)$ time regardless of the pattern.
+
+**Common DFA engines:** Google's `re2`, GNU `grep` (basic patterns), Rust's `regex` crate, `awk`, Go's `regexp` package
+
+| Property | Value |
+|:---------|:------|
+| Time complexity | $O(n)$ always |
+| ReDoS vulnerable | No |
+| Backreferences (`\1`) | Not supported |
+| Variable-length lookbehind | Not supported |
+
+### NFA/Backtracking Engines
+
+NFA engines simulate the automaton using backtracking. When the engine reaches a choice point — `a|b`, or a quantifier like `a+` — it tries one path. If that path fails, it backtracks and tries the next.
+
+**Common NFA/backtracking engines:** Python's `re`, JavaScript, Java, PHP (`preg_*`), Ruby, Perl, most "standard" regex engines
+
+| Property | Value |
+|:---------|:------|
+| Time complexity | $O(n)$ typical, $O(2^n)$ worst case |
+| ReDoS vulnerable | Yes |
+| Backreferences (`\1`) | Supported |
+| Complex lookahead/lookbehind | Supported |
+
+### Choosing an Engine in Practice
+
+The engine is a library choice, not a language choice. Here's what each major language provides by default — and how to opt into DFA-based matching when it matters:
+
+=== ":material-language-python: Python"
+
+    ```python title="NFA vs DFA Engine in Python" linenums="1"
+    import re    # Built-in: NFA/backtracking engine
+    import re2   # Alternative: DFA engine (pip install google-re2)
+
+    # NFA engine — backreferences work, but can be exponential
+    nfa = re.compile(r'(\w+) \1')          # matches "the the", "error error"
+    # re.compile(r'(a+)+b')               # unsafe on adversarial input
+
+    # DFA engine — guaranteed O(n), no ReDoS risk
+    dfa = re2.compile(r'\w+')             # safe at any scale
+    # re2.compile(r'(\w+) \1')            # raises error: backreferences unsupported
+    ```
+
+=== ":material-language-javascript: JavaScript"
+
+    ```javascript title="NFA vs DFA Engine in JavaScript" linenums="1"
+    // Built-in RegExp: NFA/backtracking engine
+    const nfa = /(\w+) \1/;              // backreferences supported
+    // /^(a+)+$/.test('aaaaaaaaac');      // dangerous — can hang
+
+    // RE2 library: DFA engine (npm install re2)
+    const RE2 = require('re2');
+    const dfa = new RE2('\\w+');          // guaranteed O(n)
+    // new RE2('(\\w+) \\1');             // throws: backreferences unsupported
+    ```
+
+=== ":material-language-go: Go"
+
+    ```go title="DFA Engine in Go" linenums="1"
+    package main
+
+    import "regexp"
+
+    func main() {
+        // Go's regexp package uses a DFA engine by design — O(n) guaranteed
+        pattern := regexp.MustCompile(`\w+`)
+        match := pattern.FindString("hello world")
+        _ = match
+
+        // Go intentionally excludes backreferences to eliminate ReDoS
+        // regexp.MustCompile(`(\w+) \1`)  // syntax error: invalid escape sequence
+    }
+    ```
+
+=== ":material-language-rust: Rust"
+
+    ```rust title="DFA vs NFA Engine in Rust" linenums="1"
+    use regex::Regex;            // Default: DFA-based, O(n) guaranteed
+    // use fancy_regex::Regex;   // Alternative: NFA, supports backreferences
+
+    fn main() {
+        // DFA engine — safe for high-volume or user-controlled input
+        let dfa = Regex::new(r"\w+").unwrap();
+        let found = dfa.find("hello world");
+
+        // For backreferences, use fancy-regex (NFA engine)
+        // let nfa = fancy_regex::Regex::new(r"(\w+) \1").unwrap();
+    }
+    ```
+
+=== ":material-language-java: Java"
+
+    ```java title="NFA Engine in Java (and RE2/J Alternative)" linenums="1"
+    import java.util.regex.*;
+    // import com.google.re2j.*;  // RE2/J: DFA engine (add to build.gradle)
+
+    public class RegexEngines {
+        public static void main(String[] args) {
+            // Built-in java.util.regex: NFA/backtracking — can be exponential
+            Pattern nfa = Pattern.compile("\\w+");
+            Matcher m = nfa.matcher("hello world");
+
+            // RE2/J: DFA-based, O(n) guaranteed
+            // com.google.re2j.Pattern dfa = com.google.re2j.Pattern.compile("\\w+");
+        }
+    }
+    ```
+
+=== ":material-language-cpp: C++"
+
+    ```cpp title="NFA vs DFA Engine in C++" linenums="1"
+    #include <regex>      // Standard library: NFA/backtracking
+    #include <re2/re2.h>  // RE2 library: DFA engine (safer for production)
+
+    int main() {
+        // std::regex: NFA/backtracking — vulnerable to ReDoS on adversarial input
+        std::regex nfa("\\w+");
+
+        // RE2: DFA engine — O(n) guaranteed, no backreferences
+        RE2 dfa("\\w+");
+        bool matched = RE2::FullMatch("hello", dfa);
+        return 0;
+    }
+    ```
+
+## Backreferences Break the Model
+
+Here is a result that surprises most working engineers: **backreferences make regex non-regular.**
+
+Consider the pattern `(\w+) \1` — any word followed by a space and the same word. This matches "the the" and "error error" but not "the cat". The language it describes — "a word, a space, the same word" — cannot be recognized by any finite automaton.
+
+Why? To evaluate `\1`, the engine must remember the exact text captured by Group 1. That text could be any length. An FSM has no memory beyond its current state — it can track which state it's in, but not what characters it previously matched. Backreferences require unbounded memory, which puts them outside the class of regular languages entirely.
+
+This has practical implications:
+
+- **DFA engines don't support `\1`** — supporting it would require abandoning the DFA architecture
+- **Backtracking engines support `\1`** but can be slow when patterns combine backreferences with quantifiers
+- When you write `(\w+)\s+\1`, you're using a feature that technically makes your "regex" more than a regular expression
+
+The same argument applies to any backreference: `\2`, `\3`, and named captures all step outside the formal regular language model.
+
+## Why Backtracking Blows Up
+
+Now the consequence: because backtracking NFA engines support backreferences and other advanced features, they expose you to exponential blowup on adversarial input.
+
+The pattern `(a+)+b` against `aaaaaaaaac` (many a's, ending in something that's not `b`):
+
+The outer `+` can match 1, 2, 3, ... times. Each time, the inner `a+` can consume 1, 2, ... remaining a's. When the overall match fails on `c`, the engine backtracks through every possible way to partition the a's among the outer repetitions.
+
+For $n$ a's, there are $2^{n-1}$ partitions to try:
+
+| Input | Backtracks attempted |
+|:------|:---------------------|
+| 5 a's + `c` | 16 |
+| 10 a's + `c` | 512 |
+| 20 a's + `c` | 524,288 |
+| 30 a's + `c` | ~500 million |
+| 40 a's + `c` | ~500 billion |
+
+A request with 40 adversarial characters can pin a server thread indefinitely.
+
+**Why the fix works:**
+
+```
+(a+)+b    →    a+b
 ```
 
-Against a string like `aaaaaaaaaaaaaaaaac`, the engine tries every possible way to divide the a's among the groups—and there are exponentially many. This can freeze your program. ❄️ Not fun.
+With a single `a+`, there's exactly one way to match the a's. The engine reaches `c`, sees the `b` doesn't match, and fails immediately — no choice points to revisit.
 
-**Solutions:**
+**The general rule:** nested quantifiers on the same character class create exponential choice points. Flatten them. A linear regex always performs linearly.
 
-1. **Refactor to avoid nested quantifiers** (universal solution):
+## Lookahead and Lookbehind
 
-``` title="Avoiding Nested Quantifiers" linenums="1"
-# Bad - nested quantifiers
-(a+)+b
+Lookahead (`(?=...)`) and lookbehind (`(?<=...)`) are **zero-width assertions** — they check a condition at the current position without consuming input characters.
 
-# Better - single quantifier
-a+b
-```
+Unlike backreferences, these don't require unbounded memory in most implementations. The lookahead pattern itself is finite. But they do require the engine to "branch" at the assertion point and explore, which is why their support varies:
 
-2. **Use atomic groups** (advanced, not supported everywhere):
+| Feature | DFA engines | NFA engines |
+|:--------|:------------|:------------|
+| Positive lookahead `(?=...)` | Limited | Supported |
+| Negative lookahead `(?!...)` | Limited | Supported |
+| Fixed-length lookbehind `(?<=abc)` | Limited | Supported |
+| Variable-length lookbehind `(?<=\w+)` | Not supported | Python only (most don't) |
 
-An **atomic group** `(?>...)` matches like a normal group, but once it succeeds, the regex engine "commits" to that match and won't backtrack into it.
+JavaScript and Java require fixed-length lookbehind. Python's `re` module uniquely supports variable-length lookbehind — most other NFA engines don't.
 
-**How it works:**
+## The Practical Boundary
 
-- Normal group `(a+)`: If the overall pattern fails, the engine can backtrack and try matching fewer a's
-- Atomic group `(?>a+)`: Once matched, the engine won't reconsider - it's "locked in"
+| What you need to match | Right tool |
+|:-----------------------|:-----------|
+| Fixed patterns, no captures | DFA engine (`re2`, Rust `regex`) |
+| Capture groups, substitution | NFA engine (Python `re`, JS, Java) |
+| Backreferences (`\1`) | NFA engine only |
+| Balanced parentheses | Parser — regex cannot do this |
+| Nested structures (HTML, XML) | Parser — regex cannot do this |
+| Equal counts (`aⁿbⁿ`) | Parser — regex cannot do this |
+| Programming language syntax | Parser — regex cannot do this |
 
-**Example:**
-
-``` title="Atomic Groups" linenums="1"
-# Without atomic group - catastrophic backtracking
-(a+)+b    # Against "aaaaaac", tries every way to split a's
-
-# With atomic group - no backtracking inside
-(?>a+)+b  # Matches all a's in one chunk, can't backtrack into it
-```
-
-The atomic group prevents the exponential backtracking by saying "once I've matched the a's, I'm done - don't try different ways to split them up."
-
-3. **Use possessive quantifiers** (advanced, limited support):
-
-Possessive quantifiers (`*+`, `++`, `?+`) work like atomic groups but with shorter syntax - they match and don't give back:
-
-``` title="Possessive Quantifiers" linenums="1"
-# Possessive quantifier - no backtracking
-a++b
-```
-
-??? warning "Limited Support"
-
-    Atomic groups and possessive quantifiers are not supported in all regex engines. JavaScript doesn't support them at all. Stick with solution #1 (refactoring) for maximum compatibility.
-
-### Forgetting Anchors
-
-``` title="Without Anchors" linenums="1"
-\d{3}-\d{4}
-```
-
-This matches "555-1234" inside "call 555-1234 now". If you want exact matches, use anchors:
-
-``` title="With Anchors" linenums="1"
-^\d{3}-\d{4}$
-```
-
-### Escaping Special Characters
-
-To match literal special characters, escape them:
-
-``` title="Escaped Special Characters" linenums="1"
-\.\*\+\?\[\]\(\)\{\}\^\$\|\\
-```
-
-Or use a character class where most specials are literal:
-
-``` title="Special Characters in Character Class" linenums="1"
-[.*+?]  # Matches literal ., *, +, or ?
-```
+The [FSM article](finite_state_machines.md#what-fsms-cannot-do) covers why FSMs — and therefore regex — cannot handle nested or counting problems. When you hit that boundary, the tool you reach for is a [parser](how_parsers_work.md).
 
 ## Practice Problems
 
-??? question "Practice Problem 1: URL Validation"
+??? question "Practice Problem 1: Engine Selection"
 
-    Write a regex that matches HTTP/HTTPS URLs like:
+    You're building an API gateway that validates incoming URLs against a whitelist pattern: `^/api/v\d+/[a-z]+$`. The gateway handles 50,000 requests per second. You have two library choices: one using a DFA engine, one using backtracking.
 
-    - `https://example.com`
-    - `http://sub.domain.org/path`
-    - `https://site.io/page?id=123`
+    Which do you choose and why?
 
-??? question "Practice Problem 2: Date Formats"
+    ??? tip "Answer"
 
-    Match dates in YYYY-MM-DD format where:
+        **DFA engine.** The pattern contains no backreferences or complex lookaheads, so both engines produce correct results. But at 50,000 req/s, the guaranteed $O(n)$ DFA performance matters — and you eliminate the theoretical ReDoS risk if the pattern ever gets extended. The backtracking engine offers no benefit for this problem.
 
-    - Year is 4 digits
-    - Month is 01-12
-    - Day is 01-31
+??? question "Practice Problem 2: Identify the ReDoS Risk"
 
-    Bonus: Can you ensure month doesn't exceed 12?
+    Which of these patterns is vulnerable to catastrophic backtracking? Why?
 
-??? question "Practice Problem 3: Find Duplicates"
+    a. `^\d+$`
 
-    Write a regex that finds repeated consecutive words in text, like "the the" or "is is".
+    b. `^(a|aa)+$`
 
-    Hint: Use backreferences.
+    c. `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
+
+    ??? tip "Answer"
+
+        **b.** `^(a|aa)+$` is vulnerable. At each position the engine can match `a` or `aa` — two choices per character. Against `aaaa...x` (many a's, ending in something that fails `$`), the engine backtracks through $2^n$ combinations.
+
+        **a.** `^\d+$` is safe — single quantifier, no choice points.
+
+        **c.** The email regex has potential: the `[a-zA-Z0-9.-]+` component repeated over the domain can backtrack on adversarial input without the `@`. In practice, the literal `@` and anchors limit the damage — but this class of pattern is why some systems replace regex email validation with a simple contains-`@` check.
+
+??? question "Practice Problem 3: Regular or Not?"
+
+    For each language, decide: regular (expressible by pure regex without backreferences), or not regular?
+
+    a. "All strings where the number of `0`s is divisible by 3"
+
+    b. "All strings of the form `ww` — a string followed by itself"
+
+    c. "All valid IPv4 addresses (four octets 0–255)"
+
+    ??? tip "Answer"
+
+        **a. Regular.** Divisibility by 3 can be tracked with three states (remainder 0, 1, 2) — this is the exact binary divisibility FSM from the [Finite State Machines](finite_state_machines.md) article. No unbounded memory needed.
+
+        **b. Not regular.** Matching `ww` requires remembering the exact string `w`, which could be arbitrarily long. This is the same class of problem as backreferences — no FSM can solve it.
+
+        **c. Technically regular**, but barely. Each octet is bounded (0–255), so you can write a finite regex for it. In practice, the pattern (`(?:25[0-5]|2[0-4]\d|[01]?\d\d?)` per octet) is complex enough that parsing and range-checking in code is more readable and maintainable.
 
 ## Key Takeaways
 
-| Concept | Syntax | Example |
-|:--------|:-------|:--------|
-| Any character | `.` | `a.c` matches "abc", "a1c" |
-| Character class | `[...]` | `[aeiou]` matches vowels |
-| Negated class | `[^...]` | `[^0-9]` matches non-digits |
-| Zero or more | `*` | `a*` matches "", "a", "aaa" |
-| One or more | `+` | `a+` matches "a", "aaa" |
-| Optional | `?` | `colou?r` matches both spellings |
-| Alternation | `\|` | `cat\|dog` matches either |
-| Group | `(...)` | `(ab)+` matches "ab", "abab" |
-| Word boundary | `\b` | `\bword\b` matches whole word |
+| Concept | What to Remember |
+|:--------|:-----------------|
+| Thompson's construction | Every regex compiles to an NFA; each operator maps to a small NFA fragment |
+| DFA engines | $O(n)$ always; no backreferences (`re2`, Rust `regex`, Go `regexp`) |
+| NFA/backtracking engines | Flexible, supports `\1`; can be exponential (Python `re`, JS, Java) |
+| Catastrophic backtracking | Nested quantifiers → exponential choice points → ReDoS |
+| Backreferences are non-regular | `\1` requires unbounded memory; no DFA can support it |
+| Lookahead/lookbehind | Zero-width assertions; variable-length lookbehind is engine-specific |
+| The hard boundary | Nested structures and counting problems require a parser, not regex |
 
 ## Further Reading
 
-- [Finite State Machines](finite_state_machines.md) — The theory behind regex
-- [How Parsers Work](how_parsers_work.md) — How regex fits into lexical analysis and parsing
-- [Regular Expressions 101](https://regex101.com/) — Interactive regex tester
-- [Backus-Naur Form](backus_naur_form.md) — When regex isn't powerful enough
+**On This Site**
+
+- [Regular Expressions](../essentials/regular_expressions.md) — Syntax reference: patterns, quantifiers, groups, flags, and practical patterns
+- [Finite State Machines](finite_state_machines.md) — The automaton theory this article builds on
+- [How Parsers Work](how_parsers_work.md) — The tool you reach for when regex isn't enough
+
+**External**
+
+- [*Regular Expression Matching Can Be Simple And Fast*](https://swtch.com/~rsc/regexp/regexp1.html) by Russ Cox — the technical argument for DFA engines and why `re2` exists
+- [Cloudflare Outage Post-Mortem](https://blog.cloudflare.com/details-of-the-cloudflare-outage-on-july-2-2019/) — the 2019 ReDoS incident, explained in detail by Cloudflare's engineering team
 
 ---
 
-Regular expressions are a superpower with a steep learning curve. They look like line noise until suddenly they don't—and then you'll find yourself reaching for them constantly. The trick is to build them up piece by piece, test frequently, and resist the urge to write everything in one inscrutable line. Your future self will thank you. 🎯
-
-## Video Summary
-
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/yhZgVeaZiiU" title="Regular Expressions" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-</div>
+Regular expressions look like a simple text-processing tool. They are — until a pattern interacts with the backtracking engine on adversarial input, or until you try to match a structure that requires counting or nesting. The backtracking model makes them dangerous in one direction; the regular language boundary makes them wrong in another. Knowing which category your problem falls into is what separates engineers who reach for regex reflexively from engineers who reach for it deliberately.

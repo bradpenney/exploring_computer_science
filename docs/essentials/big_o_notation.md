@@ -11,6 +11,16 @@ Your PR got rejected. The reviewer said it's "$O(n^2)$" and suggested a "more ef
 
 Big-O notation isn't academic gatekeeping. It's the language engineers use to discuss performance, predict scaling issues, and make informed decisions about trade-offs. Once you understand it, you'll start seeing it everywhere—in code reviews, in architecture discussions, and in every `.sort()` call you've ever made without thinking twice.
 
+!!! info "Learning Objectives"
+
+    By the end of this article, you'll be able to:
+
+    - Read and write Big-O notation to express the time and space cost of code
+    - Identify $O(1)$, $O(n)$, $O(n^2)$, $O(n \log n)$, and $O(2^n)$ by inspecting code structure
+    - Apply the two simplification rules (drop constants, drop lower-order terms) to derive Big-O
+    - Predict how an algorithm's performance will change as data grows to production scale
+    - Make informed trade-offs between time complexity and space complexity
+
 ## Where You've Seen This
 
 You've already been doing Big-O thinking, even if you didn't have the vocabulary for it:
@@ -33,7 +43,11 @@ Big-O doesn't tell you how fast your code is in absolute terms. It tells you how
 - $O(n^2)$: Double the input → four times the time
 - $O(\log n)$: Double the input → one extra step
 
-That framing cuts through a lot of confusion. A function that takes 10ms with 1,000 items and 10,000ms with 10,000 items is obviously not $O(n)$. The input grew 10x, but the time grew 1,000x. That's $O(n^2)$ behavior, and the table below will show you why.
+That framing cuts through a lot of confusion. A function that takes 10ms with 1,000 items and 10,000ms with 10,000 items is obviously not $O(n)$. The input grew 10x, but the time grew 1,000x. That's $O(n^2)$ behavior, and the chart below will show you why.
+
+<canvas id="big-o-chart" role="img" aria-label="Line chart showing growth curves for six complexity classes. O(1) is flat, O(log n) grows slowly, O(n) grows linearly, O(n log n) slightly faster, while O(n²) and O(2ⁿ) curve sharply upward. Values above 300 are capped for readability."></canvas>
+
+<p style="text-align: center; font-size: 0.85em; color: #718096; margin-top: -0.5em;">O(n²) and O(2ⁿ) values above 300 are capped — they continue climbing far off the chart.</p>
 
 ### The Simplification Rules
 
@@ -57,29 +71,6 @@ This is why Big-O feels intentionally imprecise at first. It captures growth beh
 | $O(2^n)$ | 1,024 | $1.27 \times 10^{30}$ | $\infty$ | $\infty$ |
 
 That $O(n^2)$ algorithm that runs in 1 second with 1,000 items? With 1 million items, it takes **11.5 days**. The code didn't change. The data did.
-
-```mermaid
-flowchart LR
-    subgraph Fast[" ✓ Fast "]
-        A["O(1)"]
-        B["O(log n)"]
-    end
-    subgraph OK[" ~ Acceptable "]
-        C["O(n)"]
-        D["O(n log n)"]
-    end
-    subgraph Slow[" ✗ Avoid "]
-        E["O(n²)"]
-        F["O(2ⁿ)"]
-    end
-
-    style A fill:#2f855a,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style B fill:#38a169,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style C fill:#d69e2e,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style D fill:#dd6b20,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style E fill:#c53030,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style F fill:#822727,stroke:#cbd5e0,stroke-width:2px,color:#fff
-```
 
 ## Analyzing Your Code
 
@@ -558,7 +549,7 @@ flowchart LR
 
     This is how binary search works, and it's why database indexes are fast. A B-tree index on your `users.email` column lets the database play that same halving game. Instead of checking every row ($O(n)$), it finds any email in about 20–30 comparisons even with millions of rows ($O(\log n)$).
 
-    The catch: **you need sorted data or a tree structure.** You can't discard half the remaining elements if you don't know which half contains your target. Binary search only works on sorted arrays. B-tree indexes work because the database maintains the tree structure itself, sorted, on your behalf.
+    The catch: **you need sorted data or a [tree structure](trees_basics.md).** You can't discard half the remaining elements if you don't know which half contains your target. Binary search only works on sorted arrays. B-tree indexes work because the database maintains the tree structure itself, sorted, on your behalf.
 
     === ":material-language-python: Python"
 
@@ -696,7 +687,7 @@ flowchart LR
         }
         ```
 
-    **Where you see $O(\log n)$:** Binary search, balanced tree operations (insert, lookup, delete), database B-tree index lookups. Any algorithm that repeatedly halves its remaining work.
+    **Where you see $O(\log n)$:** Binary search, balanced [tree operations](trees_basics.md) (insert, lookup, delete), database B-tree index lookups. Any algorithm that repeatedly halves its remaining work.
 
 === "O(n log n) — Linearithmic Time"
 
@@ -1354,6 +1345,18 @@ flowchart LR
 
     Sometimes you deliberately choose a slower algorithm because memory is constrained: embedded systems, serverless functions with tight memory limits, processing datasets larger than RAM. Big-O gives you the vocabulary to make that trade-off explicitly and deliberately, rather than discovering it accidentally during an incident at 2am.
 
+## Technical Interview Context
+
+Big-O analysis is one of the most consistently tested interview topics across the industry. The questions are predictable — but the expected depth varies. Junior candidates state the complexity; senior candidates justify it.
+
+**Questions you'll be able to answer:**
+
+- *"What is the time complexity of this code snippet?"* — Walk through the nested loops or recursive calls, identify what grows with $n$, then apply the rules: drop constants, keep the dominant term. A loop inside a loop is $O(n^2)$; a loop containing a binary search is $O(n \log n)$.
+- *"Why is your solution $O(n \log n)$ and not $O(n)$?"* — Justify your analysis, don't just state it. Trace through: "the outer loop is $O(n)$; the binary search inside it is $O(\log n)$ per iteration; multiply, giving $O(n \log n)$."
+- *"How would you optimize this from $O(n^2)$ to $O(n)$?"* — The standard technique: replace the inner linear scan with a hash table lookup. Build the table once in $O(n)$; each lookup is $O(1)$; total is $O(n)$. This pattern (nested loop → hash table) solves a huge fraction of interview optimization problems.
+- *"What's the space complexity?"* — Big-O applies to memory too. Recursive algorithms use $O(n)$ stack space (one frame per recursive call). Hash table solutions use $O(n)$ auxiliary space. In-place algorithms use $O(1)$. Interviewers frequently follow "what's the time complexity?" with this question.
+- *"Is $O(n \log n)$ always faster than $O(n^2)$?"* — Not at small $n$ — constants matter when inputs are tiny. But for production-scale data, yes: the growth rate dominates. The practical answer is "asymptotically yes, and at the scale where performance actually matters, yes."
+
 ## A Brief History
 
 Big-O notation predates computing by 60 years. German mathematician Paul Bachmann introduced it in 1894 in a number theory text. His colleague Edmund Landau popularized it—hence the formal name, "Bachmann-Landau notation." The *O* stands for *Ordnung*, German for "order of magnitude."
@@ -1470,6 +1473,11 @@ The abstraction turns out to be exactly right for comparing algorithms: constant
 
 ## Further Reading
 
+### On This Site
+
+- **[Trees](trees_basics.md)** — The data structures that enable $O(\log n)$: binary search trees, B-tree database indexes, and how depth maps to comparisons
+- **[Computational Thinking](../efficiency/computational_thinking.md)** — How Big-O fits into the broader practice of algorithm design and problem decomposition
+
 ### Reference
 
 - [Big-O Cheat Sheet](https://www.bigocheatsheet.com/) — Visual reference mapping common data structures and algorithms to their complexity classes
@@ -1484,4 +1492,4 @@ The abstraction turns out to be exactly right for comparing algorithms: constant
 
 ## What's Next
 
-Understanding Big-O is the foundation. Next, explore how specific data structures are designed to hit target complexity classes—starting with arrays, linked lists, and hash tables. Every data structure you use daily was built around a Big-O target.
+Understanding Big-O is the foundation. Next, explore how specific data structures are designed to hit target complexity classes — starting with **[Trees](trees_basics.md)**, which are the key to understanding why binary search and database index lookups run in $O(\log n)$.

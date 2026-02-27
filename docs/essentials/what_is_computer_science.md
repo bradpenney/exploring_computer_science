@@ -1,17 +1,39 @@
 ---
+title: What Is Computer Science? A Working Engineer's Guide
 description: Computer science isn't about computers. It's the systematic study of what can be computed, how efficiently, and how to solve problems algorithmically.
 ---
 # What is Computer Science?
 
-Here's a trick question: What do computers have to do with computer science?
+You've shipped production code. You've profiled slow database queries, argued about architecture in code reviews, and debugged stack traces at 2am. But if someone asked you what computer science *actually is* — not a language, not a framework, not a deployment tool — you might reach for a vague answer.
 
-Less than you'd think.
+**This is the theory you were missing.**
 
-Computer science isn't really about computers, any more than astronomy is about telescopes or biology is about microscopes. Computers are tools we use, but the field itself is about something deeper: **computation**—the systematic study of what can be computed, how efficiently, and what it means to solve problems algorithmically.
+Computer science isn't really about computers, any more than astronomy is about telescopes or biology is about microscopes. Computers are tools we use, but the field itself is about something deeper: **computation** — the systematic study of what can be computed, how efficiently, and what it means to solve problems algorithmically.
+
+!!! info "Learning Objectives"
+
+    By the end of this article, you'll be able to:
+
+    - Explain what computer science studies — distinct from programming languages and frameworks
+    - Identify the major subfields of CS and where they intersect your daily work
+    - Connect your existing engineering experience (debugging, code review, system design) to formal CS theory
+    - Articulate why understanding the theory underneath your tools makes you a more effective engineer
+
+## Where You've Already Encountered CS Theory
+
+You don't need a university classroom to have bumped into computer science. You've been applying it all along:
+
+- **Every Python `dict` and JavaScript `{}` you've used** — these are hash tables, a fundamental data structure from algorithms research
+- **Every SQL query that times out at scale** — that's computational complexity in action; some queries are inherently harder to execute than others
+- **Every regex pattern you've written for input validation** — that's formal language theory; [regular expressions](../efficiency/regular_expressions.md) are a direct implementation of [finite automata](../efficiency/finite_state_machines.md)
+- **Your linter that can't catch every possible bug** — that's not a limitation of the tool, it's a mathematical proof; the Halting Problem tells us no algorithm can ever do this
+- **Every time you reached for a binary search instead of a linear scan** — you were applying algorithmic thinking without needing the formal definition
+
+CS theory is already in your codebase. This site gives you the vocabulary to understand it.
 
 ## The Classic Definitions
 
-Ask ten computer scientists what CS is, and you'll get twelve answers. 🤷 Here are some classics:
+Ask ten computer scientists what CS is, and you'll get twelve answers. Here are some classics:
 
 > "Computer science is no more about computers than astronomy is about telescopes."
 > — Edsger Dijkstra
@@ -28,29 +50,68 @@ The common thread? **Algorithms** and **information**. Computers just happen to 
 
 Computer science asks fundamental questions that would matter even if silicon chips had never been invented:
 
-### What can be computed?
+<div class="grid cards" markdown>
 
-Not everything! Some problems are **undecidable**—no algorithm can ever solve them. The famous Halting Problem asks: "Given a program, will it eventually stop or run forever?" Alan Turing proved in 1936 that no general algorithm can answer this for all programs.
+-   :material-lock: __What can be computed?__
 
-This matters because it sets limits on what we can automate. Some things require human judgment not because we haven't figured out the algorithm yet, but because no such algorithm can exist. Math said so! 🧮
+    ---
 
-### How efficiently can it be computed?
+    Not everything. Some problems are **undecidable** — no algorithm can ever solve them. Alan Turing proved in 1936 that no general algorithm can determine whether an arbitrary program will halt or run forever.
 
-Even solvable problems vary wildly in difficulty. Sorting a million numbers? Easy—a fraction of a second. Finding the best route through 100 cities (the Traveling Salesman Problem)? Our best algorithms would take longer than the age of the universe. ⏳ Pack a lunch.
+    This sets hard limits on what we can automate. Some tasks require human judgment not because we haven't found the algorithm yet, but because no such algorithm can exist. Math said so.
 
-This is the study of **computational complexity**—categorizing problems by how their difficulty scales with size.
+-   :material-speedometer: __How efficiently can it be computed?__
 
-### How do we express computation?
+    ---
 
-This is where programming languages come in. But beneath the syntax lies a deeper question: What are the fundamental ways to describe processes? [Finite State Machines](finite_state_machines.md), [Recursive Transition Networks](recursive_transition_networks.md), [BNF grammars](backus_naur_form.md), lambda calculus, Turing machines—these are all answers to "How do we write down what we want a computer to do?"
+    Even solvable problems vary wildly in difficulty. Sorting a million numbers? A fraction of a second. Finding the best route through 100 cities? Our best algorithms would take longer than the age of the universe. (Pack a lunch.)
 
-You can see these principles in action in our **[Scheme Primer](../programming_languages/scheme_primer.md)**, which explores a language designed specifically to be a minimal and elegant expression of computation.
+    This is **computational complexity** — why your $O(n^2)$ query times out at scale when an $O(n \log n)$ alternative flies. See [Big-O Notation](big_o_notation.md) for the full story.
 
-### How do we build reliable systems?
+-   :material-code-braces: __How do we express computation?__
 
-Software is among the most complex things humans create. A modern operating system has tens of millions of lines of code. How do we build systems that work? That don't crash? That hackers can't break into? That scale to billions of users?
+    ---
 
-This encompasses software engineering, security, distributed systems, and more.
+    Beneath programming language syntax lies a deeper question: what are the fundamental ways to describe processes? [Finite State Machines](../efficiency/finite_state_machines.md), RTNs, BNF grammars, lambda calculus, Turing machines — all answers to "how do we precisely write down what we want a computer to do?"
+
+-   :material-hammer-wrench: __How do we build reliable systems?__
+
+    ---
+
+    A modern operating system has tens of millions of lines of code. How do we build systems that work, don't crash, resist attacks, and scale to billions of users?
+
+    This encompasses software engineering, security, and distributed systems — the engineering discipline built on top of the theory.
+
+</div>
+
+## Why This Matters for Production Code
+
+Understanding CS theory makes you a better engineer in concrete, measurable ways:
+
+=== ":material-speedometer: Writing Code That Scales"
+
+    Complexity theory explains why your code works fine in testing but times out in production. When you understand that hash table lookups are $O(1)$ while nested loops are $O(n^2)$, you stop writing code that accidentally scales quadratically.
+
+    This isn't abstract — it's the difference between a system that handles 10,000 users and one that handles 10 million.
+
+=== ":material-bug: Debugging Smarter"
+
+    Understanding the theory behind your tools helps you debug them. When a regex engine is backtracking catastrophically, knowing that some patterns cause exponential behavior tells you exactly what to fix. When a recursive function blows the call stack, knowing how stacks work tells you why.
+
+=== ":material-layers: Making Better Design Decisions"
+
+    Knowing what's computationally hard versus easy changes how you design systems. Some problems have no efficient general solution — knowing this upfront means you can design around them rather than discovering it when the system is down.
+
+## Technical Interview Context
+
+CS fundamentals appear throughout technical interviews — both as explicit theory questions and as the vocabulary behind algorithm and design discussions.
+
+**Questions you'll be able to answer:**
+
+- *"What's the difference between computer science and software engineering?"* — CS is the study of computation: what can be computed, how efficiently, and what the theoretical limits are. Software engineering is the discipline of building reliable systems from those computational building blocks. CS is the science; software engineering is the application of it.
+- *"What is the Halting Problem, and why does it matter?"* — Turing proved in 1936 that no general algorithm can determine whether an arbitrary program will halt or run forever. It matters because it sets a hard limit on what automated tools can verify — it's why linters and static analyzers can catch *some* bugs but can never catch them all.
+- *"Why can't a static analysis tool guarantee it will catch every bug?"* — Because doing so is equivalent to solving the Halting Problem, which is provably undecidable. Tools like mypy, ESLint, and Rust's borrow checker are useful precisely because they catch a well-defined *subset* of bugs — not because they can catch everything.
+- *"What is computational complexity?"* — The study of how resource requirements (time, memory) grow as problem size grows. This is the formal theory behind Big-O notation — it tells you not just how fast your code is, but whether a *faster* algorithm for the same problem is even theoretically possible.
 
 ## The Major Subfields
 
@@ -62,15 +123,13 @@ Computer science is vast. Here's a map of the territory:
 
     ---
 
-    The mathematical foundations (where the magic happens):
+    The mathematical foundations:
 
-    **Algorithms** — What's the best way to solve this problem?
-
-    **Complexity** — How hard is this problem inherently?
+    **[Algorithms & Complexity](big_o_notation.md)** — What's the best way to solve this problem? How hard is it inherently?
 
     **Computability** — Can this problem be solved at all?
 
-    **Formal Languages** — How do we describe and recognize patterns?
+    **[Formal Languages](../efficiency/finite_state_machines.md)** — How do we describe and recognize patterns? See also [Regular Expressions](../efficiency/regular_expressions.md), RTNs, and BNF
 
     **Cryptography** — How do we secure information mathematically?
 
@@ -86,7 +145,7 @@ Computer science is vast. Here's a map of the territory:
 
     **Databases** — How do we store and retrieve information efficiently?
 
-    **Compilers** — How do we translate high-level code to machine code?
+    **[Compilers & Interpreters](../efficiency/compilers_vs_interpreters.md)** — How do we translate high-level code to machine code?
 
     **Distributed Systems** — How do we coordinate many computers?
 
@@ -112,7 +171,13 @@ Computer science is vast. Here's a map of the territory:
 
     The art and science of building robust software:
 
-    **Software Engineering** — How do we build large systems reliably?
+    **Software Design** — Patterns, abstractions, and principles for maintainable code at scale
+
+    **Testing & Verification** — How do we know code is correct? Unit tests, integration tests, formal verification
+
+    **Software Architecture** — Structuring large systems: monoliths, microservices, event-driven designs
+
+    **Development Practices** — Version control, code review, CI/CD, and the processes that make teams ship reliably
 
 -   :material-monitor: __Human-Computer Interaction__
 
@@ -184,61 +249,45 @@ These terms are often confused:
 | **Computer Science** | Theory and foundations | "Is this problem solvable? How efficiently?" |
 | **Software Engineering** | Building systems | "How do we build this reliably at scale?" |
 | **Programming** | Writing code | "How do I implement this feature?" |
-| **Information Technology** | Managing and maintaining computing infrastructure and services | "How do we deploy and maintain this?" |
+| **Information Technology** | Managing infrastructure | "How do we deploy and maintain this?" |
 
 A computer scientist might study whether a problem is solvable in polynomial time. A programmer implements a solution. An IT professional deploys it. These overlap, but they're distinct skill sets.
 
 You can be an excellent programmer without knowing complexity theory. You can understand theory without being able to ship production code. The most powerful combination is both.
 
-## Why Study Computer Science?
-
-Studying computer science isn't just about learning to code; it's about developing a powerful new way of thinking.
-
-=== ":material-brain: Problem-Solving"
-
-    At its core, computer science is about solving problems systematically and at a massive scale. Whether it's finding the shortest route between two cities, detecting cancer in medical images, or serving billions of search queries a day, computer science provides the tools to tackle these challenges efficiently.
-
-=== ":material-palette: Empowering Creativity"
-
-    Computer science is a creative discipline. You can build anything you can imagine: games, music, art, social networks, scientific simulations. Code is the ultimate creative medium, limited only by your imagination.
-
-=== ":material-earth: Understanding the World"
-
-    Everything is powered by computation. From your phone to your car to the economy, understanding computer science is essential to being a literate citizen in the 21st century. It demystifies technology and empowers you to be a creator, not just a consumer.
-
-=== ":material-briefcase: Career Opportunities"
-
-    Demand for computer science skills is high across every industry—finance, healthcare, entertainment, and more. A CS degree opens doors to a vast range of fulfilling and well-compensated careers.
-
-
 ## The Philosophical Angle
 
 Here's where things get genuinely interesting. Computer science touches deep philosophical questions:
 
-**What is intelligence?** AI research forces us to define what we mean by understanding, learning, and reasoning. Turns out it's harder than you'd think.
+<div class="grid cards" markdown>
 
-**What is information?** Claude Shannon's information theory quantifies the abstract concept of "information" mathematically. (Yes, you can measure surprise!)
+-   :material-head-lightbulb: __What is intelligence?__
 
-**What is proof?** Automated theorem provers and proof assistants are changing how we think about mathematical certainty. Computers now help mathematicians prove theorems humans can't verify by hand.
+    ---
 
-**What is a process?** Algorithms formalize the notion of "a procedure to do something"—an idea that seemed obvious until we tried to make it precise. (Spoiler: it wasn't obvious.)
+    AI research forces us to define what we mean by understanding, learning, and reasoning. Turns out it's harder than you'd think.
 
-Computer science is philosophy made executable. 💭→💻
+-   :material-information-outline: __What is information?__
 
-## Getting Started
+    ---
 
-If you're new to CS, follow this roadmap:
+    Claude Shannon's information theory quantifies the abstract concept of "information" mathematically. (Yes, you can measure surprise.)
 
-1. **[Computational Thinking](computational_thinking.md)** — The mental toolkit
-2. **[Finite State Machines](finite_state_machines.md)** — Simple computation models
-3. **[Recursive Transition Networks](recursive_transition_networks.md)** — Describing languages visually
-4. **[Backus-Naur Form](backus_naur_form.md)** — Describing languages textually
-5. **[Scheme Primer](../programming_languages/scheme_primer.md)** — Your first look at a functional language
-6. **[Procedures & HOFs](../programming_languages/procedures_and_higher_order_functions.md)** — Mastering abstraction
+-   :material-math-compass: __What is proof?__
 
-*Coming soon:*
-7. Regular Expressions — Practical pattern matching
-8. How Parsers Work — From theory to implementation
+    ---
+
+    Automated theorem provers and proof assistants are changing how we think about mathematical certainty. Computers now help mathematicians prove theorems humans can't verify by hand.
+
+-   :material-cog-refresh: __What is a process?__
+
+    ---
+
+    Algorithms formalize the notion of "a procedure to do something" — an idea that seemed obvious until we tried to make it precise. (Spoiler: it wasn't obvious.)
+
+</div>
+
+Computer science is philosophy made executable.
 
 ??? example "How These Subfields Connect: A Google Search"
 
@@ -324,20 +373,22 @@ If you're new to CS, follow this roadmap:
 
 ## Further Reading
 
-- [**Introduction to Computing: Explorations in Language, Logic, and Machines**](https://computingbook.org/) by David Evans - A free introductory Computer Science textbook
+**On this site:**
 
+- **[Big-O Notation](big_o_notation.md)** — The formal framework for measuring how code scales
+- **[Trees](trees_basics.md)** — The data structure behind your file system, JSON, and database indexes
+- **[Computational Thinking](../efficiency/computational_thinking.md)** — The four pillars CS gives you for problem-solving
+- **[Finite State Machines](../efficiency/finite_state_machines.md)** — Formal language theory made concrete
+- **[How Parsers Work](../efficiency/how_parsers_work.md)** — How computers make sense of structured text
+
+**Books:**
+
+- [**Introduction to Computing: Explorations in Language, Logic, and Machines**](https://computingbook.org/) by David Evans — A free introductory Computer Science textbook
 - [**Code: The Hidden Language of Computer Hardware and Software**](https://en.wikipedia.org/wiki/Code:_The_Hidden_Language_of_Computer_Hardware_and_Software) by Charles Petzold — How computers actually work
 - [**Gödel, Escher, Bach**](https://en.wikipedia.org/wiki/G%C3%B6del,_Escher,_Bach) by Douglas Hofstadter — Mind-bending exploration of computation and consciousness
 - [**The Innovators**](https://en.wikipedia.org/wiki/The_Innovators_(book)) by Walter Isaacson — History of computing from Ada Lovelace to the internet
 
 ---
 
-Computer science is a young field—barely 80 years old—but it's already transformed the world more profoundly than disciplines thousands of years older. That transformation is accelerating.
+You've been applying CS theory for years without the vocabulary to name it. The hash tables in your code, the complexity in your queries, the automata in your regex — it was always there. This site exists to give you the formal foundation that turns a working instinct into a principled understanding.
 
-Whether you're here to build the next transformation or just to understand the one that's already happened, welcome. There's a lot to explore. Let's get started. 🚀
-
-## Video Summary
-
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/CnVg09yCs6Y" title="What is Computer Science?" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-</div>

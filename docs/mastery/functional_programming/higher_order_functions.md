@@ -1,11 +1,53 @@
 ---
+title: Procedures and Higher-Order Functions - How Code Becomes Data
 description: Learn how procedures abstract logic and how higher-order functions treat code as data.
 ---
 # Procedures and Higher-Order Functions
 
-When you calculate the total price of an item including tax, you don't rederive the formula every time. You have a mental procedure: multiply the price by the tax rate, add the result to the original price, done. When a chef teaches an apprentice to make a sauce, they don't list every molecular interaction—they provide a procedure: heat butter, add flour, whisk until smooth, gradually add milk.
+You've written `list.sort(key=lambda x: x['price'])` to sort by a custom field. You've chained `.filter()` and `.map()` on arrays. You've applied `@cache` or `@retry` decorators. You've passed callbacks to event listeners or async functions.
 
-Procedures are recipes for computation. They package sequences of steps into reusable units with names. But what happens when procedures themselves become ingredients—when you pass one procedure to another, or return a new procedure as a result? That's when you enter the realm of **higher-order functions**, one of the most powerful ideas in computer science.
+**You've been using higher-order functions all along. This is the CS theory that names what you're doing.**
+
+A procedure is a named sequence of steps packaged into a reusable unit. A higher-order function is a function that takes other functions as arguments or returns functions as results. Both ideas are fundamental — procedures are how you manage complexity; higher-order functions are how you compose behavior dynamically. Together they form the foundation of abstraction, the single most important concept in computer science.
+
+## Where You've Seen This
+
+Higher-order functions show up throughout every modern codebase:
+
+- **Sorting with custom keys** — `sorted(items, key=lambda x: x.price)`, `array.sort((a, b) => a.price - b.price)`
+- **Collection transforms** — `array.map()`, `array.filter()`, `array.reduce()` in JavaScript; `map()`, `filter()`, `functools.reduce()` in Python
+- **Decorators** — `@cache`, `@retry`, `@login_required`, `@app.route('/api/user')` are all functions returning functions
+- **Callbacks** — `setTimeout(fn, 1000)`, `button.addEventListener('click', handler)`, async callbacks
+- **Middleware** — Express.js `app.use(middleware)`, Django middleware, Flask `before_request` hooks
+- **Go function types** — `http.HandlerFunc`, passing functions as `http.Handler` implementations
+- **Rust closures** — `Vec::sort_by()`, `Iterator::map()`, `Iterator::filter()` with closure arguments
+- **Data pipelines** — every pandas `apply()`, every stream processing step is a higher-order function call
+
+## Why This Matters for Production Code
+
+=== ":material-transform: Collection Transforms"
+
+    The pattern `data.filter(predicate).map(transform).reduce(accumulator)` is the foundation of data processing pipelines. In Python it's list comprehensions and `map()`/`filter()`; in JavaScript it's array methods; in Go it's loops with function arguments; in SQL it's `WHERE`, `SELECT`, and aggregations.
+
+    Understanding higher-order functions means understanding why these transforms compose cleanly — each function takes data in and returns data out, with no side effects.
+
+=== ":material-callback: Callbacks and Event Handling"
+
+    Async code is built on higher-order functions. Every callback you pass to an async operation — `fetch().then(handler)`, `setTimeout(fn, delay)`, event listeners — is a function being passed to another function for later execution.
+
+    This is also why callback hell exists: deeply nested higher-order functions become unreadable. Promises and async/await are abstractions that flatten HOF chains into sequential-looking code.
+
+=== ":material-layers: Decorators and Middleware"
+
+    `@cache`, `@retry`, `@login_required`, `@app.route()` — decorators are Python syntax for a higher-order function that wraps another function and extends its behavior. Express.js middleware, Django middleware, and Flask hooks are the same pattern.
+
+    This is how cross-cutting concerns (authentication, logging, rate limiting, caching) get applied consistently across many endpoints without duplicating code in each handler.
+
+=== ":material-pipe: Functional Pipelines"
+
+    Stream processing (Kafka streams, Spark transforms), data science pipelines (sklearn `Pipeline`, pandas method chains), and build tools all use higher-order functions as their core abstraction. Each step is a function; the pipeline is a higher-order function that applies them in sequence.
+
+    Understanding this pattern means you can read and reason about unfamiliar pipeline code by identifying what function each step applies.
 
 ## What is a Procedure?
 
@@ -262,7 +304,7 @@ endfunction
 
 Procedures provide:
 
-### 1. [Abstraction](../building_blocks/computational_thinking.md#the-four-pillars)
+### 1. [Abstraction](../../efficiency/computational_thinking.md#the-four-pillars)
 
 Hide complexity behind a simple interface. Users don't need to know *how* `COMP-COST` works, just *what* it does.
 
@@ -533,7 +575,7 @@ If \(f(x) = x^2\), then \(f'(x) = 2x\). The derivative operator is higher-order.
     ??? tip "1958: The First Functional Language (Lisp)"
         **John McCarthy** created **Lisp**, the first language to treat functions as "first-class citizens"—meaning they could be passed around just like numbers.
         
-        For a deeper look at Lisp's descendant and how it represents code as data, check out our article on **[Scheme and Parse Trees](../building_blocks/scheme_and_parse_trees.md#historical-context)**.
+        For a deeper look at Lisp's descendant and how it represents code as data, check out our article on **[Scheme and Parse Trees](scheme_and_parse_trees.md#historical-context)**.
 
     Define a general `map` function that applies *any* function to each element:
 
@@ -1285,18 +1327,13 @@ Higher-order functions, in particular, represent a shift in thinking: instead of
 
 - **David Evans, [Introduction to Computing](https://computingbook.org/)** — Chapters 3-4 cover procedures and abstraction
 - **Abelson & Sussman, [Structure and Interpretation of Computer Programs](https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/index.html)** — Definitive text on procedures and higher-order functions
-- **[Computational Thinking](../building_blocks/computational_thinking.md)** — Abstraction and algorithm design
-- **[Scheme Primer](scheme_primer.md)** — A beginner-friendly guide to the language where these concepts were born
-- **[Scheme and Parse Trees](../building_blocks/scheme_and_parse_trees.md)** — First-class functions in Scheme
+- **[Computational Thinking](../../efficiency/computational_thinking.md)** — Abstraction and algorithm design
+- **[Scheme: A Primer](scheme_primer.md)** — A beginner-friendly guide to the language where these concepts were born
+- **[Scheme and Parse Trees](scheme_and_parse_trees.md)** — First-class functions in Scheme
 
 ---
 
 Procedures transform sequences of steps into reusable building blocks. Higher-order functions let you compose those blocks in infinitely flexible ways. Together, they form the foundation of abstraction—the single most important idea in computer science. Master them, and you've mastered the art of managing complexity.
 
-## Video Summary
-
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/8kKHmtYHlpM" title="Procedures and Higher-Order Functions" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-</div>
 
 

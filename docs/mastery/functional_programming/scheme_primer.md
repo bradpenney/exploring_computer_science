@@ -1,11 +1,45 @@
 ---
-description: A beginner-friendly introduction to the Scheme programming language, covering lists, recursion, and higher-order functions.
+title: "Scheme: A Primer for Working Engineers"
+description: A practical introduction to Scheme for engineers who already code — understand prefix notation, lambda, closures, and recursive evaluation through a language designed to make computation visible.
 ---
 # A Beginner's Guide to Scheme
 
 Scheme is one of the most elegant programming languages ever designed. Created in the 1970s at MIT by Guy Steele and Gerald Sussman, it strips programming down to its essential elements: expressions, definitions, and procedures. While Scheme isn't widely used in industry today, learning it teaches you to think about computation in a fundamentally different way.
 
-This guide will take you from zero to writing your first Scheme programs.
+You've written Python, JavaScript, or Go for years. You know how to code. Scheme isn't here to teach you new syntax tricks — it's here to show you the skeleton of computation itself. With fewer than a dozen rules, Scheme can express any program you can write in any other language. Understanding why forces you to confront what programming actually *is*.
+
+## Where You've Seen This
+
+Scheme's ideas are embedded in every language you use today:
+
+- **Lambda functions** — Python's `lambda x: x * 2`, JavaScript's `(x) => x * 2`, and Go's `func(x int) int { return x * 2 }` all descend from Scheme's lambda calculus heritage
+- **Closures** — when a JavaScript callback "closes over" a variable from its outer scope, that's a Scheme closure; every JavaScript framework relies on this
+- **Higher-order functions** — `map()`, `filter()`, `reduce()` in Python and JavaScript are Scheme-style higher-order procedures; React's component model is built on function composition
+- **Prefix notation** — Lisp-family syntax (`(+ 1 2)` instead of `1 + 2`) is what you're reading in Clojure, a modern JVM language used in production at companies like Nubank and Walmart
+- **REPL-driven development** — the interactive Scheme REPL inspired Python's `>>>`, Node's REPL, and every language server's "evaluate selection" feature
+- **Tail-call optimization** — when you read about TCO in JavaScript ES6 or Kotlin's `tailrec` keyword, they're formalizing a Scheme optimization from 1975
+
+## Why This Matters for Production Code
+
+=== ":material-function-variant: Understanding Closures Deeply"
+
+    If you've ever been surprised by a JavaScript closure capturing the wrong variable in a loop, or needed to explain why a Python lambda in a list comprehension behaves unexpectedly — Scheme makes those behaviors obvious.
+
+    Scheme's environment model makes explicit what every modern language does implicitly: each procedure application creates a new environment, and lambdas close over the environment in which they were created. When you understand this model, closure bugs become obvious rather than mysterious.
+
+=== ":material-layers: Functional Patterns Without the Framework"
+
+    Learning Scheme's built-in list operations (`map`, `filter`, `fold`) gives you the ground truth that React hooks, RxJS observables, and Clojure's sequence library are all built on. When you understand recursive list processing from first principles, you can reason about any of these libraries' behavior without relying on memorized API rules.
+
+=== ":material-code-braces: Recursion as the Primary Tool"
+
+    Scheme has no `for` or `while` loops. Every repetition is expressed through recursion. This constraint trains you to think in recursive patterns — base case, recursive case, composition of results — which transfers directly to recursive data processing in any language.
+
+    Engineers who learn Scheme typically find that they write cleaner recursive code in Python, JavaScript, and Go afterward, because they've internalized the pattern rather than translating iterative thinking into a recursive syntax.
+
+=== ":material-brain: CS Theory Made Executable"
+
+    The formal topics covered in [Backus-Naur Form](../formal_languages/backus_naur_form.md), [Recursive Transition Networks](../formal_languages/recursive_transition_networks.md), and [Scheme & Parse Trees](scheme_and_parse_trees.md) all come to life in Scheme. The parse tree *is* the program structure — Scheme's S-expression syntax makes the AST visible and editable. This is not true of any other widely-taught language.
 
 ## Why Learn Scheme?
 
@@ -111,20 +145,20 @@ graph TB
     style E fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
     style F fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
     style G fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style H fill:#48bb78,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style I fill:#48bb78,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style J fill:#48bb78,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style H fill:#326CE5,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style I fill:#326CE5,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style J fill:#326CE5,stroke:#cbd5e0,stroke-width:2px,color:#fff
 ```
 
 The leaves (primitives) evaluate first, then results propagate up to the root.
 
-??? info "Prefix vs. Infix Notation"
+??? tip "Prefix vs. Infix Notation"
 
     Most languages use **infix notation** where operators go between operands: `3 + 4 * 5`. This requires precedence rules (PEMDAS) to determine order.
 
     Scheme's **prefix notation** eliminates ambiguity. The expression `(+ 3 (* 4 5))` explicitly shows that multiplication happens first. No memorization required.
 
-    For a deeper dive into why this matters, see [Scheme & Parse Trees](../building_blocks/scheme_and_parse_trees.md).
+    For a deeper dive into why this matters, see [Scheme & Parse Trees](scheme_and_parse_trees.md).
 
 ### Built-in Procedures
 
@@ -469,12 +503,12 @@ flowchart TB
 
     style A fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
     style B fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style C fill:#48bb78,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style C fill:#326CE5,stroke:#cbd5e0,stroke-width:2px,color:#fff
     style D fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
     style E fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
     style F fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
     style G fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
-    style H fill:#48bb78,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style H fill:#326CE5,stroke:#cbd5e0,stroke-width:2px,color:#fff
 ```
 
 ### Procedures as Arguments
@@ -654,9 +688,9 @@ Let's build a complete example that uses everything we've learned:
 
 This primer covers the core of Scheme. To go deeper:
 
-- **[Scheme & Parse Trees](../building_blocks/scheme_and_parse_trees.md)** — Understand why Scheme's syntax directly mirrors computation structure
-- **[Procedures & Higher-Order Functions](procedures_and_higher_order_functions.md)** — Explore the full power of functions as values
-- **[Recursion](../algorithms_complexity/recursion.md)** — Dive deeper into recursive problem solving.
+- **[Scheme & Parse Trees](scheme_and_parse_trees.md)** — Understand why Scheme's syntax directly mirrors computation structure
+- **[Higher-Order Functions](higher_order_functions.md)** — Explore the full power of functions as values: map, filter, reduce, and composition
+- **[Recursion](../../essentials/recursion.md)** — Dive deeper into recursive problem solving and the divide-and-conquer strategy
 
 ## Further Reading
 

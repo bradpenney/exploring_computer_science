@@ -1,11 +1,74 @@
 ---
+title: How Parsers Work - From Raw Text to Meaning
 description: "From raw text to meaning: How parsers use grammars to understand code and data."
 ---
 # How Parsers Work
 
-You've learned about [RTNs](recursive_transition_networks.md), [BNF](backus_naur_form.md), and [Finite State Machines](finite_state_machines.md). These are all ways to *describe* languages. But how do we actually *use* these descriptions to process text? How does Python know that `print("hello")` is valid but `print("hello` isn't?
+Every time you call `json.loads()`, `yaml.safe_load()`, or `JSON.parse()`, a parser runs. Every time Python reports `SyntaxError: unexpected indent` or Go says `syntax error: unexpected {`, a parser has analyzed your code and found the exact point where it stopped making sense. Every SQL query you write is parsed before it touches a database.
 
-The answer is **parsing**—the process of analyzing text according to a grammar. It's how compilers understand your code, how browsers render HTML, and how your JSON config files become usable data. 🎯
+**Parsers are everywhere in your stack — and understanding how they work makes you better at every tool built on top of one.**
+
+Parsing is the process of analyzing text according to a formal grammar. It's how Python knows that `print("hello")` is valid but `print("hello` isn't. It's how browsers turn HTML into a DOM tree. It's how your config files become data structures your code can use.
+
+!!! info "Learning Objectives"
+
+    By the end of this article, you'll be able to:
+
+    - Explain the two-phase pipeline: lexing (tokenizing raw text) then parsing (building a tree)
+    - Read a grammar rule and trace how a recursive descent parser uses it to process input
+    - Distinguish a concrete syntax tree from an abstract syntax tree (AST)
+    - Implement a simple recursive descent parser for arithmetic expressions
+    - Explain how operator precedence is encoded in grammar structure — not as special-case logic
+
+## Where You've Seen This
+
+Parsers run constantly behind the scenes in your daily work:
+
+- **Language runtimes** — Python, Go, Node.js, the JVM all parse your source code before executing it
+- **JSON and YAML** — `json.loads()`, `yaml.safe_load()`, `JSON.parse()` are all parser calls
+- **SQL** — every query goes through a parser before the query planner optimizes it
+- **HTML/DOM** — browsers parse HTML into a tree structure; `BeautifulSoup` wraps a parser
+- **Template engines** — Jinja2, Handlebars, Helm charts all parse template syntax
+- **Config formats** — Docker Compose, Kubernetes manifests, Terraform HCL, `.toml` files
+- **GraphQL** — every incoming query is parsed against the schema grammar
+- **Your IDE** — syntax highlighting, autocomplete, and linting all use parsers in real time
+
+## Why This Matters for Production Code
+
+=== ":material-code-braces: Language Runtimes"
+
+    Every `SyntaxError: unexpected indent` or `unexpected token` message comes from a parser. The line and column numbers pinpoint exactly where the parser was in the input stream when it failed. Run `python -m ast your_file.py` to print the full parse tree for any Python file — the same structure the runtime uses to execute your code.
+
+    Understanding parsers means understanding what your error messages are actually telling you.
+
+=== ":material-file-cog: Config File Formats"
+
+    YAML, JSON, TOML, HCL, XML — every configuration format in your infrastructure stack is parsed on every deployment. Docker Compose, Kubernetes manifests, Terraform, Helm charts all go through parsers before they do anything. When Kubernetes rejects your manifest with a YAML parsing error, you've violated the grammar.
+
+    The error message quality (and your ability to read it) depends on understanding what a parser does with your input.
+
+=== ":material-database: Query Languages"
+
+    Every SQL query is parsed before it touches a database. The query planner that decides whether to use an index or a full table scan operates on the parsed AST. GraphQL servers parse every incoming query against the schema grammar. ORMs generate SQL strings that get parsed again on the database side.
+
+    Understanding parsers explains why query structure matters and why parameterized queries are safer than string interpolation.
+
+=== ":material-shield: Security Boundaries"
+
+    SQL injection, XSS, and template injection attacks all exploit the gap between what a developer thinks a parser will do with input and what it actually does. The parser boundary — where input transitions from data to structure — is where these vulnerabilities live.
+
+    Parameterized queries work because they keep user input outside the parse boundary. Understanding parsers is foundational to writing code that handles untrusted input safely.
+
+## Technical Interview Context
+
+Parsers come up in security-focused interviews (injection attacks) and in any discussion about building interpreters, config file processors, or DSLs.
+
+**Questions you'll be able to answer:**
+
+- *"Why does parameterized SQL prevent SQL injection?"* — SQL injection exploits the parser boundary: user input is treated as SQL syntax rather than data. Parameterized queries keep user data outside the parse boundary entirely — the SQL structure is fixed before user input arrives, so no amount of crafted input can modify the query structure.
+- *"What is an AST and where do you see them?"* — An Abstract Syntax Tree is the parsed representation of structured input. Python's `ast` module exposes the AST for any Python file. Linters, type checkers, transpilers, and compilers all operate on ASTs rather than raw source text.
+- *"What's the difference between top-down and bottom-up parsing?"* — Top-down parsers start from the root grammar rule and work toward the leaves; recursive descent parsers are top-down. Bottom-up parsers build the tree from leaves up, recognizing patterns as they accumulate input. Most hand-written parsers are top-down; most generated parsers (yacc, LALR) are bottom-up.
+- *"When would you write a parser vs use an existing library?"* — Use an existing library for any standard format (JSON, YAML, TOML, SQL). Write a parser when you're defining a custom DSL or config format — and even then, parser generators (ANTLR, PLY, `pest` in Rust) are usually faster to build with than hand-rolling from scratch.
 
 ## Why Is Parsing Necessary?
 
@@ -120,7 +183,7 @@ For the expression `total = price * 2 + tax`:
 | PLUS | "+" |
 | IDENTIFIER | "tax" |
 
-The lexer doesn't understand grammar—it just recognizes patterns. "Is this a number? A keyword? An operator?" That's all it asks. Simple creature, the lexer. 🔍
+The lexer doesn't understand grammar — it just recognizes patterns. "Is this a number? A keyword? An operator?" That's all it asks. Simple creature, the lexer.
 
 ### Lexer Implementation
 
@@ -609,13 +672,13 @@ Without a tree, you'd need complex logic to figure out "which operation happens 
 
 ??? tip "Connection to BNF and RTN"
 
-    Remember [BNF](backus_naur_form.md) and [RTN](recursive_transition_networks.md) from earlier? They're grammar notations that **describe** valid syntax. The parser uses these rules to **build** the tree:
+    BNF and RTN are grammar notations that formally **describe** valid syntax. The parser uses those rules to **build** the tree:
 
     - **Each BNF rule becomes a tree node**: When the parser applies `<expression> ::= <term> "+" <term>`, it creates an expression node with two term children
     - **RTN paths trace tree construction**: Following an RTN from start to end corresponds to building a subtree
     - **Recursion in grammar = Recursion in tree**: Nested expressions in code become nested nodes in the tree
 
-    The grammar is the blueprint; the tree is the structure built from that blueprint. The parser is the construction worker following the plans.
+    The grammar is the blueprint; the tree is the structure built from that blueprint. The parser is the construction worker following the plans. See the Mastery section for the full formal treatment of grammars.
 
 ### Parse Trees vs Abstract Syntax Trees
 
@@ -652,7 +715,7 @@ For `2 + 3 * 4`:
 The AST is what most compilers actually work with.
 
 !!! tip "Scheme: Where Parse Tree = AST"
-    In **[Scheme & Parse Trees](scheme_and_parse_trees.md)**, you'll see a language where the written code *is* the AST. Because Scheme uses prefix notation with explicit parentheses `(+ 1 (* 2 3))`, there is no ambiguity, and the parse tree matches the code structure 1:1.
+    In Scheme & Parse Trees, you'll see a language where the written code *is* the AST. Because Scheme uses prefix notation with explicit parentheses `(+ 1 (* 2 3))`, there is no ambiguity, and the parse tree matches the code structure 1:1.
 
 !!! info "Why ASTs Drop Punctuation"
 
@@ -1493,7 +1556,7 @@ For most projects: start with **recursive descent** (top-down) because it's intu
 
     ??? tip "Recursion and the Call Stack"
 
-        Notice how `parse_factor` can call `parse_expression`, which calls `parse_term`, which calls `parse_factor` again? This mutual recursion works because each function call is managed by the **[function call stack](../data_structures/abstract_data_types_and_stack.md#function-call-stack)**.
+        Notice how `parse_factor` can call `parse_expression`, which calls `parse_term`, which calls `parse_factor` again? This mutual recursion works because each function call is managed by the **function call stack**.
 
         When parsing `(2 + 3)`, the call stack looks like:
         ```
@@ -1907,7 +1970,7 @@ Writing parsers by hand is educational, but for real projects, consider parser g
 | **[Peggy](https://peggyjs.org/)** (formerly PEG.js) | JavaScript | PEG |
 | **[GNU Bison](https://www.gnu.org/software/bison/)** | C/C++ | YACC |
 
-You write the grammar, the tool generates the parser code. ✨ Laziness is a virtue in programming.
+You write the grammar, the tool generates the parser code. Parser generators make this pattern practical for complex grammars.
 
 **Example with Lark (Python):**
 
@@ -1990,6 +2053,36 @@ You write the grammar, the tool generates the parser code. ✨ Laziness is a vir
 
     Where does the new rule go in the precedence hierarchy?
 
+    ??? tip "Approach"
+
+        **Where it goes: the `factor` level** — same depth as number literals and parenthesized expressions. This gives unary minus the highest precedence, so `-2 * 3` parses as `(-2) * 3` and `2 + -3` parses as `2 + (-3)`.
+
+        **Updated grammar rule:**
+
+        ```
+        factor → NUMBER
+               | '(' expression ')'
+               | '-' factor          ← new: unary minus
+        ```
+
+        **Why `factor` calls itself recursively:** This handles `-(-4)`. The outer `-` consumes itself, then calls `parse_factor()` again — which sees another `-`, consumes it, and parses `4`. Without recursion here, double negation would fail to parse.
+
+        **Parser change:**
+
+        ```python title="Unary Minus in parse_factor()" linenums="1"
+        def parse_factor(self):
+            if self.current_token.type == 'MINUS':
+                self.advance()                        # consume the '-'
+                operand = self.parse_factor()         # recursive: handles -(-4)
+                return UnaryMinusNode(operand)
+            elif self.current_token.type == 'NUMBER':
+                # ... existing number handling
+            elif self.current_token.type == 'LPAREN':
+                # ... existing parenthesis handling
+        ```
+
+        **Why not at the `expression` level?** Placing it there would make `-2 + 3` parse as `-(2 + 3) = -5` instead of `(-2) + 3 = 1`. Grammar depth controls precedence — deeper means higher priority.
+
 ??? question "Challenge 2: Parse Variable Assignments"
 
     Extend the grammar to handle:
@@ -2001,10 +2094,98 @@ You write the grammar, the tool generates the parser code. ✨ Laziness is a vir
 
     You'll need to track variable names and store their values.
 
+    ??? tip "Approach"
+
+        **Updated grammar:**
+
+        ```
+        program    → statement*
+        statement  → IDENTIFIER '=' expression    ← assignment
+                   | expression                   ← expression statement
+        expression → term ('+' term | '-' term)*
+        ...
+        ```
+
+        **Key additions:**
+
+        **1. Symbol table** — a `dict` mapping variable names to current values:
+
+        ```python title="Symbol Table" linenums="1"
+        symbol_table = {}
+        ```
+
+        **2. Assignment parsing** — look ahead one token: if the current token is an identifier AND the next is `=`, it's an assignment:
+
+        ```python title="Parsing Assignment" linenums="1"
+        if token.type == 'IDENTIFIER' and self.peek().type == 'EQUALS':
+            name = token.value
+            self.advance()                     # consume identifier
+            self.advance()                     # consume '='
+            value = self.parse_expression()
+            symbol_table[name] = value
+        ```
+
+        **3. Variable lookup** — when an identifier appears in expression context, look it up:
+
+        ```python title="Variable Lookup in parse_factor()" linenums="1"
+        elif token.type == 'IDENTIFIER':
+            if token.value not in symbol_table:
+                raise ParseError(f"Undefined variable: {token.value!r}")
+            return symbol_table[token.value]
+        ```
+
+        **The order matters:** `y = x + 5` only works if `x` was assigned first. Your parser can enforce this at parse time (eager lookup, as above) or defer to evaluation time (build a full AST, evaluate later). Most real compilers do the latter — it enables forward references and function calls before definitions.
+
 ??? question "Challenge 3: Error Messages"
 
     Improve the parser to give line and column numbers in error messages.
     What information do you need to track during lexing?
+
+    ??? tip "Approach"
+
+        **Track position in the lexer** — capture line and column as you scan, and snapshot them at the start of each token:
+
+        ```python title="Line/Column Tracking in the Lexer" linenums="1"
+        class Lexer:
+            def __init__(self, text):
+                self.text = text
+                self.pos = 0
+                self.line = 1    # ← track line number
+                self.col = 1     # ← track column number
+
+            def advance(self):
+                if self.pos < len(self.text) and self.text[self.pos] == '\n':
+                    self.line += 1
+                    self.col = 1
+                else:
+                    self.col += 1
+                self.pos += 1
+        ```
+
+        **Store position in every token:**
+
+        ```python title="Token with Position" linenums="1"
+        class Token:
+            def __init__(self, type, value, line, col):
+                self.type = type
+                self.value = value
+                self.line = line   # ← snapshot at token start
+                self.col = col
+        ```
+
+        **Use position in parser errors:**
+
+        ```python title="Error Message with Position" linenums="1"
+        def expect(self, token_type):
+            if self.current_token.type != token_type:
+                t = self.current_token
+                raise ParseError(
+                    f"Expected {token_type} at line {t.line}, col {t.col}, "
+                    f"but got {t.type} ({t.value!r})"
+                )
+        ```
+
+        **Critical insight:** Snapshot line/column at the *start* of each token during lexing — not at parse time. By the time the parser raises an error, the lexer has already moved past the relevant position. This is exactly how Python, Go, and Rust compilers track source positions in their token types, enabling error messages like `SyntaxError: unexpected token '+' at line 3, column 12`.
 
 ## Key Takeaways
 
@@ -2019,18 +2200,10 @@ You write the grammar, the tool generates the parser code. ✨ Laziness is a vir
 
 ## Further Reading
 
-- [Binary Trees & Representation](binary_trees_and_representation.md) — Tree structures and hierarchical data
-- [Recursive Transition Networks](recursive_transition_networks.md) — Visual grammars
-- [Backus-Naur Form](backus_naur_form.md) — Grammar notation
+- [Trees](../essentials/trees_basics.md) — Tree structures and hierarchical data
 - [Finite State Machines](finite_state_machines.md) — Foundation for lexers
 - [**Crafting Interpreters**](https://craftinginterpreters.com/) by Robert Nystrom — Free online book, excellent deep dive
 
 ---
 
-Parsing bridges the gap between human-readable text and computer-manipulable structure. It's where theory meets practice—where BNF rules become working code. Once you understand parsing, you can build your own languages, transform code, and peek behind the curtain of every compiler and interpreter you use. That's real power. 🔧
-
-## Video Summary
-
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/UXlUo_-aKA8" title="How Parsers Work" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-</div>
+Parsing bridges the gap between human-readable text and computer-manipulable structure. It's where formal grammar theory meets production code — where BNF rules become the error messages you read, the config formats you write, and the query languages you depend on. Every tool that reads structured text runs a parser. Knowing how parsers work turns those tools from black boxes into understandable systems you can reason about, debug, and extend.

@@ -13,7 +13,7 @@ Welcome to a practical guide for working engineers who want to understand the co
 
 ## The Problem
 
-Your PR got rejected because the reviewer said it's "O(n²)". You nodded, made some changes, but couldn't quite explain *why* the new version is faster. You've debugged stack traces without understanding why they're called "stacks." You use hash tables (Python dicts, JavaScript objects) constantly but couldn't explain how they achieve O(1) lookup.
+Your PR got rejected because the reviewer said it's "$O(n^2)$". You nodded, made some changes, but couldn't quite explain *why* the new version is faster. You've debugged stack traces without understanding why they're called "stacks." You use hash tables (Python `dict`, JavaScript `Object`) constantly but couldn't explain how they achieve $O(1)$ lookup.
 
 **You know HOW to code. This site teaches you WHY things work.**
 
@@ -39,9 +39,17 @@ Content is structured by **practical value and depth**:
 
     **The CS you need for interviews and understanding performance.** Can't call yourself a well-rounded engineer without these.
 
-    - **[Big-O Notation](essentials/big_o_notation.md)** — Why your code is slow and how to talk about it
-    - Core Data Structures: arrays, hash tables, stacks, queues, trees (coming soon)
-    - Fundamental Algorithms: recursion, searching, sorting (coming soon)
+    **[What is Computer Science?](essentials/what_is_computer_science.md)** — The CS theory behind the code you write every day
+
+    **[Big-O Notation](essentials/big_o_notation.md)** — Why your code is slow and how to talk about it
+
+    **[Type Systems Basics](essentials/type_systems_basics.md)** — The formal contract behind every variable and function signature
+
+    **[Recursion](essentials/recursion.md)** — Divide-and-conquer problem solving from first principles
+
+    **[Trees](essentials/trees_basics.md)** — The data structure behind your file system, JSON, and database indexes
+
+    Searching, sorting, stacks, queues (coming soon)
 
 -   :material-lightning-bolt: **Efficiency**
 
@@ -49,11 +57,17 @@ Content is structured by **practical value and depth**:
 
     **CS that makes you better at debugging and system design.** Deeper understanding that pays dividends.
 
-    - Computational Thinking (coming soon)
-    - Finite State Machines (coming soon)
-    - Regular Expressions (coming soon)
-    - How Parsers Work (coming soon)
-    - Graphs & Graph Algorithms (coming soon)
+    **[Computational Thinking](efficiency/computational_thinking.md)** — The mental framework behind good engineering
+
+    **[Finite State Machines](efficiency/finite_state_machines.md)** — The model behind protocols, parsers, and validation
+
+    **[Regular Expressions](efficiency/regular_expressions.md)** — Pattern matching for every working engineer
+
+    **[How Parsers Work](efficiency/how_parsers_work.md)** — From raw text to meaning
+
+    **[Compilers vs. Interpreters](efficiency/compilers_vs_interpreters.md)** — What actually happens between your source code and execution
+
+    **[Lists as Recursive Structures](efficiency/lists_recursive_structure.md)** — The CS theory behind every map, filter, and reduce you've written
 
 -   :material-target: **Mastery**
 
@@ -61,9 +75,21 @@ Content is structured by **practical value and depth**:
 
     **Deep theory for understanding the limits of computation.** For when you want to go beyond practical and into foundational.
 
-    - Formal Languages: BNF, grammars, RTNs (coming soon)
-    - Computability: Turing machines, halting problem, P vs NP (coming soon)
-    - Functional Programming: Scheme, higher-order functions (coming soon)
+    **Information Theory** — Bits, binary, entropy, and why compression has hard limits
+
+    **Recursive Transition Networks** — Visual grammars for nested languages
+
+    **Backus-Naur Form (BNF)** — The notation behind every language specification
+
+    **Scheme: A Primer** — Lambda, closures, and recursion in the language that invented them
+
+    **Higher-Order Functions** — How code becomes data
+
+    **Scheme & Parse Trees** — When code is its own parse tree
+
+    **Abstract Data Types** — The CS theory behind interfaces, protocols, and traits
+
+    Computability: Turing machines, halting problem, P vs NP (coming soon)
 
 </div>
 
@@ -91,9 +117,9 @@ This site is part of the [BradPenney.io](https://bradpenney.io) learning ecosyst
 **How they connect:**
 
 - CS site + Python site = Understanding why your code performs the way it does
-- CS site + Tools site = Knowing the theory behind grep (regex), git (DAGs), parsers (compilers)
+- CS site + Tools site = Knowing the theory behind `grep` (regex), `git` (DAGs), parsers (compilers)
 - CS site + K8s site = Understanding distributed systems concepts
 
 ---
 
-**Ready to understand the theory?** Start with **[Big-O Notation](essentials/big_o_notation.md)** to understand why some code is fast and other code times out at scale.
+**Ready to understand the theory?** Start with **[What is Computer Science?](essentials/what_is_computer_science.md)** for context, then **[Big-O Notation](essentials/big_o_notation.md)** to understand why some code is fast and other code times out at scale.

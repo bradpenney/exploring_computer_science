@@ -1,13 +1,37 @@
 ---
+title: Finite State Machines - The Model Behind Protocols, Parsers, and Validation
 description: Understanding Finite State Machines (FSMs), the elegant model behind traffic lights, game AI, and compilers.
 ---
 # Finite State Machines (FSMs)
 
-Imagine modeling any system that moves through distinct states—a traffic light cycling through red, yellow, and green; a turnstile that's either locked or unlocked; a video game enemy switching between patrolling, chasing, and attacking. These are all **Finite State Machines**, one of the most elegant and foundational models in computer science.
+You've written authentication flows that move users through states: unauthenticated → logging in → authenticated → session expired. You've read TCP connection states in debugging output: `LISTEN`, `SYN_SENT`, `ESTABLISHED`, `CLOSE_WAIT`. You've built form validation that changes behavior based on whether input is empty, invalid, or valid. All of these are implementations of the same theoretical model.
 
-FSMs are everywhere: traffic lights, vending machines, elevators, video game AI, text parsers, network protocols, compilers. Once you understand them, you'll start seeing them in everything. 👀
+**This is that model.**
+
+A Finite State Machine is a formal model of computation that describes any system which moves through a fixed set of states based on inputs. Understanding FSMs formally gives you a precise vocabulary for designing state-dependent systems — and explains why regex engines, lexers, and network protocols work the way they do.
 
 Understanding FSMs requires [computational thinking](computational_thinking.md): **decomposing** systems into states, **recognizing patterns** in transitions, **abstracting** away implementation details, and **designing algorithms** to process inputs.
+
+!!! info "Learning Objectives"
+
+    By the end of this article, you'll be able to:
+
+    - Define an FSM using the formal 5-tuple: states, alphabet, transition function, initial state, and accepting states
+    - Design an FSM from a prose description of a system's behavior
+    - Distinguish deterministic (DFA) from non-deterministic (NFA) finite automata and explain the tradeoffs
+    - Implement an FSM in code and explain why explicit state machines improve testability
+    - Identify what FSMs cannot do — and why that boundary matters for regex and parsers
+
+## Where You've Seen This
+
+FSMs appear throughout production software:
+
+- **TCP/IP protocol** — every TCP connection moves through states (`LISTEN` → `SYN_RECEIVED` → `ESTABLISHED` → `FIN_WAIT` → `CLOSED`). The Linux kernel's TCP implementation is essentially one large FSM
+- **Regex engines** — every regular expression compiles to an FSM internally. This is why regex matching is fast: it's a single linear pass through an FSM, not recursive backtracking (usually)
+- **Lexers** — the first stage of every compiler or parser breaks source text into tokens using FSMs. Each token type (identifier, number, string literal) is recognized by a state machine
+- **Authentication flows** — unauthenticated → authenticating → authenticated → expired → locked is a classic FSM. Implementing it explicitly prevents bugs like "how did a locked user end up in the authenticated state?"
+- **Game AI** — enemies with patrol → alert → attack → retreat states; game characters with idle → running → jumping → falling states
+- **Network protocols** — HTTP, SMTP, FTP, WebSockets all define state machines for connection lifecycle
 
 ## What is a Finite State Machine?
 
@@ -81,7 +105,7 @@ Here's where FSMs get interesting. Can we build a machine that accepts binary nu
 ```mermaid
 stateDiagram-v2
     direction LR
-    classDef accepting fill:#48bb78,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    classDef accepting fill:#326CE5,stroke:#cbd5e0,stroke-width:2px,color:#fff
 
     [*] --> S0
     S0 --> S0: 0
@@ -154,68 +178,6 @@ stateDiagram-v2
 From S0, reading 'a' could go to S0 *or* S1. Non-deterministic!
 
 **The magic:** NFAs and DFAs are equally powerful. Any NFA can be converted to an equivalent DFA (though the DFA might have more states). NFAs are often easier to design; DFAs are easier to implement. Best of both worlds! ✨
-
-## Mealy vs. Moore Machines
-
-FSMs can be further categorized into two types based on how they produce output: **Moore machines** and **Mealy machines**.
-
-### Moore Machine
-
-In a Moore machine, the output is determined *only by the current state*.
-
-- **Example:** Our "divisible by 3" FSM is a Moore machine. The "output" (whether the number so far is divisible by 3) is determined just by being in state `S0`. It doesn't matter how you got there.
-
-```mermaid
-stateDiagram-v2
-    direction LR
-
-    [*] --> S0
-    state "remainder 0 (output: Yes)" as S0
-    state "remainder 1 (output: No)" as S1
-    state "remainder 2 (output: No)" as S2
-    S0 --> S1: 1
-    S1 --> S0: 1
-    S0 --> S0: 0
-    S1 --> S2: 0
-    S2 --> S1: 0
-    S2 --> S2: 1
-```
-
-### Mealy Machine
-
-In a Mealy machine, the output is determined by both the *current state and the input*. The output is associated with the *transition*.
-
-- **Example:** A vending machine giving change is a Mealy machine. If you're in the "10 cents" state and you input a quarter, the output is "dispense item and give 5 cents change".
-
-```mermaid
-stateDiagram-v2
-    direction LR
-
-    [*] --> Locked
-    Locked --> Unlocked: coin / unlock_gate
-    Unlocked --> Locked: push / lock_gate
-```
-
-Here, the output (`unlock_gate`, `lock_gate`) is written on the transition path, separated by a `/`.
-
-### Key Difference
-
-| Machine | Output Depends On | Example |
-|:--------|:------------------|:--------|
-| **Moore** | State only | "Is this number valid?" |
-| **Mealy** | State and Input | "On this input, do X" |
-
-Any Moore machine can be converted to an equivalent Mealy machine, and vice versa. They are computationally equivalent, but one might be more convenient for a specific problem.
-
-??? info "Historical Note: Who Were Moore and Mealy?"
-
-    These machines are named after the computer scientists who formalized these models in the 1950s:
-
-    **Moore Machine** - Named after **Edward F. Moore** (1925-2003), an American mathematician and computer scientist. He described this model in his 1956 paper "Gedanken-experiments on Sequential Machines."
-
-    **Mealy Machine** - Named after **George H. Mealy** (1927-2010), who published "A Method for Synthesizing Sequential Circuits" in 1955, describing machines where output depends on both state and input.
-
-    Both were working at Bell Labs during this era, which was a hotbed of early computer science and information theory research (along with folks like Claude Shannon). Their models became fundamental tools in digital circuit design and formal language theory.
 
 ## FSMs and Regular Languages
 
@@ -377,7 +339,8 @@ For languages requiring this kind of counting or nesting (like balanced parenthe
 
     Compilers use FSMs to recognize different token types. Here are two FSMs—one for **numbers**, one for **identifiers** (variable/function names):
 
-    !!! note "State Names"
+    ??? tip "State Names"
+
         The state names like "InNumber" and "InIdentifier" are descriptive labels that tell us what the FSM is currently doing:
 
         - **InNumber** = "currently in the middle of reading a number"
@@ -423,6 +386,29 @@ For languages requiring this kind of counting or nesting (like balanced parenthe
     5. See space → done, emit identifier token `x42`
 
     This is how compilers turn source code text into structured tokens for parsing!
+
+## Why This Matters for Production Code
+
+FSMs aren't just a theoretical curiosity — they're a practical design tool.
+
+**Explicit state machines prevent impossible states.** If you model an order's lifecycle as an FSM (pending → paid → shipped → delivered → refunded), you can enforce that a cancelled order can never become pending again. Without an explicit model, these invalid transitions sneak in as bugs.
+
+**FSMs are directly testable.** A state machine has a finite, enumerable set of (state, input) pairs. You can write a test for every valid transition and every invalid one. Compare this to implicit state scattered across boolean flags (`isLoggedIn`, `isLoading`, `hasError`) — testing all combinations becomes exponential.
+
+**ReDoS attacks exploit FSM backtracking.** Certain regex patterns compile to non-deterministic FSMs that backtrack exponentially on crafted inputs. Cloudflare had a major outage in 2019 caused by exactly this. Understanding that regex engines are FSMs explains why `(a+)+` matching against `"aaaaaaaaab"` can hang a server.
+
+**Lexers are FSMs.** The first stage of every compiler — tokenization — uses FSMs to scan source code. Understanding this explains lexer performance characteristics and why some patterns are tokenized in one pass.
+
+## Technical Interview Context
+
+FSMs appear in system design interviews as state modeling problems, and in lower-level discussions about regex engines and protocol parsers.
+
+**Questions you'll be able to answer:**
+
+- *"Design the state model for a payment / order / user account lifecycle"* — This is an FSM problem whether or not the interviewer uses that term. Define the states, enumerate valid transitions, and sketch a transition table. The exercise of drawing it out prevents invalid state combinations from creeping into the implementation.
+- *"How would you enforce that a cancelled order can't become pending again?"* — Explicit FSM: only permit transitions that appear in the transition table; reject all others. Contrast this with implicit state scattered across boolean flags, where invalid transitions happen when conditions are checked out of order.
+- *"How does a regex engine work?"* — A regex pattern compiles to a finite automaton (NFA or DFA). The engine reads input characters and follows state transitions; acceptance means the string matched. This is why regex is fast for simple patterns and why certain patterns cause exponential blowup on adversarial input.
+- *"Why can't a regex match balanced parentheses?"* — FSMs have no memory beyond their current state — they cannot count. Matching arbitrary nesting requires a stack (pushdown automaton), which is a more powerful computational model than an FSM.
 
 ## Beyond FSMs: Adding Memory
 
@@ -682,308 +668,7 @@ FSMs translate directly into code. Here's a turnstile implementation:
     2. Pass string by const reference to avoid copying (performance optimization)
     3. C++ allows `==` for string comparison (std::string overloads the operator)
 
-Or using a transition table:
-
-=== ":material-language-python: Python - Table-Driven"
-
-    ```python title="Table-Driven FSM Implementation" linenums="1"
-    transitions = {  # (1)!
-        ("locked", "coin"): "unlocked",
-        ("locked", "push"): "locked",
-        ("unlocked", "coin"): "unlocked",
-        ("unlocked", "push"): "locked",
-    }
-
-    def next_state(current, input):  # (2)!
-        return transitions.get((current, input), current)  # (3)!
-
-    # Usage
-    state = "locked"
-    state = next_state(state, "push")   # locked
-    state = next_state(state, "coin")   # unlocked
-    state = next_state(state, "push")   # locked
-    ```
-
-    1. Define all state transitions as a dictionary mapping (state, input) tuples to next states
-    2. Look up the next state based on current state and input
-    3. Use .get() with current state as default - if transition not defined, stay in current state
-
-=== ":material-language-javascript: JavaScript - Table-Driven"
-
-    ```javascript title="Table-Driven FSM Implementation" linenums="1"
-    const transitions = new Map([  // (1)!
-        [JSON.stringify(["locked", "coin"]), "unlocked"],  // (2)!
-        [JSON.stringify(["locked", "push"]), "locked"],
-        [JSON.stringify(["unlocked", "coin"]), "unlocked"],
-        [JSON.stringify(["unlocked", "push"]), "locked"],
-    ]);
-
-    function nextState(current, input) {
-        const key = JSON.stringify([current, input]);  // (3)!
-        return transitions.get(key) || current;  // (4)!
-    }
-
-    // Usage
-    let state = "locked";
-    state = nextState(state, "push");   // locked
-    state = nextState(state, "coin");   // unlocked
-    state = nextState(state, "push");   // locked
-    ```
-
-    1. Map data structure for efficient key-value lookups
-    2. Use JSON.stringify to create string keys from [state, input] arrays (Map requires unique keys)
-    3. Convert current state and input to same JSON string format for lookup
-    4. Use logical OR `||` to return current state if no transition found (default behavior)
-
-=== ":material-language-go: Go - Table-Driven"
-
-    ```go title="Table-Driven FSM Implementation" linenums="1"
-    package main
-
-    import "fmt"
-
-    type StateInput struct {  // (1)!
-        state string
-        input string
-    }
-
-    var transitions = map[StateInput]string{  // (2)!
-        {"locked", "coin"}:   "unlocked",  // (3)!
-        {"locked", "push"}:   "locked",
-        {"unlocked", "coin"}: "unlocked",
-        {"unlocked", "push"}: "locked",
-    }
-
-    func nextState(current, input string) string {
-        key := StateInput{current, input}
-        if next, ok := transitions[key]; ok {  // (4)!
-            return next
-        }
-        return current  // (5)!
-    }
-
-    func main() {
-        state := "locked"
-        state = nextState(state, "push")   // locked
-        state = nextState(state, "coin")   // unlocked
-        state = nextState(state, "push")   // locked
-        fmt.Println(state)
-    }
-    ```
-
-    1. Define custom struct to use as map key (Go maps require comparable types)
-    2. Map with struct keys - Go's type-safe alternative to tuples
-    3. Struct literal syntax - field names optional when in declaration order
-    4. Two-value assignment from map lookup: value and "ok" boolean (comma-ok idiom)
-    5. Return current state if key not found in map (default behavior)
-
-=== ":material-language-rust: Rust - Table-Driven"
-
-    ```rust title="Table-Driven FSM Implementation" linenums="1"
-    use std::collections::HashMap;
-
-    fn next_state(current: &str, input: &str,
-                  transitions: &HashMap<(&str, &str), &str>) -> &str {  // (1)!
-        transitions.get(&(current, input)).unwrap_or(&current)  // (2)!
-    }
-
-    fn main() {
-        let transitions: HashMap<(&str, &str), &str> = [  // (3)!
-            (("locked", "coin"), "unlocked"),
-            (("locked", "push"), "locked"),
-            (("unlocked", "coin"), "unlocked"),
-            (("unlocked", "push"), "locked"),
-        ].iter().cloned().collect();  // (4)!
-
-        let mut state = "locked";
-        state = next_state(state, "push", &transitions);   // locked
-        state = next_state(state, "coin", &transitions);   // unlocked
-        state = next_state(state, "push", &transitions);   // locked
-        println!("{}", state);
-    }
-    ```
-
-    1. HashMap with tuple keys - Rust tuples are hashable and implement Eq/Hash
-    2. unwrap_or returns reference to current state if key not found (Option handling)
-    3. Type annotation shows HashMap maps (&str, &str) tuples to &str values
-    4. Convert array to HashMap using iterator: iter() creates iterator, cloned() copies elements, collect() builds HashMap
-
-=== ":material-language-java: Java - Table-Driven"
-
-    ```java title="Table-Driven FSM Implementation" linenums="1"
-    import java.util.HashMap;
-    import java.util.Map;
-
-    class StateInput {  // (1)!
-        String state;
-        String input;
-
-        StateInput(String state, String input) {
-            this.state = state;
-            this.input = input;
-        }
-
-        @Override
-        public boolean equals(Object o) {  // (2)!
-            if (!(o instanceof StateInput)) return false;
-            StateInput si = (StateInput) o;
-            return state.equals(si.state) && input.equals(si.input);
-        }
-
-        @Override
-        public int hashCode() {  // (3)!
-            return state.hashCode() * 31 + input.hashCode();
-        }
-    }
-
-    public class FSM {
-        private static Map<StateInput, String> transitions = new HashMap<>();
-
-        static {  // (4)!
-            transitions.put(new StateInput("locked", "coin"), "unlocked");
-            transitions.put(new StateInput("locked", "push"), "locked");
-            transitions.put(new StateInput("unlocked", "coin"), "unlocked");
-            transitions.put(new StateInput("unlocked", "push"), "locked");
-        }
-
-        public static String nextState(String current, String input) {
-            return transitions.getOrDefault(new StateInput(current, input), current);  // (5)!
-        }
-
-        public static void main(String[] args) {
-            String state = "locked";
-            state = nextState(state, "push");   // locked
-            state = nextState(state, "coin");   // unlocked
-            state = nextState(state, "push");   // locked
-            System.out.println(state);
-        }
-    }
-    ```
-
-    1. Custom class needed as HashMap key (Java doesn't have tuple literals)
-    2. Override equals() to define structural equality (required for HashMap lookups)
-    3. Override hashCode() to match equals() contract (multiply by prime 31 to reduce collisions)
-    4. Static initializer block - runs once when class loads to populate transitions
-    5. getOrDefault() returns current state if key not in map (cleaner than null check)
-
-=== ":material-language-cpp: C++ - Table-Driven"
-
-    ```cpp title="Table-Driven FSM Implementation" linenums="1"
-    #include <iostream>
-    #include <map>
-    #include <string>
-    #include <utility>
-
-    using StateInput = std::pair<std::string, std::string>;  // (1)!
-
-    std::map<StateInput, std::string> transitions = {  // (2)!
-        {{"locked", "coin"}, "unlocked"},  // (3)!
-        {{"locked", "push"}, "locked"},
-        {{"unlocked", "coin"}, "unlocked"},
-        {{"unlocked", "push"}, "locked"},
-    };
-
-    std::string nextState(const std::string& current, const std::string& input) {
-        StateInput key = {current, input};
-        auto it = transitions.find(key);  // (4)!
-        return (it != transitions.end()) ? it->second : current;  // (5)!
-    }
-
-    int main() {
-        std::string state = "locked";
-        state = nextState(state, "push");   // locked
-        state = nextState(state, "coin");   // unlocked
-        state = nextState(state, "push");   // locked
-        std::cout << state << std::endl;
-        return 0;
-    }
-    ```
-
-    1. Type alias for std::pair - provides tuple-like behavior for map keys
-    2. std::map automatically ordered by keys (uses < operator on pairs)
-    3. Nested braces: outer for map entry, inner for pair construction
-    4. find() returns iterator to element (or end() if not found)
-    5. Ternary operator checks if iterator valid, accesses value with ->second, else returns current
-
-The table-driven approach scales better for complex FSMs.
-
-## Minimizing FSMs
-
-Two FSMs are equivalent if they accept the same language. Often, an FSM can be **minimized**—reduced to fewer states while maintaining the same behavior.
-
-### What Does "Minimal" Mean?
-
-A minimal DFA is the smallest possible FSM (fewest states) that still recognizes the same language. Sometimes you can build different FSMs that accept exactly the same strings, but one has more states than necessary.
-
-**Example:** Two FSMs that both accept "strings ending in 'ab'" :
-
-- **Bloated version** (5 states): Might have redundant states that behave identically—like having two different "saw an 'a'" states
-- **Minimal version** (3 states): Start → SawA → SawAB (accepting)
-
-Both accept the same language, but the minimal one is more efficient.
-
-### Minimization Example
-
-Consider an FSM that accepts strings containing either "aa" or "bb" as a substring.
-
-**A non-minimal FSM:**
-
-This FSM works, but states `S2` and `S4` are redundant. They are both accepting states, and from there on, any input leads back to the same state. They are functionally identical.
-
-```mermaid
-stateDiagram-v2
-    direction LR
-    classDef accepting fill:#48bb78,stroke:#cbd5e0,stroke-width:2px,color:#fff
-
-    [*] --> S0
-    S0 --> S1: a
-    S0 --> S3: b
-    S1 --> S2: a
-    S1 --> S3: b
-    S2 --> S2: a
-    S2 --> S2: b
-    S3 --> S1: a
-    S3 --> S4: b
-    S4 --> S4: a
-    S4 --> S4: b
-    S2:::accepting
-    S4:::accepting
-```
-
-**The minimal FSM:**
-
-By merging the equivalent states `S2` and `S4` into a single accepting state (`S24`), we get a minimal FSM that recognizes the exact same language with fewer states.
-
-```mermaid
-stateDiagram-v2
-    direction LR
-    classDef accepting fill:#48bb78,stroke:#cbd5e0,stroke-width:2px,color:#fff
-
-    [*] --> S0
-    S0 --> S1: a
-    S0 --> S3: b
-    S1 --> S24: a
-    S1 --> S3: b
-    S3 --> S1: a
-    S3 --> S24: b
-    S24 --> S24: a
-    S24 --> S24: b
-    S24:::accepting
-```
-
-### Why Minimize?
-
-- **Fewer states** = less memory
-- **Fewer transitions** = faster lookup
-- **Canonical form** = minimal DFAs for the same language are identical, enabling comparison
-
-### Hopcroft's Algorithm
-
-**Hopcroft's algorithm** automatically finds and removes redundant states from any DFA, producing the minimal version. It's like a "compression" algorithm for FSMs.
-
-**When is this useful?**
-
-When you write a regex like `a*b+`, there are automatic algorithms that convert it into an FSM. But the generated FSM often has extra, redundant states. Minimization algorithms clean this up, giving you the most efficient FSM possible.
+For complex FSMs with many states, a transition table (dictionary/map keyed on `(state, input)`) scales better than nested conditionals — the logic stays data rather than code.
 
 ## Practice Problems
 
@@ -992,6 +677,35 @@ When you write a regex like `a*b+`, there are automatic algorithms that convert 
     Create an FSM that accepts strings over {a, b} that contain an even number of a's.
 
     Hint: How many states do you need? What do they represent?
+
+    ??? tip "Solution"
+
+        **Two states are sufficient:**
+
+        - **S0** (initial, accepting) — even number of `a`s seen so far (including zero)
+        - **S1** — odd number of `a`s seen so far
+
+        **Transitions:**
+
+        - `a` toggles between states: S0 → S1, S1 → S0
+        - `b` keeps you in the same state: S0 → S0, S1 → S1
+
+        ```mermaid
+        stateDiagram-v2
+            direction LR
+            [*] --> S0
+            S0 --> S1 : a
+            S1 --> S0 : a
+            S0 --> S0 : b
+            S1 --> S1 : b
+            S0 --> [*]
+        ```
+
+        **Trace for `"abba"`:** S0 →(a)→ S1 →(b)→ S1 →(b)→ S1 →(a)→ S0. Accepted ✓
+
+        **Trace for `"aba"`:** S0 →(a)→ S1 →(b)→ S1 →(a)→ S0. Wait — S0 is accepting, so this is accepted. But "aba" has 2 a's, which is even. Correct ✓
+
+        **Key insight:** You never need to count the actual *number* of a's — only the *parity* (even or odd). Two states perfectly capture parity. This is a general pattern: if you only care about a value modulo N, you need exactly N states.
 
 ??? question "Practice Problem 2: Vending Machine"
 
@@ -1003,12 +717,44 @@ When you write a regex like `a*b+`, there are automatic algorithms that convert 
 
     What are your states? (Hint: think about accumulated amounts)
 
+    ??? tip "Solution"
+
+        **States represent accumulated amounts:** S0, S5, S10, S15, S20, S25, plus DISPENSE (accepting).
+
+        | From | Nickel (+5¢) | Dime (+10¢) | Quarter (+25¢) |
+        |:-----|:------------|:------------|:---------------|
+        | S0 | S5 | S10 | S25 |
+        | S5 | S10 | S15 | DISPENSE |
+        | S10 | S15 | S20 | DISPENSE |
+        | S15 | S20 | S25 | DISPENSE |
+        | S20 | S25 | DISPENSE | DISPENSE |
+        | S25 | DISPENSE | DISPENSE | DISPENSE |
+        | DISPENSE | S0 | S0 | S0 |
+
+        DISPENSE is the accepting state. It automatically transitions back to S0 after dispensing — no change is returned in this model (a common simplification).
+
+        **Why this works:** The possible accumulated amounts are finite and bounded (0¢ to 25¢ before dispensing). The FSM has exactly enough states to track each amount. This is the FSM sweet spot: finite, bounded state space, where each state has a clear meaning.
+
+        **Why it wouldn't work for a different design:** If the machine returned exact change, you'd need to track arbitrary amounts — potentially unbounded. That would require infinite states, which violates the FSM definition.
+
 ??? question "Practice Problem 3: Prove It's Not Regular"
 
     The language \( L = \{a^nb^n \mid n \geq 0\} \) is not regular.
 
     Try to design an FSM for it. Where do you get stuck?
     What would you need that an FSM doesn't have?
+
+    ??? tip "Solution"
+
+        **Where you get stuck:**
+
+        To build the FSM, you'd need one state for "seen 0 a's," another for "seen 1 a," another for "seen 2 a's," and so on — because you must remember exactly how many a's you saw in order to accept the same number of b's. Since `n` is unbounded, you'd need an infinite number of states. FSMs have a *finite* state count by definition. The construction fails.
+
+        **What you'd need that FSMs don't have:** A counter — memory that grows with the input. An FSM's only memory is its current state, which is fixed at design time. A **pushdown automaton** (PDA) — an FSM extended with a stack — can solve this: push one symbol per `a`, then pop one per `b`. When the stack is empty after all the b's, accept.
+
+        **Formal argument (Pumping Lemma sketch):** Suppose `L` were regular with pump length `p`. Consider the string `a^p b^p`. The pump substring must fall entirely within the a's (at the start). Repeating the pump — pumping up — produces `a^{p+k} b^p` for some `k > 0`. This string is not in `L` because it has more a's than b's. Contradiction. Therefore `L` is not regular.
+
+        **Why this matters in practice:** `{a^n b^n}` is the canonical example of why regex cannot match balanced parentheses or validate matching XML/HTML tags. Those structures require counting depth, which requires a stack — which is exactly what parsers provide.
 
 ## Key Takeaways
 
@@ -1024,18 +770,10 @@ When you write a regex like `a*b+`, there are automatic algorithms that convert 
 
 ## Further Reading
 
-More articles coming soon on related topics:
+**On This Site**
 
-- [Regular Expressions](regular_expressions.md) — Another notation for regular languages
-- [Recursive Transition Networks](recursive_transition_networks.md) — FSMs with recursion
-- [Backus-Naur Form](backus_naur_form.md) — Describing context-free languages
+- [Regular Expressions: The Formal Model](regular_expressions.md) — How regex patterns compile to automata, why backtracking causes ReDoS, and what regex cannot match
 
 ---
 
-FSMs are the "hello world" of computation theory—simple enough to fully understand, powerful enough to be genuinely useful. Every computer scientist should have them in their mental toolkit. They're proof that sometimes, constraints (finite states, no memory) force elegant solutions. 🔄
-
-## Video Summary
-
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/PfGFLUkiv74" title="Finite State Machines" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-</div>
+FSMs are the "hello world" of computation theory — simple enough to fully understand, powerful enough to be genuinely useful. They're also a practical engineering tool: making state explicit, transitions enumerable, and behavior testable. When a system's complexity comes from the number of states rather than the logic within each state, an FSM is usually the right model.

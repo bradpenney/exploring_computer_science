@@ -1,13 +1,48 @@
 ---
+title: Scheme, Lisp, and Parse Trees - When Code Is Its Own Parse Tree
 description: "Why Lisp and Scheme use parentheses: Understanding prefix notation and parse trees."
 ---
 # Scheme, Lisp, and Parse Trees
 
-When you write `3 + 4 * 5` in mathematics, everyone agrees it means `3 + (4 * 5) = 23`, not `(3 + 4) * 5 = 35`. Operator precedence rules—memorized through years of schooling—determine this. But what if there were a notation that never needed precedence rules? What if the structure of the expression itself made evaluation order crystal clear?
+You've probably encountered Lisp or Scheme — in a CS course, as the language Emacs is configured in, or as the ancestor of Clojure and Racket. The parentheses everywhere can look alien at first.
 
-Enter **Lisp** and its dialect **Scheme**: languages where parentheses aren't decorative—they're structural. Where `(+ 3 (* 4 5))` is unambiguous. Where the written form directly reflects the parse tree that represents it.
+Those parentheses are the point.
 
-Understanding Scheme's prefix notation and its parse trees reveals something profound: the notation you choose shapes how you think about computation.
+Scheme uses a notation where the structure of the code *is* the parse tree. There's no separate precedence table to memorize, no ambiguous infix to resolve — the syntax and the internal representation are the same thing. `(+ 3 (* 4 5))` is unambiguous on its face: add 3 to the result of multiplying 4 and 5.
+
+**Understanding this makes the theory of every other language's parser click into place.**
+
+When your Python or Go runtime parses `3 + 4 * 5`, it builds an internal tree to handle operator precedence. In Scheme, that tree is visible directly in the source code. Studying Scheme means studying [parse trees](../../efficiency/how_parsers_work.md) with the training wheels off.
+
+## Where You've Seen This
+
+Lisp's influence is everywhere in modern programming:
+
+- **Emacs configuration** — every `.emacs` or `init.el` is Lisp code; Emacs Lisp (Elisp) is a production Lisp dialect used daily
+- **Clojure and ClojureScript** — production Lisps on the JVM and JavaScript runtimes, used in real companies; Clojure's transducers and persistent data structures come directly from Lisp lineage
+- **JSON's structure** — nested objects and arrays are S-expressions by a different name; the same "lists of atoms and lists" model
+- **`map`, `filter`, `reduce`** — these functional patterns were invented in Lisp in the 1950s and are now in Python, JavaScript, Go, Rust, Java, and every modern language
+- **Macros** — Rust macros, C++ template metaprogramming, and Python metaclasses all descend from Lisp's "code is data" insight
+- **Python's `ast` module** — lets you inspect and manipulate Python's parse tree; the same concept Scheme makes visible in its syntax
+- **Hiccup / Reagent** — ClojureScript frameworks represent HTML as Lisp data structures, turning your template into a parse tree
+
+## Why This Matters for Production Code
+
+=== ":material-file-tree: Understanding Parse Trees"
+
+    When you debug a `SyntaxError` or read a compiler error message with line and column numbers, a parse tree is what failed to build. Scheme makes the relationship between source code and parse tree visible — the parentheses ARE the tree structure. Once you see that, the parse trees in Python, Go, and JavaScript stop being mysterious internal implementation details.
+
+=== ":material-function-variant: Functional Patterns in Modern Languages"
+
+    `Array.prototype.map()`, `filter()`, `reduce()` in JavaScript. `list(map(...))`, `filter()`, `functools.reduce()` in Python. `Iterator::map()`, `Iterator::filter()` in Rust. All of these came from Lisp. Understanding them in Scheme — where they're just higher-order functions on lists — explains why they compose the way they do in modern languages.
+
+=== ":material-code-tags: Code as Data"
+
+    Lisp's most powerful idea is homoiconicity: code and data have the same structure. This is why Lisp macros can transform code before it runs, and it's the conceptual foundation behind Python decorators, Rust `derive` macros, and metaprogramming everywhere. Understanding "code is data" in Scheme makes these patterns in other languages more legible.
+
+=== ":material-language-clojure: Clojure in Production"
+
+    Clojure is a modern Lisp running on the JVM — the same JVM your Java services run on. Companies like Nubank (the world's largest digital bank) and Stripe have used Clojure in production. Its persistent data structures and software transactional memory (STM) model solve concurrency problems directly. You don't have to use Scheme specifically — but understanding it gives you context for Clojure's design decisions.
 
 ??? tip "The Lisp Family: A Quick Map"
 
@@ -50,7 +85,7 @@ This is **prefix notation**—the operator comes first, followed by its operands
 
 1. **No precedence rules needed**: Parentheses make structure explicit
 2. **Uniform syntax**: Everything is `(function arg1 arg2 ...)`
-3. **Easy to parse**: No need for precedence-climbing or [shunting-yard algorithms](how_parsers_work.md)
+3. **Easy to parse**: No need for precedence-climbing or [shunting-yard algorithms](../../efficiency/how_parsers_work.md)
 4. **Variable number of arguments**: `(+ 1 2 3 4 5)` works naturally
 
 **Disadvantages:**
@@ -221,7 +256,7 @@ Let's build intuition by reading Scheme expressions aloud.
 
 ## Parse Trees for Scheme
 
-A **[parse tree](binary_trees_and_representation.md)** (or **abstract syntax tree**, AST) represents the grammatical structure of an expression as a tree.
+A **[parse tree](../../essentials/trees_basics.md)** (or **abstract syntax tree**, AST) represents the grammatical structure of an expression as a tree.
 
 For Scheme, the correspondence between written form and parse tree is particularly direct—parentheses literally define tree structure.
 
@@ -394,7 +429,7 @@ To solve this, we rely on **Precedence Rules** (PEMDAS). You have to memorize th
         style Plus fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
         style Times fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
         style Rules fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
-        style R1 fill:#48bb78,stroke:#cbd5e0,stroke-width:2px,color:#fff
+        style R1 fill:#326CE5,stroke:#cbd5e0,stroke-width:2px,color:#fff
     ```
 
 === ":material-check-circle-outline: Prefix (Explicit)"
@@ -562,7 +597,7 @@ def parse(tokens):  # (1)!
 
     ??? tip "Recursion and the Call Stack"
 
-        Every recursive call relies on the **[function call stack](../data_structures/abstract_data_types_and_stack.md#function-call-stack)**—a fundamental data structure that manages function execution.
+        Every recursive call relies on the **function call stack**—a fundamental data structure that manages function execution.
 
         When `(factorial 5)` runs, the stack grows with each recursive call:
         ```
@@ -584,7 +619,7 @@ You might reasonably ask: why learn Scheme when modern languages like Python, Ja
     Scheme strips away syntax complexity, letting you focus on computational concepts:
 
     - Recursion without boilerplate
-    - [Higher-order functions](../programming_languages/procedures_and_higher_order_functions.md) without ceremony
+    - [Higher-order functions](higher_order_functions.md) without ceremony
     - Closures and scope made explicit
 
 === ":material-file-tree: Understanding Parsers"
@@ -791,15 +826,9 @@ You don't need to write Scheme professionally to benefit from understanding it. 
 
 - **Abelson & Sussman, [Structure and Interpretation of Computer Programs](https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/index.html)** — The definitive Scheme textbook
 - **David Evans, [Introduction to Computing](https://computingbook.org/)** — Chapter 2 covers RTNs and parsing
-- **[Recursive Transition Networks](recursive_transition_networks.md)** — How grammars define parse trees
-- **[Computational Thinking](computational_thinking.md)** — Abstraction and decomposition in practice
+- **[Recursive Transition Networks](../formal_languages/recursive_transition_networks.md)** — How grammars define parse trees
+- **[Computational Thinking](../../efficiency/computational_thinking.md)** — Abstraction and decomposition in practice
 
 ---
 
-Scheme strips programming down to its essence: [functions](../programming_languages/procedures_and_higher_order_functions.md), data, and recursion. What remains is computation in its purest form—no syntax tricks, no precedence tables, just structure made explicit through parentheses. It's not the notation most programmers use daily, but understanding it changes how you think about all the notations you do use.
-
-## Video Summary
-
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/2v6XPK6N4ok" title="Scheme and Parse Trees" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-</div>
+Scheme strips programming down to its essence: [functions](higher_order_functions.md), data, and recursion. What remains is computation in its purest form—no syntax tricks, no precedence tables, just structure made explicit through parentheses. It's not the notation most programmers use daily, but understanding it changes how you think about all the notations you do use.

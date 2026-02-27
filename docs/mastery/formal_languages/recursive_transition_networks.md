@@ -1,13 +1,45 @@
 ---
+title: Recursive Transition Networks - Visual Grammars for Nested Languages
 description: "Recursive Transition Networks (RTNs): The visual way to describe complex, nested grammars."
 ---
 # Recursive Transition Networks (RTNs)
 
-When you write `x = 3 + 4 * 2` in any programming language, the compiler knows—without ambiguity—that this means `3 + (4 * 2)`, not `(3 + 4) * 2`. When you type "The cat sat on the mat," a grammar checker can instantly tell it's valid English, while "Cat the mat on sat the" is nonsense. How do these systems make such determinations?
+When you write `x = 3 + 4 * 2`, the language runtime evaluates it as `3 + (4 * 2) = 11`, not `(3 + 4) * 2 = 14`. This isn't an arbitrary rule — it emerges from the *structure* of the grammar used to parse your code. The parser doesn't just check if the expression is valid; it builds a tree that encodes the correct evaluation order.
 
-The answer lies in **Recursive Transition Networks**—a visual, intuitive formalism for describing the grammatical structure of languages, whether programming languages, natural languages, or anything with compositional rules.
+**Recursive Transition Networks** are the visual formalism that makes this visible. They're directed graphs that describe grammars — the same grammars your compilers, parsers, and data validators implement — in a form you can trace by hand.
 
-RTNs extend [Finite State Machines](finite_state_machines.md) with a crucial capability: the ability to call other networks recursively. This single addition transforms them from recognizers of simple patterns into powerful tools for parsing arbitrarily nested structures.
+RTNs extend [Finite State Machines](../../efficiency/finite_state_machines.md) with one crucial capability: the ability to call other networks recursively. This addition transforms them from recognizers of simple patterns into tools for parsing arbitrarily nested structures — expressions inside parentheses, objects inside arrays, subqueries inside queries.
+
+## Where You've Seen This
+
+RTN structure appears in every parser-heavy system in your stack:
+
+- **Language runtimes** — Python, Go, and JavaScript parsers use recursive descent, which maps directly to RTN structure. Your `SyntaxError: unexpected (` came from an RTN failing to find a valid path.
+- **JSON and nested data** — JSON objects containing arrays containing objects are handled by a recursive grammar. `json.loads()` implements exactly this structure.
+- **SQL subqueries** — `SELECT * FROM (SELECT ...)` works because the SQL grammar handles expression nesting via recursion.
+- **HTML/DOM** — `<div>` containing `<span>` containing text is a recursive grammar. The browser parser builds a tree from it.
+- **Math expression parsers** — calculators, spreadsheet formulas, and template engines all parse expressions using recursive grammars.
+- **Your IDE** — syntax highlighting, code folding, and autocomplete all depend on RTN-based parsing of your code in real time.
+
+## Why This Matters for Production Code
+
+=== ":material-code-braces: Recursive Descent Parsers"
+
+    The most common production parser technique — recursive descent — maps directly to RTN structure. Each non-terminal becomes a function; each function calls other functions for its sub-grammars. When you see a `parse_expression()` that calls `parse_term()` that calls `parse_factor()`, you're seeing RTN structure expressed in code.
+
+    Understanding RTNs means you can read, write, and debug recursive parsers — including the parsers in every language runtime you use.
+
+=== ":material-math-integral: Operator Precedence"
+
+    Operator precedence bugs (`3 + 4 * 2 = 11`, not `14`) aren't arbitrary — they emerge from grammar hierarchy. The rule that `*` binds tighter than `+` is encoded by placing multiplication deeper in the grammar network. Understanding RTNs turns "the language does it this way" from a memorized rule into an understandable design decision.
+
+=== ":material-code-json: Nested Data Structures"
+
+    JSON objects can contain arrays that contain objects. HTML elements can contain other elements. SQL subqueries nest inside queries. RTNs are why parsers for these formats handle arbitrary nesting — recursion in the grammar mirrors the recursion in the data. Every time you write `data['user']['address']['city']`, you're accessing something a recursive parser built.
+
+=== ":material-tools: Building Parsers"
+
+    If you've written a parser for a config format, log structure, or expression language, you've implicitly implemented RTN logic. Making the grammar explicit — identifying terminals, non-terminals, and recursive rules — turns an ad-hoc string parser into a maintainable, testable system. This is what parser generators like ANTLR formalize.
 
 ## What is a Recursive Transition Network?
 
@@ -413,16 +445,11 @@ While RTNs recognize context-free languages, they can't enforce context-sensitiv
 
 Naive RTN traversal can be inefficient for some grammars, requiring backtracking. Modern parsing algorithms optimize this.
 
-## Why RTNs Matter
+## RTNs in the Bigger Picture
 
-Understanding RTNs provides insight into:
+RTNs bridge the gap between two formalisms: [Finite State Machines](../../efficiency/finite_state_machines.md) (too limited for nested structures) and full context-free grammars (precise but abstract). They make grammar visual — a traced path through a graph is more concrete than a formal proof.
 
-- **Compiler design**: How programming languages are parsed
-- **Natural language processing**: How sentence structure is analyzed
-- **Data validation**: How formats like JSON or XML are validated
-- **[Computational thinking](computational_thinking.md)**: Breaking complex structures into composable, recursive pieces
-
-RTNs make the abstract concrete. They turn "grammar" from a vague concept into a precise, traceable mechanism you can follow by hand or implement in code.
+Every parser you work with — language runtime, config loader, query engine — implements the same logic as an RTN, whether or not the implementation is described that way. Recognizing the pattern means you can reason about any of them.
 
 ## Practice Problems
 
@@ -540,21 +567,14 @@ RTNs make the abstract concrete. They turn "grammar" from a vague concept into a
 
 ## Further Reading
 
-- **William A. Woods (1970)** — "Transition Network Grammars for Natural Language Analysis" (the original paper)
 - **David Evans, [Introduction to Computing](https://computingbook.org/)** — Chapter 2 covers RTNs and formal languages
-- **[Scheme & Parse Trees](scheme_and_parse_trees.md)** — A language where the grammar is just nested lists
-- **[Binary Trees & Representation](binary_trees_and_representation.md)** — Tree structures and parse trees
-- **[Computational Thinking](computational_thinking.md)** — RTNs exemplify decomposition and abstraction
+- **[Scheme & Parse Trees](../functional_programming/scheme_and_parse_trees.md)** — A language where the grammar is just nested lists
+- **[Trees](../../essentials/trees_basics.md)** — Tree structures and parse trees
+- **[Computational Thinking](../../efficiency/computational_thinking.md)** — RTNs exemplify decomposition and abstraction
 - **[Backus-Naur Form](backus_naur_form.md)** — Textual notation for context-free grammars
 
 ---
 
-Recursive Transition Networks transform the abstract notion of "grammar" into something you can see, trace, and reason about. They bridge the gap between finite state machines (too simple for nesting) and full context-free grammars (precise but less visual). In doing so, they make parsing—a fundamental task in computer science—accessible and intuitive.
+Recursive Transition Networks transform the abstract notion of "grammar" into something you can see, trace, and reason about. By making the recursive structure explicit — networks calling networks — they reveal why operator precedence works, why nested structures parse correctly, and why recursive descent is the implementation technique of choice.
 
-Every time a compiler checks your code or a grammar checker analyzes your writing, something very much like an RTN is working behind the scenes. Understanding how these networks operate gives you insight into one of the most ubiquitous problems in computing: making sense of structured input.
-
-## Video Summary
-
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/S2G4QGy5vGE" title="Recursive Transition Networks Explained" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-</div>
+Every parser in your stack — language runtime, JSON loader, SQL engine, HTML renderer — implements this logic. The specific tool may be a LALR generator or a hand-written recursive descent parser, but the underlying grammar structure is the same. Knowing RTNs means you know what's there, even when you can't see the source code.

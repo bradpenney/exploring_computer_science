@@ -55,8 +55,9 @@ The site serves as a teaching tool, portfolio, and personal reference for engine
 - **Bridge the gap**: They know HOW things work practically—teach them WHY theoretically
 - **Provide context**: Show where they've already used this concept without knowing the formal theory
 - **Make it relevant**: Explain why understanding this theory makes them better engineers
-- **Stay sharp**: Every sentence should earn its place. If a section doesn't clearly serve the article's core purpose, cut it — don't pad.
+- **Stay sharp — punchy beats thorough**: Every sentence should earn its place. Long articles lose readers. A 700-line article that a working engineer actually reads cover-to-cover delivers more value than a 1,400-line article they skim and abandon. When in doubt, cut. If a section doesn't clearly serve the article's core purpose, remove it — don't pad.
 - **Cross-link, don't cram**: When a concept touches adjacent topics (data structures, sorting algorithms, etc.), link to the future article rather than covering it inline. Articles should be focused and tight, not encyclopedic.
+- **Concept checks are not the persona's style**: Avoid scattering "Concept Check" or quiz-style exercises throughout an article — this reads like a textbook, not an engineering reference. A few practice problems at the end is the right pattern. The persona reads to learn, not to be tested at every step.
 
 ### Article Opening Patterns
 
@@ -157,10 +158,13 @@ The site has comprehensive SEO optimization:
 
 ```yaml
 ---
-title: Clear, Descriptive Title (50-60 chars ideal)
+title: "Title With a Colon: Must Be Quoted"
+title: Plain Title Without Colon
 description: Compelling description for search results (150-160 chars ideal)
 ---
 ```
+
+**CRITICAL**: If the title contains a colon (`:`) it **must** be quoted — e.g. `title: "Type Systems: The Contract Behind Every Variable"`. An unquoted colon causes PyYAML to misparse the frontmatter, breaking the title and description metadata silently.
 
 **Rules:**
 
@@ -453,18 +457,35 @@ ALWAYS wrap technical terms, command names, and function names in backticks when
 
 **Common items to wrap:** Unix commands (`ls`, `grep`, `find`), programming functions, algorithm names, data structure operations (`push`, `pop`, `enqueue`), system calls, technical terms when used as code references
 
-**Exceptions:**
+**Language-specific type and value names always need backticks in prose:**
+- Python: `dict`, `list`, `tuple`, `str`, `int`, `bool`, `None`, `True`, `False`, `lambda`
+- JavaScript/TypeScript: `null`, `undefined`, `typeof`, `Array`, `Object`
+- Go: `nil`, `map`, `slice`, `goroutine`, `defer`
+- Rust: `Option`, `Result`, `Vec`, `Some`, `None`
+- Examples:
+  - ✅ "Should we use a `dict` or a `list` internally?"
+  - ✅ "returns `None` if the key is absent"
+  - ❌ "Should we use a dict or a list internally?"
+
+**Big-O notation must ALWAYS use LaTeX delimiters in prose:**
+- ✅ Correct: `$O(n)$`, `$O(1)$`, `$O(n^2)$`, `$O(n \log n)$`
+- ❌ Wrong: `O(n)`, `O(1)`, `O(n²)` in plain prose text
+- Exception: Big-O inside fenced code blocks or table cells that are already in `$...$` context
+
+**Exceptions (no backticks needed):**
 - Code inside code blocks (already formatted)
 - Terms in mermaid diagrams
 - Casual use of technical terms in normal prose (e.g., "sorting algorithms" vs "`quicksort`" specifically)
+- Conceptual uses where the word is not language-specific (e.g., "the null case" in formal language theory describing Scheme's empty list)
 
 - Articles should be teaching-focused, not just notes
-- Use mermaid diagrams for visual concepts. **Follow the project's 'Slate' color scheme for consistency:**
+- Use mermaid diagrams for visual concepts. **Follow the project's Slate + Kubernetes color scheme for consistency:**
   - **Standard Node (Slate 800):** `fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff`
   - **Highlighted Node (Slate 700):** `fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff`
   - **Darker Node (Slate 900):** `fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff`
-  - **Accent Node (Green):** `fill:#48bb78,stroke:#cbd5e0,stroke-width:2px,color:#fff`
+  - **Accent Node (Kubernetes Blue):** `fill:#326CE5,stroke:#cbd5e0,stroke-width:2px,color:#fff`
   - *Always explicitly style nodes using these hex codes to ensure readability in the dark theme.*
+  - *Do NOT use bright green (#48bb78 or similar) — it is too vivid against the dark background.*
 - Include practice problems with expandable solutions (`??? question`)
 - Cross-link related articles using markdown links
 - Use admonitions for tips and callouts:
@@ -728,6 +749,8 @@ Before publishing an article:
 
 - [ ] All code blocks have `title=` attribute
 - [ ] **CRITICAL: Blank lines before ALL lists** (recurring issue - check every list in article)
+- [ ] **Big-O notation uses LaTeX in prose** — `$O(n)$` not `O(n)`; check every complexity mention outside code blocks
+- [ ] **Language-specific types/values in backticks** — `dict`, `list`, `None`, `null`, `nil`, `True`, `False`, etc. when used as code references in prose
 - [ ] Code tabs properly indented (4 spaces for content, more for nested elements)
 - [ ] Admonitions used appropriately
 - [ ] Mermaid diagrams follow site color scheme

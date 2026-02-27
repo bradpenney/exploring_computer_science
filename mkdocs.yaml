@@ -49,16 +49,26 @@ plugins:
   - meta
   - exclude:
       glob:
-        - "essentials/what_is_computer_science.md"
+        # Essentials drafts
         - "essentials/stacks_and_queues.md"
         - "essentials/linked_lists.md"
         - "essentials/queues_and_deques.md"
-        - "essentials/trees_basics.md"
-        - "essentials/recursion.md"
         - "essentials/searching_linear_vs_binary.md"
         - "essentials/sorting_elementary.md"
         - "essentials/big_o_time_complexity.md"
-        - "efficiency/**"
+        # Efficiency drafts
+        - "efficiency/big_o_space_complexity.md"
+        - "efficiency/binary_search_trees.md"
+        - "efficiency/database_fundamentals.md"
+        - "efficiency/graph_traversal.md"
+        - "efficiency/information_security_basics.md"
+        - "efficiency/oop/**"
+        - "efficiency/programming_paradigms.md"
+        - "efficiency/sorting_insertion.md"
+        - "efficiency/sorting_merge.md"
+        - "efficiency/sorting_quick.md"
+        - "efficiency/systems/**"
+        # Mastery (returning to draft for essentials/efficiency-only release)
         - "mastery/**"
   - social:
       cards: true
@@ -101,37 +111,45 @@ extra_javascript:
   - javascripts/mathjax.js
   - https://polyfill.io/v3/polyfill.min.js?features=es6
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  - https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js
+  - javascripts/charts.js
 
 nav:
   - Home: index.md
   - 📦 Essentials:
+      - What is Computer Science?: essentials/what_is_computer_science.md
       - Big-O Notation: essentials/big_o_notation.md
-#      - What is Computer Science?: essentials/what_is_computer_science.md
-#      - Big-O (old draft): essentials/big_o_time_complexity.md
-#      - Data Structures:
+      - Type Systems Basics: essentials/type_systems_basics.md
+      - Regular Expressions: essentials/regular_expressions.md
+      - Core Algorithms:
+          - Recursion: essentials/recursion.md
+      - Data Structures:
+          - Trees: essentials/trees_basics.md
+#      - Data Structures (drafts):
 #          - Stacks & Queues: essentials/stacks_and_queues.md
 #          - Linked Lists: essentials/linked_lists.md
 #          - Queues & Deques: essentials/queues_and_deques.md
-#          - Trees: essentials/trees_basics.md
-#      - Core Algorithms:
-#          - Recursion: essentials/recursion.md
+#      - Core Algorithms (drafts):
 #          - Searching: essentials/searching_linear_vs_binary.md
 #          - Sorting Basics: essentials/sorting_elementary.md
-#  - ⚡ Efficiency:
-#      - Computational Thinking: efficiency/computational_thinking.md
+  - ⚡ Efficiency:
+      - Computational Thinking: efficiency/computational_thinking.md
+      - Languages & Parsing:
+          - Finite State Machines: efficiency/finite_state_machines.md
+          - Regular Expressions: efficiency/regular_expressions.md
+          - How Parsers Work: efficiency/how_parsers_work.md
+          - Compilers vs. Interpreters: efficiency/compilers_vs_interpreters.md
+      - Data Structures:
+          - Lists as Recursive Structures: efficiency/lists_recursive_structure.md
 #      - Big-O Space Complexity: efficiency/big_o_space_complexity.md
-#      - Data Structures:
+#      - Data Structures (drafts):
 #          - Binary Search Trees: efficiency/binary_search_trees.md
 #          - Graph Traversal: efficiency/graph_traversal.md
 #      - Sorting Algorithms:
 #          - Insertion Sort: efficiency/sorting_insertion.md
 #          - Merge Sort: efficiency/sorting_merge.md
 #          - Quick Sort: efficiency/sorting_quick.md
-#      - Languages & Parsing:
-#          - Regular Expressions: efficiency/regular_expressions.md
-#          - Finite State Machines: efficiency/finite_state_machines.md
-#          - How Parsers Work: efficiency/how_parsers_work.md
-#          - Compilers vs Interpreters: efficiency/compilers_vs_interpreters.md
+#      - Languages & Parsing (drafts):
 #          - Programming Paradigms: efficiency/programming_paradigms.md
 #      - Object-Oriented Programming:
 #          - Classes & Objects: efficiency/oop/oop_classes_and_objects.md
@@ -147,16 +165,18 @@ nav:
 #          - Database Fundamentals: efficiency/database_fundamentals.md
 #          - Information Security Basics: efficiency/information_security_basics.md
 #  - 🎯 Mastery:
+#      - Information Theory: mastery/information_theory.md
 #      - Formal Languages:
-#          - Backus-Naur Form: mastery/formal_languages/backus_naur_form.md
 #          - Recursive Transition Networks: mastery/formal_languages/recursive_transition_networks.md
+#          - Backus-Naur Form: mastery/formal_languages/backus_naur_form.md
+#      - Functional Programming:
+#          - "Scheme: A Primer": mastery/functional_programming/scheme_primer.md
+#          - Higher-Order Functions: mastery/functional_programming/higher_order_functions.md
+#          - Scheme & Parse Trees: mastery/functional_programming/scheme_and_parse_trees.md
+#      - Abstract Data Types: mastery/abstract_data_types.md
 #      - Computability Theory:
 #          - Turing Machines: mastery/computability/turing_machines.md
 #          - The Halting Problem: mastery/computability/the_halting_problem.md
-#      - Functional Programming:
-#          - Scheme Primer: mastery/functional_programming/scheme_primer.md
-#          - Higher-Order Functions: mastery/functional_programming/higher_order_functions.md
-#          - Scheme & Parse Trees: mastery/functional_programming/scheme_and_parse_trees.md
 #      - Systems:
 #          - Virtual Machines: mastery/systems/virtual_machines.md
 #          - Cloud & Edge Computing: mastery/systems/cloud_and_edge_computing.md
@@ -164,7 +184,6 @@ nav:
 #          - How Interpreters Work: mastery/how_interpreters_work.md
 #          - ACID & Normalization: mastery/database_acid_and_normalization.md
 #          - Big Data & NoSQL: mastery/big_data_and_nosql.md
-#          - Information Theory: mastery/information_theory.md
 #      - Security:
 #          - Cryptography Basics: mastery/security/cryptography_basics.md
 #      - Modern Topics:

@@ -1,11 +1,37 @@
 ---
+title: Computational Thinking - The Mental Framework Behind Good Engineering
 description: "Master the mental toolkit of computer science: Decomposition, Pattern Recognition, Abstraction, and Algorithm Design."
 ---
 # Computational Thinking
 
-Before you can write code, you need to *think* in a way that computers can follow. That's not about memorizing syntax or learning keyboard shortcuts—it's about developing a mental toolkit for breaking down problems, spotting patterns, and building solutions that scale.
+You've broken a large feature into tickets. You've recognized that a new problem is "basically the same as the caching issue we solved last quarter." You've written a function to hide SMTP configuration from the rest of your codebase. You've sketched out a step-by-step plan before writing a single line of code.
 
-This toolkit is called **computational thinking**, and it's arguably more important than any programming language you'll ever learn. Languages come and go; the ability to think systematically about problems is forever.
+You've been practicing computational thinking all along. You just didn't have the formal vocabulary for it.
+
+**This is the CS theory behind systematic problem-solving.**
+
+Computational thinking is a framework of four mental skills that underpin how computer scientists — and good engineers — approach problems. Understanding it formally sharpens instincts you already have and gives you a vocabulary for thinking about why some solutions are better than others.
+
+!!! info "Learning Objectives"
+
+    By the end of this article, you'll be able to:
+
+    - Name and define the four pillars: decomposition, pattern recognition, abstraction, and algorithm design
+    - Apply decomposition to break any engineering problem into independently solvable pieces
+    - Recognize patterns that allow you to reuse known solutions instead of starting from scratch
+    - Write an algorithm precise enough for a computer to execute without ambiguity
+    - Explain why good abstraction makes code testable, maintainable, and composable
+
+## Where You've Seen This
+
+The four pillars of computational thinking map directly to things you do in production engineering:
+
+- **Decomposition** — breaking a feature into tickets, a service into endpoints, a bug into a reproduction case
+- **Pattern recognition** — spotting that a new problem is "basically just a queue" or "this is the same N+1 query we had last time"
+- **Abstraction** — writing a function instead of copy-pasting logic, using a library instead of reimplementing from scratch, defining an interface instead of exposing internals
+- **Algorithm design** — writing pseudocode before implementation, designing a data pipeline, thinking through edge cases before they become production incidents
+
+Formal CS gives these instincts precise definitions and names.
 
 ## The Four Pillars
 
@@ -29,7 +55,7 @@ Computational thinking rests on four core skills. They're not steps to follow in
     - Style everything with CSS
     - Deploy to a server
 
-    Suddenly, you have a todo list instead of an existential crisis. 📝 Much better.
+    Suddenly, you have a todo list instead of an existential crisis. Much better.
 
     **Example: Making Breakfast**
 
@@ -40,7 +66,7 @@ Computational thinking rests on four core skills. They're not steps to follow in
     3. Prepare each item (eggs, toast, coffee)
     4. Plate and serve
 
-    Each sub-task can be further decomposed. "Make coffee" becomes: fill kettle, boil water, grind beans (freshly, obviously—pre-ground is for emergencies only), add to French press, pour water at exactly 200°F, wait four minutes, plunge, pour. ☕ Now we're cooking (or brewing). This is the most important sub-task, frankly.
+    Each sub-task can be further decomposed. "Make coffee" becomes: fill kettle, boil water, grind beans, add to French press, pour water at 200°F, wait four minutes, plunge, pour. Now we're cooking.
 
     ??? tip "Decomposition in Practice"
 
@@ -366,7 +392,7 @@ Computational thinking rests on four core skills. They're not steps to follow in
 
     ??? tip "Abstraction in Data Structures"
 
-        A prime example of abstraction in computing is the **[Abstract Data Type (ADT)](../data_structures/abstract_data_types_and_stack.md)**—a way of defining data structures by *what they do* rather than *how they're implemented*.
+        A prime example of abstraction in computing is the **Abstract Data Type (ADT)**—a way of defining data structures by *what they do* rather than *how they're implemented*.
 
         When you use a Stack, you call `PUSH` and `POP` without caring whether it's built with arrays or linked lists. That's abstraction hiding complexity behind a clean interface.
 
@@ -400,9 +426,9 @@ Computational thinking rests on four core skills. They're not steps to follow in
     7. Place the other slice on top, flat side down
     8. Close the peanut butter jar
 
-    Tedious? Yes. Unambiguous? Also yes. That's algorithm design. 🥪
+    Tedious? Yes. Unambiguous? Also yes. That's algorithm design.
 
-    ??? note "The Sandwich Exercise"
+    ??? tip "The Sandwich Exercise"
 
         This is a classic CS education exercise. Try writing instructions for making a sandwich,
         then have someone follow them *literally*. You'll quickly discover your assumptions.
@@ -453,6 +479,29 @@ For the matching algorithm:
 3. Sort items by relevance score (highest first)
 4. Return top 20 items
 
+## Why This Matters for Production Code
+
+These aren't abstract principles — they have direct consequences in how you write, review, and debug production systems.
+
+**Decomposition** is how you scope work. A bug report that says "the checkout is broken" isn't actionable. Decomposed: is the problem in the cart calculation, the payment API call, the order creation, or the confirmation email? Each piece can be isolated, reproduced, and fixed independently.
+
+**Pattern recognition** is how you leverage experience. Recognizing "this is an N+1 query" or "this is a cache invalidation problem" or "this is just a producer-consumer queue" means you can apply known solutions instead of reinventing from scratch. Senior engineers are fast largely because their pattern library is bigger.
+
+**Abstraction** is what makes code testable and maintainable. A function that does too much is hard to test because you can't isolate what's being verified. A module that exposes its internals is brittle because callers depend on implementation details. Good abstraction creates seams — clean boundaries that make code composable, replaceable, and easier to reason about.
+
+**Algorithm design** is the prerequisite for performance analysis. You can't reason about [Big-O complexity](../essentials/big_o_notation.md) until you can articulate the steps your code takes. "It scans every element, then for each match it scans again" is the description of $O(n^2)$ — but you have to have designed the algorithm explicitly to see that.
+
+## Technical Interview Context
+
+Computational thinking is the problem-solving process that underpins every coding interview — interviewers aren't just evaluating your solution, they're watching how you think.
+
+**Questions you'll be able to answer:**
+
+- *"Walk me through how you'd approach this problem"* — This is decomposition in action. Don't jump to code. Break the problem into inputs, outputs, and the steps between. Narrating your decomposition shows structured thinking, and it often reveals the key constraints before you've written a line.
+- *"Have you seen a similar problem before?"* — Pattern recognition question. Connect the current problem to known patterns (sliding window, BFS traversal, producer-consumer queue). The ability to say "this is essentially a topological sort" or "this is a cache invalidation problem" signals engineering maturity.
+- *"How would you simplify this?"* — Abstraction question. Hide the unnecessary detail, focus on the essential structure. Often the right answer is: "I'd model this as a graph and run BFS," stripping away the domain-specific framing to reveal the underlying algorithm.
+- *"What are the edge cases?"* — Structured decomposition applied to failure modes. Enumerate systematically: empty input, single element, duplicates, null values, maximum bounds. Interviewers check whether you think about boundaries before they become production bugs.
+
 ## Computational Thinking Beyond Code
 
 Here's the thing: computational thinking isn't just for programmers. These skills apply everywhere.
@@ -463,7 +512,7 @@ Here's the thing: computational thinking isn't just for programmers. These skill
 | **Law** | Decompose case → Pattern match to precedents → Abstract legal principles |
 | **Cooking** | Decompose recipe → Pattern match techniques → Abstract flavor profiles |
 | **Music** | Decompose song → Pattern match chord progressions → Abstract genre conventions |
-| **Debugging Life** | Decompose problem → Pattern match to past experiences → Abstract lessons learned 🐛 |
+| **Debugging** | Decompose symptom → Pattern match to past incidents → Abstract the root cause |
 
 The formal name is "computational thinking," but really it's just *structured problem-solving*.
 
@@ -496,6 +545,33 @@ Good abstraction hides complexity while preserving essential behavior. Bad abstr
 
     How would you break down just the "streak tracking" feature?
 
+    ??? tip "Solution"
+
+        **Core components of a habit tracker:**
+
+        - User Profile — authentication, settings, preferences
+        - Habit List — create, edit, delete habits; set frequency
+        - Tracking — record daily completions; mark today's habits done
+        - Streaks — calculate current and longest streak per habit
+        - Notifications — reminders at configured times
+        - Data Storage — local database or remote sync
+
+        **Breaking down "streak tracking" specifically:**
+
+        1. For each habit, store the date of each completion
+        2. To calculate current streak: start from today, walk backward through dates
+        3. If today and yesterday are both completed → streak continues
+        4. If yesterday is missing → streak = 1 (or 0 if today is also missing)
+        5. Longest streak: track a running max as you calculate
+
+        **Edge cases decomposition reveals:**
+
+        - Timezone handling: "today" depends on the user's timezone
+        - Habits with weekly frequency: adjacency rule is different from daily
+        - Catching up: does completing yesterday restore a broken streak?
+
+        Every one of those edge cases is a sub-problem. Decomposition reveals the decisions you need to make — before you write a single line of code.
+
 ??? question "Practice Problem 2: Spot the Pattern"
 
     These functions all do something similar:
@@ -507,6 +583,37 @@ Good abstraction hides complexity while preserving essential behavior. Bad abstr
 
     What's the underlying pattern? Could you write one general function that handles all of these?
 
+    ??? tip "Solution"
+
+        The pattern is **fold** (also called `reduce`): iterate over a list, accumulate a running result using a binary operation, and return the final value.
+
+        Each function is just a fold with a different operation and identity value:
+
+        | Function | Operation | Identity value |
+        |:---------|:----------|:--------------|
+        | `sum` | `+` | `0` |
+        | `product` | `×` | `1` |
+        | `max` | `max(a, b)` | `-∞` |
+        | `concat` | string `+` | `""` |
+
+        The general function:
+
+        ```python title="The Fold Pattern" linenums="1"
+        def fold(lst, combine, initial):
+            result = initial
+            for item in lst:
+                result = combine(result, item)
+            return result
+
+        # Each original function is now a one-liner:
+        total   = lambda lst: fold(lst, lambda a, b: a + b, 0)
+        product = lambda lst: fold(lst, lambda a, b: a * b, 1)
+        maximum = lambda lst: fold(lst, max, float('-inf'))
+        concat  = lambda lst: fold(lst, lambda a, b: a + b, "")
+        ```
+
+        This is exactly `functools.reduce` in Python, `Array.reduce` in JavaScript, and `fold` in Rust and Haskell. Pattern recognition here collapses four separate implementations into one reusable abstraction.
+
 ??? question "Practice Problem 3: Write an Algorithm"
 
     Write precise, unambiguous instructions for:
@@ -514,6 +621,38 @@ Good abstraction hides complexity while preserving essential behavior. Bad abstr
     - Finding a specific book in a library
     - Determining if a word is a palindrome
     - Calculating a tip at a restaurant
+
+    ??? tip "Solution"
+
+        **Finding a book in a library:**
+
+        1. Look up the book's call number in the catalog
+        2. Note which floor and section it belongs to
+        3. Navigate to that floor and section
+        4. Find the shelf range that includes the call number
+        5. Scan spines left-to-right until the call number matches exactly
+        6. Pull the book; verify the title matches what you searched for
+        7. If not found on the shelf, check "checked out" status in the catalog
+
+        **Determining if a word is a palindrome:**
+
+        1. Convert the word to lowercase
+        2. Remove all non-letter characters (spaces, punctuation)
+        3. Set `left = 0`, `right = length - 1`
+        4. While `left < right`:
+            - If character at `left` ≠ character at `right` → return false
+            - Increment `left`; decrement `right`
+        5. Return true
+
+        **Calculating a tip:**
+
+        1. Get the bill total (before tax, ideally)
+        2. Decide the tip percentage (15%, 18%, 20%, etc.)
+        3. Tip amount = bill total × (percentage ÷ 100)
+        4. Round up to nearest dollar if desired
+        5. If splitting: (bill total + tip) ÷ number of people = each person's share
+
+        The palindrome algorithm illustrates why precision matters: "check if it reads the same backward" is a goal, not an algorithm. Steps 3–4 are the algorithm — specific enough for a computer to follow without interpretation.
 
 ## Key Takeaways
 
@@ -524,23 +663,13 @@ Good abstraction hides complexity while preserving essential behavior. Bad abstr
 | **Abstraction** | "What details can I safely ignore?" |
 | **Algorithm Design** | "What are the exact, unambiguous steps to solve this?" |
 
-## Further Resources
+## Further Reading
 
-- **Jeannette Wing, "Computational Thinking"** — the video below is exceptional:
-
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/YVEUOHw3Qb8?start=704" title="Jeannette Wing - Computational Thinking" allowfullscreen></iframe>
-</div>
-- [Binary Trees & Representation](binary_trees_and_representation.md) — Hierarchical structures and abstraction
-- [Recursive Transition Networks](recursive_transition_networks.md) — Abstraction and decomposition in action
-- [Backus-Naur Form](backus_naur_form.md) — Pattern recognition applied to language structure
+- **Jeannette Wing, ["Computational Thinking"](https://www.cs.cmu.edu/~15110-s13/Wing06-ct.pdf)** — the paper that formalized the framework (2006, Communications of the ACM)
+- **[Big-O Notation](../essentials/big_o_notation.md)** — Algorithm design applied to performance analysis
+- **[Trees](../essentials/trees_basics.md)** — Hierarchical structures and abstraction in action
 
 ---
 
-Computational thinking isn't about thinking *like* a computer—computers don't actually think. It's about thinking *clearly* enough that you could explain your reasoning to a computer. And if you can do that, you can explain it to anyone. That's the real superpower. 🧠
+Computational thinking isn't about thinking *like* a computer — computers don't actually think. It's about thinking *clearly* enough that you could explain your reasoning to a computer. The four pillars aren't a checklist to run through; they're lenses you apply simultaneously, often without noticing. The more deliberately you practice them, the more naturally they surface when a problem resists an obvious solution.
 
-## Video Summary
-
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/1aqCajM4MiM" title="Computational Thinking" allowfullscreen></iframe>
-</div>
