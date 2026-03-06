@@ -45,6 +45,8 @@ Content is structured by **practical value and depth**:
 
     **[Type Systems Basics](essentials/type_systems_basics.md)** — The formal contract behind every variable and function signature
 
+    **[Regular Expressions](essentials/regular_expressions.md)** — The complete syntax reference for writing and reading regex in production code
+
     **[Recursion](essentials/recursion.md)** — Divide-and-conquer problem solving from first principles
 
     **[Trees](essentials/trees_basics.md)** — The data structure behind your file system, JSON, and database indexes
@@ -61,7 +63,7 @@ Content is structured by **practical value and depth**:
 
     **[Finite State Machines](efficiency/finite_state_machines.md)** — The model behind protocols, parsers, and validation
 
-    **[Regular Expressions](efficiency/regular_expressions.md)** — Pattern matching for every working engineer
+    **[Regular Expressions: The Formal Model](efficiency/regular_expressions.md)** — How regex engines compile patterns to automata, why backtracking causes ReDoS, and what regex can't match
 
     **[How Parsers Work](efficiency/how_parsers_work.md)** — From raw text to meaning
 

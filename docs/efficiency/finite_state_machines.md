@@ -94,7 +94,7 @@ stateDiagram-v2
 - Insert coin → Unlocked
 - Push while Unlocked → Locked (you go through)
 - Push while Locked → stays Locked (nothing happens)
-- Insert coin while Unlocked → stays Unlocked (thanks for the extra money! 💰)
+- Insert coin while Unlocked → stays Unlocked (stays unlocked; no state change)
 
 This is a complete specification of turnstile behavior. No ambiguity.
 
@@ -119,10 +119,10 @@ stateDiagram-v2
 
 **Formal Definition of this FSM:**
 
-- \(Q = \{S0, S1, S2\}
-- \(\Sigma = \{0, 1\}
-- \(q_0 = S0
-- \(F = \{S0\}
+- $Q = \{S0, S1, S2\}$
+- $\Sigma = \{0, 1\}$
+- $q_0 = S0$
+- $F = \{S0\}$
 - \(\delta\) is defined by the following table:
 
 | State | Input '0' | Input '1' |
@@ -177,7 +177,7 @@ stateDiagram-v2
 
 From S0, reading 'a' could go to S0 *or* S1. Non-deterministic!
 
-**The magic:** NFAs and DFAs are equally powerful. Any NFA can be converted to an equivalent DFA (though the DFA might have more states). NFAs are often easier to design; DFAs are easier to implement. Best of both worlds! ✨
+**The magic:** NFAs and DFAs are equally powerful. Any NFA can be converted to an equivalent DFA (though the DFA might have more states). NFAs are often easier to design; DFAs are easier to implement. Best of both worlds.
 
 ## FSMs and Regular Languages
 
@@ -303,7 +303,7 @@ For languages requiring this kind of counting or nesting (like balanced parenthe
         Attack --> Patrol: player_dead
     ```
 
-    This creates believable behavior from simple rules. 🎮 Not bad for a bunch of circles and arrows.
+    This creates believable behavior from simple rules. Not bad for a bunch of circles and arrows.
 
 === ":material-network: TCP Connection"
 
@@ -782,6 +782,11 @@ FSMs appear in system design interviews as state modeling problems, and in lower
 **On This Site**
 
 - [Regular Expressions: The Formal Model](regular_expressions.md) — How regex patterns compile to automata, why backtracking causes ReDoS, and what regex cannot match
+
+**External**
+
+- Sipser, Michael. *Introduction to the Theory of Computation* — The standard university text; Chapter 1 covers finite automata and regular languages in full formal detail
+- Cox, Russ. ["Regular Expression Matching Can Be Simple And Fast"](https://swtch.com/~rsc/regexp/regexp1.html) — Explains why DFA-based engines guarantee linear time; directly relevant to the ReDoS discussion above
 
 ---
 

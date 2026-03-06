@@ -1,8 +1,8 @@
 ---
-title: Trees - The Data Structure Behind Your File System, JSON, and Database Indexes
-description: "Binary representation and trees: The foundation of how computers store and organize information."
+title: "Trees: The Data Structure Behind Your File System, JSON, and Database Indexes"
+description: Understand the CS theory behind trees — the data structure powering your file system, database indexes, DOM, compiler ASTs, and Git history.
 ---
-# Trees
+# Trees: The Data Structure Behind Your File System, JSON, and Database Indexes
 
 Your file system navigates to a deeply nested directory in milliseconds. Your database index finds a single row among millions in a handful of comparisons. Your syntax highlighter understands arbitrarily nested function calls. Behind all three is the same data structure: a **tree**.
 
@@ -17,8 +17,8 @@ Trees are one of the most fundamental data structures in computer science — an
     - Define a tree formally using nodes, edges, parent-child relationships, and the root
     - Explain why binary search trees deliver $O(\log n)$ search and what breaks that guarantee
     - Identify where trees appear in your daily work: file systems, JSON, DOM, database indexes, Git
-    - Read and implement tree traversals: pre-order, in-order, post-order
     - Reason about tree height and its relationship to time complexity
+    - Explain pre-order, in-order, and post-order traversal and identify which produces sorted output on a BST
 
 ## Where You've Seen This
 
@@ -342,6 +342,268 @@ This is exactly what [Big-O Notation](big_o_notation.md) is describing when it t
 
     The classic "20 Questions" game is a binary tree of depth 20. With 20 yes/no questions, you can distinguish among \(2^{20} = 1{,}048{,}576\) possible answers. This exponential relationship between depth and distinguishable values is the fundamental insight behind binary search, Huffman encoding, and decision trees.
 
+## Tree Traversals
+
+Trees don't have a natural "next element" order like arrays do — you choose a traversal strategy. The three classic depth-first traversal orders differ only in when you visit the current node relative to its subtrees.
+
+Given this tree:
+
+```mermaid
+graph TD
+    Four["4"] --> Two["2"]
+    Four --> Six["6"]
+    Two --> One["1"]
+    Two --> Three["3"]
+    Six --> Five["5"]
+    Six --> Seven["7"]
+
+    style Four fill:#326CE5,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Two fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Six fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style One fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Three fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Five fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Seven fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+```
+
+| Order | Rule | Output | Use case |
+|:------|:-----|:-------|:---------|
+| **Pre-order** | root → left → right | 4, 2, 1, 3, 6, 5, 7 | Serialize/copy a tree (parents before children) |
+| **In-order** | left → root → right | 1, 2, 3, 4, 5, 6, 7 | Extract sorted data from a BST |
+| **Post-order** | left → right → root | 1, 3, 2, 5, 7, 6, 4 | Evaluate expressions; compute directory sizes |
+
+In-order is the one to burn into memory: on a BST it always produces sorted output — the direct consequence of the left-less-than-right invariant.
+
+=== ":material-language-python: Python"
+
+    ```python title="Tree Traversals in Python" linenums="1"
+    class Node:
+        def __init__(self, val, left=None, right=None):
+            self.val = val
+            self.left = left
+            self.right = right
+
+    def preorder(node):  # (1)!
+        if node is None:
+            return []
+        return [node.val] + preorder(node.left) + preorder(node.right)
+
+    def inorder(node):  # (2)!
+        if node is None:
+            return []
+        return inorder(node.left) + [node.val] + inorder(node.right)
+
+    def postorder(node):  # (3)!
+        if node is None:
+            return []
+        return postorder(node.left) + postorder(node.right) + [node.val]
+
+    tree = Node(4, Node(2, Node(1), Node(3)), Node(6, Node(5), Node(7)))
+    print(preorder(tree))   # [4, 2, 1, 3, 6, 5, 7]
+    print(inorder(tree))    # [1, 2, 3, 4, 5, 6, 7]  ← sorted!
+    print(postorder(tree))  # [1, 3, 2, 5, 7, 6, 4]
+    ```
+
+    1. Root → Left → Right: parent before children
+    2. Left → Root → Right: in-order on a BST yields sorted output
+    3. Left → Right → Root: children before parent
+
+=== ":material-language-javascript: JavaScript"
+
+    ```javascript title="Tree Traversals in JavaScript" linenums="1"
+    class Node {
+        constructor(val, left = null, right = null) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+    const preorder = (node) =>
+        node ? [node.val, ...preorder(node.left), ...preorder(node.right)] : [];
+
+    const inorder = (node) =>
+        node ? [...inorder(node.left), node.val, ...inorder(node.right)] : [];
+
+    const postorder = (node) =>
+        node ? [...postorder(node.left), ...postorder(node.right), node.val] : [];
+
+    const tree = new Node(4, new Node(2, new Node(1), new Node(3)),
+                             new Node(6, new Node(5), new Node(7)));
+    console.log(preorder(tree));   // [4, 2, 1, 3, 6, 5, 7]
+    console.log(inorder(tree));    // [1, 2, 3, 4, 5, 6, 7]
+    console.log(postorder(tree));  // [1, 3, 2, 5, 7, 6, 4]
+    ```
+
+=== ":material-language-go: Go"
+
+    ```go title="Tree Traversals in Go" linenums="1"
+    type Node struct {
+        Val   int
+        Left  *Node
+        Right *Node
+    }
+
+    func preorder(node *Node) []int {
+        if node == nil {
+            return nil
+        }
+        result := []int{node.Val}
+        result = append(result, preorder(node.Left)...)
+        result = append(result, preorder(node.Right)...)
+        return result
+    }
+
+    func inorder(node *Node) []int {
+        if node == nil {
+            return nil
+        }
+        result := inorder(node.Left)
+        result = append(result, node.Val)
+        result = append(result, inorder(node.Right)...)
+        return result
+    }
+
+    func postorder(node *Node) []int {
+        if node == nil {
+            return nil
+        }
+        result := postorder(node.Left)
+        result = append(result, postorder(node.Right)...)
+        result = append(result, node.Val)
+        return result
+    }
+    ```
+
+=== ":material-language-rust: Rust"
+
+    ```rust title="Tree Traversals in Rust" linenums="1"
+    enum Tree {
+        Nil,
+        Node(i32, Box<Tree>, Box<Tree>),
+    }
+
+    fn preorder(tree: &Tree) -> Vec<i32> {
+        match tree {
+            Tree::Nil => vec![],
+            Tree::Node(val, left, right) => {
+                let mut result = vec![*val];
+                result.extend(preorder(left));
+                result.extend(preorder(right));
+                result
+            }
+        }
+    }
+
+    fn inorder(tree: &Tree) -> Vec<i32> {
+        match tree {
+            Tree::Nil => vec![],
+            Tree::Node(val, left, right) => {
+                let mut result = inorder(left);
+                result.push(*val);
+                result.extend(inorder(right));
+                result
+            }
+        }
+    }
+
+    fn postorder(tree: &Tree) -> Vec<i32> {
+        match tree {
+            Tree::Nil => vec![],
+            Tree::Node(val, left, right) => {
+                let mut result = postorder(left);
+                result.extend(postorder(right));
+                result.push(*val);
+                result
+            }
+        }
+    }
+    ```
+
+=== ":material-language-java: Java"
+
+    ```java title="Tree Traversals in Java" linenums="1"
+    import java.util.ArrayList;
+    import java.util.List;
+
+    class Node {
+        int val;
+        Node left, right;
+        Node(int val) { this.val = val; }
+        Node(int val, Node left, Node right) {
+            this.val = val; this.left = left; this.right = right;
+        }
+    }
+
+    public List<Integer> preorder(Node node) {
+        List<Integer> result = new ArrayList<>();
+        if (node == null) return result;
+        result.add(node.val);
+        result.addAll(preorder(node.left));
+        result.addAll(preorder(node.right));
+        return result;
+    }
+
+    public List<Integer> inorder(Node node) {
+        List<Integer> result = new ArrayList<>();
+        if (node == null) return result;
+        result.addAll(inorder(node.left));
+        result.add(node.val);
+        result.addAll(inorder(node.right));
+        return result;
+    }
+
+    public List<Integer> postorder(Node node) {
+        List<Integer> result = new ArrayList<>();
+        if (node == null) return result;
+        result.addAll(postorder(node.left));
+        result.addAll(postorder(node.right));
+        result.add(node.val);
+        return result;
+    }
+    ```
+
+=== ":material-language-cpp: C++"
+
+    ```cpp title="Tree Traversals in C++" linenums="1"
+    #include <vector>
+
+    struct Node {
+        int val;
+        Node* left  = nullptr;
+        Node* right = nullptr;
+        Node(int v) : val(v) {}
+    };
+
+    std::vector<int> preorder(Node* node) {
+        if (!node) return {};
+        auto result = std::vector<int>{node->val};
+        auto left = preorder(node->left);
+        auto right = preorder(node->right);
+        result.insert(result.end(), left.begin(), left.end());
+        result.insert(result.end(), right.begin(), right.end());
+        return result;
+    }
+
+    std::vector<int> inorder(Node* node) {
+        if (!node) return {};
+        auto result = inorder(node->left);
+        result.push_back(node->val);
+        auto right = inorder(node->right);
+        result.insert(result.end(), right.begin(), right.end());
+        return result;
+    }
+
+    std::vector<int> postorder(Node* node) {
+        if (!node) return {};
+        auto result = postorder(node->left);
+        auto right = postorder(node->right);
+        result.insert(result.end(), right.begin(), right.end());
+        result.push_back(node->val);
+        return result;
+    }
+    ```
+
 ## Technical Interview Context
 
 Trees are one of the most common interview topics — both as explicit problems and as the underlying structure in problems about paths, hierarchies, and search.
@@ -438,11 +700,21 @@ Trees are one of the most common interview topics — both as explicit problems 
 | **$O(\log n)$** | Doubling the data adds only one more step |
 | **Database index** | A tree over a column — why indexed queries don't scan every row |
 | **AST** | How your compiler understands code structure |
+| **In-order traversal** | Visits left → root → right; always yields sorted output on a BST |
+| **Pre/Post-order** | Pre-order: parents before children (serialization). Post-order: children before parent (evaluation) |
 
 ## Further Reading
 
+**On This Site**
+
 - **[Big-O Notation](big_o_notation.md)** — Why $O(\log n)$ matters so much for BST search
-- **[How Parsers Work](../efficiency/how_parsers_work.md)** — Building syntax trees from source code
+- **[Recursion](recursion.md)** — Tree operations are naturally recursive; the substitution model applies directly to tree traversal
+- **[How Parsers Work](../efficiency/how_parsers_work.md)** — Building abstract syntax trees from source code
+
+**External**
+
+- [*Introduction to Algorithms* (CLRS)](https://en.wikipedia.org/wiki/Introduction_to_Algorithms), Chapter 12 — the definitive treatment of binary search trees, rotations, and balanced variants
+- [*Introduction to Computing*](https://computingbook.org/) by David Evans — recursive data structures and their definitions from first principles
 
 ---
 

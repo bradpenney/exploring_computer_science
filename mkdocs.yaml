@@ -135,7 +135,7 @@ nav:
       - Computational Thinking: efficiency/computational_thinking.md
       - Languages & Parsing:
           - Finite State Machines: efficiency/finite_state_machines.md
-          - Regular Expressions: efficiency/regular_expressions.md
+          - Regular Expressions - The Formal Model: efficiency/regular_expressions.md
           - How Parsers Work: efficiency/how_parsers_work.md
           - Compilers vs. Interpreters: efficiency/compilers_vs_interpreters.md
       - Data Structures:

@@ -186,7 +186,7 @@ description: Compelling description for search results (150-160 chars ideal)
 - Search indexing
 - Navigation (even if accidentally uncommented)
 
-**Current exclude configuration** (as of 2026-02-16):
+**Current exclude configuration** (as of 2026-03-05):
 
 ```yaml
 plugins:
@@ -194,11 +194,34 @@ plugins:
   - meta
   - exclude:
       glob:
-        - "essentials/what_is_computer_science.md"
-        - "efficiency/**"
+        # Essentials drafts
+        - "essentials/stacks_and_queues.md"
+        - "essentials/linked_lists.md"
+        - "essentials/queues_and_deques.md"
+        - "essentials/searching_linear_vs_binary.md"
+        - "essentials/sorting_elementary.md"
+        - "essentials/big_o_time_complexity.md"
+        # Efficiency drafts
+        - "efficiency/big_o_space_complexity.md"
+        - "efficiency/binary_search_trees.md"
+        - "efficiency/database_fundamentals.md"
+        - "efficiency/graph_traversal.md"
+        - "efficiency/information_security_basics.md"
+        - "efficiency/oop/**"
+        - "efficiency/programming_paradigms.md"
+        - "efficiency/sorting_insertion.md"
+        - "efficiency/sorting_merge.md"
+        - "efficiency/sorting_quick.md"
+        - "efficiency/systems/**"
+        # Mastery (returned to draft for essentials/efficiency-only release)
         - "mastery/**"
   # ... other plugins
 ```
+
+**Published articles (12 total):**
+
+- `essentials/`: what_is_computer_science, big_o_notation, type_systems_basics, regular_expressions, recursion, trees_basics
+- `efficiency/`: computational_thinking, finite_state_machines, regular_expressions, how_parsers_work, compilers_vs_interpreters, lists_recursive_structure
 
 **What this means:**
 - Draft articles can exist in these directories without appearing in search results

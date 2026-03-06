@@ -382,7 +382,7 @@ CS fundamentals appear throughout technical interviews — both as explicit theo
 
 ## Further Reading
 
-**On this site:**
+**On This Site**
 
 - **[Big-O Notation](big_o_notation.md)** — The formal framework for measuring how code scales
 - **[Trees](trees_basics.md)** — The data structure behind your file system, JSON, and database indexes
@@ -390,7 +390,7 @@ CS fundamentals appear throughout technical interviews — both as explicit theo
 - **[Finite State Machines](../efficiency/finite_state_machines.md)** — Formal language theory made concrete
 - **[How Parsers Work](../efficiency/how_parsers_work.md)** — How computers make sense of structured text
 
-**Books:**
+**External**
 
 - [**Introduction to Computing: Explorations in Language, Logic, and Machines**](https://computingbook.org/) by David Evans — A free introductory Computer Science textbook
 - [**Code: The Hidden Language of Computer Hardware and Software**](https://en.wikipedia.org/wiki/Code:_The_Hidden_Language_of_Computer_Hardware_and_Software) by Charles Petzold — How computers actually work

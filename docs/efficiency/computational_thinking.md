@@ -670,9 +670,14 @@ Computational thinking is the meta-skill interviewers are measuring when they wa
 
 ## Further Reading
 
-- **Jeannette Wing, ["Computational Thinking"](https://www.cs.cmu.edu/~15110-s13/Wing06-ct.pdf)** — the paper that formalized the framework (2006, Communications of the ACM)
+**On This Site**
+
 - **[Big-O Notation](../essentials/big_o_notation.md)** — Algorithm design applied to performance analysis
 - **[Trees](../essentials/trees_basics.md)** — Hierarchical structures and abstraction in action
+
+**External**
+
+- **Jeannette Wing, ["Computational Thinking"](https://www.cs.cmu.edu/~15110-s13/Wing06-ct.pdf)** — the paper that formalized the framework (2006, Communications of the ACM)
 
 ---
 

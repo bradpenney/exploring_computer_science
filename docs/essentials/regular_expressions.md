@@ -1,5 +1,5 @@
 ---
-title: Regular Expressions
+title: "Regular Expressions: The Complete Syntax Reference"
 description: The complete practical reference for writing and reading regex in production code — character classes, quantifiers, groups, flags, and common pitfalls.
 ---
 # Regular Expressions
