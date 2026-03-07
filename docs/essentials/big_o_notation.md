@@ -919,7 +919,7 @@ That $O(n^2)$ algorithm that runs in 1 second with 1,000 items? With 1 million i
             return fibonacci_fast(n - 1) + fibonacci_fast(n - 2)
         ```
 
-        1. Both recursive calls re-solve overlapping subproblems. `fibonacci_slow(40)` makes over a billion calls.
+        1. Both recursive calls re-solve overlapping subproblems. `fibonacci_slow(40)` makes over 300 million calls.
         2. `@lru_cache` memoizes automatically — subsequent calls return the cached result instantly instead of recursing.
 
     === ":material-language-javascript: JavaScript"
@@ -1259,18 +1259,18 @@ Big-O fluency is table stakes — every engineer knows $O(n^2)$ is worse than $O
 
         **Optimal: $O(n)$ time, $O(n)$ space**
 
-        ```python title="Two Sum: O(n) with a hash map" linenums="1"
+        ```python title="Two Sum: O(n) with a set" linenums="1"
         def two_sum(numbers, target):
-            seen = {}  # value -> index
-            for i, num in enumerate(numbers):
+            seen = set()
+            for num in numbers:
                 complement = target - num
                 if complement in seen:   # O(1) hash lookup
                     return [complement, num]
-                seen[num] = i
+                seen.add(num)
             return None
         ```
 
-        The insight: for each number, you need to know if its complement (target - num) has already appeared. Storing what you've seen in a hash map makes that check $O(1)$. One pass = $O(n)$ total.
+        The insight: for each number, you need to know if its complement (target - num) has already appeared. Storing what you've seen in a set makes that check $O(1)$. One pass = $O(n)$ total.
 
         Compare the three approaches:
 
