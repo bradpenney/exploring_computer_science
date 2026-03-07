@@ -43,7 +43,7 @@ Big-O doesn't tell you how fast your code is in absolute terms. It tells you how
 - $O(n^2)$: Double the input → four times the time
 - $O(\log n)$: Double the input → one extra step
 
-That framing cuts through a lot of confusion. A function that takes 10ms with 1,000 items and 10,000ms with 10,000 items is obviously not $O(n)$. The input grew 10x, but the time grew 1,000x. That's $O(n^2)$ behavior, and the chart below will show you why.
+That framing cuts through a lot of confusion. A function that takes 10ms with 1,000 items and 1,000ms with 10,000 items is obviously not $O(n)$. The input grew 10x, but the time grew 100x. That's $O(n^2)$ behavior, and the chart below will show you why.
 
 <canvas id="big-o-chart" role="img" aria-label="Line chart showing growth curves for six complexity classes. O(1) is flat, O(log n) grows slowly, O(n) grows linearly, O(n log n) slightly faster, while O(n²) and O(2ⁿ) curve sharply upward. Values above 300 are capped for readability."></canvas>
 
