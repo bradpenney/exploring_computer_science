@@ -1,4 +1,5 @@
 ---
+date: "2025-12-22 22:21"
 description: "The foundation of Object-Oriented Programming: Understanding Classes as blueprints and Objects as instances."
 ---
 # OOP: Classes & Objects

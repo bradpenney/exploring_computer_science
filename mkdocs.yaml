@@ -2,6 +2,9 @@ site_name: "Exploring Computer Science"
 site_url: https://cs.bradpenney.io
 site_description: The CS theory behind the production code you write.
 site_author: Brad Penney
+copyright: >-
+  Copyright &copy; Brad Penney —
+  <a href="#__consent">Change cookie settings</a>
 extra_css:
   - stylesheets/extra.css
 theme:
@@ -37,11 +40,27 @@ extra:
   analytics:
     provider: google
     property: G-V01MJ4R3SQ
+  consent:
+    title: Cookie consent
+    description: >-
+      We use cookies to measure how effective our content is and whether you
+      find what you're looking for. With your consent, you help make these
+      learning sites better. You can change your choice at any time.
+    cookies:
+      analytics:
+        name: Google Analytics
+        checked: false
+    actions:
+      - accept
+      - reject
+      - manage
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/bradpenney
     - icon: fontawesome/solid/globe
       link: https://bradpenney.io
+    - icon: fontawesome/solid/rss
+      link: https://cs.bradpenney.io/feed_rss_created.xml
 
 plugins:
   - search
@@ -69,6 +88,18 @@ plugins:
         - "efficiency/systems/**"
         # Mastery (returning to draft for essentials/efficiency-only release)
         - "mastery/**"
+  - rss:
+      match_path: ".*"
+      image: https://cs.bradpenney.io/images/exploring_computer_science.png
+      abstract_chars_count: 160
+      length: 20
+      date_from_meta:
+        as_creation: "date"
+        as_update: "git"
+        default_timezone: "America/Halifax"
+      categories:
+        - tags
+      use_material_social_cards: false
   - social:
       cards: true
       cards_layout_options:
@@ -80,6 +111,9 @@ plugins:
       validate_external_urls: false
       raise_error: true
       raise_error_after_finish: true
+      raise_error_excludes:
+        404:
+          - "#__consent"
 
 markdown_extensions:
   - admonition

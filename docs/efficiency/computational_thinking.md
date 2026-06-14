@@ -1,4 +1,5 @@
 ---
+date: "2025-12-22 22:21"
 title: Computational Thinking - The Mental Framework Behind Good Engineering
 description: "Master the mental toolkit of computer science: Decomposition, Pattern Recognition, Abstraction, and Algorithm Design."
 ---

@@ -1,4 +1,5 @@
 ---
+date: "2025-11-21 22:09"
 title: Backus-Naur Form (BNF) - The Notation Behind Every Language Specification
 description: "Backus-Naur Form (BNF) explained: The standard notation for defining programming language syntax."
 ---

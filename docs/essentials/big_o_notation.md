@@ -1,4 +1,5 @@
 ---
+date: "2026-02-22 16:03"
 title: "Big-O Notation: Understanding Algorithmic Efficiency"
 description: Understand Big-O notation for software engineers. Learn how to identify O(n²), O(n log n), O(n) complexities and optimize your code for production.
 ---

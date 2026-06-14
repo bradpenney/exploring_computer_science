@@ -1,4 +1,5 @@
 ---
+date: "2025-12-22 22:21"
 description: "Imperative vs. Declarative: Understanding the major styles of programming."
 ---
 # Programming Paradigms: Imperative vs. Declarative

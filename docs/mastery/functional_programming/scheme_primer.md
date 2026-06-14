@@ -1,4 +1,5 @@
 ---
+date: "2026-02-02 21:48"
 title: "Scheme: A Primer for Working Engineers"
 description: A practical introduction to Scheme for engineers who already code — understand prefix notation, lambda, closures, and recursive evaluation through a language designed to make computation visible.
 ---

@@ -1,4 +1,5 @@
 ---
+date: "2025-12-16 11:08"
 description: Learn how Abstract Data Types (ADTs) hide complexity and how the Stack manages data in a LIFO (Last-In, First-Out) order.
 ---
 # Abstract Data Types and the Stack

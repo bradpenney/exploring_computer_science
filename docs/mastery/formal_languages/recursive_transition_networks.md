@@ -1,4 +1,5 @@
 ---
+date: "2025-11-21 22:09"
 title: Recursive Transition Networks - Visual Grammars for Nested Languages
 description: "Recursive Transition Networks (RTNs): The visual way to describe complex, nested grammars."
 ---

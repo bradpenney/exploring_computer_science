@@ -1,4 +1,5 @@
 ---
+date: "2025-11-21 22:09"
 title: What Is Computer Science? A Working Engineer's Guide
 description: Computer science isn't about computers. It's the systematic study of what can be computed, how efficiently, and how to solve problems algorithmically.
 ---

@@ -1,4 +1,5 @@
 ---
+date: "2025-12-22 22:21"
 title: "Compilers vs. Interpreters: How Your Code Becomes Execution"
 description: Understand what compilers and interpreters actually do — the CS theory behind how source code becomes running programs, and why it matters for how you write and debug code.
 ---

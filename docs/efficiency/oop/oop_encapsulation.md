@@ -1,4 +1,5 @@
 ---
+date: "2025-12-22 22:21"
 description: "OOP Encapsulation: Hiding complexity behind clean interfaces."
 ---
 # OOP: Encapsulation

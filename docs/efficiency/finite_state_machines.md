@@ -1,4 +1,5 @@
 ---
+date: "2025-11-21 22:09"
 title: Finite State Machines - The Model Behind Protocols, Parsers, and Validation
 description: Understanding Finite State Machines (FSMs), the elegant model behind traffic lights, game AI, and compilers.
 ---

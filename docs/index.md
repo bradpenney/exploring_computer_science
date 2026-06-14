@@ -1,4 +1,5 @@
 ---
+date: "2025-11-17 22:10"
 title: Exploring Computer Science - CS Theory for Working Engineers
 description: The CS theory behind the production code you write. Big-O, data structures, algorithms, and computational theory for back-end and platform engineers.
 ---

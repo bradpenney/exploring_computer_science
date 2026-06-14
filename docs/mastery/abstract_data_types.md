@@ -1,4 +1,5 @@
 ---
+date: "2026-02-27 08:27"
 title: "Abstract Data Types: Designing by Contract"
 description: Learn how abstract data types separate what data does from how it's stored — the CS theory behind interfaces, protocols, and traits in every modern language.
 ---

@@ -1,4 +1,5 @@
 ---
+date: "2025-12-22 22:21"
 title: Procedures and Higher-Order Functions - How Code Becomes Data
 description: Learn how procedures abstract logic and how higher-order functions treat code as data.
 ---

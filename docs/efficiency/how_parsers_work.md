@@ -1,4 +1,5 @@
 ---
+date: "2025-12-22 22:21"
 title: How Parsers Work - From Raw Text to Meaning
 description: "From raw text to meaning: How parsers use grammars to understand code and data."
 ---

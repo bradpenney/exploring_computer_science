@@ -1,4 +1,5 @@
 ---
+date: "2025-12-16 11:08"
 title: Scheme, Lisp, and Parse Trees - When Code Is Its Own Parse Tree
 description: "Why Lisp and Scheme use parentheses: Understanding prefix notation and parse trees."
 ---

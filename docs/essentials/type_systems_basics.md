@@ -1,4 +1,5 @@
 ---
+date: "2026-02-27 08:27"
 title: "Type Systems: The Contract Behind Every Variable"
 description: Understand type systems from a CS theory perspective — what types really are, how type notation works, and why every strongly-typed language enforces the same rules.
 ---

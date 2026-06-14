@@ -1,4 +1,5 @@
 ---
+date: "2025-11-21 22:09"
 title: "Regular Expressions: The Formal Model"
 description: How regex engines compile patterns to automata, why backtracking causes production outages, and what regular expressions fundamentally cannot match.
 ---

@@ -1,4 +1,5 @@
 ---
+date: "2025-12-22 22:21"
 title: "Information Theory: The Mathematics of Data"
 description: Understand what information really is at the CS theory level — bits as units of uncertainty, binary representation, entropy, and why data compression has fundamental limits.
 ---
