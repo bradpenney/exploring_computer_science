@@ -48,6 +48,14 @@
   width: auto;
 }
 
+/* Restore full width for line-numbered code blocks (linenums renders as a
+   <table> internally and otherwise gets caught by the centering rule above) */
+.md-typeset .highlight table {
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
 .md-typeset .md-typeset__scrollwrap,
 .md-typeset .md-typeset__table {
   display: flex;

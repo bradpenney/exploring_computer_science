@@ -116,6 +116,9 @@ plugins:
           - "#__consent"
 
 markdown_extensions:
+  - toc:
+      permalink: "🔗"
+      permalink_title: "Link to this section"
   - admonition
   - pymdownx.details
   - pymdownx.highlight:
@@ -150,6 +153,7 @@ nav:
   - Home: index.md
   - 📦 Essentials:
       - What is Computer Science?: essentials/what_is_computer_science.md
+      - "What an API Actually Is": essentials/what_is_an_api.md
       - Big-O Notation: essentials/big_o_notation.md
       - Type Systems Basics: essentials/type_systems_basics.md
       - Regular Expressions: essentials/regular_expressions.md
@@ -173,6 +177,11 @@ nav:
           - Compilers vs. Interpreters: efficiency/compilers_vs_interpreters.md
       - Data Structures:
           - Lists as Recursive Structures: efficiency/lists_recursive_structure.md
+      - Web & APIs:
+          - "Client and Server: The Request/Response Lifecycle": efficiency/web/client_server_request_response.md
+          - "Why HTTP APIs Forget You: Statelessness": efficiency/web/http_statelessness.md
+          - Anatomy of an HTTP Request and Response: efficiency/web/anatomy_of_request_response.md
+          - Authentication vs Authorization in APIs: efficiency/web/authentication_vs_authorization.md
 #      - Big-O Space Complexity: efficiency/big_o_space_complexity.md
 #      - Data Structures (drafts):
 #          - Binary Search Trees: efficiency/binary_search_trees.md
@@ -197,6 +206,8 @@ nav:
 #          - Database Fundamentals: efficiency/database_fundamentals.md
 #          - Information Security Basics: efficiency/information_security_basics.md
 #  - 🎯 Mastery:
+#      - Web & APIs (DRAFT - API series):
+#          - "API Design Principles: REST, Idempotency, Versioning": mastery/web/api_design_principles.md
 #      - Information Theory: mastery/information_theory.md
 #      - Formal Languages:
 #          - Recursive Transition Networks: mastery/formal_languages/recursive_transition_networks.md

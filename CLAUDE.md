@@ -161,6 +161,7 @@ The site has comprehensive SEO optimization:
 
 ```yaml
 ---
+date: "2026-01-15 12:00"
 title: "Title With a Colon: Must Be Quoted"
 title: Plain Title Without Colon
 description: Compelling description for search results (150-160 chars ideal)
@@ -171,6 +172,7 @@ description: Compelling description for search results (150-160 chars ideal)
 
 **Rules:**
 
+- **Date**: Required — the RSS feed dates entries from this field. Format `date: "YYYY-MM-DD HH:MM"`. Omitting it logs an RSS build warning and leaves the feed entry undated.
 - **Title**: Should be unique across the site, descriptive, include key terms
 - **Description**: Summarize what the reader will learn, compelling call-to-action
 - **No keywords needed**: Modern search engines don't rely on keyword meta tags
