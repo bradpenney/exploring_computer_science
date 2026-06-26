@@ -42,7 +42,7 @@ When an API returns `401`, re-pasting a fresh token fixes it — that's an *auth
 
 Because HTTP is [stateless](http_statelessness.md), the proof of identity must ride on *every* request, almost always in the `Authorization` header. Three common credentials, from simplest to richest:
 
-<div class="grid cards" markdown>
+<div class="grid cards two-col" markdown>
 
 -   :material-key: __API Keys__
 

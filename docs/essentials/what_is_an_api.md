@@ -59,7 +59,7 @@ flowchart TD
 
 A lot of the muddiness around APIs comes from one word meaning two related things.
 
-<div class="grid cards" markdown>
+<div class="grid cards two-col" markdown>
 
 -   :material-language-python: __Library API__
 

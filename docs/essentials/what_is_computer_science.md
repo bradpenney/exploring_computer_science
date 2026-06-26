@@ -51,7 +51,7 @@ The common thread? **Algorithms** and **information**. Computers just happen to 
 
 Computer science asks fundamental questions that would matter even if silicon chips had never been invented:
 
-<div class="grid cards" markdown>
+<div class="grid cards two-col" markdown>
 
 -   :material-lock: __What can be computed?__
 
@@ -107,7 +107,7 @@ Understanding CS theory makes you a better engineer in concrete, measurable ways
 
 Computer science is vast. Here's a map of the territory:
 
-<div class="grid cards" markdown>
+<div class="grid cards two-col" markdown>
 
 -   :material-math-compass: __Theory__
 
@@ -249,7 +249,7 @@ You can be an excellent programmer without knowing complexity theory. You can un
 
 Here's where things get genuinely interesting. Computer science touches deep philosophical questions:
 
-<div class="grid cards" markdown>
+<div class="grid cards two-col" markdown>
 
 -   :material-head-lightbulb: __What is intelligence?__
 

@@ -32,7 +32,7 @@ While [Exploring Linux](https://linux.bradpenney.io), [Exploring Python](https:/
 
 Content is structured by **practical value and depth**:
 
-<div class="grid cards" markdown>
+<div class="grid cards two-col" markdown>
 
 -   :material-package-variant: **Essentials**
 

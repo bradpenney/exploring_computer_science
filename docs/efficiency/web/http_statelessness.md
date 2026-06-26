@@ -31,7 +31,7 @@ You attach the same `Authorization: Bearer <token>` header to *every* call to th
 
 Forgetting sounds like a downgrade. It's actually what makes the modern web possible. Three payoffs:
 
-<div class="grid cards" markdown>
+<div class="grid cards two-col" markdown>
 
 -   :material-arrow-expand-horizontal: __It scales horizontally__
 
