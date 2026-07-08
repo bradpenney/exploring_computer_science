@@ -1296,6 +1296,10 @@ Big-O fluency is table stakes — every engineer knows $O(n^2)$ is worse than $O
 | **Trade-offs** | Faster algorithms often use more memory — that's usually the right call |
 | **Indexes** | Database B-tree indexes turn $O(n)$ table scans into $O(\log n)$ lookups |
 
+## What's Next
+
+Understanding Big-O is the foundation. Next, explore how specific data structures are designed to hit target complexity classes — starting with **[Trees](trees_basics.md)**, which are the key to understanding why binary search and database index lookups run in $O(\log n)$.
+
 ## Further Reading
 
 ### On This Site
@@ -1314,7 +1318,3 @@ Big-O fluency is table stakes — every engineer knows $O(n^2)$ is worse than $O
 
 - [MIT 6.006: Introduction to Algorithms](https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/) — Full lecture notes and problem sets from MIT's algorithms course, free on OpenCourseWare
 
-
-## What's Next
-
-Understanding Big-O is the foundation. Next, explore how specific data structures are designed to hit target complexity classes — starting with **[Trees](trees_basics.md)**, which are the key to understanding why binary search and database index lookups run in $O(\log n)$.

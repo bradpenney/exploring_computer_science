@@ -294,10 +294,6 @@ Securing an endpoint is two questions, never one: *who are you* and *what may yo
 
 ## Further Reading
 
-### Going Deeper (Mastery)
-
-- **API Design Principles: REST, Idempotency, Versioning** *(Mastery — coming soon)* — where OAuth flows, token lifecycles, and the decisions you can't take back once clients depend on you get the full treatment.
-
 ### External Resources
 
 - [OWASP API Security Top 10](https://owasp.org/API-Security/editions/2023/en/0x11-t10/) — broken authorization tops the list for a reason.

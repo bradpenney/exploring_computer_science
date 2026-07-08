@@ -9,6 +9,7 @@ extra_css:
   - stylesheets/extra.css
 theme:
   name: material
+  custom_dir: overrides
   font:
     text: IBM Plex Sans
     code: IBM Plex Mono
@@ -185,6 +186,8 @@ nav:
           - "Why HTTP APIs Forget You: Statelessness": efficiency/web/http_statelessness.md
           - Anatomy of an HTTP Request and Response: efficiency/web/anatomy_of_request_response.md
           - Authentication vs Authorization in APIs: efficiency/web/authentication_vs_authorization.md
+      - Security:
+          - "Public-Key Cryptography: How Strangers Share Secrets": efficiency/security/public_key_cryptography.md
 #      - Big-O Space Complexity: efficiency/big_o_space_complexity.md
 #      - Data Structures (drafts):
 #          - Binary Search Trees: efficiency/binary_search_trees.md

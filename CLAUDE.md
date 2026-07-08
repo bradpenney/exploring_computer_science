@@ -220,10 +220,12 @@ plugins:
   # ... other plugins
 ```
 
-**Published articles (12 total):**
+**Published articles (18 total):**
 
-- `essentials/`: what_is_computer_science, big_o_notation, type_systems_basics, regular_expressions, recursion, trees_basics
+- `essentials/`: what_is_computer_science, what_is_an_api, big_o_notation, type_systems_basics, regular_expressions, recursion, trees_basics
 - `efficiency/`: computational_thinking, finite_state_machines, regular_expressions, how_parsers_work, compilers_vs_interpreters, lists_recursive_structure
+- `efficiency/web/`: client_server_request_response, http_statelessness, anatomy_of_request_response, authentication_vs_authorization
+- `efficiency/security/`: public_key_cryptography (added 2026-07-02; first article in the Security group; step 4 of the bradpenney.io cluster-to-internet pathway)
 
 **What this means:**
 - Draft articles can exist in these directories without appearing in search results
