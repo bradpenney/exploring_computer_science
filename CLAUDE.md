@@ -81,10 +81,19 @@ You've written recursive functions in Python. You know they work. But when your 
 Recursion isn't just a coding trick—it's a fundamental computational pattern that's been around since before programming languages existed. Understanding the CS theory behind it will make you better at recognizing when to use it (and when not to).
 ```
 
+**⚠️ Watch the formula, not just the topic (2026-07-28):** "You've done X" / "You've seen Y" asserts the *reader's own history* — a bet that fails every time someone in the audience didn't do that exact thing, and it reads as alienating when it misses, not just inaccurate. Prefer grounding the hook in the **practice or phenomenon itself**, stated as a fact about production/the field, not a claim about this specific reader's past:
+
+**Better — describe the practice, not the reader's biography:**
+```markdown
+In production, setting a memory limit — `resources.limits.memory: 512Mi` on a container, `-Xmx2g` on a JVM flag — is one of the most routine configuration steps there is, and one of the least understood. Cross it, and the process doesn't slow down; it gets killed outright, on the spot.
+```
+
+This is still concrete and scenario-driven (the persona rule isn't relaxed — no abstract theory-first openings), it just doesn't gamble on the reader's personal history to land. The `"Where You Might Have Seen This"` section immediately below is where individual, hedged ("might have") examples belong — the opening hook itself should be true regardless of which of those the reader has personally hit.
+
 ### Required Sections for Persona
 
 1. **Opening with real-world context** - Start with a scenario they've experienced
-2. **"Where You've Seen This"** section - Connect theory to their daily work:
+2. **"Where You Might Have Seen This"** section - Connect theory to their daily work:
    - Stacks → "Every exception stacktrace you've debugged"
    - Trees → "Your JSON responses, your file system, your DOM"
    - Graphs → "Your database relationships, your microservices architecture"
@@ -444,7 +453,7 @@ Articles must balance **playfulness with professionalism** and be **technically 
 **Required Sections (Updated for Persona):**
 
 1. **Opening paragraph(s)** - Start with their engineering experience (debugging, code review, production issue), THEN introduce theory
-2. **"Where You've Seen This"** - Connect to tools/code they use daily (Python dicts, JSON parsing, stack traces, etc.)
+2. **"Where You Might Have Seen This"** - Connect to tools/code they use daily (Python dicts, JSON parsing, stack traces, etc.)
 3. **Formal definition** (if applicable) - Table format for mathematical notation with practical examples
 4. **Simple examples building to complex** - Use languages they know (Python, JavaScript, Go)
 5. **"Why This Matters for Production Code"** - Practical implications (performance, debugging, design decisions)
@@ -766,7 +775,7 @@ Before publishing an article:
 **✅ Content Quality:**
 
 - [ ] Opening hooks with real-world engineering experience (persona-driven)
-- [ ] "Where You've Seen This" section connecting theory to daily work
+- [ ] "Where You Might Have Seen This" section connecting theory to daily work
 - [ ] "Why This Matters for Production Code" section
 - [ ] "Technical Interview Context" (when relevant)
 - [ ] Clear learning objectives

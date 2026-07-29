@@ -52,6 +52,10 @@ Content is structured by **practical value and depth**:
 
     **[Trees](essentials/trees_basics.md)** — The data structure behind your file system, JSON, and database indexes
 
+    **[What Actually Happens When Your Code Runs](essentials/cpu_and_machine_code.md)** — The fetch-decode-execute cycle underneath every program you've ever shipped
+
+    **[The Stack, the Heap, and Virtual Memory](essentials/stack_heap_virtual_memory.md)** — Why a container gets `OOMKilled` and what a stack overflow actually overflows
+
     Searching, sorting, stacks, queues (coming soon)
 
 -   :material-lightning-bolt: **Efficiency**
@@ -67,6 +71,14 @@ Content is structured by **practical value and depth**:
     **[Regular Expressions: The Formal Model](efficiency/regular_expressions.md)** — How regex engines compile patterns to automata, why backtracking causes ReDoS, and what regex can't match
 
     **[How Parsers Work](efficiency/how_parsers_work.md)** — From raw text to meaning
+
+    **[x86, ARM, and RISC-V](efficiency/systems/x86_arm_risc.md)** — Why your CPU's instruction set isn't a detail, verified with real disassembly on all three
+
+    **[Operating System Basics](efficiency/systems/operating_system_basics.md)** — The kernel, privilege rings, and why a syscall is the only door through
+
+    **[Processes and Threads](efficiency/systems/processes_and_threads.md)** — What a context switch actually costs, and what the Python GIL is really doing
+
+    **[How the OS Scheduler Actually Decides](efficiency/systems/os_scheduler.md)** — `nice`, CFS, and the mechanism behind container CPU throttling
 
     **[Compilers vs. Interpreters](efficiency/compilers_vs_interpreters.md)** — What actually happens between your source code and execution
 
