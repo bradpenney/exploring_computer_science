@@ -1,12 +1,15 @@
 ---
 date: "2025-12-22 22:21"
 title: "Compilers vs. Interpreters: How Your Code Becomes Execution"
-description: Understand what compilers and interpreters actually do — the CS theory behind how source code becomes running programs, and why it matters for how you write and debug code.
+description: Understand what compilers and interpreters actually do. The CS theory behind how source code becomes running programs, and why it matters for how you write and debug code.
 ---
 
 # Compilers vs. Interpreters: How Your Code Becomes Execution
 
-You've heard "Python is interpreted, Go is compiled" hundreds of times. When you `go build`, something happens and you get a binary. When you `python app.py`, something else happens. But what, exactly?
+!!! tip "Part of a Learning Path"
+    This article is a step in the [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster) pathway on [bradpenney.io](https://bradpenney.io): a guided sequence through the topic. It also stands on its own.
+
+"Python is interpreted, Go is compiled" is one of those lines repeated so often it's stopped meaning anything specific. Running `go build` produces a binary; running `python app.py` does something else entirely. But what, exactly?
 
 The question matters more than trivia. It explains why Go programs start instantly and Python programs spin up a virtual machine. It explains why TypeScript errors appear in your editor before you run anything. It explains why your Java stack trace points to a source file line number even though the JVM is running bytecode. And it explains what actually happens to those 500 lines of Python you just wrote before a single one executes.
 
@@ -15,33 +18,33 @@ The question matters more than trivia. It explains why Go programs start instant
     By the end of this article, you'll be able to:
 
     - Describe the compilation pipeline: source code → tokens → AST → IR → machine code
-    - Distinguish compilers, interpreters, bytecode VMs, and JIT compilers — and give real examples of each
+    - Distinguish compilers, interpreters, bytecode VMs, and JIT compilers. And give real examples of each
     - Explain why compiled and interpreted languages report errors at different times
     - Connect build times, deployment artifacts, and stack trace formats to the compile/interpret choice
     - Reason about the performance trade-offs between ahead-of-time compilation and JIT compilation
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 The compile/interpret distinction shapes your daily development workflow:
 
-- **Build times** — `cargo build` takes minutes on a large Rust project; `python script.py` starts instantly. That asymmetry is compilation work happening at different times.
-- **Error timing** — a Go or Rust type error appears during `build`, before any code runs; a Python `TypeError` appears at runtime, only when that code path executes
-- **Deployment artifacts** — shipping a Go service means shipping a single binary; shipping a Python service means shipping source files plus a Python runtime
-- **Docker image size** — Go programs compile to a single static binary that runs in a `FROM scratch` container; Python requires the interpreter, stdlib, and all dependencies
-- **IDE autocomplete** — TypeScript's language server can autocomplete and flag errors because it compiles your code in the background as you type
-- **`pyc` files** — the `.pyc` files Python creates in `__pycache__` are bytecode, an intermediate form between source and machine code; Python is more complex than "purely interpreted"
+- **Build times:** `cargo build` takes minutes on a large Rust project; `python script.py` starts instantly. That asymmetry is compilation work happening at different times.
+- **Error timing:** a Go or Rust type error appears during `build`, before any code runs; a Python `TypeError` appears at runtime, only when that code path executes
+- **Deployment artifacts:** shipping a Go service means shipping a single binary; shipping a Python service means shipping source files plus a Python runtime
+- **Docker image size:** Go programs compile to a single static binary that runs in a `FROM scratch` container; Python requires the interpreter, stdlib, and all dependencies
+- **IDE autocomplete:** TypeScript's language server can autocomplete and flag errors because it compiles your code in the background as you type
+- **`pyc` files:** the `.pyc` files Python creates in `__pycache__` are bytecode, an intermediate form between source and machine code; Python is more complex than "purely interpreted"
 
 ## Why This Matters for Production Code
 
 === ":material-lightning-bolt: Performance Characteristics"
 
-    Compiled languages (C, C++, Rust, Go) translate your source code into native machine instructions *before* the program runs. At runtime, the CPU executes those instructions directly — no translation overhead.
+    Compiled languages (C, C++, Rust, Go) translate your source code into native machine instructions *before* the program runs. At runtime, the CPU executes those instructions directly. No translation overhead.
 
-    Interpreted languages (classic Python, Ruby, original JavaScript) parse and execute your source code instruction by instruction at runtime. Each operation involves the interpreter figuring out what to do — function lookup, type checking, dispatch — that compiled languages resolved at build time.
+    Interpreted languages (classic Python, Ruby, original JavaScript) parse and execute your source code instruction by instruction at runtime. Each operation involves the interpreter figuring out what to do: function lookup, type checking, dispatch, work that compiled languages already resolved at build time.
 
     The performance difference can be 10–100× for compute-bound workloads. This is why game engines, database internals, and operating system kernels are written in C/C++/Rust, while web frameworks and scripting are comfortable in Python/Ruby.
 
-    Modern JIT-compiled languages (JVM languages, PyPy, V8 JavaScript) narrow this gap by compiling hot code paths to native machine code at runtime — trading startup time for sustained performance.
+    Modern JIT-compiled languages (JVM languages, PyPy, V8 JavaScript) narrow this gap by compiling hot code paths to native machine code at runtime, trading startup time for sustained performance.
 
 === ":material-bug: Error Detection Timing"
 
@@ -60,13 +63,13 @@ The compile/interpret distinction shapes your daily development workflow:
 
     Compiled binaries are architecture-specific: code compiled for Linux/amd64 won't run on macOS/arm64 without recompilation. This is why Go and Rust projects use cross-compilation targets (`GOOS=linux GOARCH=amd64 go build`).
 
-    Interpreted languages trade this for portability: Python code runs on any platform with a Python interpreter. The bytecode formats (`.pyc`, `.class`) add another layer — bytecode compiled once runs on any machine with the right virtual machine. This is the "Write Once, Run Anywhere" proposition Java made in 1995.
+    Interpreted languages trade this for portability: Python code runs on any platform with a Python interpreter. The bytecode formats (`.pyc`, `.class`) add another layer: bytecode compiled once runs on any machine with the right virtual machine. This is the "Write Once, Run Anywhere" proposition Java made in 1995.
 
 === ":material-wrench: Debugging Experience"
 
     Interpreters can provide extremely precise error location: "line 47 of `utils.py`" because the interpreter knows exactly which source line it's currently executing. Source maps in transpiled JavaScript provide the same experience.
 
-    Compiled languages without debug symbols lose source-level information entirely — the binary just knows addresses. Debug builds (`-g` flags) embed source location information back into the binary so debuggers can show you source lines. The production binaries you ship usually strip this for size.
+    Compiled languages without debug symbols lose source-level information entirely. The binary just knows addresses. Debug builds (`-g` flags) embed source location information back into the binary so debuggers can show you source lines. The production binaries you ship usually strip this for size.
 
 ## What a Compiler Actually Does
 
@@ -86,16 +89,16 @@ graph LR
     classDef accent fill:#326CE5,stroke:#cbd5e0,stroke-width:2px,color:#fff
 ```
 
-1. **Lexing (tokenizing)** — the source text is split into tokens: keywords (`func`, `if`), identifiers (`userName`), operators (`+`, `:=`), literals (`42`, `"hello"`)
-2. **Parsing** — tokens are arranged into an Abstract Syntax Tree (AST) that represents the grammatical structure of the program (see [How Parsers Work](how_parsers_work.md))
-3. **Semantic analysis** — type checking, name resolution, scope analysis; this is where `undefined variable` and type mismatch errors come from
-4. **Code generation** — the verified AST is translated into machine instructions or an intermediate representation
+1. **Lexing (tokenizing)**. The source text is split into tokens: keywords (`func`, `if`), identifiers (`userName`), operators (`+`, `:=`), literals (`42`, `"hello"`)
+2. **Parsing:** tokens are arranged into an Abstract Syntax Tree (AST) that represents the grammatical structure of the program (see [How Parsers Work](how_parsers_work.md))
+3. **Semantic analysis:** type checking, name resolution, scope analysis; this is where `undefined variable` and type mismatch errors come from
+4. **Code generation**. The verified AST is translated into machine instructions or an intermediate representation
 
 All of this happens before your program runs. When it fails, you get a compile error. When it succeeds, you get a binary.
 
 ## What an Interpreter Actually Does
 
-An interpreter does all the same analysis — parsing, type checking, name resolution — but does it **at runtime**, just before executing each piece of code.
+An interpreter does all the same analysis (parsing, type checking, name resolution) but does it **at runtime**, just before executing each piece of code.
 
 The simplest model: the interpreter reads one statement, executes it, reads the next, executes it, and so on. This is the "live translator" mental model.
 
@@ -109,11 +112,41 @@ graph LR
     classDef accent fill:#326CE5,stroke:#cbd5e0,stroke-width:2px,color:#fff
 ```
 
-The consequence: every time the program runs, the interpreter does this work again from scratch. This is the source of the startup overhead you see when you `python -c "print('hi')"` — Python is parsing the file, building an AST, and setting up the execution environment before `print` even runs.
+The consequence: every time the program runs, the interpreter does this work again from scratch. This is the source of the startup overhead you see when you `python -c "print('hi')"`: Python is parsing the file, building an AST, and setting up the execution environment before `print` even runs.
+
+## Why You Can Hot-Reload a Flask App, But Not a Go Binary
+
+Save a change to a Python or JavaScript file and, in most dev setups, the running app just... updates. Save a change to a `.go` or `.rs` file and nothing happens until you rebuild and restart it. That difference isn't a tooling gap Go and Rust haven't gotten around to closing. It's downstream of everything above.
+
+An interpreter is a running program that keeps treating your source (or its bytecode) as *data* it reads on every call, not as something it's already consumed and discarded. Data can be swapped out mid-flight. A compiler performs a one-way translation into opcodes the CPU executes directly, and once that translation happens, the running process no longer has any concept of "source" left to consult. There's nothing left to swap.
+
+That said, "hot-reload" covers a few genuinely different things, worth telling apart:
+
+- **A full, fast, automated restart.** What Flask's or Django's dev-server reloader actually does. It watches your files and kills-and-respawns the whole process the moment one changes. It *feels* live because it's instant and automatic, but it's a restart, not a modification of the running process: any in-memory state you hadn't persisted is gone.
+
+    Easy to prove, not just assert. A trivial Flask app returns its own PID and an in-memory counter that increments per request:
+
+    ```text title="Before and after touching the file, no code change needed"
+    $ curl 127.0.0.1:5055/
+    pid=1602188 counter=1
+    $ curl 127.0.0.1:5055/
+    pid=1602188 counter=2
+    $ touch app.py
+    # server.log: "Detected change in 'app.py', reloading" / "Restarting with stat"
+    $ curl 127.0.0.1:5055/
+    pid=1603138 counter=1
+    ```
+
+    New PID, counter back to 1. That's not a patch to the running process — it's a different process, with Werkzeug's own log calling it "restarting," not "reloading in place."
+
+- **REPL-style redefinition.** A Python, Ruby, or Node REPL (or a Jupyter kernel) lets you redefine a function directly, and the *next call* uses the new version, in the same process, with all its state intact. This is closer to true live editing.
+- **Real hot code swapping.** Erlang and Elixir's BEAM VM can replace a running module's code with zero downtime and no state loss, a capability the language was explicitly designed around (it's how telecom systems patch live call-handling code without dropping calls). Smalltalk and Lisp environments work the same way, treating the running program as a "live image" you edit in place rather than a fixed artifact you rebuild.
+
+Compiled languages have nothing in this list, structurally. Not because nobody's built the tooling, but because the running process genuinely is machine code sitting in memory with no source left to point back to. Tools like `air` or `CompileDaemon` for Go just automate the rebuild-and-restart cycle faster; they're doing the same restart Flask's reloader does, for a language where "restart" is the only option to begin with.
 
 ## Error Timing in Practice
 
-The most concrete difference between compiled and interpreted languages is *when* a type error gets caught. The same logical mistake — passing a number where a string is expected — is caught at completely different points:
+The most concrete difference between compiled and interpreted languages is *when* a type error gets caught. The same logical mistake (passing a number where a string is expected) is caught at completely different points:
 
 === ":material-language-python: Python"
 
@@ -220,8 +253,8 @@ The most concrete difference between compiled and interpreted languages is *when
 
 Modern "interpreted" languages rarely operate purely as described above. Python, Ruby, Lua, and the JVM languages all use a **hybrid approach**:
 
-1. **Compile to bytecode** — the source is compiled to a compact intermediate representation (Python's `.pyc` files, Java's `.class` files). This step catches syntax errors and does some optimization.
-2. **Execute bytecode in a virtual machine** — a specialized interpreter reads bytecode instructions (which are simpler and more uniform than source code) and executes them.
+1. **Compile to bytecode**. The source is compiled to a compact intermediate representation (Python's `.pyc` files, Java's `.class` files). This step catches syntax errors and does some optimization.
+2. **Execute bytecode in a virtual machine:** a specialized interpreter reads bytecode instructions (which are simpler and more uniform than source code) and executes them.
 
 ```mermaid
 graph LR
@@ -243,11 +276,11 @@ Java's bytecode portability is the design intention: compile once to `.class` fi
 
 The result: JIT-compiled code starts with interpreted performance (slow), then approaches native performance as the JIT identifies and compiles hot paths.
 
-- **V8** (Node.js, Chrome) JIT-compiles JavaScript — this is why Node.js is fast enough for production servers despite JavaScript being "interpreted"
-- **JVM HotSpot** JIT-compiles Java bytecode — mature Java applications often match C++ performance after warmup
-- **PyPy** is a JIT-compiled Python implementation — 5–50× faster than CPython for compute-bound code
+- **V8** (Node.js, the Chrome browser) JIT-compiles JavaScript. This is why Node.js is fast enough for production servers despite JavaScript being "interpreted"
+- **JVM HotSpot** JIT-compiles Java bytecode: mature Java applications often match C++ performance after warmup
+- **PyPy** is a JIT-compiled Python implementation: 5–50× faster than CPython for compute-bound code
 
-The trade-off: JIT compilation adds complexity and startup cost. This is why Lambda functions and short-lived containers pay a "cold start" penalty — the JIT hasn't had time to optimize the hot paths yet.
+The trade-off: JIT compilation adds complexity and startup cost. This is why Lambda functions and short-lived containers pay a "cold start" penalty. The JIT hasn't had time to optimize the hot paths yet.
 
 ## Summary Table
 
@@ -259,13 +292,21 @@ The trade-off: JIT compilation adds complexity and startup cost. This is why Lam
 | **JIT** | Hot paths at runtime | V8, HotSpot, PyPy | Near-native performance after warmup; cold start cost |
 | **Transpiled** | Build time, target is another language | TypeScript → JS, Babel | Source-level benefits; adds build step |
 
+Squint at that table and it collapses into three real tiers, not five. **C++, Go, and Rust** hand the CPU real opcodes directly, at compile time: nothing stands between your code and the hardware at runtime. **Python and Java** hand a *different* virtual machine's bytecode to its own interpreter instead, itself a real, compiled program running its own fetch-decode-execute cycle on your behalf, every single call. **JavaScript in Node** does the same through V8, with a JIT built in from the start to try to erase the difference for code that runs often enough. Nobody skips the CPU's fetch-decode-execute cycle: some of you are just paying for an extra layer of it, invisibly, until a JIT compiler decides that layer is worth removing.
+
+## What's Next
+
+You know how source becomes instructions. What's still missing is where those instructions actually live while they run, and why a process can trust that its memory is its own. **[The Stack, the Heap, and Virtual Memory](../essentials/stack_heap_virtual_memory.md)** picks that up next.
+
+---
+
 ## Technical Interview Context
 
 The compile/interpret distinction is relevant for system design interviews, language choice discussions, and questions about build pipelines and deployment.
 
 ??? question "Why does Go start up faster than Python?"
 
-    Go compiles to native machine code ahead of time; the resulting binary runs directly on the CPU. Python parses source and compiles to bytecode on first run (caching the result in `__pycache__`), then starts the CPython VM on every invocation. The difference is when translation work happens — AOT vs. at runtime.
+    Go compiles to native machine code ahead of time; the resulting binary runs directly on the CPU. Python parses source and compiles to bytecode on first run (caching the result in `__pycache__`), then starts the CPython VM on every invocation. The difference is when translation work happens: AOT vs. at runtime.
 
 ??? question "What causes Lambda / container cold start latency?"
 
@@ -277,7 +318,7 @@ The compile/interpret distinction is relevant for system design interviews, lang
 
 ??? question "Why does TypeScript need a build step if JavaScript doesn't?"
 
-    TypeScript adds a compilation phase that type-checks your code and emits JavaScript. This catches type errors at build time — before any code runs — at the cost of a build step. It's a compiled layer over an interpreted language: the type safety of static analysis without changing the runtime.
+    TypeScript adds a compilation phase that type-checks your code and emits JavaScript. This catches type errors at build time (before any code runs) at the cost of a build step. It's a compiled layer over an interpreted language: the type safety of static analysis without changing the runtime.
 
 ## Practice Problems
 
@@ -285,7 +326,7 @@ The compile/interpret distinction is relevant for system design interviews, lang
 
     You're building a CLI tool that will be distributed to users across macOS, Linux, and Windows. It needs to start in under 100ms and have no runtime dependencies (no "please install Python first").
 
-    Which approach — compiled, bytecode VM, or interpreted — best fits this use case? Why?
+    Which approach (compiled, bytecode VM, or interpreted) best fits this use case? Why?
 
     ??? tip "Answer"
 
@@ -308,13 +349,13 @@ The compile/interpret distinction is relevant for system design interviews, lang
 
     ??? tip "Answer"
 
-        a. **Compile time** — TypeScript's compiler checks method existence against type definitions during `tsc`; error appears before any code runs.
+        a. **Compile time:** TypeScript's compiler checks method existence against type definitions during `tsc`; error appears before any code runs.
 
-        b. **Runtime** — Python only executes this code path when the user provides `0`; the error appears as a `ZeroDivisionError` at runtime, only when triggered.
+        b. **Runtime:** Python only executes this code path when the user provides `0`; the error appears as a `ZeroDivisionError` at runtime, only when triggered.
 
-        c. **Compile time** — Go is statically typed; `go build` rejects this type mismatch before the program runs.
+        c. **Compile time:** Go is statically typed; `go build` rejects this type mismatch before the program runs.
 
-        d. **Neither** — neither compilers nor interpreters can detect arbitrary infinite loops (this is the Halting Problem; it's theoretically undecidable). The program just runs forever.
+        d. **Neither:** neither compilers nor interpreters can detect arbitrary infinite loops (this is the Halting Problem; it's theoretically undecidable). The program just runs forever.
 
 ## Key Takeaways
 
@@ -332,13 +373,13 @@ The compile/interpret distinction is relevant for system design interviews, lang
 
 **On This Site**
 
-- [How Parsers Work](how_parsers_work.md) — the lexing and parsing phases that both compilers and interpreters share
-- [Finite State Machines](finite_state_machines.md) — the theory behind lexers; how source text is tokenized
-- [Regular Expressions](regular_expressions.md) — the pattern matching that drives tokenization
+- [How Parsers Work](how_parsers_work.md). The lexing and parsing phases that both compilers and interpreters share
+- [Finite State Machines](finite_state_machines.md). The theory behind lexers; how source text is tokenized
+- [Regular Expressions](regular_expressions.md). The pattern matching that drives tokenization
 
 **External**
 
-- [*Introduction to Computing*](https://computingbook.org/) by David Evans, Chapter 3 — the motivation for formal languages over natural languages, and Scheme as an example of a language designed for interpretation
-- [*Crafting Interpreters*](https://craftinginterpreters.com/) by Robert Nystrom — a complete walk-through of building both a tree-walking interpreter and a bytecode VM
+- [*Introduction to Computing*](https://computingbook.org/) by David Evans, Chapter 3. The motivation for formal languages over natural languages, and Scheme as an example of a language designed for interpretation
+- [*Crafting Interpreters*](https://craftinginterpreters.com/) by Robert Nystrom: a complete walk-through of building both a tree-walking interpreter and a bytecode VM
 
-The next time someone says "Python is slow" or "Go is fast," you now know what that actually means: it's a statement about when translation work happens and what the runtime overhead of that translation is. Neither approach is universally better — they're different trade-offs for different problems.
+The next time someone says "Python is slow" or "Go is fast," you now know what that actually means: it's a statement about when translation work happens and what the runtime overhead of that translation is. Neither approach is universally better: they're different trade-offs for different problems.
