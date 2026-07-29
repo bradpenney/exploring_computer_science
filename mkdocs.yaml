@@ -91,7 +91,8 @@ plugins:
         - "efficiency/sorting_insertion.md"
         - "efficiency/sorting_merge.md"
         - "efficiency/sorting_quick.md"
-        - "efficiency/systems/**"
+        - "efficiency/systems/network_fundamentals.md"
+        - "efficiency/systems/internet_vs_www.md"
         # Mastery (returning to draft for essentials/efficiency-only release)
         - "mastery/**"
   - rss:
@@ -167,6 +168,9 @@ nav:
           - Recursion: essentials/recursion.md
       - Data Structures:
           - Trees: essentials/trees_basics.md
+      - Systems:
+          - "What Actually Happens When Your Code Runs": essentials/cpu_and_machine_code.md
+          - The Stack, the Heap, and Virtual Memory: essentials/stack_heap_virtual_memory.md
 #      - Data Structures (drafts):
 #          - Stacks & Queues: essentials/stacks_and_queues.md
 #          - Linked Lists: essentials/linked_lists.md
@@ -205,9 +209,11 @@ nav:
 #          - Encapsulation: efficiency/oop/oop_encapsulation.md
 #          - Inheritance: efficiency/oop/oop_inheritance.md
 #          - Polymorphism: efficiency/oop/oop_polymorphism.md
-#      - Systems:
-#          - Operating System Basics: efficiency/systems/operating_system_basics.md
-#          - Processes & Threads: efficiency/systems/processes_and_threads.md
+      - Systems:
+          - Operating System Basics: efficiency/systems/operating_system_basics.md
+          - Processes & Threads: efficiency/systems/processes_and_threads.md
+          - How the OS Scheduler Actually Decides: efficiency/systems/os_scheduler.md
+          - "x86, ARM, and RISC-V": efficiency/systems/x86_arm_risc.md
 #          - Network Fundamentals: efficiency/systems/network_fundamentals.md
 #          - Internet vs WWW: efficiency/systems/internet_vs_www.md
 #      - Data & Security:

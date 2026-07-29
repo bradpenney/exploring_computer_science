@@ -35,7 +35,7 @@ Four parts, and you've used all of them:
 - **The headers** (`Host`, `Authorization`, `Content-Type`) — *metadata about the request*.
 - **The body** (`{"product_id": 7, ...}`) — *the data you're sending* (not every request has one).
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 Every Postman request you've built is these four parts in a GUI: the method dropdown, the URL bar, the Headers tab, and the Body tab. Postman is just a friendly face over raw HTTP.
 
@@ -185,6 +185,12 @@ Expect "what's the difference between `PUT` and `PATCH`?" or "when would you ret
 | **Anatomy = contract** | Address + request shape + response shape, made concrete |
 
 An HTTP message looks intimidating until you see it's just four parts with fixed jobs: an action, a target, some metadata, and a payload — answered by a status code, more metadata, and a payload. That structure isn't bureaucracy; it's the vocabulary your API contract is written in. Master the anatomy and "designing an endpoint" becomes "deciding what goes in each slot."
+
+## What's Next
+
+You've read the request/response contract field by field. **[Seeing API Traffic: `curl -v` and the Network Tab](https://tools.bradpenney.io/essentials/web/inspecting_http_traffic/)** puts it in front of you on real, live traffic.
+
+---
 
 ## Further Reading
 

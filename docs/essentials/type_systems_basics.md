@@ -6,7 +6,7 @@ description: Understand type systems from a CS theory perspective — what types
 
 # Type Systems: The Contract Behind Every Variable
 
-You've seen `TypeError: unsupported operand type(s) for +: 'int' and 'str'` in Python. You've fought with TypeScript refusing to compile because a `string` showed up where a `number` was expected. You've written Go code that wouldn't build because you passed the wrong type to a function. You've added type hints to a Python codebase and had a teammate ask "why bother?"
+`TypeError: unsupported operand type(s) for +: 'int' and 'str'` shows up in Python constantly. TypeScript refuses to compile because a `string` showed up where a `number` was expected. Go code won't build because the wrong type got passed to a function. Type hints get added to a Python codebase, and a teammate asks "why bother?"
 
 **The "why bother" answer is CS theory.** Types are not just documentation or editor niceties — they are formal contracts that define what values exist and what operations are valid on those values. Every type error you've ever seen is the language enforcing one of these contracts.
 
@@ -20,7 +20,7 @@ You've seen `TypeError: unsupported operand type(s) for +: 'int' and 'str'` in P
     - Connect `TypeError`, `mypy` errors, and TypeScript complaints to formal type theory
     - Explain why type systems exist beyond documentation and editor autocompletion
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 Type systems permeate every production codebase:
 

@@ -5,13 +5,13 @@ description: Learn how procedures abstract logic and how higher-order functions 
 ---
 # Procedures and Higher-Order Functions
 
-You've written `list.sort(key=lambda x: x['price'])` to sort by a custom field. You've chained `.filter()` and `.map()` on arrays. You've applied `@cache` or `@retry` decorators. You've passed callbacks to event listeners or async functions.
+`list.sort(key=lambda x: x['price'])` sorts by a custom field. `.filter()` and `.map()` get chained on arrays. `@cache` and `@retry` decorators wrap functions routinely. Callbacks get passed to event listeners and async functions without a second thought.
 
-**You've been using higher-order functions all along. This is the CS theory that names what you're doing.**
+**All of that is higher-order functions, already in daily use. This is the CS theory that names what's happening.**
 
 A procedure is a named sequence of steps packaged into a reusable unit. A higher-order function is a function that takes other functions as arguments or returns functions as results. Both ideas are fundamental — procedures are how you manage complexity; higher-order functions are how you compose behavior dynamically. Together they form the foundation of abstraction, the single most important concept in computer science.
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 Higher-order functions show up throughout every modern codebase:
 

@@ -9,7 +9,7 @@ Scheme is one of the most elegant programming languages ever designed. Created i
 
 You've written Python, JavaScript, or Go for years. You know how to code. Scheme isn't here to teach you new syntax tricks — it's here to show you the skeleton of computation itself. With fewer than a dozen rules, Scheme can express any program you can write in any other language. Understanding why forces you to confront what programming actually *is*.
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 Scheme's ideas are embedded in every language you use today:
 

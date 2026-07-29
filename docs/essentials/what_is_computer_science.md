@@ -5,7 +5,7 @@ description: Computer science isn't about computers. It's the systematic study o
 ---
 # What is Computer Science?
 
-You've shipped production code. You've profiled slow database queries, argued about architecture in code reviews, and debugged stack traces at 2am. But if someone asked you what computer science *actually is* — not a language, not a framework, not a deployment tool — you might reach for a vague answer.
+Shipping production code, profiling slow database queries, arguing about architecture in code reviews, debugging stack traces at 2am — all in a day's work for most engineers. Ask the same engineers what computer science *actually is* — not a language, not a framework, not a deployment tool — and the answer usually goes vague fast.
 
 **This is the theory you were missing.**
 

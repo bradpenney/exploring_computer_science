@@ -9,7 +9,7 @@ description: "Who you are vs what you're allowed to do — and crucially, where 
 !!! tip "Part of a Learning Path"
     This article is part of the [How APIs Actually Work](https://bradpenney.io/pathways/how-apis-work) pathway on [bradpenney.io](https://bradpenney.io) — a guided sequence through the topic. It also stands on its own.
 
-You've configured plenty of auth: pasted API keys, generated bearer tokens, set up OAuth in a client. You understand the *design concepts* of authenticating a request. But there's a layer underneath that stays muddy — *where* in the flow the check actually happens, why two different things both get called "auth," and what you're really deciding when you "secure an endpoint."
+Configuring auth is routine work: pasting API keys, generating bearer tokens, wiring up OAuth in a client. The *design concepts* behind authenticating a request are familiar territory. What stays muddy is the layer underneath — *where* in the flow the check actually happens, why two different things both get called "auth," and what "secure an endpoint" is actually deciding.
 
 It comes apart cleanly once you see it as **two distinct questions, asked in order, on every single request**:
 
@@ -34,7 +34,7 @@ These two outcomes map onto two status codes you already know:
 - `401 Unauthorized` → authentication failed. *We don't know who you are.* (Misnamed — it really means "unauthenticated.")
 - `403 Forbidden` → authentication succeeded, authorization failed. *We know exactly who you are, and the answer is no.*
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 When an API returns `401`, re-pasting a fresh token fixes it — that's an *authentication* problem. When it returns `403` no matter how valid your token is, you lack *permission* — a different problem entirely, and a new token won't help.
 
@@ -126,7 +126,7 @@ So a typical request is authenticated at the gateway and authorized in the servi
 A concrete form of this offloading is a **sidecar auth proxy** — a small proxy deployed alongside your service that runs the credential checks before requests reach your code. [forevd](https://github.com/firestoned/forevd), for example, externalizes authentication (mTLS or OIDC) and *coarse* authorization (is the caller in an allowed LDAP group or user list?) out of the application, while the per-object, business-rule authorization still lives in the service. It's one of several tools in this space — gateways, service meshes, and sidecars all overlap here.
 
 !!! info "Disclosure"
-    I contribute to forevd. It's referenced here as one example of the sidecar auth pattern, not an endorsement.
+    I contribute to forevd and I recommend it — I have no financial stake in it, so the recommendation isn't a paid placement, just a genuine one.
 
 ## Sending and Checking a Credential
 
@@ -291,6 +291,12 @@ The client side is uniform across languages — attach the credential to every r
 | **Top breach** | Authenticated user accessing another user's object (missing per-object authZ) |
 
 Securing an endpoint is two questions, never one: *who are you* and *what may you do*. Authentication scans the badge; authorization decides which doors it opens — and the doors are checked by the service that owns them, on the server, on every request. Keep the two questions distinct and in order, and the muddiest part of "how do I secure this?" turns into a checklist you can actually follow.
+
+## What's Next
+
+Identity and permission checks assume the connection carrying them is already trustworthy. **[HTTPS for APIs](https://networking.bradpenney.io/essentials/tls/https_for_apis/)** covers where that trust actually gets established — and where encryption stops in production.
+
+---
 
 ## Further Reading
 

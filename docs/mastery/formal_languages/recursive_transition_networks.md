@@ -11,7 +11,7 @@ When you write `x = 3 + 4 * 2`, the language runtime evaluates it as `3 + (4 * 2
 
 RTNs extend [Finite State Machines](../../efficiency/finite_state_machines.md) with one crucial capability: the ability to call other networks recursively. This addition transforms them from recognizers of simple patterns into tools for parsing arbitrarily nested structures — expressions inside parentheses, objects inside arrays, subqueries inside queries.
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 RTN structure appears in every parser-heavy system in your stack:
 

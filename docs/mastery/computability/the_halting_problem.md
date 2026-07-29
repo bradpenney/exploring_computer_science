@@ -1,6 +1,6 @@
 # The Halting Problem
 
-You've likely encountered the "Infinite Loop" bug. You write a `while` loop, mess up the exit condition, and your program freezes. You have to force-quit it.
+The "Infinite Loop" bug is a familiar one: a `while` loop with a broken exit condition, a frozen program, a force-quit.
 
 Wouldn't it be amazing if your code editor could warn you? Imagine a red squiggly line that pops up and says: *"Error: This loop will never finish."*
 

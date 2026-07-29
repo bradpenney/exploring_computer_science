@@ -23,7 +23,7 @@ Every request starts from zero. The server reads it, does the work, sends a resp
 
 HTTP, the protocol almost every web API rides on, is stateless. That single property shapes everything above it.
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 You attach the same `Authorization: Bearer <token>` header to *every* call to the same API. You're not being redundant — you're compensating for a server that genuinely doesn't remember the last request you made.
 
@@ -179,6 +179,12 @@ A frequent confusion: "If APIs are stateless, how does my bank remember my balan
 | **State ≠ data** | Statelessness is about conversation memory, not durable database data |
 
 Statelessness is the quiet decision that lets the web scale to billions of requests: forget everyone, and any server can serve anyone. The price is that *remembering* becomes the request's job, not the server's — which is why every call carries its own proof of identity. Decide early *where* that memory lives, and a whole class of "works on my machine" production mysteries never happens to you.
+
+## What's Next
+
+You know why the server forgets you between requests. **[Anatomy of an HTTP Request and Response](anatomy_of_request_response.md)** covers exactly what's inside each one — methods, status codes, headers, and body.
+
+---
 
 ## Further Reading
 

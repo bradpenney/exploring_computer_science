@@ -10,7 +10,7 @@ You store data in databases, send it over APIs, compress it for storage, and enc
 
 **These questions have precise mathematical answers.** In 1948, Claude Shannon published *A Mathematical Theory of Communication*, establishing information theory as a field. His framework is the theoretical foundation of every compression algorithm, every communications protocol, and every error-correcting code — from ZIP files to Wi-Fi to QR codes. Understanding it makes the design decisions in these systems legible rather than mysterious.
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 Information theory underlies engineering decisions you make constantly:
 

@@ -5,7 +5,7 @@ description: The complete practical reference for writing and reading regex in p
 ---
 # Regular Expressions
 
-You've copied regex from Stack Overflow. You've pasted `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$` into a validator without reading it. You've used IDE find-and-replace in regex mode and wondered why `.` suddenly matches everything.
+Regex gets copied from Stack Overflow constantly. `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$` gets pasted into a validator without anyone reading it. IDE find-and-replace in regex mode raises the same recurring question: why does `.` suddenly match everything?
 
 **This is the reference that makes those patterns readable.**
 
@@ -21,7 +21,7 @@ Regular expressions are a pattern language for matching, extracting, and transfo
     - Recognize the common pitfalls: catastrophic backtracking, missing anchors, and escaped characters
     - Know when regex is the right tool and when to reach for a parser instead
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 Regex appears throughout a working engineer's day:
 

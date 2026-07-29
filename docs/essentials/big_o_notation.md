@@ -22,7 +22,7 @@ Big-O notation isn't academic gatekeeping. It's the language engineers use to di
     - Predict how an algorithm's performance will change as data grows to production scale
     - Make informed trade-offs between time complexity and space complexity
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 You've already been doing Big-O thinking, even if you didn't have the vocabulary for it:
 

@@ -9,13 +9,13 @@ description: "How do two machines agree on an encryption key while attackers wat
 !!! tip "Part of a Learning Path"
     This article is part of the [Put Your Kubernetes App on the Internet](https://bradpenney.io/pathways/cluster-to-internet) pathway on [bradpenney.io](https://bradpenney.io) — a guided sequence through the topic. It also stands on its own.
 
-You've pasted an SSH public key into GitHub without worrying that it's, well, *public*. You've picked `RS256` from a dropdown to sign JWTs. You've watched a TLS handshake fly by in `curl -v`. All of it works, you ship on top of it daily, and underneath all of it sits one question you've probably never had to answer:
+An SSH public key gets pasted into GitHub without a second thought about it being, well, *public*. `RS256` gets picked from a dropdown to sign JWTs. A TLS handshake flies by in `curl -v`, unremarked. All of it works, teams ship on top of it daily, and underneath all of it sits one question most engineers have never had to answer:
 
 **How can two machines that have never met agree on a secret, while an attacker reads every packet they exchange?**
 
 That question was considered unsolvable for most of the history of cryptography. The answer, public-key (asymmetric) cryptography, is the theory this article covers, and it's less math-heavy than its reputation. You need three ideas and one worked example, and suddenly SSH keys, certificates, and token signing stop being ritual and start being obvious.
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 Public-key cryptography is likely the theory you *use* most and understand least:
 
@@ -297,6 +297,12 @@ The questions here separate "has used TLS" from "understands it":
 | **Hybrid systems** | Asymmetric to authenticate and exchange keys; symmetric for the actual data |
 
 The next time a TLS handshake scrolls past in `curl -v`, you'll know what's inside it: a signature check proving the server's identity, an ephemeral key exchange conjuring a shared secret in public, and a handoff to symmetric encryption for the real work. The math earned its reputation; the *ideas* never deserved theirs.
+
+## What's Next
+
+You have the three ideas — one-way functions, key exchange, signatures. **[TLS Basics: How HTTPS Actually Works](https://networking.bradpenney.io/essentials/tls/tls_basics/)** is where they stop being theory and become the handshake that puts a padlock in the browser.
+
+---
 
 ## Further Reading
 

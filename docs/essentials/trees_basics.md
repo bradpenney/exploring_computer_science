@@ -21,7 +21,7 @@ Trees are one of the most fundamental data structures in computer science — an
     - Reason about tree height and its relationship to time complexity
     - Explain pre-order, in-order, and post-order traversal and identify which produces sorted output on a BST
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 Trees show up everywhere in production systems:
 

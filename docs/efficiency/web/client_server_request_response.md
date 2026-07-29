@@ -28,7 +28,7 @@ That's the whole model. The hard part is that "client" and "server" are **roles,
 
     "Front end" and "back end" are not the same axis as "client" and "server." The front end is almost always a *client*. But your back end is *also a client* whenever it calls another service. The role is defined by **who initiates this particular request**, not by where the code lives.
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 Your browser is a client when it loads a page; your back-end service becomes a client the moment it calls the payments API. Same code, different role, depending on who started the conversation.
 
@@ -252,6 +252,12 @@ A common system-design probe is "walk me through what happens when a user clicks
 | **Each arrow = one round trip** | Latency and failure accumulate per hop in the chain |
 
 The front-end/back-end boundary isn't a wall in a building — it's the point where the **client stops and the server starts**, redrawn for every single request. Learn to trace one request, name each actor as it initiates or responds, and remember that the client is never trusted. Do that, and the muddiest part of API design becomes the clearest.
+
+## What's Next
+
+You've traced a request in the abstract. The next step grounds it in the internet's actual addressing: **[From URL to Endpoint](https://networking.bradpenney.io/essentials/http/from_url_to_endpoint/)** — what "expose an endpoint" really means once DNS, ports, and binding enter the picture.
+
+---
 
 ## Further Reading
 

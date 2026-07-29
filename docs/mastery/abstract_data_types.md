@@ -6,13 +6,13 @@ description: Learn how abstract data types separate what data does from how it's
 
 # Abstract Data Types: Designing by Contract
 
-You've had this argument: "Should we use a `dict` or a `list` internally?" Then a senior engineer says "the callers don't care — expose an interface and change the implementation later." You've written a Go interface, a Python ABC, or a Java interface and been told it's "good design" without a clear explanation of *why*.
+"Should we use a `dict` or a `list` internally?" is a familiar argument, usually settled by a senior engineer saying "the callers don't care — expose an interface and change the implementation later." A Go interface, a Python ABC, or a Java interface gets written and called "good design," often with no clear explanation of *why*.
 
 **The "why" is CS theory.** The principle is called *data abstraction*, and the artifact it produces is called an **Abstract Data Type** (ADT). It's the idea that the most important thing about a data type is not how it stores data — it's what operations it supports and what contracts those operations fulfill.
 
 This is one of the most consequential ideas in software engineering. Every interface, protocol, trait, and ABC in every language exists because of this principle.
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 Abstract data types are everywhere in production code:
 

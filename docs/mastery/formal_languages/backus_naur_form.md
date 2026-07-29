@@ -5,7 +5,7 @@ description: "Backus-Naur Form (BNF) explained: The standard notation for defini
 ---
 # Backus-Naur Form (BNF)
 
-You've read language specifications and seen notation like this:
+Language specifications are full of notation like this:
 
 ```
 <statement> ::= <if_stmt> | <while_stmt> | <assignment> | <expr>
@@ -17,7 +17,7 @@ That's BNF. It appears in every language standard, every parser generator's docu
 
 BNF has been the standard grammar notation since the late 1950s. Understanding it gives you access to the formal specifications of every language and protocol you use, and to the tools for building parsers that process structured text.
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 BNF or BNF-derived notation appears throughout the tools and specifications you work with:
 

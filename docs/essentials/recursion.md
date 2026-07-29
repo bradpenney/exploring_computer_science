@@ -6,7 +6,7 @@ description: Understand the CS theory behind recursive problem solving — base 
 
 # Recursion: Solving Problems by Dividing Them
 
-You've written a function that caused a `RecursionError` or `stack overflow`. You've stared at a stacktrace that showed the same function name repeated 500 times. You've used recursive functions for tree traversal or directory walking, and they felt elegant — but you couldn't quite explain *why* recursion rather than a loop.
+A function causes a `RecursionError` or `stack overflow`, and the stacktrace shows the same function name repeated 500 times. Recursive functions for tree traversal or directory walking feel elegant — right up until someone asks *why* recursion instead of a loop, and the answer doesn't come easily.
 
 **The "why" is divide-and-conquer.** Recursion isn't a syntax trick — it's the primary computational strategy for problems that have self-similar structure. Once you see it from the CS theory perspective, you'll recognize which problems *demand* recursion and which are just loops in disguise.
 
@@ -20,7 +20,7 @@ You've written a function that caused a `RecursionError` or `stack overflow`. Yo
     - Recognize which problems call for recursion and which are iteration in disguise
     - Reason about call stack depth and explain what causes a stack overflow
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 Recursive structure appears in the code you work with every day:
 

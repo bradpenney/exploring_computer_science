@@ -5,7 +5,7 @@ description: Understanding Finite State Machines (FSMs), the elegant model behin
 ---
 # Finite State Machines (FSMs)
 
-You've written authentication flows that move users through states: unauthenticated → logging in → authenticated → session expired. You've read TCP connection states in debugging output: `LISTEN`, `SYN_SENT`, `ESTABLISHED`, `CLOSE_WAIT`. You've built form validation that changes behavior based on whether input is empty, invalid, or valid. All of these are implementations of the same theoretical model.
+Authentication flows move users through states: unauthenticated → logging in → authenticated → session expired. TCP connections report their status in exactly the same shape, right in debugging output: `LISTEN`, `SYN_SENT`, `ESTABLISHED`, `CLOSE_WAIT`. Form validation that changes behavior based on whether input is empty, invalid, or valid is the same pattern again. All three are implementations of the same theoretical model.
 
 **This is that model.**
 
@@ -23,7 +23,7 @@ Understanding FSMs requires [computational thinking](computational_thinking.md):
     - Implement an FSM in code and explain why explicit state machines improve testability
     - Identify what FSMs cannot do — and why that boundary matters for regex and parsers
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 FSMs appear throughout production software:
 

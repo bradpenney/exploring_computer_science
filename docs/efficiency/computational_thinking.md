@@ -5,9 +5,9 @@ description: "Master the mental toolkit of computer science: Decomposition, Patt
 ---
 # Computational Thinking
 
-You've broken a large feature into tickets. You've recognized that a new problem is "basically the same as the caching issue we solved last quarter." You've written a function to hide SMTP configuration from the rest of your codebase. You've sketched out a step-by-step plan before writing a single line of code.
+Breaking a large feature into tickets. Recognizing that a new problem is "basically the same as the caching issue solved last quarter." Writing a function that hides SMTP configuration from the rest of a codebase. Sketching a step-by-step plan before writing a single line of code — most working engineers do all four of these constantly, usually without a name for any of them.
 
-You've been practicing computational thinking all along. You just didn't have the formal vocabulary for it.
+That's computational thinking, practiced daily, minus the formal vocabulary for it.
 
 **This is the CS theory behind systematic problem-solving.**
 
@@ -23,7 +23,7 @@ Computational thinking is a framework of four mental skills that underpin how co
     - Write an algorithm precise enough for a computer to execute without ambiguity
     - Explain why good abstraction makes code testable, maintainable, and composable
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 The four pillars of computational thinking map directly to things you do in production engineering:
 

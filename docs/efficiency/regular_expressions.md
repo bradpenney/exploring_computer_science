@@ -21,7 +21,7 @@ Understanding how regex engines work explains ReDoS, why some engines are faster
     - Explain why backreferences make regex non-regular — and what that means for engine design
     - Know when regex cannot solve a problem and why a parser is the correct tool instead
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 These are the situations where the formal model matters:
 

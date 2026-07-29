@@ -9,9 +9,9 @@ description: "An API is a contract, not a tool. Learn what an API really is, why
 !!! tip "Part of a Learning Path"
     This article is part of the [How APIs Actually Work](https://bradpenney.io/pathways/how-apis-work) pathway on [bradpenney.io](https://bradpenney.io) — a guided sequence through the topic. It also stands on its own.
 
-You've called APIs a thousand times. You `curl` an endpoint, you click "Send" in Postman, you copy a bearer token into a header and a JSON blob comes back. You can make it work. But when someone asks you to *design* one — "expose an endpoint for the billing team" — the ground shifts. What exactly are you exposing? What is the *thing* you're being asked to build?
+Calling APIs is routine: `curl` an endpoint, click "Send" in Postman, copy a bearer token into a header, watch a JSON blob come back. Making it work isn't the hard part. The ground shifts the moment someone asks for one to be *designed* — "expose an endpoint for the billing team" — and what's actually being exposed, the *thing* being asked for, turns out to be surprisingly hard to pin down.
 
-**This is the concept you were missing.** Not how to use an API — you've got that — but what an API fundamentally *is*.
+**This is the concept most engineers are missing.** Not how to use an API — that part's solid — but what an API fundamentally *is*.
 
 The short version: an API is a **contract**, not a piece of software. Once that clicks, everything downstream (how it's secured, where the front end stops and the back end begins, why it returns the status codes it does) stops being muddy.
 
@@ -24,7 +24,7 @@ Read that again with the emphasis on **contract** and **without knowing how the 
 - The **contract** says: "Send me a request shaped like *this*, and I promise to respond shaped like *that*."
 - The **without knowing** part is the magic: the caller doesn't care if your back end is Python, Go, a mainframe from 1994, or three microservices in a trench coat. It only cares that the contract holds.
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 Every time you `curl https://api.example.com/users/42` and trust that you'll get user 42 back as JSON, you're relying on a contract — you never saw the database, the language, or the server.
 
@@ -164,6 +164,12 @@ That's it. That short list *is* an API. A front-end developer in another country
 | **Breaking the contract** | Renaming or removing what callers depend on breaks their software, not just yours |
 
 Once you stop seeing an API as "code that returns JSON" and start seeing it as a **contract that hides a kitchen**, the design questions answer themselves. What should I expose? Only what you're willing to promise. How do I secure it? Decide who's allowed through each door in the contract. Where does the front end stop? Exactly at the contract — everything past it is your kitchen, and no one else's business.
+
+## What's Next
+
+You know an API is a contract between two roles — client and server. The next step is seeing that contract in motion: **[Client and Server: The Request/Response Lifecycle](../efficiency/web/client_server_request_response.md)** traces one request end to end.
+
+---
 
 ## Further Reading
 

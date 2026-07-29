@@ -21,7 +21,7 @@ Parsing is the process of analyzing text according to a formal grammar. It's how
     - Implement a simple recursive descent parser for arithmetic expressions
     - Explain how operator precedence is encoded in grammar structure — not as special-case logic
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 Parsers run constantly behind the scenes in your daily work:
 

@@ -5,7 +5,7 @@ description: "Why Lisp and Scheme use parentheses: Understanding prefix notation
 ---
 # Scheme, Lisp, and Parse Trees
 
-You've probably encountered Lisp or Scheme — in a CS course, as the language Emacs is configured in, or as the ancestor of Clojure and Racket. The parentheses everywhere can look alien at first.
+Lisp and Scheme show up in a few familiar places — a CS course, the language Emacs is configured in, the ancestor of Clojure and Racket. The parentheses everywhere tend to look alien at first.
 
 Those parentheses are the point.
 
@@ -15,7 +15,7 @@ Scheme uses a notation where the structure of the code *is* the parse tree. Ther
 
 When your Python or Go runtime parses `3 + 4 * 5`, it builds an internal tree to handle operator precedence. In Scheme, that tree is visible directly in the source code. Studying Scheme means studying [parse trees](../../efficiency/how_parsers_work.md) with the training wheels off.
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 Lisp's influence is everywhere in modern programming:
 

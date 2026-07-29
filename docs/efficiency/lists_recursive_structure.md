@@ -22,7 +22,7 @@ This is the CS theory behind every `map` and `reduce` you've written.
     - Recognize `map`, `filter`, and `reduce` as instances of the fold pattern
     - Connect Scheme/Lisp list theory to Python `list`, JavaScript arrays, and Go slices
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 The recursive structure of lists appears everywhere in production code:
 
