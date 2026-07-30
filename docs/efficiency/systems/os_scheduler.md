@@ -1,6 +1,6 @@
 ---
 date: "2026-07-26 10:00"
-title: "How the OS Scheduler Actually Decides"
+title: "Linux CFS Scheduler Explained: How It Picks a Thread"
 description: "Thousands of runnable threads, a handful of CPU cores. Something has to decide who runs next, for how long, and why a background job you `nice`d actually slowed down. Here's Linux's answer: the Completely Fair Scheduler."
 ---
 

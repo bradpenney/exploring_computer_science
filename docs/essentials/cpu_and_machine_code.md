@@ -1,6 +1,6 @@
 ---
 date: "2026-07-26 09:00"
-title: "What Actually Happens When Your Code Runs"
+title: "Fetch-Decode-Execute: How CPUs Actually Run Your Code"
 description: "The CPU doesn't run Python, or Go, or anything you wrote. It runs one thing: machine code, one instruction at a time. Here's the fetch-decode-execute cycle underneath every program you've ever shipped."
 ---
 

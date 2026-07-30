@@ -1,6 +1,6 @@
 ---
 date: "2026-07-26 09:15"
-title: "The Stack, the Heap, and Virtual Memory"
+title: "Stack vs Heap vs Virtual Memory Explained"
 description: "Every process believes it owns all the RAM on the machine, in one continuous block starting at address zero. That belief is a lie the operating system tells for your own good — here's how, and why."
 ---
 

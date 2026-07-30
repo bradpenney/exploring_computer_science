@@ -1,6 +1,6 @@
 ---
 date: "2026-07-26 09:30"
-title: "Operating System Basics: The Kernel, Privilege, and the Syscall"
+title: "What Does an Operating System Kernel Actually Do?"
 description: "Your code doesn't touch the disk, the network, or another process directly. It asks the kernel to, through a syscall. Here's the privilege boundary that makes that mandatory, not optional."
 ---
 

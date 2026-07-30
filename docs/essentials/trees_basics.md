@@ -1,6 +1,6 @@
 ---
 date: "2025-12-16 11:08"
-title: "Trees: The Data Structure Behind Your File System, JSON, and Database Indexes"
+title: "Tree Data Structure Explained: Traversal, BSTs & Big O"
 description: Understand the CS theory behind trees — the data structure powering your file system, database indexes, DOM, compiler ASTs, and Git history.
 ---
 # Trees: The Data Structure Behind Your File System, JSON, and Database Indexes

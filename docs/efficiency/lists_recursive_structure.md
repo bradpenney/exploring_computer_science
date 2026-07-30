@@ -1,6 +1,6 @@
 ---
 date: "2026-02-27 08:27"
-title: Lists as Recursive Data Structures
+title: "Linked Lists as Recursive Structures: cons and null"
 description: Understand how CS theory defines a list recursively using cons and null, why recursive list operations are natural, and what Python lists, Clojure, and functional languages have in common.
 ---
 

@@ -1,6 +1,6 @@
 ---
 date: "2026-06-21 12:00"
-title: "What an API Actually Is: The Contract Behind the Curl"
+title: "What Is an API? The Contract Behind Every curl Call"
 description: "An API is a contract, not a tool. Learn what an API really is, why it's a boundary between systems, and what you're invoking every time you curl."
 ---
 

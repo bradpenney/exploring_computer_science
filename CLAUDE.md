@@ -147,7 +147,7 @@ This site IS:
 
 **Git Operations**: The user handles all git operations (commits, pushes, etc.) themselves. Do not commit or push changes.
 
-**MkDocs Operations**: The user handles running `mkdocs serve` and `mkdocs build` themselves. Do not run these commands.
+**MkDocs Operations (updated 2026-07-30):** `poetry run mkdocs build --strict` is allowed for testing/verification — use it to confirm changes actually build cleanly before handing off. `mkdocs serve` is allowed too if a live preview is genuinely needed, but only on a non-default port (3000 is almost always occupied by something else) and only as a short-lived test — never left running. The user still handles real preview sessions and all deploys.
 
 ## SEO Strategy and Publication Process
 
@@ -295,6 +295,8 @@ Uncomment the article in the `nav:` section of `mkdocs.yaml`:
     - Big-O Notation: essentials/big_o_notation.md
     # - Recursion: essentials/recursion.md  # Still in draft
 ```
+
+**Every tier needs its own overview page (mandatory, cross-site standard, added 2026-07-30):** before a tier's first article goes live, that tier must have a published `overview.md` linked at the top of its nav section — not just a flat list of articles. It's the tier's real SEO landing page (a semantic hub Google can rank, distinct from the homepage) and the reader's orientation point before diving into individual articles. **This site currently has neither `essentials/overview.md` nor `efficiency/overview.md`, despite both tiers being live with several published articles — this is the known gap to close.** See `essentials/overview.md` on the Kubernetes or Linux site for the established pattern (hook tip callout, card-grid tier map, "What You'll Take Away," "What's Next").
 
 #### 4. Verify Publication
 

@@ -1,6 +1,6 @@
 ---
 date: "2026-06-21 12:00"
-title: "Anatomy of an HTTP Request and Response"
+title: "HTTP Request and Response Anatomy: Methods to Body"
 description: "Methods, status codes, headers, and body — the four parts of every HTTP exchange and how they form the contract your API actually promises."
 ---
 

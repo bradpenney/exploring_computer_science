@@ -1,6 +1,6 @@
 ---
 date: "2026-07-28 09:00"
-title: "x86, ARM, and RISC-V: Why Your CPU's Instruction Set Isn't a Detail"
+title: "x86 vs ARM vs RISC-V: CPU Instruction Sets Explained"
 description: "Why the same Dockerfile builds a different image on your M-series laptop than in CI, why AWS Graviton is cheaper, and why your phone doesn't need a fan. It's all one design decision, made decades apart."
 ---
 

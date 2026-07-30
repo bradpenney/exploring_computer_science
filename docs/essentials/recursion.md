@@ -1,6 +1,6 @@
 ---
 date: "2025-12-22 22:21"
-title: "Recursion: Solving Problems by Dividing Them"
+title: "Recursion Explained: Base Cases, Stack & When to Use It"
 description: Understand the CS theory behind recursive problem solving — base cases, recursive steps, the substitution model, and why recursive algorithms are the natural fit for self-similar problems.
 ---
 

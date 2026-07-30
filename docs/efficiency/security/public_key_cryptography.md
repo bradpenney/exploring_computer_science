@@ -1,6 +1,6 @@
 ---
 date: "2026-07-09 12:00"
-title: "Public-Key Cryptography: How Strangers Share Secrets"
+title: "Public-Key Cryptography Explained: TLS, SSH & JWTs"
 description: "How do two machines agree on an encryption key while attackers watch every packet? The asymmetric crypto under TLS, SSH, and JWTs, minus the heavy math."
 ---
 

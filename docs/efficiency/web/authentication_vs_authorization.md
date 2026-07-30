@@ -1,6 +1,6 @@
 ---
 date: "2026-06-21 12:00"
-title: "Authentication vs Authorization in APIs, Clearly"
+title: "Authentication vs Authorization: The Real Difference"
 description: "Who you are vs what you're allowed to do — and crucially, where each check happens. The conceptual model behind API keys, tokens, and sessions."
 ---
 

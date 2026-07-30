@@ -159,6 +159,7 @@ extra_javascript:
 nav:
   - Home: index.md
   - 📦 Essentials:
+      - Overview: essentials/overview.md
       - What is Computer Science?: essentials/what_is_computer_science.md
       - "What an API Actually Is": essentials/what_is_an_api.md
       - Big-O Notation: essentials/big_o_notation.md
@@ -179,6 +180,7 @@ nav:
 #          - Searching: essentials/searching_linear_vs_binary.md
 #          - Sorting Basics: essentials/sorting_elementary.md
   - ⚡ Efficiency:
+      - Overview: efficiency/overview.md
       - Computational Thinking: efficiency/computational_thinking.md
       - Languages & Parsing:
           - Finite State Machines: efficiency/finite_state_machines.md

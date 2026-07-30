@@ -1,6 +1,6 @@
 ---
 date: "2026-07-26 09:45"
-title: "Processes and Threads: What the OS Actually Schedules"
+title: "Processes vs Threads: What a Context Switch Costs"
 description: "Your 'concurrent' program on a single core isn't running things at the same time. It's switching between them thousands of times a second. Here's the unit that switch operates on, and what it costs."
 ---
 

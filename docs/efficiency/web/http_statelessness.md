@@ -1,6 +1,6 @@
 ---
 date: "2026-06-21 12:00"
-title: "Why HTTP APIs Forget You: Statelessness Explained"
+title: "HTTP Statelessness Explained: Sessions vs Tokens"
 description: "HTTP APIs don't remember your last request. Learn why statelessness exists, what it costs, and how sessions vs tokens rebuild the memory you lost."
 ---
 

@@ -1,6 +1,6 @@
 ---
 date: "2026-06-21 12:00"
-title: "Client and Server: The Request/Response Lifecycle"
+title: "Client-Server Model Explained: The Request/Response Cycle"
 description: "Trace exactly what happens between a request and a response — who holds state, who does the work, and why the front-end/back-end split feels muddy."
 ---
 
