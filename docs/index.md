@@ -65,9 +65,9 @@ You're a **back-end engineer, platform engineer, or software developer** who:
 
 You already know how to code. **This site teaches the theory underneath.**
 
-## Integration with Other Sites
+## Part of the BradPenney.io Network
 
-This site is part of the [BradPenney.io](https://bradpenney.io) learning ecosystem:
+This site is part of a family of progressive technical learning resources:
 
 - **[Exploring Linux](https://linux.bradpenney.io)** — Linux commands and system administration
 - **[Exploring Kubernetes](https://k8s.bradpenney.io)** — Kubernetes for platform engineers
