@@ -97,6 +97,7 @@ plugins:
         - "mastery/**"
   - rss:
       match_path: ".*"
+      pretty_print: true
       image: https://cs.bradpenney.io/images/exploring_computer_science.png
       abstract_chars_count: 160
       length: 20
