@@ -1,0 +1,236 @@
+{
+    "version": "https://jsonfeed.org/version/1.1",
+    "title": "Exploring Computer Science",
+    "home_page_url": "https://cs.bradpenney.io/",
+    "feed_url": "https://cs.bradpenney.io/feed_json_updated.json",
+    "description": "The CS theory behind the production code you write.",
+    "icon": "https://cs.bradpenney.io/images/exploring_computer_science.png",
+    "authors": [
+        {
+            "name": "Brad Penney"
+        }
+    ],
+    "language": "en",
+    "items": [
+        {
+            "id": "https://cs.bradpenney.io/",
+            "url": "https://cs.bradpenney.io/",
+            "title": "Home",
+            "content_html": "The CS theory behind the production code you write. Big-O, data structures, algorithms, and computational theory for back-end and platform engineers.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2025-11-17T22:10:00-04:00",
+            "authors": [],
+            "tags": []
+        },
+        {
+            "id": "https://cs.bradpenney.io/efficiency/compilers_vs_interpreters/",
+            "url": "https://cs.bradpenney.io/efficiency/compilers_vs_interpreters/",
+            "title": "Compilers vs. Interpreters",
+            "content_html": "Understand what compilers and interpreters actually do. The CS theory behind how source code becomes running programs, and why it matters for how you write and debug code.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2025-12-22T22:21:00-04:00",
+            "authors": [],
+            "tags": []
+        },
+        {
+            "id": "https://cs.bradpenney.io/efficiency/computational_thinking/",
+            "url": "https://cs.bradpenney.io/efficiency/computational_thinking/",
+            "title": "Computational Thinking",
+            "content_html": "Master the mental toolkit of computer science: Decomposition, Pattern Recognition, Abstraction, and Algorithm Design.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2025-12-22T22:21:00-04:00",
+            "authors": [],
+            "tags": []
+        },
+        {
+            "id": "https://cs.bradpenney.io/efficiency/finite_state_machines/",
+            "url": "https://cs.bradpenney.io/efficiency/finite_state_machines/",
+            "title": "Finite State Machines",
+            "content_html": "Understanding Finite State Machines (FSMs), the elegant model behind traffic lights, game AI, and compilers.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2025-11-21T22:09:00-04:00",
+            "authors": [],
+            "tags": []
+        },
+        {
+            "id": "https://cs.bradpenney.io/efficiency/how_parsers_work/",
+            "url": "https://cs.bradpenney.io/efficiency/how_parsers_work/",
+            "title": "How Parsers Work",
+            "content_html": "From raw text to meaning: How parsers use grammars to understand code and data.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2025-12-22T22:21:00-04:00",
+            "authors": [],
+            "tags": []
+        },
+        {
+            "id": "https://cs.bradpenney.io/efficiency/lists_recursive_structure/",
+            "url": "https://cs.bradpenney.io/efficiency/lists_recursive_structure/",
+            "title": "Lists as Recursive Structures",
+            "content_html": "Understand how CS theory defines a list recursively using cons and null, why recursive list operations are natural, and what Python lists, Clojure, and functional languages have in common.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2026-02-27T08:27:00-04:00",
+            "authors": [],
+            "tags": []
+        },
+        {
+            "id": "https://cs.bradpenney.io/efficiency/overview/",
+            "url": "https://cs.bradpenney.io/efficiency/overview/",
+            "title": "Overview",
+            "content_html": "Beyond the fundamentals: how parsers and compilers actually work, what the OS scheduler decides for you, and the protocols and cryptography behind every API call.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2026-07-30T11:00:00-03:00",
+            "authors": [],
+            "tags": []
+        },
+        {
+            "id": "https://cs.bradpenney.io/efficiency/regular_expressions/",
+            "url": "https://cs.bradpenney.io/efficiency/regular_expressions/",
+            "title": "Regular Expressions - The Formal Model",
+            "content_html": "How regex engines compile patterns to automata, why backtracking causes production outages, and what regular expressions fundamentally cannot match.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2025-11-21T22:09:00-04:00",
+            "authors": [],
+            "tags": []
+        },
+        {
+            "id": "https://cs.bradpenney.io/efficiency/security/public_key_cryptography/",
+            "url": "https://cs.bradpenney.io/efficiency/security/public_key_cryptography/",
+            "title": "Public-Key Cryptography: How Strangers Share Secrets",
+            "content_html": "How do two machines agree on an encryption key while attackers watch every packet? The asymmetric crypto under TLS, SSH, and JWTs, minus the heavy math.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2026-07-09T12:00:00-03:00",
+            "authors": [],
+            "tags": []
+        },
+        {
+            "id": "https://cs.bradpenney.io/efficiency/systems/operating_system_basics/",
+            "url": "https://cs.bradpenney.io/efficiency/systems/operating_system_basics/",
+            "title": "Operating System Basics",
+            "content_html": "Your code doesn't touch the disk, the network, or another process directly. It asks the kernel to, through a syscall. Here's the privilege boundary that makes that mandatory, not optional.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2026-07-26T09:30:00-03:00",
+            "authors": [],
+            "tags": []
+        },
+        {
+            "id": "https://cs.bradpenney.io/efficiency/systems/os_scheduler/",
+            "url": "https://cs.bradpenney.io/efficiency/systems/os_scheduler/",
+            "title": "How the OS Scheduler Actually Decides",
+            "content_html": "Thousands of runnable threads, a handful of CPU cores. Something has to decide who runs next, for how long, and why a background job you `nice`d actually slowed down. Here's Linux's answer: the Completely Fair Scheduler.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2026-07-26T10:00:00-03:00",
+            "authors": [],
+            "tags": []
+        },
+        {
+            "id": "https://cs.bradpenney.io/efficiency/systems/processes_and_threads/",
+            "url": "https://cs.bradpenney.io/efficiency/systems/processes_and_threads/",
+            "title": "Processes & Threads",
+            "content_html": "Your 'concurrent' program on a single core isn't running things at the same time. It's switching between them thousands of times a second. Here's the unit that switch operates on, and what it costs.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2026-07-26T09:45:00-03:00",
+            "authors": [],
+            "tags": []
+        },
+        {
+            "id": "https://cs.bradpenney.io/efficiency/systems/x86_arm_risc/",
+            "url": "https://cs.bradpenney.io/efficiency/systems/x86_arm_risc/",
+            "title": "x86, ARM, and RISC-V",
+            "content_html": "Why the same Dockerfile builds a different image on your M-series laptop than in CI, why AWS Graviton is cheaper, and why your phone doesn't need a fan. It's all one design decision, made decades apart.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2026-07-28T09:00:00-03:00",
+            "authors": [],
+            "tags": []
+        },
+        {
+            "id": "https://cs.bradpenney.io/efficiency/web/anatomy_of_request_response/",
+            "url": "https://cs.bradpenney.io/efficiency/web/anatomy_of_request_response/",
+            "title": "Anatomy of an HTTP Request and Response",
+            "content_html": "Methods, status codes, headers, and body \u2014 the four parts of every HTTP exchange and how they form the contract your API actually promises.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2026-06-21T12:00:00-03:00",
+            "authors": [],
+            "tags": []
+        },
+        {
+            "id": "https://cs.bradpenney.io/efficiency/web/authentication_vs_authorization/",
+            "url": "https://cs.bradpenney.io/efficiency/web/authentication_vs_authorization/",
+            "title": "Authentication vs Authorization in APIs",
+            "content_html": "Who you are vs what you're allowed to do \u2014 and crucially, where each check happens. The conceptual model behind API keys, tokens, and sessions.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2026-06-21T12:00:00-03:00",
+            "authors": [],
+            "tags": []
+        },
+        {
+            "id": "https://cs.bradpenney.io/efficiency/web/client_server_request_response/",
+            "url": "https://cs.bradpenney.io/efficiency/web/client_server_request_response/",
+            "title": "Client and Server: The Request/Response Lifecycle",
+            "content_html": "Trace exactly what happens between a request and a response \u2014 who holds state, who does the work, and why the front-end/back-end split feels muddy.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2026-06-21T12:00:00-03:00",
+            "authors": [],
+            "tags": []
+        },
+        {
+            "id": "https://cs.bradpenney.io/efficiency/web/http_statelessness/",
+            "url": "https://cs.bradpenney.io/efficiency/web/http_statelessness/",
+            "title": "Why HTTP APIs Forget You: Statelessness",
+            "content_html": "HTTP APIs don't remember your last request. Learn why statelessness exists, what it costs, and how sessions vs tokens rebuild the memory you lost.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2026-06-21T12:00:00-03:00",
+            "authors": [],
+            "tags": []
+        },
+        {
+            "id": "https://cs.bradpenney.io/essentials/big_o_notation/",
+            "url": "https://cs.bradpenney.io/essentials/big_o_notation/",
+            "title": "Big-O Notation",
+            "content_html": "Understand Big-O notation for software engineers. Learn how to identify O(n\u00b2), O(n log n), O(n) complexities and optimize your code for production.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2026-02-22T16:03:00-04:00",
+            "authors": [],
+            "tags": []
+        },
+        {
+            "id": "https://cs.bradpenney.io/essentials/cpu_and_machine_code/",
+            "url": "https://cs.bradpenney.io/essentials/cpu_and_machine_code/",
+            "title": "What Actually Happens When Your Code Runs",
+            "content_html": "The CPU doesn't run Python, or Go, or anything you wrote. It runs one thing: machine code, one instruction at a time. Here's the fetch-decode-execute cycle underneath every program you've ever shipped.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2026-07-26T09:00:00-03:00",
+            "authors": [],
+            "tags": []
+        },
+        {
+            "id": "https://cs.bradpenney.io/essentials/overview/",
+            "url": "https://cs.bradpenney.io/essentials/overview/",
+            "title": "Overview",
+            "content_html": "The computer science foundations every working engineer should know cold \u2014 Big-O, type systems, recursion, trees, regex, and what actually happens when your code runs.",
+            "image": null,
+            "date_modified": "2026-08-08T01:39:47-03:00",
+            "date_published": "2026-07-30T11:00:00-03:00",
+            "authors": [],
+            "tags": []
+        }
+    ]
+}

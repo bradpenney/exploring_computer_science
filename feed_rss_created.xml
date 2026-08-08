@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet type="text/xsl" href="rss.xsl"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    
+    <title>Exploring Computer Science</title>
+    <description>The CS theory behind the production code you write.</description>
+    <link>https://cs.bradpenney.io/</link>
+    <atom:link href="https://cs.bradpenney.io/feed_rss_created.xml" rel="self" type="application/rss+xml" />
+
+    
+    <managingEditor>Brad Penney</managingEditor>
+    
+    <language>en</language>
+
+    
+    <pubDate>Sat, 08 Aug 2026 01:40:19 -0000</pubDate>
+    <lastBuildDate>Sat, 08 Aug 2026 01:40:19 -0000</lastBuildDate>
+    <ttl>1440</ttl>
+
+    
+    <generator>MkDocs RSS plugin - v1.19.0</generator>
+
+    
+    
+    <image>
+      <url>https://cs.bradpenney.io/images/exploring_computer_science.png</url>
+      <title>Exploring Computer Science</title>
+      <link>https://cs.bradpenney.io/</link>
+    </image>
+    
+
+    
+    
+    <item>
+      <title>Overview</title>
+      
+      
+      
+      
+        
+      
+      <description>Beyond the fundamentals: how parsers and compilers actually work, what the OS scheduler decides for you, and the protocols and cryptography behind every API call.</description>
+      <link>https://cs.bradpenney.io/efficiency/overview/</link>
+      <pubDate>Thu, 30 Jul 2026 11:00:00 -0300</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/efficiency/overview/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Overview</title>
+      
+      
+      
+      
+        
+      
+      <description>The computer science foundations every working engineer should know cold — Big-O, type systems, recursion, trees, regex, and what actually happens when your code runs.</description>
+      <link>https://cs.bradpenney.io/essentials/overview/</link>
+      <pubDate>Thu, 30 Jul 2026 11:00:00 -0300</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/essentials/overview/</guid>
+      
+    </item>
+    
+    <item>
+      <title>x86, ARM, and RISC-V</title>
+      
+      
+      
+      
+        
+      
+      <description>Why the same Dockerfile builds a different image on your M-series laptop than in CI, why AWS Graviton is cheaper, and why your phone doesn&#39;t need a fan. It&#39;s all one design decision, made decades apart.</description>
+      <link>https://cs.bradpenney.io/efficiency/systems/x86_arm_risc/</link>
+      <pubDate>Tue, 28 Jul 2026 09:00:00 -0300</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/efficiency/systems/x86_arm_risc/</guid>
+      
+    </item>
+    
+    <item>
+      <title>How the OS Scheduler Actually Decides</title>
+      
+      
+      
+      
+        
+      
+      <description>Thousands of runnable threads, a handful of CPU cores. Something has to decide who runs next, for how long, and why a background job you `nice`d actually slowed down. Here&#39;s Linux&#39;s answer: the Completely Fair Scheduler.</description>
+      <link>https://cs.bradpenney.io/efficiency/systems/os_scheduler/</link>
+      <pubDate>Sun, 26 Jul 2026 10:00:00 -0300</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/efficiency/systems/os_scheduler/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Processes &amp; Threads</title>
+      
+      
+      
+      
+        
+      
+      <description>Your &#39;concurrent&#39; program on a single core isn&#39;t running things at the same time. It&#39;s switching between them thousands of times a second. Here&#39;s the unit that switch operates on, and what it costs.</description>
+      <link>https://cs.bradpenney.io/efficiency/systems/processes_and_threads/</link>
+      <pubDate>Sun, 26 Jul 2026 09:45:00 -0300</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/efficiency/systems/processes_and_threads/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Operating System Basics</title>
+      
+      
+      
+      
+        
+      
+      <description>Your code doesn&#39;t touch the disk, the network, or another process directly. It asks the kernel to, through a syscall. Here&#39;s the privilege boundary that makes that mandatory, not optional.</description>
+      <link>https://cs.bradpenney.io/efficiency/systems/operating_system_basics/</link>
+      <pubDate>Sun, 26 Jul 2026 09:30:00 -0300</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/efficiency/systems/operating_system_basics/</guid>
+      
+    </item>
+    
+    <item>
+      <title>The Stack, the Heap, and Virtual Memory</title>
+      
+      
+      
+      
+        
+      
+      <description>Every process believes it owns all the RAM on the machine, in one continuous block starting at address zero. That belief is a lie the operating system tells for your own good — here&#39;s how, and why.</description>
+      <link>https://cs.bradpenney.io/essentials/stack_heap_virtual_memory/</link>
+      <pubDate>Sun, 26 Jul 2026 09:15:00 -0300</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/essentials/stack_heap_virtual_memory/</guid>
+      
+    </item>
+    
+    <item>
+      <title>What Actually Happens When Your Code Runs</title>
+      
+      
+      
+      
+        
+      
+      <description>The CPU doesn&#39;t run Python, or Go, or anything you wrote. It runs one thing: machine code, one instruction at a time. Here&#39;s the fetch-decode-execute cycle underneath every program you&#39;ve ever shipped.</description>
+      <link>https://cs.bradpenney.io/essentials/cpu_and_machine_code/</link>
+      <pubDate>Sun, 26 Jul 2026 09:00:00 -0300</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/essentials/cpu_and_machine_code/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Public-Key Cryptography: How Strangers Share Secrets</title>
+      
+      
+      
+      
+        
+      
+      <description>How do two machines agree on an encryption key while attackers watch every packet? The asymmetric crypto under TLS, SSH, and JWTs, minus the heavy math.</description>
+      <link>https://cs.bradpenney.io/efficiency/security/public_key_cryptography/</link>
+      <pubDate>Thu, 09 Jul 2026 12:00:00 -0300</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/efficiency/security/public_key_cryptography/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Anatomy of an HTTP Request and Response</title>
+      
+      
+      
+      
+        
+      
+      <description>Methods, status codes, headers, and body — the four parts of every HTTP exchange and how they form the contract your API actually promises.</description>
+      <link>https://cs.bradpenney.io/efficiency/web/anatomy_of_request_response/</link>
+      <pubDate>Sun, 21 Jun 2026 12:00:00 -0300</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/efficiency/web/anatomy_of_request_response/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Authentication vs Authorization in APIs</title>
+      
+      
+      
+      
+        
+      
+      <description>Who you are vs what you&#39;re allowed to do — and crucially, where each check happens. The conceptual model behind API keys, tokens, and sessions.</description>
+      <link>https://cs.bradpenney.io/efficiency/web/authentication_vs_authorization/</link>
+      <pubDate>Sun, 21 Jun 2026 12:00:00 -0300</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/efficiency/web/authentication_vs_authorization/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Client and Server: The Request/Response Lifecycle</title>
+      
+      
+      
+      
+        
+      
+      <description>Trace exactly what happens between a request and a response — who holds state, who does the work, and why the front-end/back-end split feels muddy.</description>
+      <link>https://cs.bradpenney.io/efficiency/web/client_server_request_response/</link>
+      <pubDate>Sun, 21 Jun 2026 12:00:00 -0300</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/efficiency/web/client_server_request_response/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Why HTTP APIs Forget You: Statelessness</title>
+      
+      
+      
+      
+        
+      
+      <description>HTTP APIs don&#39;t remember your last request. Learn why statelessness exists, what it costs, and how sessions vs tokens rebuild the memory you lost.</description>
+      <link>https://cs.bradpenney.io/efficiency/web/http_statelessness/</link>
+      <pubDate>Sun, 21 Jun 2026 12:00:00 -0300</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/efficiency/web/http_statelessness/</guid>
+      
+    </item>
+    
+    <item>
+      <title>What an API Actually Is</title>
+      
+      
+      
+      
+        
+      
+      <description>An API is a contract, not a tool. Learn what an API really is, why it&#39;s a boundary between systems, and what you&#39;re invoking every time you curl.</description>
+      <link>https://cs.bradpenney.io/essentials/what_is_an_api/</link>
+      <pubDate>Sun, 21 Jun 2026 12:00:00 -0300</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/essentials/what_is_an_api/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Lists as Recursive Structures</title>
+      
+      
+      
+      
+        
+      
+      <description>Understand how CS theory defines a list recursively using cons and null, why recursive list operations are natural, and what Python lists, Clojure, and functional languages have in common.</description>
+      <link>https://cs.bradpenney.io/efficiency/lists_recursive_structure/</link>
+      <pubDate>Fri, 27 Feb 2026 08:27:00 -0400</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/efficiency/lists_recursive_structure/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Regular Expressions</title>
+      
+      
+      
+      
+        
+      
+      <description>The complete practical reference for writing and reading regex in production code — character classes, quantifiers, groups, flags, and common pitfalls.</description>
+      <link>https://cs.bradpenney.io/essentials/regular_expressions/</link>
+      <pubDate>Fri, 27 Feb 2026 08:27:00 -0400</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/essentials/regular_expressions/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Type Systems Basics</title>
+      
+      
+      
+      
+        
+      
+      <description>Understand type systems from a CS theory perspective — what types really are, how type notation works, and why every strongly-typed language enforces the same rules.</description>
+      <link>https://cs.bradpenney.io/essentials/type_systems_basics/</link>
+      <pubDate>Fri, 27 Feb 2026 08:27:00 -0400</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/essentials/type_systems_basics/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Big-O Notation</title>
+      
+      
+      
+      
+        
+      
+      <description>Understand Big-O notation for software engineers. Learn how to identify O(n²), O(n log n), O(n) complexities and optimize your code for production.</description>
+      <link>https://cs.bradpenney.io/essentials/big_o_notation/</link>
+      <pubDate>Sun, 22 Feb 2026 16:03:00 -0400</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/essentials/big_o_notation/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Compilers vs. Interpreters</title>
+      
+      
+      
+      
+        
+      
+      <description>Understand what compilers and interpreters actually do. The CS theory behind how source code becomes running programs, and why it matters for how you write and debug code.</description>
+      <link>https://cs.bradpenney.io/efficiency/compilers_vs_interpreters/</link>
+      <pubDate>Mon, 22 Dec 2025 22:21:00 -0400</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/efficiency/compilers_vs_interpreters/</guid>
+      
+    </item>
+    
+    <item>
+      <title>Computational Thinking</title>
+      
+      
+      
+      
+        
+      
+      <description>Master the mental toolkit of computer science: Decomposition, Pattern Recognition, Abstraction, and Algorithm Design.</description>
+      <link>https://cs.bradpenney.io/efficiency/computational_thinking/</link>
+      <pubDate>Mon, 22 Dec 2025 22:21:00 -0400</pubDate>
+      <source url="https://cs.bradpenney.io/feed_rss_created.xml">Exploring Computer Science</source>
+      
+      <guid isPermaLink="true">https://cs.bradpenney.io/efficiency/computational_thinking/</guid>
+      
+    </item>
+    
+  </channel>
+</rss>
