@@ -798,6 +798,10 @@ FSMs appear in system design interviews as state modeling problems, and in lower
 | **NFA** | Non-deterministic — multiple options possible |
 | **Regular Language** | What FSMs can recognize |
 
+## What's Next
+
+If you're following the [Languages & Parsing](../essentials/regular_expressions.md) deep dive, the next step is **[Regular Expressions: The Formal Model](regular_expressions.md)** — the formal model you just learned is exactly what powers a regex engine underneath.
+
 ## Further Reading
 
 **On This Site**
