@@ -54,6 +54,18 @@ Three tiers, increasing in depth. Each has its own overview covering exactly wha
 
 </div>
 
+## Deep Dives
+
+<div class="grid cards" markdown>
+
+-   :material-map-marker-path: **[Deep Dives](https://bradpenney.io/deep-dives#computer-science)**
+
+    ---
+
+    Ordered article series that stay inside this site, start to finish — How Programs Actually Run, Languages & Parsing, Operating Systems, and Web & APIs.
+
+</div>
+
 ## Who This Is For
 
 You're a **back-end engineer, platform engineer, or software developer** who:

@@ -6,8 +6,33 @@ description: "Who you are vs what you're allowed to do — and crucially, where 
 
 # Authentication vs Authorization in APIs, Clearly
 
-!!! tip "Part of a Learning Path"
-    This article is part of the [How APIs Actually Work](https://bradpenney.io/pathways/how-apis-work) pathway on [bradpenney.io](https://bradpenney.io) — a guided sequence through the topic. It also stands on its own.
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive and a pathway:</span> [Web & APIs](client_server_request_response.md){: .pathway-pill } [How APIs Actually Work](https://bradpenney.io/pathways/how-apis-work){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards two-col" markdown>
+
+    -   :material-web: __Web & APIs__ — step 4 of 4
+
+        ---
+
+        ← [Anatomy of an HTTP Request and Response](anatomy_of_request_response.md) · **you are here** · *(last step)* →
+
+        [Start the deep dive →](client_server_request_response.md)
+
+    -   :material-web: __How APIs Actually Work__ — step 7 of 11
+
+        ---
+
+        ← [Seeing API Traffic: `curl -v` and the Network Tab](https://tools.bradpenney.io/essentials/web/inspecting_http_traffic/) · **you are here** · [HTTPS for APIs: Where the Connection Gets Secured](https://networking.bradpenney.io/essentials/tls/https_for_apis/) →
+
+        [Start the pathway →](https://bradpenney.io/pathways/how-apis-work)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
 
 Configuring auth is routine work: pasting API keys, generating bearer tokens, wiring up OAuth in a client. The *design concepts* behind authenticating a request are familiar territory. What stays muddy is the layer underneath — *where* in the flow the check actually happens, why two different things both get called "auth," and what "secure an endpoint" is actually deciding.
 
@@ -200,7 +225,6 @@ The client side is uniform across languages — attach the credential to every r
     1. Attach the credential.
     2. `401` → authentication failed.
     3. `403` → authorization failed.
-    4. Free the header list and the handle — libcurl won't, and skipping it leaks.
 
 === ":material-language-java: Java"
 

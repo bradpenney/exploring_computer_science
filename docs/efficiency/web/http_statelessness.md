@@ -6,10 +6,35 @@ description: "HTTP APIs don't remember your last request. Learn why statelessnes
 
 # Why HTTP APIs Forget You: Statelessness Explained
 
-!!! tip "Part of a Learning Path"
-    This article is part of the [How APIs Actually Work](https://bradpenney.io/pathways/how-apis-work) pathway on [bradpenney.io](https://bradpenney.io) — a guided sequence through the topic. It also stands on its own.
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive and a pathway:</span> [Web & APIs](client_server_request_response.md){: .pathway-pill } [How APIs Actually Work](https://bradpenney.io/pathways/how-apis-work){: .pathway-pill }
+</div>
 
-Here's something you've worked around without naming it: every API request you send has to *re-introduce itself*. You attach the token again. You pass the user ID again. You re-send the filters again. It feels redundant — surely the server remembers you from two seconds ago?
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards two-col" markdown>
+
+    -   :material-web: __Web & APIs__ — step 2 of 4
+
+        ---
+
+        ← [Client and Server: The Request/Response Lifecycle](client_server_request_response.md) · **you are here** · [Anatomy of an HTTP Request and Response](anatomy_of_request_response.md) →
+
+        [Start the deep dive →](client_server_request_response.md)
+
+    -   :material-web: __How APIs Actually Work__ — step 4 of 11
+
+        ---
+
+        ← [From URL to Endpoint: How an API Gets Exposed](https://networking.bradpenney.io/essentials/http/from_url_to_endpoint/) · **you are here** · [Anatomy of an HTTP Request and Response](https://cs.bradpenney.io/efficiency/web/anatomy_of_request_response/) →
+
+        [Start the pathway →](https://bradpenney.io/pathways/how-apis-work)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
+
+Every API request has to *re-introduce itself* — a cost so routine most API work absorbs it without ever naming it. The token gets attached again. The user ID gets passed again. The filters get re-sent again. It feels redundant — surely the server remembers the last request from two seconds ago?
 
 It doesn't. **By design, the server forgets you the instant it answers.** That's not a bug or a missing feature. It's the property called *statelessness*, and it's one of the load-bearing decisions behind how the web scales. Understanding it explains a whole category of "where does this data live?" questions that make API design feel muddy.
 

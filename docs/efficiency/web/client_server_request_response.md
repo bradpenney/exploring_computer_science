@@ -6,8 +6,33 @@ description: "Trace exactly what happens between a request and a response — wh
 
 # Client and Server: The Request/Response Lifecycle
 
-!!! tip "Part of a Learning Path"
-    This article is part of the [How APIs Actually Work](https://bradpenney.io/pathways/how-apis-work) pathway on [bradpenney.io](https://bradpenney.io) — a guided sequence through the topic. It also stands on its own.
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive and a pathway:</span> [Web & APIs](client_server_request_response.md){: .pathway-pill } [How APIs Actually Work](https://bradpenney.io/pathways/how-apis-work){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards two-col" markdown>
+
+    -   :material-web: __Web & APIs__ — step 1 of 4
+
+        ---
+
+        ← *(first step)* · **you are here** · [Why HTTP APIs Forget You: Statelessness](http_statelessness.md) →
+
+        [Start the deep dive →](client_server_request_response.md)
+
+    -   :material-web: __How APIs Actually Work__ — step 2 of 11
+
+        ---
+
+        ← [What an API Actually Is](https://cs.bradpenney.io/essentials/what_is_an_api/) · **you are here** · [From URL to Endpoint: How an API Gets Exposed](https://networking.bradpenney.io/essentials/http/from_url_to_endpoint/) →
+
+        [Start the pathway →](https://bradpenney.io/pathways/how-apis-work)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
 
 A request leaves your code and, a few milliseconds later, JSON comes back. The bit in between — where "the front end" hands off to "the back end" — is a zone most engineers treat as a black box. It stays a black box right up until someone asks you to *design* that boundary, and then the vague questions turn sharp: what runs where, and who is responsible for what?
 

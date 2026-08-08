@@ -6,14 +6,62 @@ description: "Methods, status codes, headers, and body — the four parts of eve
 
 # Anatomy of an HTTP Request and Response
 
-!!! tip "Part of a Learning Path"
-    This article is part of the [How APIs Actually Work](https://bradpenney.io/pathways/how-apis-work) pathway on [bradpenney.io](https://bradpenney.io) — a guided sequence through the topic. It also stands on its own.
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive and a pathway:</span> [Web & APIs](client_server_request_response.md){: .pathway-pill } [How APIs Actually Work](https://bradpenney.io/pathways/how-apis-work){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards two-col" markdown>
+
+    -   :material-web: __Web & APIs__ — step 3 of 4
+
+        ---
+
+        ← [Why HTTP APIs Forget You: Statelessness](http_statelessness.md) · **you are here** · [Authentication vs Authorization in APIs](authentication_vs_authorization.md) →
+
+        [Start the deep dive →](client_server_request_response.md)
+
+    -   :material-web: __How APIs Actually Work__ — step 5 of 11
+
+        ---
+
+        ← [Why HTTP APIs Forget You: Statelessness](https://cs.bradpenney.io/efficiency/web/http_statelessness/) · **you are here** · [Seeing API Traffic: `curl -v` and the Network Tab](https://tools.bradpenney.io/essentials/web/inspecting_http_traffic/) →
+
+        [Start the pathway →](https://bradpenney.io/pathways/how-apis-work)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
 
 Strip away the libraries and an HTTP request is just a few lines of text in a rigid shape: a method, a path, some headers, maybe a body — answered by a status code and the same shape in reverse. You already use every part of it — reading `404` by instinct, setting `Content-Type` because the docs said to, dropping JSON in the body. What usually goes unexamined is what each part is actually *for*, and that's exactly the gap that opens the moment you're defining endpoints for someone else to build against.
 
 So let's name the parts. There are only a handful, each with a fixed job — and together they spell out something you've already met: [the API contract](../../essentials/what_is_an_api.md) is written, quite literally, in these slots.
 
 This is the detailed view of each arrow in [the request/response lifecycle](client_server_request_response.md).
+
+```mermaid
+flowchart LR
+    subgraph REQ["Request"]
+        M["Method\nPOST"]:::standard
+        P["Path\n/orders"]:::standard
+        H1["Headers\nContent-Type, Authorization"]:::standard
+        B1["Body\n{ product_id, quantity }"]:::standard
+    end
+
+    REQ --> SRV["Server"]:::accent
+
+    subgraph RES["Response"]
+        SC["Status Code\n201 Created"]:::accent
+        H2["Headers\nContent-Type, Location"]:::standard
+        B2["Body\n{ id, status, ... }"]:::standard
+    end
+
+    SRV --> RES
+
+    classDef standard fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    classDef accent fill:#326CE5,stroke:#cbd5e0,stroke-width:2px,color:#fff
+```
 
 ## A Request Has Four Parts
 

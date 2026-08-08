@@ -6,8 +6,33 @@ description: "Your code doesn't touch the disk, the network, or another process 
 
 # Operating System Basics: The Kernel, Privilege, and the Syscall
 
-!!! tip "Part of a Learning Path"
-    This article is a step in the [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster) pathway on [bradpenney.io](https://bradpenney.io) — a guided sequence through the topic. It also stands on its own.
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive and a pathway:</span> [Operating Systems](operating_system_basics.md){: .pathway-pill } [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards two-col" markdown>
+
+    -   :material-desktop-classic: __Operating Systems__ — step 1 of 4
+
+        ---
+
+        ← *(first step)* · **you are here** · [Processes & Threads](processes_and_threads.md) →
+
+        [Start the deep dive →](operating_system_basics.md)
+
+    -   :material-chip: __How Modern Software Really Runs on a CPU__ — step 4 of 17
+
+        ---
+
+        ← [The Stack, the Heap, and Virtual Memory](https://cs.bradpenney.io/essentials/stack_heap_virtual_memory/) · **you are here** · [Processes and Threads](https://cs.bradpenney.io/efficiency/systems/processes_and_threads/) →
+
+        [Start the pathway →](https://bradpenney.io/pathways/cpu-to-cluster)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
 
 `strace`ing a hung process turns up a wall of unfamiliar function names — `read`, `epoll_wait`, `futex` — before landing on the one where it actually stalled. "Permission denied" shows up for a file a user account plainly owns, and it's never really about the file. And there's a question most engineers eventually run into: why can't a Python script just reach out and write to `/dev/sda` directly, when the hardware is right there?
 

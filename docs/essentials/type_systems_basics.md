@@ -395,7 +395,7 @@ Type systems come up in interviews both as a direct topic ("what's the differenc
 | Type notation | `A × B → C` means "takes A and B, returns C" |
 | Primitive types | `Boolean`, `Integer`, `Float`, `String`, `Null` — the building blocks |
 | Product types | Structs/tuples: all fields must be present (`A × B`) |
-| Sum types | Enums/unions: exactly one variant present (`A | B`) |
+| Sum types | Enums/unions: exactly one variant present (<code>A &#124; B</code>) |
 | Function types | Functions are values too; HOFs have function-type parameters |
 | Static vs dynamic | When errors are caught — compile time vs runtime |
 

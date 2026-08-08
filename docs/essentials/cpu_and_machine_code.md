@@ -6,8 +6,33 @@ description: "The CPU doesn't run Python, or Go, or anything you wrote. It runs 
 
 # What Actually Happens When Your Code Runs
 
-!!! tip "Part of a Learning Path"
-    This article is a step in the [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster) pathway on [bradpenney.io](https://bradpenney.io): a guided sequence through the topic. It also stands on its own.
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive and a pathway:</span> [How Programs Actually Run](cpu_and_machine_code.md){: .pathway-pill } [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards two-col" markdown>
+
+    -   :material-cpu-64-bit: __How Programs Actually Run__ — step 1 of 2
+
+        ---
+
+        ← *(first step)* · **you are here** · [The Stack, the Heap, and Virtual Memory](stack_heap_virtual_memory.md) →
+
+        [Start the deep dive →](cpu_and_machine_code.md)
+
+    -   :material-chip: __How Modern Software Really Runs on a CPU__ — step 1 of 17
+
+        ---
+
+        ← *(first step)* · **you are here** · [Compilers vs. Interpreters](https://cs.bradpenney.io/efficiency/compilers_vs_interpreters/) →
+
+        [Start the pathway →](https://bradpenney.io/pathways/cpu-to-cluster)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
 
 Profiling a hot loop and watching a flame graph collapse into one function eating 80% of CPU time is routine work. "Instructions per cycle" shows up in a `perf` report and gets nodded along to, whether or not it's fully understood. `top` shows a process pinned at 100% CPU, and it's fair to know that *something* is running — without necessarily being able to say what "running" actually means at the level the hardware experiences it.
 

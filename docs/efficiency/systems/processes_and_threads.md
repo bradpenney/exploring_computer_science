@@ -6,8 +6,33 @@ description: "Your 'concurrent' program on a single core isn't running things at
 
 # Processes and Threads: What the OS Actually Schedules
 
-!!! tip "Part of a Learning Path"
-    This article is a step in the [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster) pathway on [bradpenney.io](https://bradpenney.io) — a guided sequence through the topic. It also stands on its own.
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive and a pathway:</span> [Operating Systems](operating_system_basics.md){: .pathway-pill } [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards two-col" markdown>
+
+    -   :material-desktop-classic: __Operating Systems__ — step 2 of 4
+
+        ---
+
+        ← [Operating System Basics](operating_system_basics.md) · **you are here** · [How the OS Scheduler Actually Decides](os_scheduler.md) →
+
+        [Start the deep dive →](operating_system_basics.md)
+
+    -   :material-chip: __How Modern Software Really Runs on a CPU__ — step 5 of 17
+
+        ---
+
+        ← [Operating System Basics](https://cs.bradpenney.io/efficiency/systems/operating_system_basics/) · **you are here** · [How the OS Scheduler Actually Decides](https://cs.bradpenney.io/efficiency/systems/os_scheduler/) →
+
+        [Start the pathway →](https://bradpenney.io/pathways/cpu-to-cluster)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
 
 A Python service pinning one CPU core at 100% while seven others sit idle gets explained away with "the GIL" (Global Interpreter Lock) — an answer most engineers accept without quite knowing what it's explaining. A race condition that only shows up in production, never locally, gets filed under "threading issue" as if that settles anything. `nginx` answers concurrency with a handful of worker *processes*; Node answers it with a single *thread* somehow handling thousands of connections — two completely different answers to what looks like the same problem.
 

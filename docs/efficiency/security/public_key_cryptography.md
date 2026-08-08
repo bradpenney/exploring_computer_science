@@ -6,8 +6,25 @@ description: "How do two machines agree on an encryption key while attackers wat
 
 # Public-Key Cryptography: How Strangers Share Secrets
 
-!!! tip "Part of a Learning Path"
-    This article is part of the [Put Your Kubernetes App on the Internet](https://bradpenney.io/pathways/cluster-to-internet) pathway on [bradpenney.io](https://bradpenney.io) — a guided sequence through the topic. It also stands on its own.
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a pathway:</span> [Put Your Kubernetes App on the Internet](https://bradpenney.io/pathways/cluster-to-internet){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards" markdown>
+
+    -   :material-server-network: __Put Your Kubernetes App on the Internet__ — step 4 of 13
+
+        ---
+
+        ← [Load Balancer Basics](https://networking.bradpenney.io/essentials/load_balancers/load_balancer_basics/) · **you are here** · [TLS Basics: How HTTPS Actually Works](https://networking.bradpenney.io/essentials/tls/tls_basics/) →
+
+        [Start the pathway →](https://bradpenney.io/pathways/cluster-to-internet)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
 
 An SSH public key gets pasted into GitHub without a second thought about it being, well, *public*. `RS256` gets picked from a dropdown to sign JWTs. A TLS handshake flies by in `curl -v`, unremarked. All of it works, teams ship on top of it daily, and underneath all of it sits one question most engineers have never had to answer:
 
@@ -70,6 +87,23 @@ And one more capability, the one that answers the opening question, deserves its
 ## Key Exchange: Agreeing on a Secret in Public
 
 Diffie-Hellman key exchange lets two parties *construct* a shared secret while an eavesdropper watches everything. With toy numbers (real ones are thousands of bits), here's the entire protocol. Alice and Bob publicly agree on two numbers anyone may see: a modulus of 23 and a base of 5 (the *p* and *g* in the table).
+
+```mermaid
+sequenceDiagram
+    participant Alice
+    participant Eve as Eve (eavesdropper)
+    participant Bob
+
+    Note over Alice,Bob: Agree publicly: p=23, g=5
+    Alice->>Alice: pick secret a=6, compute A = 5^6 mod 23 = 8
+    Bob->>Bob: pick secret b=15, compute B = 5^15 mod 23 = 19
+    Alice->>Bob: send A = 8
+    Bob->>Alice: send B = 19
+    Note over Eve: sees p, g, A=8, B=19 — not enough to find a or b
+    Alice->>Alice: compute B^a mod 23 = 2
+    Bob->>Bob: compute A^b mod 23 = 2
+    Note over Alice,Bob: both hold the same shared secret: 2
+```
 
 | Step | Alice | Bob | Eve sees |
 | :--- | :--- | :--- | :--- |
@@ -241,6 +275,12 @@ Encryption uses the public key to lock and the private key to unlock. A **digita
 In practice the signer doesn't sign the whole document — it hashes the content to a fixed-size digest first, then signs the digest. Verification recomputes the hash and checks the signature against it. A valid signature therefore proves two things at once: the private key holder produced it (**authenticity**), and the content hasn't changed by a single bit since (**integrity**).
 
 This is the primitive underneath the web's entire trust infrastructure: a TLS **certificate** is, at its core, a certificate authority's *signature* over the claim "this hostname is bound to this public key." Verifying a certificate chain is verifying signatures, link by link — which is why the mechanics live in [TLS Basics](https://networking.bradpenney.io/essentials/tls/tls_basics/) and the theory lives here.
+
+### SSH: Signatures as Login
+
+SSH public-key authentication is the same signature primitive, used to log in instead of to certify a document. The server never asks for your private key, or anything derived from it that an eavesdropper could replay — it sends a random challenge, and your client signs that challenge with your private key. The server checks the signature against whichever public key happens to be sitting in `~/.ssh/authorized_keys`. Verify, and you're in; your private key never left your machine.
+
+That's also why copying a key to a server (`ssh-copy-id`, or pasting one into GitHub) is safe over an untrusted network in the first place: you're only ever handing over the public half, the one that was never a secret. See [SSH Mastery](https://tools.bradpenney.io/efficiency/ssh_mastery/) on the Dev Tools site for the practical side of setting this up.
 
 ## Why This Matters for Production Code
 

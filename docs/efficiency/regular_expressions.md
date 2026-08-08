@@ -5,6 +5,34 @@ description: How regex engines compile patterns to automata, why backtracking ca
 ---
 # Regular Expressions: The Formal Model
 
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive and a pathway:</span> [Languages & Parsing](../essentials/regular_expressions.md){: .pathway-pill } [Debugging With Nothing But a Terminal](https://bradpenney.io/pathways/nothing-but-a-terminal){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards two-col" markdown>
+
+    -   :material-file-tree: __Languages & Parsing__ — step 3 of 5
+
+        ---
+
+        ← [Finite State Machines](finite_state_machines.md) · **you are here** · [How Parsers Work](how_parsers_work.md) →
+
+        [Start the deep dive →](../essentials/regular_expressions.md)
+
+    -   :material-console: __Debugging With Nothing But a Terminal__ — step 6 of 20
+
+        ---
+
+        ← [Regular Expressions for SREs](https://tools.bradpenney.io/essentials/regex_for_sres/) · **you are here** · [Seeing API Traffic: `curl -v` and the Network Tab](https://tools.bradpenney.io/essentials/web/inspecting_http_traffic/) →
+
+        [Start the pathway →](https://bradpenney.io/pathways/nothing-but-a-terminal)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
+
 You already write regex. You know `\d+` matches digits and `.*` matches everything. But when a colleague asks "why did that regex take down the server?" or "why can't I match balanced parentheses with regex?" — the answer isn't in any syntax guide.
 
 **This is the theory behind the tool.**
@@ -375,6 +403,10 @@ The formal model of regex engines is relevant in security-focused interviews and
 | Backreferences are non-regular | `\1` requires unbounded memory; no DFA can support it |
 | Lookahead/lookbehind | Zero-width assertions; variable-length lookbehind is engine-specific |
 | The hard boundary | Nested structures and counting problems require a parser, not regex |
+
+## What's Next
+
+That's the theory. If you're following the [Debugging With Nothing But a Terminal](https://bradpenney.io/pathways/nothing-but-a-terminal) pathway, the next step is **[Seeing API Traffic: curl -v and the Network Tab](https://tools.bradpenney.io/essentials/web/inspecting_http_traffic/)** on the Dev Tools site — back in the terminal, the next stop in an incident isn't more regex, it's reading the actual request and response on the wire.
 
 ## Further Reading
 

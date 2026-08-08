@@ -5,6 +5,34 @@ description: "From raw text to meaning: How parsers use grammars to understand c
 ---
 # How Parsers Work
 
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive and a pathway:</span> [Languages & Parsing](../essentials/regular_expressions.md){: .pathway-pill } [Debugging With Nothing But a Terminal](https://bradpenney.io/pathways/nothing-but-a-terminal){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards two-col" markdown>
+
+    -   :material-file-tree: __Languages & Parsing__ — step 4 of 5
+
+        ---
+
+        ← [Regular Expressions: The Formal Model](regular_expressions.md) · **you are here** · [Compilers vs. Interpreters](compilers_vs_interpreters.md) →
+
+        [Start the deep dive →](../essentials/regular_expressions.md)
+
+    -   :material-console: __Debugging With Nothing But a Terminal__ — step 8 of 20
+
+        ---
+
+        ← [Seeing API Traffic: `curl -v` and the Network Tab](https://tools.bradpenney.io/essentials/web/inspecting_http_traffic/) · **you are here** · [`jq`: Parsing JSON](https://tools.bradpenney.io/essentials/jq_parsing_json/) →
+
+        [Start the pathway →](https://bradpenney.io/pathways/nothing-but-a-terminal)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
+
 Every time you call `json.loads()`, `yaml.safe_load()`, or `JSON.parse()`, a parser runs. Every time Python reports `SyntaxError: unexpected indent` or Go says `syntax error: unexpected {`, a parser has analyzed your code and found the exact point where it stopped making sense. Every SQL query you write is parsed before it touches a database.
 
 **Parsers are everywhere in your stack — and understanding how they work makes you better at every tool built on top of one.**
@@ -392,27 +420,27 @@ Once you have an AST, you can walk it to compute results:
 
 === ":material-language-python: Python"
 
-            ```python title="AST Evaluator in Python" linenums="1"
-        def evaluate(node):  # (1)!
-            if node[0] == 'number':  # (2)!
-                return node[1]
-    
-            elif node[0] == 'binop':  # (3)!
-                op, left, right = node[1], node[2], node[3]  # (4)!
-                left_val = evaluate(left)  # (5)!
-                right_val = evaluate(right)
-    
-                if op == '+': return left_val + right_val  # (6)!
-                if op == '-': return left_val - right_val
-                if op == '*': return left_val * right_val
-                if op == '/': return left_val / right_val
-    
-            raise ValueError(f"Unknown node type: {node[0]}")
-    
-        # Using our earlier AST
-        ast = ('binop', '+', ('number', 2), ('binop', '*', ('number', 3), ('number', 4)))
-        print(evaluate(ast))  # 14
-            ```
+    ```python title="AST Evaluator in Python" linenums="1"
+    def evaluate(node):  # (1)!
+        if node[0] == 'number':  # (2)!
+            return node[1]
+
+        elif node[0] == 'binop':  # (3)!
+            op, left, right = node[1], node[2], node[3]  # (4)!
+            left_val = evaluate(left)  # (5)!
+            right_val = evaluate(right)
+
+            if op == '+': return left_val + right_val  # (6)!
+            if op == '-': return left_val - right_val
+            if op == '*': return left_val * right_val
+            if op == '/': return left_val / right_val
+
+        raise ValueError(f"Unknown node type: {node[0]}")
+
+    # Using our earlier AST
+    ast = ('binop', '+', ('number', 2), ('binop', '*', ('number', 3), ('number', 4)))
+    print(evaluate(ast))  # 14
+    ```
 
     1. Recursively evaluate an AST node and return its computed value
     2. Base case: if it's a number node, return its value
@@ -431,19 +459,19 @@ This tree-walking interpreter is the simplest approach. Real interpreters might:
 
 Good parsers give helpful error messages:
 
-            ```python title="Error Handling in Parser" linenums="1"
-    def consume(self, expected_type):
-        token = self.current_token()
-        if token is None:  # (1)!
-            raise SyntaxError(f"Unexpected end of input, expected {expected_type}")
-        if token[0] != expected_type:  # (2)!
-            raise SyntaxError(
-                f"Line {self.line}, column {self.column}: "  # (3)!
-                f"Expected {expected_type}, got {token[0]} ('{token[1]}')"
-            )
-        self.pos += 1
-        return token
-            ```
+```python title="Error Handling in Parser" linenums="1"
+def consume(self, expected_type):
+    token = self.current_token()
+    if token is None:  # (1)!
+        raise SyntaxError(f"Unexpected end of input, expected {expected_type}")
+    if token[0] != expected_type:  # (2)!
+        raise SyntaxError(
+            f"Line {self.line}, column {self.column}: "  # (3)!
+            f"Expected {expected_type}, got {token[0]} ('{token[1]}')"
+        )
+    self.pos += 1
+    return token
+```
 
 1. Check if we've run out of tokens unexpectedly
 2. Validate that the token type matches what we expected
@@ -471,22 +499,22 @@ You write the grammar, the tool generates the parser code. Parser generators mak
 
 **Example with Lark (Python):**
 
-            ```python title="Parser Generator with Lark" linenums="1"
-    from lark import Lark
-    
-    grammar = """  # (1)!
-        start: expr  # (2)!
-        expr: term (("|"|"-") term)*  # (3)!
-        term: factor (("*"|"/") factor)*  # (4)!
-        factor: NUMBER | "(" expr ")"  # (5)!
-        NUMBER: /\d+/  # (6)!
-        %ignore " "  # (7)!
-    """
-    
-    parser = Lark(grammar)  # (8)!
-    tree = parser.parse("2 + 3 * 4")
-    print(tree.pretty())
-            ```
+```python title="Parser Generator with Lark" linenums="1"
+from lark import Lark
+
+grammar = """  # (1)!
+    start: expr  # (2)!
+    expr: term (("|"|"-") term)*  # (3)!
+    term: factor (("*"|"/") factor)*  # (4)!
+    factor: NUMBER | "(" expr ")"  # (5)!
+    NUMBER: /\d+/  # (6)!
+    %ignore " "  # (7)!
+"""
+
+parser = Lark(grammar)  # (8)!
+tree = parser.parse("2 + 3 * 4")
+print(tree.pretty())
+```
 
 1. Define grammar using EBNF-like syntax as a multi-line string
 2. Entry point of the grammar - must start with an expression
@@ -714,6 +742,10 @@ Parsers come up in security-focused interviews (injection attacks) and in any di
 | **AST** | Tree representing program structure |
 | **Recursive Descent** | Each grammar rule = one function |
 | **Precedence** | Handled by grammar structure (nesting depth) |
+
+## What's Next
+
+The theory above is exactly what `jq` walks over when you filter a JSON API response. If you're following the [Debugging With Nothing But a Terminal](https://bradpenney.io/pathways/nothing-but-a-terminal) pathway, the next step is **[jq: Parsing JSON](https://tools.bradpenney.io/essentials/jq_parsing_json/)** on the Dev Tools site — the practical side of this same tree structure.
 
 ## Further Reading
 

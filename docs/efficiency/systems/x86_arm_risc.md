@@ -6,6 +6,26 @@ description: "Why the same Dockerfile builds a different image on your M-series 
 
 # x86, ARM, and RISC-V: Why Your CPU's Instruction Set Isn't a Detail
 
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive:</span> [Operating Systems](operating_system_basics.md){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards" markdown>
+
+    -   :material-desktop-classic: __Operating Systems__ — step 4 of 4
+
+        ---
+
+        ← [How the OS Scheduler Actually Decides](os_scheduler.md) · **you are here** · *(last step)* →
+
+        [Start the deep dive →](operating_system_basics.md)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
+
 You go to download a piece of software (VS Code, Docker, a database client), and the page doesn't hand you one file. It hands you a menu: macOS (Apple Silicon), macOS (Intel), Windows, Linux (x86_64), Linux (ARM64). You already know which one matches your machine, and you click it without a second thought, the same way you already know your shoe size. Stop for a second: why does the *exact same program* need five different downloads to do the exact same job?
 
 That menu is a real engineering decision, made at different points in computing history by different chip designers, and it has consequences you've probably paid for without knowing it — a failed Docker build in CI, a cloud bill, a phone that doesn't need a fan. **[What Actually Happens When Your Code Runs](../../essentials/cpu_and_machine_code.md)** established that every program eventually becomes opcodes for one specific instruction set architecture (ISA). This article is about the two (really three) major answers to what that instruction set should look like, and why the answer was never just a technical footnote.

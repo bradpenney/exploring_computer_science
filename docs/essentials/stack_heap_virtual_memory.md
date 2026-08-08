@@ -6,8 +6,33 @@ description: "Every process believes it owns all the RAM on the machine, in one 
 
 # The Stack, the Heap, and Virtual Memory
 
-!!! tip "Part of a Learning Path"
-    This article is a step in the [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster) pathway on [bradpenney.io](https://bradpenney.io) — a guided sequence through the topic. It also stands on its own.
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive and a pathway:</span> [How Programs Actually Run](cpu_and_machine_code.md){: .pathway-pill } [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards two-col" markdown>
+
+    -   :material-cpu-64-bit: __How Programs Actually Run__ — step 2 of 2
+
+        ---
+
+        ← [What Actually Happens When Your Code Runs](cpu_and_machine_code.md) · **you are here** · *(last step)* →
+
+        [Start the deep dive →](cpu_and_machine_code.md)
+
+    -   :material-chip: __How Modern Software Really Runs on a CPU__ — step 3 of 17
+
+        ---
+
+        ← [Compilers vs. Interpreters](https://cs.bradpenney.io/efficiency/compilers_vs_interpreters/) · **you are here** · [Operating System Basics](https://cs.bradpenney.io/efficiency/systems/operating_system_basics/) →
+
+        [Start the pathway →](https://bradpenney.io/pathways/cpu-to-cluster)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
 
 In production, setting a memory limit — `resources.limits.memory: 512Mi` on a container, `-Xmx2g` on a JVM flag — is one of the most routine configuration steps there is, and one of the least understood. Cross that limit, and the process doesn't slow down; it gets killed outright, on the spot. A service's memory graph climbing steadily for days before a routine restart is common enough to have its own name in most incident channels: a slow leak.
 

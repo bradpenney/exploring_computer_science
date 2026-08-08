@@ -6,8 +6,25 @@ description: "An API is a contract, not a tool. Learn what an API really is, why
 
 # What an API Actually Is: The Contract Behind the Curl
 
-!!! tip "Part of a Learning Path"
-    This article is part of the [How APIs Actually Work](https://bradpenney.io/pathways/how-apis-work) pathway on [bradpenney.io](https://bradpenney.io) — a guided sequence through the topic. It also stands on its own.
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a pathway:</span> [How APIs Actually Work](https://bradpenney.io/pathways/how-apis-work){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards" markdown>
+
+    -   :material-web: __How APIs Actually Work__ — step 1 of 11
+
+        ---
+
+        ← *(first step)* · **you are here** · [Client and Server: The Request/Response Lifecycle](https://cs.bradpenney.io/efficiency/web/client_server_request_response/) →
+
+        [Start the pathway →](https://bradpenney.io/pathways/how-apis-work)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
 
 Calling APIs is routine: `curl` an endpoint, click "Send" in Postman, copy a bearer token into a header, watch a JSON blob come back. Making it work isn't the hard part. The ground shifts the moment someone asks for one to be *designed* — "expose an endpoint for the billing team" — and what's actually being exposed, the *thing* being asked for, turns out to be surprisingly hard to pin down.
 

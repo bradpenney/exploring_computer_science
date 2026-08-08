@@ -5,6 +5,26 @@ description: The complete practical reference for writing and reading regex in p
 ---
 # Regular Expressions
 
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive:</span> [Languages & Parsing](regular_expressions.md){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards" markdown>
+
+    -   :material-file-tree: __Languages & Parsing__ — step 1 of 5
+
+        ---
+
+        ← *(first step)* · **you are here** · [Finite State Machines (FSMs)](../efficiency/finite_state_machines.md) →
+
+        [Start the deep dive →](regular_expressions.md)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
+
 Regex gets copied from Stack Overflow constantly. `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$` gets pasted into a validator without anyone reading it. IDE find-and-replace in regex mode raises the same recurring question: why does `.` suddenly match everything?
 
 **This is the reference that makes those patterns readable.**
@@ -587,6 +607,10 @@ Regex problems appear in interviews either as direct tasks ("write a pattern to 
 | Backreference | `\1` | `(\w+)\s+\1` finds repeated words |
 | Word boundary | `\b` | `\bword\b` matches whole word |
 | Lookahead | `(?=...)` | `(?=.*\d)` requires digit ahead |
+
+## What's Next
+
+If you're following the [Languages & Parsing](../essentials/regular_expressions.md) deep dive, the next step is **[Finite State Machines (FSMs)](../efficiency/finite_state_machines.md)** — the formal model that explains why regex engines, lexers, and network protocols all work the way they do.
 
 ## Further Reading
 

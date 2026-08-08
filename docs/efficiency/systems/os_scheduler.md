@@ -6,8 +6,33 @@ description: "Thousands of runnable threads, a handful of CPU cores. Something h
 
 # How the OS Scheduler Actually Decides
 
-!!! tip "Part of a Learning Path"
-    This article is a step in the [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster) pathway on [bradpenney.io](https://bradpenney.io) — a guided sequence through the topic. It also stands on its own.
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive and a pathway:</span> [Operating Systems](operating_system_basics.md){: .pathway-pill } [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards two-col" markdown>
+
+    -   :material-desktop-classic: __Operating Systems__ — step 3 of 4
+
+        ---
+
+        ← [Processes & Threads](processes_and_threads.md) · **you are here** · [x86, ARM, and RISC-V](x86_arm_risc.md) →
+
+        [Start the deep dive →](operating_system_basics.md)
+
+    -   :material-chip: __How Modern Software Really Runs on a CPU__ — step 6 of 17
+
+        ---
+
+        ← [Processes and Threads](https://cs.bradpenney.io/efficiency/systems/processes_and_threads/) · **you are here** · [Linux Processes](https://linux.bradpenney.io/essentials/processes/) →
+
+        [Start the pathway →](https://bradpenney.io/pathways/cpu-to-cluster)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
 
 `nice -n 19 my_batch_job` gets typed before a backup or a compile, trusting it'll matter, without much idea what reading that number actually does. `top`'s state column shows `R` for a process, and it's a fair question why that's not the same thing as *running*: what actually separates *runnable* from *running*? And "noisy neighbor" incidents on shared boxes keep happening, where one process somehow starves everything else of CPU time it should have been entitled to.
 

@@ -5,6 +5,26 @@ description: Understanding Finite State Machines (FSMs), the elegant model behin
 ---
 # Finite State Machines (FSMs)
 
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive:</span> [Languages & Parsing](../essentials/regular_expressions.md){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards" markdown>
+
+    -   :material-file-tree: __Languages & Parsing__ — step 2 of 5
+
+        ---
+
+        ← [Regular Expressions: The Complete Syntax Reference](../essentials/regular_expressions.md) · **you are here** · [Regular Expressions: The Formal Model](regular_expressions.md) →
+
+        [Start the deep dive →](../essentials/regular_expressions.md)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
+
 Authentication flows move users through states: unauthenticated → logging in → authenticated → session expired. TCP connections report their status in exactly the same shape, right in debugging output: `LISTEN`, `SYN_SENT`, `ESTABLISHED`, `CLOSE_WAIT`. Form validation that changes behavior based on whether input is empty, invalid, or valid is the same pattern again. All three are implementations of the same theoretical model.
 
 **This is that model.**

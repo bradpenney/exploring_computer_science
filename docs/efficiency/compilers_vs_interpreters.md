@@ -6,8 +6,33 @@ description: Understand what compilers and interpreters actually do. The CS theo
 
 # Compilers vs. Interpreters: How Your Code Becomes Execution
 
-!!! tip "Part of a Learning Path"
-    This article is a step in the [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster) pathway on [bradpenney.io](https://bradpenney.io): a guided sequence through the topic. It also stands on its own.
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive and a pathway:</span> [Languages & Parsing](../essentials/regular_expressions.md){: .pathway-pill } [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards two-col" markdown>
+
+    -   :material-file-tree: __Languages & Parsing__ — step 5 of 5
+
+        ---
+
+        ← [How Parsers Work](how_parsers_work.md) · **you are here** · *(last step)* →
+
+        [Start the deep dive →](../essentials/regular_expressions.md)
+
+    -   :material-chip: __How Modern Software Really Runs on a CPU__ — step 2 of 17
+
+        ---
+
+        ← [What Actually Happens When Your Code Runs](https://cs.bradpenney.io/essentials/cpu_and_machine_code/) · **you are here** · [The Stack, the Heap, and Virtual Memory](https://cs.bradpenney.io/essentials/stack_heap_virtual_memory/) →
+
+        [Start the pathway →](https://bradpenney.io/pathways/cpu-to-cluster)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
 
 "Python is interpreted, Go is compiled" is one of those lines repeated so often it's stopped meaning anything specific. Running `go build` produces a binary; running `python app.py` does something else entirely. But what, exactly?
 

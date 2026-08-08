@@ -83,7 +83,7 @@ BNF uses a simple set of symbols:
 |:-------|:--------|
 | `::=` | "is defined as" |
 | `<name>` | A non-terminal (a rule that needs further expansion) |
-| `|` | "or" (alternative options) |
+| <code>&#124;</code> | "or" (alternative options) |
 | Plain text | Terminals (literal characters or tokens) |
 
 Let's see it in action.
@@ -181,7 +181,7 @@ Classic BNF can get verbose. **Extended BNF** adds some conveniences borrowed fr
 |:------------|:--------|:--------|
 | `{ x }` | Zero or more of x | `{ digit }` = any number of digits |
 | `[ x ]` | Optional (zero or one) | `[ - ]` = optional minus sign |
-| `( x | y )` | Grouping | `( + | - )` = plus or minus |
+| <code>( x &#124; y )</code> | Grouping | <code>( + &#124; - )</code> = plus or minus |
 
 ### Unsigned Integer in EBNF
 
@@ -348,7 +348,7 @@ Both describe the same thing—valid strings in a language. Choose based on your
 | **Non-terminal** | A rule name in angle brackets `<like-this>` |
 | **Production** | A rule defining what a non-terminal expands to |
 | **`::=`** | "is defined as" |
-| **`|`** | "or" (alternatives) |
+| **<code>&#124;</code>** | "or" (alternatives) |
 | **EBNF** | Extended BNF with `{ }`, `[ ]` for repetition and optionality |
 | **Recursive descent** | Parsing technique where grammar rules become functions |
 
